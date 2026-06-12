@@ -1,0 +1,79 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  meta?: string;
+  tags?: string[];
+  draft?: boolean;
+}
+
+const { href, title, description, meta, tags = [], draft = false } = Astro.props;
+---
+
+<article class="card" data-tags={tags.join(',')}>
+  <h3>
+    <a href={href}>{title}</a>
+    {draft && <span class="draft">Draft</span>}
+  </h3>
+  <p class="description">{description}</p>
+  {meta && <p class="meta">{meta}</p>}
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  h3 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  h3 a {
+    text-decoration: none;
+  }
+
+  /* make the whole card the click target */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .card {
+    position: relative;
+  }
+
+  .card:hover {
+    border-color: var(--color-ink-tertiary);
+  }
+
+  .draft {
+    margin-left: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-ink-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .description {
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+  }
+
+  .meta {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+  }
+</style>

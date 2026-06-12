@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Type Weight</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #f4f2ee; }
+    body { display: grid; place-items: center; overflow: hidden; }
+    .word {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: clamp(3rem, 14vw, 11rem);
+      letter-spacing: -0.04em;
+      color: #1a1a1a;
+      cursor: default;
+      user-select: none;
+      display: flex;
+    }
+    .word span {
+      font-variation-settings: "wght" var(--w, 300);
+      font-weight: var(--w, 300);
+      transition: font-weight 240ms ease, font-variation-settings 240ms ease;
+    }
+    .hint {
+      position: fixed; bottom: 16px; left: 0; right: 0; text-align: center;
+      font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #999; pointer-events: none; user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="word" id="word"></div>
+  <p class="hint">hover the letters — weight follows presence</p>
+  <script>
+    const text = 'gravity';
+    const word = document.getElementById('word');
+    const letters = [...text].map((ch) => {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      word.appendChild(s);
+      return s;
+    });
+
+    addEventListener('pointermove', (e) => {
+      for (const s of letters) {
+        const r = s.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const dist = Math.abs(e.clientX - cx);
+        const weight = Math.round(900 - Math.min(dist / 2.2, 600));
+        s.style.setProperty('--w', weight);
+      }
+    });
+
+    addEventListener('pointerleave', () => {
+      letters.forEach((s) => s.style.setProperty('--w', 300));
+    });
+  </script>
+</body>
+</html>
