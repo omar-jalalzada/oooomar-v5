@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import { getVisible } from '../lib/content';
+
+const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="About — Omar Jalalzada"
+  description="Design leader focused on cybersecurity — scaling design teams, setting a high craft bar, and building as an AI-native creative."
+>
+  <article class="prose">
+    <h1>About</h1>
+
+    <p>
+      I'm Omar — a design leader currently heading design at
+      <a href="https://sublime.security">Sublime Security</a>, where I've helped take the company
+      from 0 to Series D. Before that: founding a company (Kin), designing for a complex healthcare
+      system (Alto), and making dense financial systems legible (Coatue).
+    </p>
+
+    <h2>What I focus on</h2>
+    <p>
+      <strong>Design leadership.</strong> Amplifying ideas through people — identifying strong
+      talent, setting a high quality bar, and managing the work rather than the people. A
+      midfielder, not a coach yelling from the sideline.
+    </p>
+    <p>
+      <strong>Design in cybersecurity.</strong> Security products win or lose on whether complex
+      systems are made legible. I write about what that takes and advise early-stage security
+      startups on design.
+    </p>
+    <p>
+      <strong>AI-native creative work.</strong> Experimenting in the open — building with AI tools,
+      learning by doing, and sharing what I learn in the <a href="/labs/">Lab</a>.
+    </p>
+
+    <h2>Work</h2>
+    <ul class="cv">
+      {
+        work.map((entry) => (
+          <li>
+            <div class="line">
+              <span class="company">{entry.data.company}</span>
+              {entry.data.period && <span class="period">{entry.data.period}</span>}
+            </div>
+            <p class="role">{entry.data.role}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Contact</h2>
+    <p>
+      The fastest way to reach me is email:
+      <a href="mailto:omar@sublimesecurity.com">omar@sublimesecurity.com</a>
+    </p>
+    <p>I'm open to conversations about:</p>
+    <ul>
+      <li>Advising early-stage cybersecurity startups on design</li>
+      <li>Design leadership — talks, podcasts, writing</li>
+      <li>Working together, if you're a designer who wants to do your best work</li>
+    </ul>
+  </article>
+</Base>
+
+<style>
+  h1 {
+    font-size: var(--text-xl);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-6);
+  }
+
+  .cv {
+    list-style: none;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+  }
+
+  .cv li {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .cv li:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .company {
+    font-weight: 600;
+  }
+
+  .period {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    white-space: nowrap;
+  }
+
+  .role {
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+  }
+</style>
