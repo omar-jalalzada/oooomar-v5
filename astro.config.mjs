@@ -5,8 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  // TODO: replace with the real domain once it's connected in Vercel
-  site: 'https://omarjalalzada.vercel.app',
+  site: 'https://omar.build',
   integrations: [react(), sitemap()],
   adapter: vercel({
     webAnalytics: { enabled: true },

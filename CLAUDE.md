@@ -26,6 +26,12 @@ comes later as its own phase.
   over niche ones.
 - `site` in `astro.config.mjs` is a placeholder until the real domain is connected in Vercel.
 
+## Deployment
+
+- Production deploys from `main` on Vercel: https://omar.build (project URL: omar-neon.vercel.app)
+- Workflow: feature branch → push (Vercel builds a preview URL) → PR → Omar merges to `main` →
+  production deploy. Never push directly to `main`.
+
 ## Process rules
 
 - **Live review before push**: Omar always reviews changes in his browser before they go to
