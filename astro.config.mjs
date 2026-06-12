@@ -5,8 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  // update if a custom domain is connected in Vercel
-  site: 'https://omar-neon.vercel.app',
+  site: 'https://omar.build',
   integrations: [react(), sitemap()],
   adapter: vercel({
     webAnalytics: { enabled: true },

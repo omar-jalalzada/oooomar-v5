@@ -28,7 +28,7 @@ comes later as its own phase.
 
 ## Deployment
 
-- Production deploys from `main` on Vercel: https://omar-neon.vercel.app
+- Production deploys from `main` on Vercel: https://omar.build (project URL: omar-neon.vercel.app)
 - Workflow: feature branch → push (Vercel builds a preview URL) → PR → Omar merges to `main` →
   production deploy. Never push directly to `main`.
 
