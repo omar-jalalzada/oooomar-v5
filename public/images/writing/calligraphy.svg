@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="An abstract calligraphic stroke crossing a faint geometric grid">
+  <rect width="1200" height="675" fill="#F4F1EA"/>
+  <g stroke="#E2DCCD" stroke-width="1">
+    <path d="M0 168.75H1200M0 337.5H1200M0 506.25H1200"/>
+    <path d="M150 0V675M300 0V675M450 0V675M600 0V675M750 0V675M900 0V675M1050 0V675"/>
+  </g>
+  <path d="M180 470 C 360 250, 520 250, 600 360 C 680 470, 840 470, 1020 230"
+        fill="none" stroke="#1C1916" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="1020" cy="230" r="14" fill="#1B5E4A"/>
+</svg>

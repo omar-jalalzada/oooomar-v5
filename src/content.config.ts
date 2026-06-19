@@ -13,6 +13,9 @@ const writing = defineCollection({
     date: z.coerce.date(),
     status,
     format: z.enum(['article', 'note']).default('article'),
+    // optional cover image (path under /public), used on cards and the article header
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
   }),
 });
 
