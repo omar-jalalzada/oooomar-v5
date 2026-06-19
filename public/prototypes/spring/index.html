@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spring</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #FAFAF8; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    canvas { display: block; }
+    .panel {
+      position: fixed; top: 16px; left: 16px; padding: 14px 16px;
+      background: #fff; border: 1px solid #E4E4E2; border-radius: 8px;
+      font-size: 12px; color: #333; user-select: none; width: 200px;
+    }
+    .row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .row:last-child { margin-bottom: 0; }
+    input[type=range] { width: 110px; accent-color: #E03616; }
+    .hint {
+      position: fixed; bottom: 16px; left: 0; right: 0; text-align: center;
+      font-size: 13px; color: #9A968E; pointer-events: none; user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="panel">
+    <div class="row"><span>stiffness</span><span id="kv">120</span></div>
+    <div class="row"><input id="k" type="range" min="20" max="400" value="120"></div>
+    <div class="row"><span>damping</span><span id="dv">14</span></div>
+    <div class="row"><input id="d" type="range" min="2" max="40" value="14"></div>
+  </div>
+  <p class="hint">click anywhere — the dot springs to it</p>
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+    resize(); addEventListener('resize', resize);
+
+    let target = { x: innerWidth / 2, y: innerHeight / 2 };
+    const pos = { x: target.x, y: target.y };
+    const vel = { x: 0, y: 0 };
+
+    const kEl = document.getElementById('k'), dEl = document.getElementById('d');
+    const kv = document.getElementById('kv'), dv = document.getElementById('dv');
+    kEl.oninput = () => kv.textContent = kEl.value;
+    dEl.oninput = () => dv.textContent = dEl.value;
+
+    addEventListener('pointerdown', (e) => { target = { x: e.clientX, y: e.clientY }; });
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min((now - last) / 1000, 1 / 30); last = now;
+      const k = +kEl.value, damp = +dEl.value;
+      for (const ax of ['x', 'y']) {
+        const f = -k * (pos[ax] - target[ax]) - damp * vel[ax];
+        vel[ax] += f * dt;
+        pos[ax] += vel[ax] * dt;
+      }
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = '#D8D8D4';
+      ctx.beginPath(); ctx.arc(target.x, target.y, 6, 0, 7); ctx.stroke();
+      ctx.fillStyle = '#E03616';
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, 16, 0, 7); ctx.fill();
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>

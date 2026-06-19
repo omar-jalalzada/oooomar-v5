@@ -44,4 +44,14 @@ comes later as its own phase.
 - **Parking lot**: deferred "while I'm at it" ideas go to `docs/ideas.md`, not into the build.
 - The original project brief lives at `docs/brief.md` — read it before proposing structural
   changes.
+- **Identity & ethos**: `docs/omar.md` is the baseline reference for who Omar is, how he sees, and
+  his aesthetic loyalties — read it before any brand/visual/copy direction so work stays rooted in
+  him, not category clichés.
 - Append new conventions to this file as they're decided during builds.
+
+## Site direction (locked)
+
+- **Home leads with craft, not a statement.** No grandiose hero headline ("Design that makes…").
+  The work — writing and experiments — comes first.
+- **Omar/bio content lives on the About page**, not the home.
+- **Writing and experiments carry equal weight** to the portfolio (per `docs/omar.md`).
