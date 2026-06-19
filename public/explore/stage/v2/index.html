@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — stage v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C; --mute:#8A8A92; --accent:#2D5BFF; --line:#ECECEE; --bg:#FFFFFF;
+    --ease:cubic-bezier(.2,.75,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--ink); font-family:'Hanken Grotesk',sans-serif; overflow-x:hidden;}
+
+  /* ---- aurora bloom ---- */
+  .bloom{position:fixed; top:32%; left:50%; width:1100px; height:1100px; transform:translate(-50%,-50%) scale(.6); opacity:0;
+    background:
+      radial-gradient(closest-side at 38% 42%, rgba(255,211,165,.55), transparent 70%),
+      radial-gradient(closest-side at 62% 40%, rgba(195,182,255,.55), transparent 70%),
+      radial-gradient(closest-side at 50% 62%, rgba(165,216,255,.55), transparent 70%),
+      radial-gradient(closest-side at 60% 64%, rgba(189,245,214,.45), transparent 70%);
+    filter:blur(40px); border-radius:50%; pointer-events:none; z-index:0;
+    animation:bloomIn 2200ms var(--ease) forwards, breathe 9s ease-in-out 2200ms infinite;}
+  @keyframes bloomIn{to{opacity:1; transform:translate(-50%,-50%) scale(1);}}
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-52%) scale(1.08);}}
+
+  /* ---- hero ---- */
+  .hero{position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; z-index:2;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.22em; color:var(--mute); margin-bottom:26px; opacity:0; animation:fade 1s var(--ease) 300ms forwards;}
+  .line{font-family:'Instrument Serif',serif; font-weight:400; font-size:clamp(48px,9vw,132px); line-height:1.04; letter-spacing:.05em; max-width:15ch;
+    animation:kern 1500ms var(--ease) 700ms forwards;}
+  @keyframes kern{to{letter-spacing:-.012em;}}
+  .word{display:inline-block; white-space:nowrap;}
+  .ch{display:inline-block; opacity:0; filter:blur(16px); transform:translateY(38px) rotate(4deg);
+    animation:mat 950ms var(--ease) forwards; animation-delay:calc(700ms + var(--i)*34ms);}
+  @keyframes mat{to{opacity:1; filter:blur(0); transform:none;}}
+  .it{position:relative; font-style:italic; color:var(--accent);}
+  .it::after{content:''; position:absolute; left:0; right:.12em; bottom:.04em; height:3px; background:var(--accent); border-radius:2px; transform:scaleX(0); transform-origin:left;
+    animation:draw 700ms var(--ease) forwards; animation-delay:var(--ud);}
+  @keyframes draw{to{transform:scaleX(1);}}
+
+  .cue{position:absolute; bottom:36px; left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; animation:fade 1s var(--ease) 2300ms forwards;}
+  .cue span{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--mute);}
+  .cue .bar{width:1px; height:42px; background:linear-gradient(var(--accent),transparent); animation:bob 1.8s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(8px);opacity:.4;}}
+  @keyframes fade{to{opacity:1;}}
+
+  /* ---- floating dock nav (reveals after hero) ---- */
+  .dock{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(150%); z-index:30;
+    display:flex; align-items:center; gap:6px; padding:8px 8px 8px 16px; background:rgba(255,255,255,.72);
+    backdrop-filter:blur(18px) saturate(1.4); -webkit-backdrop-filter:blur(18px) saturate(1.4);
+    border:1px solid rgba(0,0,0,.06); border-radius:999px; box-shadow:0 24px 60px -22px rgba(20,30,80,.4);
+    opacity:0; transition:transform .7s var(--spring), opacity .5s ease;}
+  .dock.show{transform:translateX(-50%) translateY(0); opacity:1;}
+  .dock .dmark{display:flex; align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.03em; padding-right:14px; border-right:1px solid var(--line); margin-right:8px;}
+  .dock .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);}
+  .dock a{font-size:14px; font-weight:500; color:var(--ink); text-decoration:none; padding:9px 15px; border-radius:999px; transition:background .25s ease, color .25s ease;}
+  .dock a:hover{background:var(--accent); color:#fff;}
+  .dock a.off{color:var(--mute);}
+
+  /* ---- work: asymmetric composition ---- */
+  .work{position:relative; z-index:2; background:var(--bg); padding:30px 40px 160px;}
+  .work-head{display:flex; align-items:baseline; justify-content:space-between; padding:8px 0 30px; border-bottom:1px solid var(--line); margin-bottom:56px;}
+  .work-head .t{font-family:'Instrument Serif',serif; font-size:40px;}
+  .work-head .c{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.14em; color:var(--mute);}
+
+  .composition{display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start;}
+  .card{position:relative; padding:28px; border:1px solid var(--line); border-radius:16px; background:#fff;
+    display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; overflow:hidden;
+    opacity:0; transform:translateY(50px) scale(.94); filter:blur(6px);
+    transition:transform .55s var(--ease), box-shadow .55s var(--ease), border-color .4s ease; transform-style:preserve-3d; will-change:transform;}
+  .card.in{animation:cardIn 950ms var(--spring) forwards; animation-delay:calc(var(--i)*100ms);}
+  @keyframes cardIn{to{opacity:1; transform:none; filter:blur(0);}}
+  /* asymmetric sizes + offsets */
+  .feature{flex:1 1 560px; min-height:400px;}
+  .med{flex:1 1 320px; min-height:300px;}
+  .tall{flex:1 1 300px; min-height:430px;}
+  .wide{flex:1 1 460px; min-height:280px;}
+  .note{flex:1 1 250px; min-height:230px;}
+  .down{margin-top:72px;} .up{margin-top:-28px;}
+  .feature{background:radial-gradient(120% 120% at 90% 8%, rgba(195,182,255,.18), rgba(165,216,255,.10) 40%, #fff 72%);}
+
+  .card .kind{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--accent);}
+  .card .num{position:absolute; top:26px; right:26px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mute);}
+  .card .title{font-family:'Hanken Grotesk',sans-serif; font-weight:600; letter-spacing:-.02em; line-height:1.04; margin-top:auto;}
+  .feature .title{font-size:40px;} .med .title,.wide .title{font-size:26px;} .tall .title{font-size:30px;} .note .title{font-size:22px;}
+  .card .meta{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; color:var(--mute); margin-top:14px;}
+  .note .title{font-family:'Instrument Serif',serif; font-weight:400; font-style:italic; font-size:25px; line-height:1.2;}
+  .card .glow{position:absolute; inset:0; opacity:0; transition:opacity .4s ease; pointer-events:none;
+    background:radial-gradient(240px 240px at var(--mx,50%) var(--my,0%), rgba(45,91,255,.10), transparent 70%);}
+  .card:hover{box-shadow:0 1px 0 rgba(45,91,255,.4), 0 34px 64px -30px rgba(20,30,80,.4); border-color:#D9DEFF;}
+  .card:hover .glow{opacity:1;}
+
+  .footer{padding:40px; display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mute); letter-spacing:.06em;}
+</style>
+</head>
+<body>
+  <div class="bloom"></div>
+
+  <section class="hero">
+    <div class="eyebrow">DESIGNER · CRAFTSMAN</div>
+    <h1 class="line" id="line"></h1>
+    <div class="cue"><span>SCROLL</span><div class="bar"></div></div>
+  </section>
+
+  <nav class="dock" id="dock">
+    <div class="dmark"><span class="dot"></span>omar.build</div>
+    <a href="#">Work</a><a href="#">Writing</a><a href="#">Labs</a><a href="#" class="off">About</a>
+  </nav>
+
+  <section class="work">
+    <div class="work-head"><span class="t">The work</span><span class="c">WRITING · EXPERIMENTS · CASE STUDIES</span></div>
+    <div class="composition" id="comp"></div>
+  </section>
+
+  <div class="footer"><span>omar.build</span><span>ALWAYS IN THE MAKING</span><span>© 2026</span></div>
+
+<script>
+  // ---- hero line: per-letter materialize (rise + blur + slight rotate), italic accent word draws an underline
+  const words = [{t:"Always"},{t:"in"},{t:"the"},{t:"making.", it:true}];
+  let i = 0; let html = "";
+  words.forEach((w,wi)=>{
+    const cls = w.it ? "word it" : "word";
+    let inner = "";
+    [...w.t].forEach(ch=>{ inner += `<span class="ch" style="--i:${i}">${ch}</span>`; i++; });
+    html += `<span class="${cls}">${inner}</span>`;
+    if(wi < words.length-1) html += " ";
+  });
+  const line = document.getElementById('line');
+  line.innerHTML = html;
+  // underline draws right after the last letter lands
+  line.querySelector('.it')?.style.setProperty('--ud', (700 + i*34 + 120) + 'ms');
+
+  // ---- work: asymmetric composition
+  const items = [
+    {kind:'FEATURED · ESSAY', title:'Designing Security from Zero to Series D', meta:'JUN 2026 · 12 MIN', cls:'feature'},
+    {kind:'LAB · GEOMETRY', title:'Girih', meta:'CANVAS · 2026', cls:'tall down'},
+    {kind:'ESSAY · LEADERSHIP', title:'Manage the Work, Not the People', meta:'JUN 2026 · 8 MIN', cls:'med up'},
+    {kind:'LAB · TEXTURE', title:'Grain', meta:'CANVAS · 2026', cls:'wide'},
+    {kind:'NOTE · REFLECTIONS', title:'“Taste isn’t downloaded; it’s accrued.”', meta:'NOTES ON TASTE', cls:'note down'},
+    {kind:'REFLECTION', title:'Systems for a Calm Life', meta:'MAY 2026 · 5 MIN', cls:'med'},
+  ];
+  const comp = document.getElementById('comp');
+  items.forEach((it,idx)=>{
+    const c = document.createElement('div');
+    c.className = 'card ' + it.cls;
+    c.style.setProperty('--i', idx);
+    c.innerHTML = `<div class="glow"></div><div class="kind">${it.kind}</div><div class="num">${String(idx+1).padStart(2,'0')}</div><div class="title">${it.title}</div><div class="meta">${it.meta}</div>`;
+    comp.appendChild(c);
+  });
+
+  // reveal on scroll
+  const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}})},{threshold:.15});
+  document.querySelectorAll('.card').forEach(c=>io.observe(c));
+
+  // cursor tilt + glow
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('pointermove', e=>{
+      const r = card.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      card.style.transform = `perspective(1000px) rotateY(${(px-.5)*6}deg) rotateX(${(.5-py)*6}deg) translateY(-6px)`;
+      card.style.setProperty('--mx', px*100+'%'); card.style.setProperty('--my', py*100+'%');
+    });
+    card.addEventListener('pointerleave', ()=>{ card.style.transform=''; });
+  });
+
+  // dock reveals after hero; bloom parallax
+  const dock = document.getElementById('dock');
+  addEventListener('scroll', ()=>{
+    const y = scrollY;
+    dock.classList.toggle('show', y > innerHeight*0.55);
+    document.querySelector('.bloom').style.marginTop = (-y*0.25)+'px';
+  }, {passive:true});
+</script>
+</body>
+</html>
