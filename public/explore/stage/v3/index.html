@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — stage v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0B0B0C;--mute:#8A8A92;--accent:#195CFF;--soft:#BFD0FF;--line:#EAEAEC;--bg:#FFFFFF;
+    --ease:cubic-bezier(.2,.75,.2,1);--spring:cubic-bezier(.34,1.4,.5,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;overflow-x:hidden;}
+
+  /* faint optimistic aurora — keeps the white world alive without competing with the mark */
+  .bloom{position:fixed;top:30%;left:50%;width:1000px;height:1000px;transform:translate(-50%,-50%) scale(.7);opacity:0;
+    background:radial-gradient(closest-side at 40% 45%,rgba(255,211,165,.34),transparent 70%),
+      radial-gradient(closest-side at 60% 42%,rgba(195,182,255,.34),transparent 70%),
+      radial-gradient(closest-side at 52% 62%,rgba(165,216,255,.36),transparent 70%);
+    filter:blur(44px);border-radius:50%;pointer-events:none;z-index:0;
+    animation:bloomIn 2.4s var(--ease) forwards, breathe 10s ease-in-out 2.4s infinite;}
+  @keyframes bloomIn{to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-52%) scale(1.07);}}
+
+  /* ---- hero ---- */
+  .hero{position:relative;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;z-index:2;}
+  .markwrap{position:relative;display:inline-block;width:min(640px,62vw);}
+  .markwrap svg{display:block;width:100%;height:auto;}
+  .eye{transform-box:fill-box;transform-origin:center;transition:transform .25s ease-out;}
+  /* slice reveal */
+  .slices{position:absolute;inset:0;z-index:3;pointer-events:none;}
+  .slice{position:absolute;left:0;width:100%;background:var(--bg);transform:scaleX(1);
+    animation:slice .8s var(--ease) forwards;animation-delay:calc(.3s + var(--i)*.08s);}
+  @keyframes slice{to{transform:scaleX(0);}}
+
+  .subline{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.24em;color:var(--mute);opacity:0;animation:fade 1s var(--ease) 1.5s forwards;}
+  .cue{position:absolute;bottom:32px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fade 1s var(--ease) 2.2s forwards;}
+  .cue span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--mute);}
+  .cue .bar{width:1px;height:40px;background:linear-gradient(var(--accent),transparent);animation:bob 1.8s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(8px);opacity:.4;}}
+  @keyframes fade{to{opacity:1;}}
+
+  /* ---- floating dock — fixed to the bottom of the window, always present after entrance ---- */
+  .dock{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(150%);z-index:40;
+    display:flex;align-items:center;gap:6px;padding:8px 8px 8px 16px;background:rgba(255,255,255,.7);
+    backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
+    border:1px solid rgba(0,0,0,.06);border-radius:999px;box-shadow:0 24px 60px -22px rgba(20,40,120,.4);
+    opacity:0;transition:transform .8s var(--spring),opacity .6s ease;}
+  .dock.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  .dock .dmark{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.03em;padding-right:14px;border-right:1px solid var(--line);margin-right:6px;}
+  .dock .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);}
+  .dock a{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;padding:9px 15px;border-radius:999px;transition:background .25s,color .25s;}
+  .dock a:hover{background:var(--accent);color:#fff;}
+  .dock a.off{color:var(--mute);}
+
+  /* ---- work ---- */
+  .work{position:relative;z-index:2;background:var(--bg);padding:30px 40px 180px;}
+  .work-head{display:flex;align-items:baseline;justify-content:space-between;padding:8px 0 30px;border-bottom:1px solid var(--ink);margin-bottom:56px;}
+  .work-head .t{font-size:30px;font-weight:700;letter-spacing:-.02em;}
+  .work-head .c{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--mute);}
+  .composition{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;}
+  .card{position:relative;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;cursor:pointer;
+    opacity:0;transform:translateY(50px) scale(.94);filter:blur(6px);
+    transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .4s;transform-style:preserve-3d;will-change:transform;}
+  .card.in{animation:cardIn .9s var(--spring) forwards;animation-delay:calc(var(--i)*.1s);}
+  @keyframes cardIn{to{opacity:1;transform:none;filter:blur(0);}}
+  .feature{flex:1 1 560px;min-height:400px;} .med{flex:1 1 320px;min-height:300px;}
+  .tall{flex:1 1 300px;min-height:430px;} .wide{flex:1 1 460px;min-height:280px;} .note{flex:1 1 250px;min-height:230px;}
+  .down{margin-top:72px;} .up{margin-top:-28px;}
+  .card .fill{position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .55s var(--ease);z-index:0;}
+  .card:hover .fill{transform:translateY(0);}
+  .inner{position:relative;z-index:1;height:100%;padding:28px;display:flex;flex-direction:column;justify-content:space-between;}
+  .card .num{position:absolute;top:24px;right:26px;z-index:1;font-family:'JetBrains Mono',monospace;font-size:13px;color:#D8D8DC;transition:color .4s;}
+  .card .kind{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--accent);transition:color .4s;}
+  .card .title{font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-top:auto;transition:color .4s;}
+  .feature .title{font-size:42px;} .med .title,.wide .title{font-size:26px;} .tall .title{font-size:30px;}
+  .note .title{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:26px;line-height:1.2;}
+  .card .meta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--mute);margin-top:14px;transition:color .4s;}
+  .card:hover .kind{color:#fff;} .card:hover .title{color:#fff;} .card:hover .meta{color:var(--soft);} .card:hover .num{color:rgba(255,255,255,.55);}
+  .card:hover{box-shadow:0 34px 64px -28px rgba(20,40,120,.5);border-color:var(--accent);}
+  .arrow{position:absolute;bottom:26px;right:26px;z-index:1;font-family:'JetBrains Mono',monospace;color:#fff;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;}
+  .card:hover .arrow{opacity:1;transform:none;}
+
+  .footer{padding:40px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mute);letter-spacing:.06em;}
+</style>
+</head>
+<body>
+  <div class="bloom"></div>
+
+  <section class="hero">
+    <div class="markwrap">
+      <svg viewBox="403 624 1232 281" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1491" y="631" width="69" height="163" fill="#195CFF"/>
+        <rect x="450" y="631" width="254" height="233" fill="#195CFF"/>
+        <rect x="714" y="631" width="103" height="233" fill="#195CFF"/>
+        <path d="M817 631L866 690.744V864L817 804.256 817 631Z" fill="#195CFF"/>
+        <path d="M915 631L866 690.744V864L915 804.256 915 631Z" fill="#195CFF"/>
+        <rect x="915" y="631" width="103" height="233" fill="#195CFF"/>
+        <rect x="1031" y="631" width="122" height="233" fill="#195CFF"/>
+        <rect x="1319" y="631" width="103" height="233" fill="#195CFF"/>
+        <rect x="1203" y="631" width="103" height="233" fill="#195CFF"/>
+        <path d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z" fill="#195CFF"/>
+        <rect x="1134" y="631" width="69" height="90" fill="#195CFF"/>
+        <rect x="1422" y="631" width="69" height="90" fill="#195CFF"/>
+        <rect x="1134" y="709" width="69" height="85" fill="#195CFF"/>
+        <rect x="1422" y="721" width="69" height="73" fill="#195CFF"/>
+        <path d="M1421 792H1516L1560 864H1471L1421 792Z" fill="#195CFF"/>
+        <circle class="eye" cx="574" cy="747" r="24" fill="#FFFFFF"/>
+        <circle class="eye" cx="1169" cy="734" r="24" fill="#FFFFFF"/>
+        <circle class="eye" cx="1469" cy="734" r="24" fill="#FFFFFF"/>
+      </svg>
+      <div class="slices" id="slices"></div>
+    </div>
+    <div class="subline">DESIGNER · CRAFTSMAN — ALWAYS IN THE MAKING</div>
+    <div class="cue"><span>SCROLL</span><div class="bar"></div></div>
+  </section>
+
+  <nav class="dock" id="dock">
+    <div class="dmark"><span class="dot"></span>omar.build</div>
+    <a href="#">Work</a><a href="#">Writing</a><a href="#">Labs</a><a href="#" class="off">About</a>
+  </nav>
+
+  <section class="work">
+    <div class="work-head"><span class="t">The work</span><span class="c">WRITING · EXPERIMENTS · CASE STUDIES</span></div>
+    <div class="composition" id="comp"></div>
+  </section>
+
+  <div class="footer"><span>omar.build</span><span>EXPLORE / STAGE / V3</span><span>© 2026</span></div>
+
+<script>
+  // ---- slice reveal over the mark (echoes the banded sketch)
+  const N = 7, slices = document.getElementById('slices');
+  for(let i=0;i<N;i++){
+    const s=document.createElement('div'); s.className='slice';
+    s.style.top=(i*100/N)+'%'; s.style.height=(100/N + .3)+'%';
+    s.style.setProperty('--i', i);
+    s.style.transformOrigin = i%2 ? 'right' : 'left';
+    slices.appendChild(s);
+  }
+
+  // ---- counter-dots gently track the cursor (alive, understated)
+  const eyes=[...document.querySelectorAll('.eye')];
+  addEventListener('pointermove', e=>{
+    const cx=innerWidth/2, cy=innerHeight*0.42;
+    const dx=(e.clientX-cx)/innerWidth, dy=(e.clientY-cy)/innerHeight;
+    eyes.forEach(el=> el.style.transform=`translate(${dx*22}px,${dy*22}px)`);
+  });
+
+  // ---- work cards
+  const items=[
+    {kind:'FEATURED · ESSAY',title:'Designing Security from Zero to Series D',meta:'JUN 2026 · 12 MIN',cls:'feature'},
+    {kind:'LAB · GEOMETRY',title:'Girih',meta:'CANVAS · 2026',cls:'tall down'},
+    {kind:'ESSAY · LEADERSHIP',title:'Manage the Work, Not the People',meta:'JUN 2026 · 8 MIN',cls:'med up'},
+    {kind:'LAB · TEXTURE',title:'Grain',meta:'CANVAS · 2026',cls:'wide'},
+    {kind:'NOTE · REFLECTIONS',title:'“Taste isn’t downloaded; it’s accrued.”',meta:'NOTES ON TASTE',cls:'note down'},
+    {kind:'REFLECTION',title:'Systems for a Calm Life',meta:'MAY 2026 · 5 MIN',cls:'med'},
+  ];
+  const comp=document.getElementById('comp');
+  items.forEach((it,idx)=>{
+    const c=document.createElement('div'); c.className='card '+it.cls; c.style.setProperty('--i', idx);
+    c.innerHTML=`<div class="fill"></div><div class="num">${String(idx+1).padStart(2,'0')}</div>
+      <div class="inner"><div class="kind">${it.kind}</div><div class="title">${it.title}</div><div class="meta">${it.meta}</div></div>
+      <div class="arrow">→</div>`;
+    comp.appendChild(c);
+  });
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.15});
+  document.querySelectorAll('.card').forEach(c=>io.observe(c));
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();const px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      card.style.transform=`perspective(1000px) rotateY(${(px-.5)*5}deg) rotateX(${(.5-py)*5}deg) translateY(-6px)`;});
+    card.addEventListener('pointerleave',()=>card.style.transform='');
+  });
+
+  // ---- dock: reveal after the entrance, then stays pinned to the window bottom
+  setTimeout(()=>document.getElementById('dock').classList.add('show'), 2600);
+</script>
+</body>
+</html>

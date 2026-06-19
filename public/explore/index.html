@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Explore — the making of omar.build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0B0B0C;--mute:#8A8A92;--accent:#2D5BFF;--line:#ECECEE;--bg:#FFFFFF;--ease:cubic-bezier(.2,.75,.2,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;overflow-x:hidden;}
+  .bloom{position:fixed;top:-10%;left:50%;width:900px;height:900px;transform:translateX(-50%);pointer-events:none;z-index:0;filter:blur(46px);opacity:.8;
+    background:
+      radial-gradient(closest-side at 40% 45%, rgba(255,211,165,.40), transparent 70%),
+      radial-gradient(closest-side at 60% 42%, rgba(195,182,255,.40), transparent 70%),
+      radial-gradient(closest-side at 52% 60%, rgba(165,216,255,.42), transparent 70%);}
+  .wrap{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:120px 40px 120px;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;color:var(--mute);}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(44px,7vw,84px);line-height:1.02;letter-spacing:-.01em;margin:22px 0 24px;}
+  h1 .it{font-style:italic;color:var(--accent);}
+  .intro{font-size:18px;line-height:1.6;color:#4A4A52;max-width:60ch;}
+  .intro b{color:var(--ink);font-weight:600;}
+
+  .concept{margin-top:80px;}
+  .concept-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--ink);}
+  .concept-head .t{font-family:'Instrument Serif',serif;font-size:34px;}
+  .concept-head .c{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--mute);}
+
+  .row{display:flex;gap:28px;align-items:flex-start;padding:26px 8px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:padding .3s var(--ease),background .3s ease;border-radius:10px;}
+  .row:hover{padding-left:20px;padding-right:20px;background:#FAFAFB;}
+  .row .v{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--accent);width:46px;flex-shrink:0;padding-top:3px;}
+  .row .body{flex:1;display:flex;flex-direction:column;gap:6px;}
+  .row .h{font-size:19px;font-weight:600;letter-spacing:-.01em;}
+  .row .d{font-size:15px;line-height:1.5;color:#6A6A72;}
+  .row .date{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mute);flex-shrink:0;padding-top:5px;}
+  .row .arrow{font-family:'JetBrains Mono',monospace;color:var(--mute);padding-top:3px;transition:transform .3s var(--ease),color .3s ease;}
+  .row:hover .arrow{transform:translateX(4px);color:var(--accent);}
+
+  .note{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--mute);display:flex;gap:10px;align-items:center;}
+  .note .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+  .foot{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:0 40px 60px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mute);display:flex;justify-content:space-between;}
+  .foot a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="bloom"></div>
+  <main class="wrap">
+    <div class="eyebrow">OMAR.BUILD / EXPLORE</div>
+    <h1>The <span class="it">making</span> of this site.</h1>
+    <p class="intro">A public log of the iteration behind omar.build — the sketches, the dead-ends, and the directions worth keeping. Every version is preserved, never overwritten. This is the workshop floor; the <b>Labs</b> are the finished pieces.</p>
+
+    <section class="concept">
+      <div class="concept-head"><span class="t">Stage</span><span class="c">CONCEPT 01 · LIVING STAGE</span></div>
+
+      <a class="row" href="./stage/v4/index.html">
+        <span class="v">v4</span>
+        <span class="body">
+          <span class="h">Self-constructing wordmark + cleaner affordances</span>
+          <span class="d">Closed the hairline seams in the logotype, and changed the reveal to a left-to-right self-construction — each modular block grows into place. Dropped the SCROLL label; the work now peeks above the fold as the cue. Nav mark became the O, and "Work" was removed from the dock.</span>
+        </span>
+        <span class="date">19 JUN 2026</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="row" href="./stage/v3/index.html">
+        <span class="v">v3</span>
+        <span class="body">
+          <span class="h">OMAR logotype as the centerpiece</span>
+          <span class="d">Dropped the headline entirely. Omar's sketched wordmark — a bold, modular, constructed logotype in electric blue — rebuilt from his exact geometry and revealed in horizontal slices, with counter-dots that gently track the cursor. The dock is now pinned to the window bottom. Cards fill electric blue on hover, inverting to white.</span>
+        </span>
+        <span class="date">19 JUN 2026</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="row" href="./stage/v2/index.html">
+        <span class="v">v2</span>
+        <span class="body">
+          <span class="h">Per-letter reveal, floating dock, asymmetric work</span>
+          <span class="d">Type materializes letter by letter and kerns in; the italic word draws its own underline. Nav became a frosted dock that springs up after the hero. Cards broke the grid into an asymmetric composition. New pairing: Hanken Grotesk for the work, Instrument Serif reserved for the voice.</span>
+        </span>
+        <span class="date">19 JUN 2026</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="row" href="./stage/v1/index.html">
+        <span class="v">v1</span>
+        <span class="body">
+          <span class="h">Cinematic aurora entrance + word-fade</span>
+          <span class="d">First motion test: a breathing aurora on white, the line fading in word by word, work revealing as a uniform card grid with cursor-tilt. Proved the entrance tempo — but the grid felt expected and Instrument Serif everywhere was too much.</span>
+        </span>
+        <span class="date">18 JUN 2026</span>
+        <span class="arrow">→</span>
+      </a>
+    </section>
+
+    <div class="note"><span class="dot"></span>Before this: five static directions explored in Paper — scrapped as too cliché, which is what pushed us to prototype in motion.</div>
+  </main>
+  <div class="foot"><span>omar.build / explore</span><span>← <a href="/">back to site</a></span></div>
+</body>
+</html>

@@ -55,3 +55,27 @@ comes later as its own phase.
   The work — writing and experiments — comes first.
 - **Omar/bio content lives on the About page**, not the home.
 - **Writing and experiments carry equal weight** to the portfolio (per `docs/omar.md`).
+
+## explore/ — the public iteration archive
+
+- `public/explore/<concept>/<version>/` is the deliberately-public "making of" record — the
+  design sketchbook, showing the iteration behind the site. It ships (this is intentional; Omar
+  wants it browsable) and is **separate from `public/prototypes/`** (which is the finished,
+  shipped Labs).
+- **Never overwrite an iteration.** Each pass is a new `vN/` folder; `explore/<concept>/index.html`
+  redirects to the latest. The journey is the point.
+- These are throwaway-style static HTML (fast motion prototypes). The *winning* concept gets
+  rebuilt properly in `src/` as the real site — explore is the sketch, `src/` is the painting.
+
+### Exploring concepts in parallel
+
+- Each distinct design concept gets its **own branch** (and its own Conductor workspace), and its
+  own folder `public/explore/<concept>/`. Branches run in parallel — they don't collide because
+  each concept is a separate folder.
+- The current locked direction is `explore/stage/` (the "Living Stage" — OMAR logotype that
+  self-constructs, floating dock, asymmetric work cards). New concepts start fresh, e.g.
+  `explore/<new-concept>/v1/`.
+- The only shared file is `public/explore/index.html` (the archive landing). When a concept
+  branch lands, add its section there — expect a trivial merge if several land together.
+- Same rules apply per concept: never overwrite a version (`vN/`), `index.html` redirects to the
+  latest.

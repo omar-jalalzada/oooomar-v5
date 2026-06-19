@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — stage v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;
+    --mute:#8A8A92;
+    --accent:#2D5BFF;
+    --line:#ECECEE;
+    --bg:#FFFFFF;
+    --ease:cubic-bezier(.2,.75,.2,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--ink); font-family:Inter,sans-serif; overflow-x:hidden;}
+
+  /* ---- aurora bloom: the luminous "source" ---- */
+  .bloom{
+    position:fixed; top:34%; left:50%; width:1100px; height:1100px;
+    transform:translate(-50%,-50%) scale(.6); opacity:0;
+    background:
+      radial-gradient(closest-side at 38% 42%, rgba(255,211,165,.55), transparent 70%),
+      radial-gradient(closest-side at 62% 40%, rgba(195,182,255,.55), transparent 70%),
+      radial-gradient(closest-side at 50% 62%, rgba(165,216,255,.55), transparent 70%),
+      radial-gradient(closest-side at 60% 64%, rgba(189,245,214,.45), transparent 70%);
+    filter:blur(40px); border-radius:50%; pointer-events:none; z-index:0;
+    animation:bloomIn 2200ms var(--ease) forwards, breathe 9s ease-in-out 2200ms infinite;
+  }
+  @keyframes bloomIn{to{opacity:1; transform:translate(-50%,-50%) scale(1);}}
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-52%) scale(1.08);}}
+
+  /* ---- chrome ---- */
+  .chrome{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:28px 40px; z-index:10; opacity:0; animation:fade 1s var(--ease) 1700ms forwards;}
+  .mark{display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.04em;}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);}
+  .nav{display:flex; gap:30px; font-size:14px; font-weight:500;}
+  .nav span{cursor:pointer;} .nav .off{color:var(--mute);}
+
+  /* ---- hero ---- */
+  .hero{position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; z-index:2;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.22em; color:var(--mute); margin-bottom:26px; opacity:0; animation:fade 1s var(--ease) 300ms forwards;}
+  .line{font-family:'Instrument Serif',serif; font-weight:400; font-size:clamp(48px,9vw,128px); line-height:.98; letter-spacing:-.01em; max-width:14ch;}
+  .line .w{display:inline-block; opacity:0; filter:blur(16px); transform:translateY(26px) scale(.96); animation:materialize 1100ms var(--ease) forwards; animation-delay:calc(700ms + var(--i)*130ms);}
+  .line .it{font-style:italic; color:var(--accent);}
+  @keyframes materialize{to{opacity:1; filter:blur(0); transform:none;}}
+  .cue{position:absolute; bottom:36px; left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; animation:fade 1s var(--ease) 2200ms forwards;}
+  .cue span{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; color:var(--mute);}
+  .cue .bar{width:1px; height:42px; background:linear-gradient(var(--accent),transparent); animation:bob 1.8s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(8px);opacity:.4;}}
+  @keyframes fade{to{opacity:1;}}
+
+  /* ---- work ---- */
+  .work{position:relative; z-index:2; background:var(--bg); padding:40px 40px 120px;}
+  .work-head{display:flex; align-items:baseline; justify-content:space-between; padding:8px 0 36px; border-bottom:1px solid var(--line); margin-bottom:48px;}
+  .work-head .t{font-family:'Instrument Serif',serif; font-size:38px;}
+  .work-head .c{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.14em; color:var(--mute);}
+  .grid{display:flex; flex-wrap:wrap; gap:24px;}
+  .card{
+    position:relative; flex:1 1 340px; min-height:280px; padding:28px; border:1px solid var(--line); border-radius:14px;
+    background:#fff; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer;
+    opacity:0; transform:translateY(46px) scale(.95); filter:blur(6px);
+    transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .4s ease;
+    transform-style:preserve-3d; will-change:transform;
+  }
+  .card.in{animation:cardIn 900ms var(--ease) forwards; animation-delay:calc(var(--i)*90ms);}
+  @keyframes cardIn{to{opacity:1; transform:none; filter:blur(0);}}
+  .card .kind{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--accent);}
+  .card .title{font-family:'Instrument Serif',serif; font-size:34px; line-height:1.02; letter-spacing:-.01em; margin-top:auto;}
+  .card .meta{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; color:var(--mute); margin-top:14px;}
+  .card .glow{position:absolute; inset:0; border-radius:14px; opacity:0; transition:opacity .4s ease; pointer-events:none;
+    background:radial-gradient(220px 220px at var(--mx,50%) var(--my,0%), rgba(45,91,255,.10), transparent 70%);}
+  .card:hover{box-shadow:0 1px 0 rgba(45,91,255,.4), 0 30px 60px -28px rgba(20,30,80,.35); border-color:#D9DEFF;}
+  .card:hover .glow{opacity:1;}
+  .card .num{position:absolute; top:24px; right:26px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mute);}
+  .footer{padding:40px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mute); letter-spacing:.06em;}
+</style>
+</head>
+<body>
+  <div class="bloom"></div>
+
+  <header class="chrome">
+    <div class="mark"><span class="dot"></span>omar.build</div>
+    <nav class="nav"><span>Work</span><span>Writing</span><span>Labs</span><span class="off">About</span></nav>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">DESIGNER · CRAFTSMAN</div>
+    <h1 class="line" id="line"></h1>
+    <div class="cue"><span>SCROLL</span><div class="bar"></div></div>
+  </section>
+
+  <section class="work">
+    <div class="work-head"><span class="t">The work</span><span class="c">WRITING · EXPERIMENTS · CASE STUDIES</span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <div class="footer"><span>omar.build</span><span>ALWAYS IN THE MAKING</span><span>© 2026</span></div>
+
+<script>
+  // hero line — materialize word by word ("fonts tell a story": Instrument Serif assembling)
+  const words = ["Always", "in", "the", "<i class='it'>making.</i>"];
+  document.getElementById('line').innerHTML = words.map((w,i)=>`<span class="w" style="--i:${i}">${w}&nbsp;</span>`).join('');
+
+  // the work — cards materialize in sequence
+  const items = [
+    {kind:'ESSAY · LEADERSHIP', title:'Manage the Work, Not the People', meta:'JUN 2026 · 8 MIN'},
+    {kind:'ESSAY · LEADERSHIP', title:'Designing Security from Zero to Series D', meta:'JUN 2026 · 12 MIN'},
+    {kind:'LAB · GEOMETRY', title:'Girih', meta:'CANVAS · 2026'},
+    {kind:'REFLECTION', title:'Systems for a Calm Life', meta:'MAY 2026 · 5 MIN'},
+    {kind:'LAB · TEXTURE', title:'Grain', meta:'CANVAS · 2026'},
+    {kind:'NOTE', title:'Notes on Taste', meta:'JUN 2026 · 1 MIN'},
+  ];
+  const grid = document.getElementById('grid');
+  items.forEach((it,i)=>{
+    const c = document.createElement('div');
+    c.className='card'; c.style.setProperty('--i', i%3);
+    c.innerHTML = `<div class="glow"></div><div class="kind">${it.kind}</div><div class="num">${String(i+1).padStart(2,'0')}</div><div class="title">${it.title}</div><div class="meta">${it.meta}</div>`;
+    grid.appendChild(c);
+  });
+
+  // reveal cards on scroll (staggered via --i)
+  const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}})},{threshold:.2});
+  document.querySelectorAll('.card').forEach(c=>io.observe(c));
+
+  // cursor tilt + glow follow
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('pointermove', e=>{
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      card.style.transform = `perspective(900px) rotateY(${(px-.5)*7}deg) rotateX(${(.5-py)*7}deg) translateY(-6px)`;
+      card.style.setProperty('--mx', px*100+'%'); card.style.setProperty('--my', py*100+'%');
+    });
+    card.addEventListener('pointerleave', ()=>{ card.style.transform=''; });
+  });
+
+  // subtle parallax: bloom drifts up as you scroll into the work
+  addEventListener('scroll', ()=>{
+    const y = scrollY;
+    document.querySelector('.bloom').style.marginTop = (-y*0.25)+'px';
+  }, {passive:true});
+</script>
+</body>
+</html>
