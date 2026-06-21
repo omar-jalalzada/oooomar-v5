@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — stage v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0B0B0C;--mute:#8A8A92;--accent:#195CFF;--soft:#BFD0FF;--line:#EAEAEC;--bg:#FFFFFF;
+    --ease:cubic-bezier(.2,.75,.2,1);--spring:cubic-bezier(.34,1.4,.5,1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;overflow:hidden;height:100vh;}
+
+  .bloom{position:fixed;top:46%;left:50%;width:1040px;height:1040px;transform:translate(-50%,-50%) scale(.7);opacity:0;
+    background:radial-gradient(closest-side at 40% 45%,rgba(255,211,165,.30),transparent 70%),
+      radial-gradient(closest-side at 60% 42%,rgba(195,182,255,.30),transparent 70%),
+      radial-gradient(closest-side at 52% 62%,rgba(165,216,255,.32),transparent 70%);
+    filter:blur(46px);border-radius:50%;pointer-events:none;z-index:0;
+    animation:bloomIn 2.4s var(--ease) forwards, breathe 10s ease-in-out 2.4s infinite;}
+  @keyframes bloomIn{to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-52%) scale(1.06);}}
+
+  .stage{position:relative;height:100vh;z-index:2;}
+
+  /* centerpiece */
+  .mark{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:min(560px,52vw);z-index:5;}
+  .mark svg{display:block;width:100%;height:auto;overflow:visible;}
+  .blk{opacity:0;transform-box:fill-box;transform-origin:bottom;transform:translateY(42px) scaleY(.7);}
+  .play .blk{animation:assemble .72s var(--spring) forwards;animation-delay:calc(.2s + var(--i)*.045s);}
+  @keyframes assemble{to{opacity:1;transform:none;}}
+  .eye{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0);}
+  .play .eye{animation:eyepop .55s var(--spring) 1.05s forwards;}
+  @keyframes eyepop{to{opacity:1;transform:scale(1);}}
+  .subline{position:absolute;top:60%;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.24em;color:var(--mute);opacity:0;z-index:5;animation:fade 1s var(--ease) 1.4s forwards;}
+  @keyframes fade{to{opacity:1;}}
+
+  /* orbiting work */
+  .slot{position:absolute;transform:translate(-50%,-50%);z-index:4;will-change:transform;}
+  .card{position:relative;width:212px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;
+    opacity:0;filter:blur(6px);transition:transform .85s var(--spring),opacity .6s ease,box-shadow .45s var(--ease),border-color .4s;will-change:transform,opacity;}
+  .card .fill{position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .5s var(--ease);z-index:0;}
+  .card:hover .fill{transform:translateY(0);}
+  .inner{position:relative;z-index:1;padding:20px;display:flex;flex-direction:column;gap:12px;min-height:148px;justify-content:space-between;}
+  .kind{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);transition:color .4s;}
+  .title{font-weight:700;font-size:19px;letter-spacing:-.01em;line-height:1.08;transition:color .4s;}
+  .note .title{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:21px;}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--mute);transition:color .4s;}
+  .card:hover .kind{color:#fff;} .card:hover .title{color:#fff;} .card:hover .meta{color:var(--soft);}
+  .card:hover{box-shadow:0 30px 60px -26px rgba(20,40,120,.5);border-color:var(--accent);}
+
+  /* dock — fixed to window bottom */
+  .dock{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(150%);z-index:40;
+    display:flex;align-items:center;gap:6px;padding:8px 8px 8px 12px;background:rgba(255,255,255,.72);
+    backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
+    border:1px solid rgba(0,0,0,.06);border-radius:999px;box-shadow:0 24px 60px -22px rgba(20,40,120,.4);
+    opacity:0;transition:transform .8s var(--spring),opacity .6s ease;}
+  .dock.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  .dmark{display:flex;align-items:center;padding-right:12px;border-right:1px solid var(--line);margin-right:6px;}
+  .omark{position:relative;width:22px;height:22px;background:var(--accent);border-radius:4px;}
+  .omark::after{content:'';position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);}
+  .dock a{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;padding:9px 15px;border-radius:999px;transition:background .25s,color .25s;}
+  .dock a:hover{background:var(--accent);color:#fff;}
+  .dock a.off{color:var(--mute);}
+</style>
+</head>
+<body>
+  <div class="bloom"></div>
+  <div class="stage" id="stage">
+    <div class="mark" id="mark">
+      <svg viewBox="403 624 1232 281" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round">
+          <rect class="blk" x="1491" y="631" width="69" height="163"/>
+          <rect class="blk" x="450" y="631" width="254" height="233"/>
+          <rect class="blk" x="714" y="631" width="103" height="233"/>
+          <path class="blk" d="M817 631L866 690.744V864L817 804.256 817 631Z"/>
+          <path class="blk" d="M915 631L866 690.744V864L915 804.256 915 631Z"/>
+          <rect class="blk" x="915" y="631" width="103" height="233"/>
+          <rect class="blk" x="1031" y="631" width="122" height="233"/>
+          <rect class="blk" x="1319" y="631" width="103" height="233"/>
+          <rect class="blk" x="1203" y="631" width="103" height="233"/>
+          <path class="blk" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"/>
+          <rect class="blk" x="1134" y="631" width="69" height="90"/>
+          <rect class="blk" x="1422" y="631" width="69" height="90"/>
+          <rect class="blk" x="1134" y="709" width="69" height="85"/>
+          <rect class="blk" x="1422" y="721" width="69" height="73"/>
+          <path class="blk" d="M1421 792H1516L1560 864H1471L1421 792Z"/>
+        </g>
+        <circle class="eye" cx="574" cy="747" r="24" fill="#FFFFFF"/>
+        <circle class="eye" cx="1169" cy="734" r="24" fill="#FFFFFF"/>
+        <circle class="eye" cx="1469" cy="734" r="24" fill="#FFFFFF"/>
+      </svg>
+    </div>
+    <div class="subline">DESIGNER · CRAFTSMAN — ALWAYS IN THE MAKING</div>
+  </div>
+
+  <nav class="dock" id="dock">
+    <div class="dmark"><span class="omark"></span></div>
+    <a href="#">Writing</a><a href="#">Labs</a><a href="#" class="off">About</a>
+  </nav>
+
+<script>
+  // assemble mark left-to-right
+  const mark=document.getElementById('mark');
+  const blks=[...mark.querySelectorAll('.blk')];
+  blks.map(b=>({b,x:b.getBBox().x})).sort((a,c)=>a.x-c.x).forEach((o,i)=>o.b.style.setProperty('--i',i));
+  requestAnimationFrame(()=>mark.classList.add('play'));
+
+  // counter-dots track cursor
+  const eyes=[...document.querySelectorAll('.eye')]; let track=false; setTimeout(()=>track=true,1500);
+
+  // ---- the work orbits the mark ----
+  const items=[
+    {kind:'FEATURED · ESSAY',title:'Designing Security from Zero to Series D',meta:'12 MIN',cls:'',pos:{top:'18%',left:'18%'},depth:1.4},
+    {kind:'LAB · GEOMETRY',title:'Girih',meta:'CANVAS · 2026',cls:'',pos:{top:'16%',left:'82%'},depth:.8},
+    {kind:'ESSAY · LEADERSHIP',title:'Manage the Work, Not the People',meta:'8 MIN',cls:'',pos:{top:'50%',left:'9%'},depth:1.1},
+    {kind:'LAB · TEXTURE',title:'Grain',meta:'CANVAS · 2026',cls:'',pos:{top:'50%',left:'91%'},depth:1.6},
+    {kind:'NOTE · REFLECTIONS',title:'“Taste isn’t downloaded; it’s accrued.”',meta:'NOTES ON TASTE',cls:'note',pos:{top:'83%',left:'24%'},depth:.7},
+    {kind:'REFLECTION',title:'Systems for a Calm Life',meta:'5 MIN',cls:'',pos:{top:'84%',left:'77%'},depth:1.2},
+  ];
+  const stage=document.getElementById('stage');
+  const slots=[];
+  const cx=()=>innerWidth*0.5, cy=()=>innerHeight*0.46;
+  items.forEach((it,i)=>{
+    const slot=document.createElement('div'); slot.className='slot';
+    slot.style.top=it.pos.top; slot.style.left=it.pos.left;
+    const card=document.createElement('div'); card.className='card '+it.cls;
+    card.innerHTML=`<div class="fill"></div><div class="inner"><div class="kind">${it.kind}</div><div class="title">${it.title}</div><div class="meta">${it.meta}</div></div>`;
+    slot.appendChild(card); stage.appendChild(slot);
+    slots.push({slot,card,depth:it.depth,pos:it.pos});
+    // initial: collapsed at the mark's center (emanate outward from "Omar")
+    const sx=parseFloat(it.pos.left)/100*innerWidth, sy=parseFloat(it.pos.top)/100*innerHeight;
+    card.style.transform=`translate(${cx()-sx}px,${cy()-sy}px) scale(.35)`;
+    card.style.transitionDelay=(i*0.08)+'s';
+    // hover tilt
+    card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();const px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      card.dataset.hover='1'; card.style.transform=`perspective(900px) rotateY(${(px-.5)*8}deg) rotateX(${(.5-py)*8}deg) translateY(-6px)`;});
+    card.addEventListener('pointerleave',()=>{card.dataset.hover='';card.style.transform='';});
+  });
+
+  // emanate after the mark builds
+  setTimeout(()=>{
+    slots.forEach(({card})=>{card.style.transform='';card.style.opacity='1';card.style.filter='blur(0)';});
+  }, 1250);
+
+  // cursor parallax: dots + cards drift for depth/aliveness
+  addEventListener('pointermove', e=>{
+    const dx=(e.clientX-innerWidth/2)/innerWidth, dy=(e.clientY-innerHeight/2)/innerHeight;
+    if(track) eyes.forEach(el=> el.style.transform=`translate(${dx*22}px,${dy*22}px) scale(1)`);
+    slots.forEach(({slot,card,depth})=>{
+      if(card.dataset.hover) return; // don't fight the hover tilt
+      slot.style.transform=`translate(-50%,-50%) translate(${dx*depth*-26}px,${dy*depth*-26}px)`;
+    });
+  });
+
+  // dock
+  setTimeout(()=>document.getElementById('dock').classList.add('show'), 2400);
+</script>
+</body>
+</html>
