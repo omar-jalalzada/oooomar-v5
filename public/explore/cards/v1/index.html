@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Exploring Cards — v1 · omar.build/explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0B0B0C;
+  --mute:    #8A8A92;
+  --accent:  #2D5BFF;
+  --line:    #E8E8EC;
+  --bg:      #F4F3F1;
+  --surface: #FFFFFF;
+  --ease:    cubic-bezier(.2,.75,.2,1);
+
+  /* content type palette */
+  --clr-writing: #C04A20;
+  --clr-lab:     #2D5BFF;
+  --clr-work:    #1A1A1F;
+  --bg-writing:  rgba(192,74,32,.10);
+  --bg-lab:      rgba(45,91,255,.10);
+  --bg-work:     rgba(26,26,31,.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PAGE SHELL ──────────────────────────────── */
+.page { max-width: 1080px; margin: 0 auto; padding: 80px 48px 120px; }
+
+/* ── HEADER ──────────────────────────────────── */
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.header-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5.5vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  margin-bottom: 20px;
+}
+.header-title em { font-style: italic; color: var(--accent); }
+.header-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #5A5A62;
+  max-width: 54ch;
+  margin-bottom: 8px;
+}
+.header-question {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--mute);
+  border-left: 2px solid var(--accent);
+  padding-left: 12px;
+  margin-top: 24px;
+  max-width: 58ch;
+  line-height: 1.6;
+}
+
+/* ── DIRECTION SECTION ───────────────────────── */
+.direction { margin-top: 88px; }
+.dir-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 28px;
+}
+.dir-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .18em;
+  color: var(--mute);
+}
+.dir-name {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.dir-note {
+  font-size: 13px;
+  color: var(--mute);
+  margin-left: auto;
+  max-width: 34ch;
+  text-align: right;
+  line-height: 1.55;
+}
+
+/* TYPE BADGE */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.badge.writing { background: var(--bg-writing); color: var(--clr-writing); }
+.badge.lab     { background: var(--bg-lab);     color: var(--clr-lab); }
+.badge.work    { background: var(--bg-work);    color: var(--clr-work); }
+
+
+
+/* ═══════════════════════════════════════════════
+   01 · ROW — print-index, horizontal strip
+   ═══════════════════════════════════════════════ */
+.d1-list { display: flex; flex-direction: column; }
+.d1-row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto auto;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 12px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+  transition: background .25s var(--ease), padding-left .25s var(--ease);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.d1-row:hover {
+  background: rgba(45,91,255,.04);
+  padding-left: 20px;
+}
+.d1-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--mute);
+}
+.d1-title {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+  transition: color .25s;
+}
+.d1-row:hover .d1-title { color: var(--accent); }
+.d1-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--mute);
+  transition: transform .25s var(--ease), color .25s;
+}
+.d1-row:hover .d1-arrow { transform: translateX(5px); color: var(--accent); }
+
+
+/* ═══════════════════════════════════════════════
+   02 · TICKET — physical artifact, color strip
+   ═══════════════════════════════════════════════ */
+.d2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.d2-card {
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.d2-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.04),
+    0 12px 32px rgba(0,0,0,.08);
+}
+.d2-strip { height: 4px; width: 100%; flex-shrink: 0; }
+.d2-strip.writing { background: var(--clr-writing); }
+.d2-strip.lab     { background: var(--clr-lab); }
+.d2-strip.work    { background: var(--clr-work); }
+.d2-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.d2-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+}
+.d2-excerpt {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #6A6A72;
+  flex: 1;
+}
+.d2-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px;
+  border-top: 1px dashed var(--line);
+  background: #FAFAFA;
+  flex-shrink: 0;
+}
+.d2-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--mute);
+}
+.d2-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+
+/* ═══════════════════════════════════════════════
+   03 · DARK — inverted, serif headline
+   ═══════════════════════════════════════════════ */
+.d3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.d3-card {
+  background: var(--ink);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: #D8D8DE;
+  cursor: pointer;
+  transition: background .3s var(--ease);
+}
+.d3-card:hover { background: #14141A; }
+
+.d3-badge {
+  display: inline-flex;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+.d3-badge.writing { background: rgba(192,74,32,.22); color: #E08060; }
+.d3-badge.lab     { background: rgba(45,91,255,.22); color: #7A9FFF; }
+.d3-badge.work    { background: rgba(255,255,255,.08); color: #7A7A82; }
+
+.d3-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.22;
+  letter-spacing: -.01em;
+  color: #F2F2F5;
+}
+.d3-excerpt {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #606068;
+  flex: 1;
+}
+.d3-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin-top: auto;
+}
+.d3-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: #444450;
+}
+.d3-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #3A3A44;
+  transition: transform .25s var(--ease), color .25s;
+}
+.d3-card:hover .d3-arrow { transform: translateX(4px); color: var(--accent); }
+
+
+/* ═══════════════════════════════════════════════
+   04 · EDITORIAL — two-column micro-layout
+   ═══════════════════════════════════════════════ */
+.d4-list { display: flex; flex-direction: column; gap: 12px; }
+.d4-card {
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.d4-card:hover {
+  border-color: rgba(45,91,255,.25);
+  box-shadow: 0 0 0 1px rgba(45,91,255,.08), 0 8px 24px rgba(0,0,0,.05);
+}
+.d4-left {
+  padding: 28px 32px 28px 28px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+.d4-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+.d4-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.d4-title em { font-style: italic; color: var(--accent); }
+.d4-right {
+  padding: 28px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+.d4-excerpt {
+  font-size: 14px;
+  line-height: 1.72;
+  color: #6A6A72;
+  flex: 1;
+}
+.d4-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.d4-readtime {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--mute);
+}
+
+
+/* ═══════════════════════════════════════════════
+   05 · SPLIT — colored left block, white right
+   ═══════════════════════════════════════════════ */
+.d5-list { display: flex; flex-direction: column; gap: 10px; }
+.d5-card {
+  border-radius: 10px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: box-shadow .3s var(--ease), transform .3s var(--ease);
+}
+.d5-card:hover {
+  transform: translateX(3px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.04);
+}
+.d5-left {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.d5-left.writing { background: var(--clr-writing); }
+.d5-left.lab     { background: var(--clr-lab); }
+.d5-left.work    { background: var(--clr-work); }
+.d5-type-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.65);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.d5-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+}
+.d5-right {
+  background: var(--surface);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 100px;
+}
+.d5-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+}
+.d5-excerpt {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6A6A72;
+  flex: 1;
+}
+.d5-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.d5-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--mute);
+  transition: transform .25s var(--ease), color .25s;
+}
+.d5-card:hover .d5-arrow { transform: translateX(4px); color: var(--accent); }
+
+
+/* ── FOOTER ──────────────────────────────────── */
+.pg-foot {
+  margin-top: 96px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.pg-foot a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--mute);
+  text-decoration: none;
+  transition: color .25s;
+}
+.pg-foot a:hover { color: var(--accent); }
+.pg-foot .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--mute);
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="eyebrow">OMAR.BUILD / EXPLORE / CARDS / V1</div>
+  <h1 class="header-title">Exploring <em>Cards</em></h1>
+  <p class="header-desc">Five structurally different directions for content cards — each showing writing, lab, and work. Not variations of one layout: genuinely different spatial ideas. v1 is range-finding before we go deep.</p>
+  <p class="header-question">The question: what card structure is scannable in under two seconds, feels ownable to this site, and works across three content types without forcing them into the same mold?</p>
+
+
+  <!-- ─────────────────────────────────────────────
+       01 · ROW
+       ───────────────────────────────────────────── -->
+  <section class="direction">
+    <div class="dir-head">
+      <span class="dir-num">01</span>
+      <span class="dir-name">Row</span>
+      <span class="dir-note">Print index. No card chrome — type does all the work. Spare, fast, Bauhaus.</span>
+    </div>
+    <div class="d1-list">
+      <a class="d1-row" href="#">
+        <span class="d1-date">JUN 2026</span>
+        <span class="d1-title">The midfielder model of design leadership</span>
+        <span class="badge writing">Writing</span>
+        <span class="d1-arrow">→</span>
+      </a>
+      <a class="d1-row" href="#">
+        <span class="d1-date">MAY 2026</span>
+        <span class="d1-title">Type in motion — variable font experiments</span>
+        <span class="badge lab">Lab</span>
+        <span class="d1-arrow">→</span>
+      </a>
+      <a class="d1-row" href="#">
+        <span class="d1-date">2022–2025</span>
+        <span class="d1-title">Sublime Security: design at Series A through D</span>
+        <span class="badge work">Work</span>
+        <span class="d1-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       02 · TICKET
+       ───────────────────────────────────────────── -->
+  <section class="direction">
+    <div class="dir-head">
+      <span class="dir-num">02</span>
+      <span class="dir-name">Ticket</span>
+      <span class="dir-note">Physical artifact. Color strip above, dashed meta footer below — like a boarding pass or concert stub.</span>
+    </div>
+    <div class="d2-grid">
+      <a class="d2-card" href="#">
+        <div class="d2-strip writing"></div>
+        <div class="d2-body">
+          <span class="badge writing">Writing</span>
+          <div class="d2-title">The midfielder model of design leadership</div>
+          <div class="d2-excerpt">On being a player-coach — close enough to the craft to make, far enough to lead systems and amplify others.</div>
+        </div>
+        <div class="d2-foot">
+          <span class="d2-date">JUN 2026</span>
+          <span class="d2-tag">8 min read</span>
+        </div>
+      </a>
+      <a class="d2-card" href="#">
+        <div class="d2-strip lab"></div>
+        <div class="d2-body">
+          <span class="badge lab">Lab</span>
+          <div class="d2-title">Type in motion — variable font experiments</div>
+          <div class="d2-excerpt">Playing with the axes that are usually left at their defaults. What happens when weight and width breathe?</div>
+        </div>
+        <div class="d2-foot">
+          <span class="d2-date">MAY 2026</span>
+          <span class="d2-tag">Interactive</span>
+        </div>
+      </a>
+      <a class="d2-card" href="#">
+        <div class="d2-strip work"></div>
+        <div class="d2-body">
+          <span class="badge work">Work</span>
+          <div class="d2-title">Sublime Security: design at Series A through D</div>
+          <div class="d2-excerpt">Building the design org from 1 to 8, and the decisions that shaped the product along the way.</div>
+        </div>
+        <div class="d2-foot">
+          <span class="d2-date">2022–2025</span>
+          <span class="d2-tag">Case study</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       03 · DARK
+       ───────────────────────────────────────────── -->
+  <section class="direction">
+    <div class="dir-head">
+      <span class="dir-num">03</span>
+      <span class="dir-name">Dark</span>
+      <span class="dir-note">Inverted — content glows out of the surface. Serif headline adds voice; mono metadata grounds it.</span>
+    </div>
+    <div class="d3-grid">
+      <a class="d3-card" href="#">
+        <span class="d3-badge writing">Writing</span>
+        <div class="d3-title">The midfielder model of design leadership</div>
+        <div class="d3-excerpt">On being a player-coach — close enough to the craft to make, far enough to lead systems and amplify others.</div>
+        <div class="d3-foot">
+          <span class="d3-date">JUN 2026</span>
+          <span class="d3-arrow">→</span>
+        </div>
+      </a>
+      <a class="d3-card" href="#">
+        <span class="d3-badge lab">Lab</span>
+        <div class="d3-title">Type in motion — variable font experiments</div>
+        <div class="d3-excerpt">Playing with the axes that are usually left at defaults. What happens when weight and width breathe?</div>
+        <div class="d3-foot">
+          <span class="d3-date">MAY 2026</span>
+          <span class="d3-arrow">→</span>
+        </div>
+      </a>
+      <a class="d3-card" href="#">
+        <span class="d3-badge work">Work</span>
+        <div class="d3-title">Sublime: design at Series A through D</div>
+        <div class="d3-excerpt">Building the design org from 1 to 8, and the decisions that shaped the product along the way.</div>
+        <div class="d3-foot">
+          <span class="d3-date">2022–2025</span>
+          <span class="d3-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       04 · EDITORIAL
+       ───────────────────────────────────────────── -->
+  <section class="direction">
+    <div class="dir-head">
+      <span class="dir-num">04</span>
+      <span class="dir-name">Editorial</span>
+      <span class="dir-note">Two columns inside the card — large serif title left, excerpt + meta right. Magazine layout.</span>
+    </div>
+    <div class="d4-list">
+      <a class="d4-card" href="#">
+        <div class="d4-left">
+          <div class="d4-label">Writing · Jun 2026</div>
+          <div class="d4-title">The midfielder model of <em>design</em> leadership</div>
+        </div>
+        <div class="d4-right">
+          <div class="d4-excerpt">On being a player-coach — close enough to the craft to make, far enough to lead systems and amplify others. The playmaker sees the whole field.</div>
+          <div class="d4-meta">
+            <span class="d4-readtime">8 min read</span>
+            <span class="badge writing">Design Leadership</span>
+          </div>
+        </div>
+      </a>
+      <a class="d4-card" href="#">
+        <div class="d4-left">
+          <div class="d4-label">Lab · May 2026</div>
+          <div class="d4-title">Type in <em>motion</em></div>
+        </div>
+        <div class="d4-right">
+          <div class="d4-excerpt">Variable font experiments — playing with the axes that are usually left at their defaults. What happens when weight and width start to breathe?</div>
+          <div class="d4-meta">
+            <span class="d4-readtime">Interactive</span>
+            <span class="badge lab">Typography</span>
+          </div>
+        </div>
+      </a>
+      <a class="d4-card" href="#">
+        <div class="d4-left">
+          <div class="d4-label">Work · 2022–2025</div>
+          <div class="d4-title">Sublime <em>Security</em></div>
+        </div>
+        <div class="d4-right">
+          <div class="d4-excerpt">Building the design org from 1 to 8 — and the decisions along the way that shaped the product from Series A to D.</div>
+          <div class="d4-meta">
+            <span class="d4-readtime">Case study</span>
+            <span class="badge work">Cybersecurity</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       05 · SPLIT
+       ───────────────────────────────────────────── -->
+  <section class="direction">
+    <div class="dir-head">
+      <span class="dir-num">05</span>
+      <span class="dir-name">Split</span>
+      <span class="dir-note">Hard asymmetry — color block left with vertical type label; white right holds the content. No ambiguity about type.</span>
+    </div>
+    <div class="d5-list">
+      <a class="d5-card" href="#">
+        <div class="d5-left writing">
+          <span class="d5-type-label">Writing</span>
+          <span class="d5-year">2026</span>
+        </div>
+        <div class="d5-right">
+          <div class="d5-title">The midfielder model of design leadership</div>
+          <div class="d5-excerpt">On being a player-coach — close enough to the craft to make, far enough to lead.</div>
+          <div class="d5-foot">
+            <span class="badge writing">Design Leadership</span>
+            <span class="d5-arrow">→</span>
+          </div>
+        </div>
+      </a>
+      <a class="d5-card" href="#">
+        <div class="d5-left lab">
+          <span class="d5-type-label">Lab</span>
+          <span class="d5-year">2026</span>
+        </div>
+        <div class="d5-right">
+          <div class="d5-title">Type in motion — variable font experiments</div>
+          <div class="d5-excerpt">Playing with the axes that are usually left at their defaults.</div>
+          <div class="d5-foot">
+            <span class="badge lab">Typography</span>
+            <span class="d5-arrow">→</span>
+          </div>
+        </div>
+      </a>
+      <a class="d5-card" href="#">
+        <div class="d5-left work">
+          <span class="d5-type-label">Work</span>
+          <span class="d5-year">2022</span>
+        </div>
+        <div class="d5-right">
+          <div class="d5-title">Sublime Security: design at Series A through D</div>
+          <div class="d5-excerpt">Building the design org from 1 to 8, and the decisions that shaped the product.</div>
+          <div class="d5-foot">
+            <span class="badge work">Cybersecurity</span>
+            <span class="d5-arrow">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <div class="pg-foot">
+    <a href="../index.html">← cards</a>
+    <span class="meta">V1 · 19 JUN 2026 · omar.build/explore/cards</span>
+    <a href="../../index.html">explore →</a>
+  </div>
+
+</div>
+</body>
+</html>

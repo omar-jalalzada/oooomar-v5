@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Exploring Cards — v3 · omar.build/explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0B0B0C;
+  --mute:    #9A9AA4;
+  --accent:  #2D5BFF;
+  --bg:      #F8F7F5;
+  --surface: #FFFFFF;
+  --ease:    cubic-bezier(.2,.75,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PAGE ─────────────────────────────────────── */
+.page { max-width: 1140px; margin: 0 auto; padding: 64px 48px 120px; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 44px;
+}
+
+/* ── CARD BASE ────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.04),
+    0 4px 16px rgba(0,0,0,.05);
+  transition:
+    transform .35s var(--ease),
+    box-shadow .35s var(--ease);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.11);
+}
+
+/* ── CANVAS ───────────────────────────────────── */
+.card-canvas {
+  width: 100%;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── CARD TEXT ZONE ───────────────────────────── */
+.card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface);
+}
+.badge {
+  display: inline-flex;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+.badge.writing { background: rgba(192,74,32,.10); color: #B84018; }
+.badge.lab     { background: rgba(45,91,255,.10);  color: #2D5BFF; }
+.badge.work    { background: rgba(0,0,0,.06);       color: #5A5A62; }
+.card-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.22;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+.card-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .07em;
+  color: var(--mute);
+}
+.card-arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--mute);
+  transition: transform .3s var(--ease), color .3s;
+}
+.card:hover .card-arrow { transform: translateX(4px); color: var(--accent); }
+
+/* ── GRID ─────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; }
+
+/* ── FOOTER ───────────────────────────────────── */
+.pg-foot {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pg-foot a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--mute);
+  text-decoration: none;
+  transition: color .25s;
+}
+.pg-foot a:hover { color: var(--accent); }
+.pg-foot .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: #C8C8CC;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">OMAR.BUILD / EXPLORE / CARDS / V3 — Generated motion, light ground</div>
+
+  <div class="grid">
+
+    <!-- Writing · col 5 · tall -->
+    <a class="card col-5" href="#" data-card>
+      <canvas class="card-canvas" data-type="flow" data-seed="42" data-ch="300"></canvas>
+      <div class="card-body">
+        <span class="badge writing">Writing</span>
+        <div class="card-title">The midfielder model</div>
+        <div class="card-meta">
+          <span class="card-date">Jun 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Lab · col 4 · medium -->
+    <a class="card col-4" href="#" data-card>
+      <canvas class="card-canvas" data-type="iris" data-seed="17" data-ch="240"></canvas>
+      <div class="card-body">
+        <span class="badge lab">Lab</span>
+        <div class="card-title">Type in motion</div>
+        <div class="card-meta">
+          <span class="card-date">May 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Work · col 3 · short -->
+    <a class="card col-3" href="#" data-card>
+      <canvas class="card-canvas" data-type="lattice" data-seed="88" data-ch="180"></canvas>
+      <div class="card-body">
+        <span class="badge work">Work</span>
+        <div class="card-title">Sublime</div>
+        <div class="card-meta">
+          <span class="card-date">2022–2025</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Work · col 3 · tall -->
+    <a class="card col-3" href="#" data-card>
+      <canvas class="card-canvas" data-type="lattice" data-seed="33" data-ch="300"></canvas>
+      <div class="card-body">
+        <span class="badge work">Work</span>
+        <div class="card-title">Alto</div>
+        <div class="card-meta">
+          <span class="card-date">2020–2022</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Lab · col 5 · short -->
+    <a class="card col-5" href="#" data-card>
+      <canvas class="card-canvas" data-type="iris" data-seed="64" data-ch="180"></canvas>
+      <div class="card-body">
+        <span class="badge lab">Lab</span>
+        <div class="card-title">Living Stage</div>
+        <div class="card-meta">
+          <span class="card-date">Jun 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Writing · col 4 · medium -->
+    <a class="card col-4" href="#" data-card>
+      <canvas class="card-canvas" data-type="flow" data-seed="7" data-ch="240"></canvas>
+      <div class="card-body">
+        <span class="badge writing">Writing</span>
+        <div class="card-title">Design in cybersecurity</div>
+        <div class="card-meta">
+          <span class="card-date">Apr 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Lab · col 6 · medium -->
+    <a class="card col-6" href="#" data-card>
+      <canvas class="card-canvas" data-type="iris" data-seed="51" data-ch="240"></canvas>
+      <div class="card-body">
+        <span class="badge lab">Lab</span>
+        <div class="card-title">Generative geometry</div>
+        <div class="card-meta">
+          <span class="card-date">Mar 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Writing · col 6 · medium -->
+    <a class="card col-6" href="#" data-card>
+      <canvas class="card-canvas" data-type="flow" data-seed="29" data-ch="240"></canvas>
+      <div class="card-body">
+        <span class="badge writing">Writing</span>
+        <div class="card-title">On managing design</div>
+        <div class="card-meta">
+          <span class="card-date">Feb 2026</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="pg-foot">
+    <a href="../index.html">← cards</a>
+    <span class="meta">V3 · 19 JUN 2026</span>
+    <a href="../../index.html">explore →</a>
+  </div>
+
+</div>
+<script>
+/* ─────────────────────────────────────────────────
+   SEEDED PSEUDO-RANDOM
+   ─────────────────────────────────────────────── */
+function makeRand(seed) {
+  let s = seed;
+  return () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+
+/* ─────────────────────────────────────────────────
+   PRE-COMPUTE PARAMS (called once per card)
+   Each algorithm returns a params object.
+   draw*(ctx, w, h, t, params) uses it each frame.
+   ─────────────────────────────────────────────── */
+
+// FLOW — flowing bezier strokes (calligraphy / ink)
+function buildFlowParams(seed) {
+  const r = makeRand(seed);
+  const N = 7;
+  return Array.from({ length: N }, () => ({
+    x0:    r() * 0.18,
+    y0:    r(),
+    cp1x:  r() * 0.4 + 0.1,
+    cp1y:  r(),
+    cp2x:  r() * 0.4 + 0.45,
+    cp2y:  r(),
+    x1:    1 - r() * 0.18,
+    y1:    r(),
+    lw:    0.6 + r() * 2.4,
+    a:     0.12 + r() * 0.58,
+    hue:   14 + r() * 14,
+    light: 32 + r() * 14,
+    ph1:   r() * Math.PI * 2,
+    ph2:   r() * Math.PI * 2,
+    sp1:   0.35 + r() * 0.55,
+    sp2:   0.30 + r() * 0.50,
+    drift: 0.045 + r() * 0.065,
+  }));
+}
+
+function drawFlow(ctx, w, h, t, params) {
+  const T = t * 0.0009;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#FDF4EE';
+  ctx.fillRect(0, 0, w, h);
+
+  params.forEach(p => {
+    const cp1x = (p.cp1x + Math.sin(T * p.sp1 + p.ph1) * p.drift) * w;
+    const cp1y = (p.cp1y + Math.cos(T * p.sp1 * 0.8 + p.ph1) * p.drift) * h;
+    const cp2x = (p.cp2x + Math.sin(T * p.sp2 + p.ph2) * p.drift) * w;
+    const cp2y = (p.cp2y + Math.cos(T * p.sp2 * 0.9 + p.ph2) * p.drift) * h;
+
+    ctx.beginPath();
+    ctx.moveTo(p.x0 * w, p.y0 * h);
+    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p.x1 * w, p.y1 * h);
+    ctx.strokeStyle = `hsla(${p.hue}, 72%, ${p.light}%, ${p.a})`;
+    ctx.lineWidth = p.lw;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+  });
+}
+
+// IRIS — orbiting construction circles (Bauhaus / geometric)
+function buildIrisParams(seed) {
+  const r = makeRand(seed);
+  const N = 5;
+  return Array.from({ length: N }, () => ({
+    radius:    0.22 + r() * 0.50,   // fraction of min(w,h)
+    dist:      0.05 + r() * 0.28,   // orbit distance, fraction of min(w,h)
+    initAngle: r() * Math.PI * 2,
+    speed:     (0.20 + r() * 0.50) * (r() < 0.5 ? 1 : -1),
+    alpha:     0.07 + r() * 0.18,
+    showAxis:  r() > 0.55,
+    axAlpha:   0.05 + r() * 0.08,
+  }));
+}
+
+function drawIris(ctx, w, h, t, params) {
+  const T = t * 0.0005;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#ECF1FF';
+  ctx.fillRect(0, 0, w, h);
+
+  const cx = w * 0.5;
+  const cy = h * 0.48;
+  const unit = Math.min(w, h);
+
+  params.forEach(p => {
+    const angle = p.initAngle + T * p.speed;
+    const ox = cx + Math.cos(angle) * p.dist * unit;
+    const oy = cy + Math.sin(angle) * p.dist * unit;
+    const r  = p.radius * unit;
+
+    ctx.beginPath();
+    ctx.arc(ox, oy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(45,91,255,${p.alpha})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    if (p.showAxis) {
+      ctx.save();
+      ctx.setLineDash([2, 8]);
+      ctx.beginPath();
+      ctx.moveTo(ox - Math.cos(angle) * r * 1.1, oy - Math.sin(angle) * r * 1.1);
+      ctx.lineTo(ox + Math.cos(angle) * r * 1.1, oy + Math.sin(angle) * r * 1.1);
+      ctx.strokeStyle = `rgba(45,91,255,${p.axAlpha})`;
+      ctx.lineWidth = 0.75;
+      ctx.stroke();
+      ctx.restore();
+    }
+  });
+
+  // Center mark
+  ctx.beginPath();
+  ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(45,91,255,0.55)';
+  ctx.fill();
+
+  // Crosshair at center (very faint)
+  ctx.save();
+  ctx.setLineDash([2, 10]);
+  ctx.strokeStyle = 'rgba(45,91,255,0.08)';
+  ctx.lineWidth = 0.75;
+  ctx.beginPath();
+  ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// LATTICE — node network (systems / connections)
+function buildLatticeParams(seed) {
+  const r = makeRand(seed);
+  const N = 9 + Math.floor(r() * 4);
+
+  const nodes = Array.from({ length: N }, () => ({
+    nx:    0.1 + r() * 0.8,
+    ny:    0.1 + r() * 0.8,
+    rad:   2.5 + r() * 2.2,
+    phase: r() * Math.PI * 2,
+    freq:  1.2 + r() * 1.6,
+    travelOffset: r(), // for traveling dots
+  }));
+
+  const edges = [];
+  const thresh = 0.38 + r() * 0.08;
+  for (let i = 0; i < N; i++) {
+    for (let j = i + 1; j < N; j++) {
+      const dx = nodes[i].nx - nodes[j].nx;
+      const dy = nodes[i].ny - nodes[j].ny;
+      if (Math.sqrt(dx*dx + dy*dy) < thresh && edges.length < N * 1.6) {
+        edges.push([i, j]);
+      }
+    }
+  }
+
+  return { nodes, edges };
+}
+
+function drawLattice(ctx, w, h, t, { nodes, edges }) {
+  const T = t * 0.001;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#F6F5F3';
+  ctx.fillRect(0, 0, w, h);
+
+  // Edges
+  edges.forEach(([i, j]) => {
+    const ni = nodes[i], nj = nodes[j];
+    const x0 = ni.nx * w, y0 = ni.ny * h;
+    const x1 = nj.nx * w, y1 = nj.ny * h;
+
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.strokeStyle = 'rgba(11,11,12,0.10)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Traveling dot (only when animating)
+    if (t > 0) {
+      const progress = ((T * 0.6 + ni.travelOffset) % 1 + 1) % 1;
+      const dx = x1 - x0, dy = y1 - y0;
+      ctx.beginPath();
+      ctx.arc(x0 + dx * progress, y0 + dy * progress, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(45,91,255,0.55)';
+      ctx.fill();
+    }
+  });
+
+  // Nodes
+  nodes.forEach(n => {
+    const pulse = t > 0
+      ? 1 + Math.sin(T * n.freq * 3 + n.phase) * 0.22
+      : 1;
+    const x = n.nx * w, y = n.ny * h;
+    const r = n.rad * pulse;
+
+    // Halo
+    ctx.beginPath();
+    ctx.arc(x, y, r + 3.5, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(11,11,12,0.07)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(11,11,12,0.62)';
+    ctx.fill();
+  });
+}
+
+/* ─────────────────────────────────────────────────
+   INIT ALL CARDS
+   ─────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-card]').forEach(card => {
+    const canvas = card.querySelector('.card-canvas');
+    if (!canvas) return;
+
+    const type   = canvas.dataset.type;
+    const seed   = parseInt(canvas.dataset.seed) || 1;
+    const ch     = parseInt(canvas.dataset.ch)   || 240;
+    const dpr    = window.devicePixelRatio || 1;
+
+    // Set display height
+    canvas.style.height = ch + 'px';
+
+    // Wait one frame so layout width is available
+    requestAnimationFrame(() => {
+      const w = canvas.offsetWidth;
+      const h = ch;
+
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      // Pre-compute params from seed
+      let params;
+      if      (type === 'flow')    params = buildFlowParams(seed);
+      else if (type === 'iris')    params = buildIrisParams(seed);
+      else if (type === 'lattice') params = buildLatticeParams(seed);
+
+      const draw = (t) => {
+        if      (type === 'flow')    drawFlow   (ctx, w, h, t, params);
+        else if (type === 'iris')    drawIris   (ctx, w, h, t, params);
+        else if (type === 'lattice') drawLattice(ctx, w, h, t, params);
+      };
+
+      // Draw initial static frame
+      draw(0);
+
+      // Hover → animate
+      let animId = null;
+      let t = 0;
+
+      card.addEventListener('mouseenter', () => {
+        if (animId) return;
+        const loop = () => {
+          t++;
+          draw(t);
+          animId = requestAnimationFrame(loop);
+        };
+        animId = requestAnimationFrame(loop);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(animId);
+        animId = null;
+        // Freeze on current frame
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

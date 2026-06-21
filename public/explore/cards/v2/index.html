@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Exploring Cards — v2 · omar.build/explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0B0B0C;
+  --mute:   #8A8A92;
+  --accent: #2D5BFF;
+  --bg:     #0E0E10;
+  --ease:   cubic-bezier(.2,.75,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: #F0F0F3;
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PAGE ─────────────────────────────────────── */
+.page { max-width: 1140px; margin: 0 auto; padding: 72px 48px 120px; }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: #3A3A44;
+  text-transform: uppercase;
+  margin-bottom: 56px;
+}
+
+/* ── SECTION LABEL ────────────────────────────── */
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .18em;
+  color: #3A3A44;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+
+/* ══════════════════════════════════════════════
+   COVER CARD — the core unit
+   ══════════════════════════════════════════════ */
+.cover-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #1A1A1F;
+}
+
+/* visual container — the image/art fills this */
+.cover-card .vis {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  transition: none;
+}
+.cover-card .vis img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .7s var(--ease);
+  filter: saturate(.9);
+}
+.cover-card:hover .vis img {
+  transform: scale(1.05);
+}
+
+/* color overlay on image */
+.cover-card .vis::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transition: opacity .4s;
+}
+
+/* text content — pinned to bottom of card */
+.cover-card .content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 24px 22px;
+  background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.55) 50%, transparent 100%);
+  transition: transform .4s var(--ease);
+}
+.cover-card:hover .content {
+  transform: translateY(-4px);
+}
+.cover-card .badge {
+  display: inline-flex;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.cover-card .title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  color: #F8F8FB;
+}
+.cover-card .meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.cover-card .date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: rgba(255,255,255,.4);
+}
+.cover-card .arrow {
+  font-size: 14px;
+  color: rgba(255,255,255,.3);
+  font-family: 'JetBrains Mono', monospace;
+  transition: transform .3s var(--ease), color .3s;
+}
+.cover-card:hover .arrow { transform: translateX(5px); color: rgba(255,255,255,.8); }
+
+/* BADGE COLORS */
+.badge.writing { background: rgba(192,74,32,.28); color: #F09060; }
+.badge.lab     { background: rgba(45,91,255,.28); color: #85A8FF; }
+.badge.work    { background: rgba(255,255,255,.1); color: rgba(255,255,255,.55); }
+
+/* COLOR OVERLAY TINTS */
+.cover-card.writing .vis::after { background: rgba(120,38,8,.25); }
+.cover-card.lab     .vis::after { background: rgba(8,18,80,.30); }
+.cover-card.work    .vis::after { background: rgba(4,4,8,.22); }
+
+
+/* ══════════════════════════════════════════════
+   LAYOUT A — Hero + Pair
+   ══════════════════════════════════════════════ */
+.layout-hero-pair { display: grid; grid-template-rows: auto; gap: 16px; }
+.hero-row { display: grid; }
+.pair-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* hero = tall */
+.layout-hero-pair .hero .vis { height: 480px; }
+.layout-hero-pair .hero .title { font-size: 28px; }
+
+/* pair = medium */
+.layout-hero-pair .pair .vis { height: 280px; }
+.layout-hero-pair .pair .title { font-size: 20px; }
+
+
+/* ══════════════════════════════════════════════
+   LAYOUT B — Three column equal grid
+   ══════════════════════════════════════════════ */
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+.layout-grid .vis { height: 320px; }
+.layout-grid .title { font-size: 19px; }
+
+
+/* ══════════════════════════════════════════════
+   LAYOUT C — Wide landscape cards (list mode)
+   ══════════════════════════════════════════════ */
+.layout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 64px;
+}
+
+.wide-card {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  background: #141418;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  height: 160px;
+}
+.wide-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+.wide-card .vis {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  flex-shrink: 0;
+}
+.wide-card .vis img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .7s var(--ease);
+  filter: saturate(.85);
+}
+.wide-card:hover .vis img { transform: scale(1.06); }
+.wide-card .vis::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.wide-card.writing .vis::after { background: rgba(120,38,8,.35); }
+.wide-card.lab     .vis::after { background: rgba(8,18,80,.38); }
+.wide-card.work    .vis::after { background: rgba(4,4,8,.28); }
+
+.wide-card .body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,.04);
+  border-right: 1px solid rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  border-radius: 0 12px 12px 0;
+}
+.wide-card .badge {
+  display: inline-flex;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  margin-bottom: 0;
+}
+.wide-card .title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.22;
+  letter-spacing: -.02em;
+  color: #F0F0F3;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.wide-card .foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wide-card .date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: #3A3A44;
+}
+.wide-card .arrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #3A3A44;
+  transition: transform .3s var(--ease), color .3s;
+}
+.wide-card:hover .arrow { transform: translateX(4px); color: var(--accent); }
+
+
+/* ── DIVIDER ─────────────────────────────────── */
+.divider {
+  margin: 64px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.divider::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: rgba(255,255,255,.06);
+  flex: 1;
+}
+
+/* ── FOOTER ──────────────────────────────────── */
+.pg-foot {
+  margin-top: 96px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pg-foot a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: #3A3A44;
+  text-decoration: none;
+  transition: color .25s;
+}
+.pg-foot a:hover { color: var(--accent); }
+.pg-foot .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: #2E2E34;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">OMAR.BUILD / EXPLORE / CARDS / V2</div>
+
+
+  <!-- ══════════════════════════════════════════
+       LAYOUT A — Hero + Pair
+       ══════════════════════════════════════════ -->
+  <div class="section-label">A — Hero + pair</div>
+
+  <div class="layout-hero-pair">
+    <div class="hero-row">
+      <!-- HERO: Writing -->
+      <a class="cover-card writing hero" href="#">
+        <div class="vis">
+          <img
+            src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=1400&q=85&auto=format&fit=crop"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+        <div class="content">
+          <span class="badge writing">Writing</span>
+          <div class="title">The midfielder model of design leadership</div>
+          <div class="meta">
+            <span class="date">Jun 2026</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="pair-row">
+      <!-- Lab -->
+      <a class="cover-card lab pair" href="#">
+        <div class="vis">
+          <img
+            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=900&q=85&auto=format&fit=crop"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+        <div class="content">
+          <span class="badge lab">Lab</span>
+          <div class="title">Type in motion</div>
+          <div class="meta">
+            <span class="date">May 2026</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Work -->
+      <a class="cover-card work pair" href="#">
+        <div class="vis">
+          <img
+            src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=900&q=85&auto=format&fit=crop"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+        <div class="content">
+          <span class="badge work">Work</span>
+          <div class="title">Sublime Security</div>
+          <div class="meta">
+            <span class="date">2022–2025</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LAYOUT B — Equal grid
+       ══════════════════════════════════════════ -->
+  <div class="divider">
+    <span class="section-label" style="margin:0;">B — Equal grid</span>
+  </div>
+
+  <div class="layout-grid">
+    <a class="cover-card writing" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=700&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="content">
+        <span class="badge writing">Writing</span>
+        <div class="title">Design leadership at scale</div>
+        <div class="meta">
+          <span class="date">Jun 2026</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="cover-card lab" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=700&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="content">
+        <span class="badge lab">Lab</span>
+        <div class="title">Living Stage prototype</div>
+        <div class="meta">
+          <span class="date">Jun 2026</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="cover-card work" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=700&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="content">
+        <span class="badge work">Work</span>
+        <div class="title">Alto: healthcare redesign</div>
+        <div class="meta">
+          <span class="date">2020–2022</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LAYOUT C — Wide list
+       ══════════════════════════════════════════ -->
+  <div class="divider">
+    <span class="section-label" style="margin:0;">C — Wide list</span>
+  </div>
+
+  <div class="layout-list">
+    <a class="wide-card writing" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="body">
+        <span class="badge writing">Writing</span>
+        <div class="title">The midfielder model of design leadership</div>
+        <div class="foot">
+          <span class="date">Jun 2026</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="wide-card lab" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="body">
+        <span class="badge lab">Lab</span>
+        <div class="title">Type in motion — variable font experiments</div>
+        <div class="foot">
+          <span class="date">May 2026</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="wide-card work" href="#">
+      <div class="vis">
+        <img
+          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=85&auto=format&fit=crop"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <div class="body">
+        <span class="badge work">Work</span>
+        <div class="title">Sublime Security: Series A through D</div>
+        <div class="foot">
+          <span class="date">2022–2025</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+  <div class="pg-foot">
+    <a href="../index.html">← cards</a>
+    <span class="meta">V2 · 19 JUN 2026</span>
+    <a href="../../index.html">explore →</a>
+  </div>
+
+</div>
+</body>
+</html>
