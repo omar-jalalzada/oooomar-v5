@@ -38,4 +38,39 @@
   --radius-card: 2px; /* sharp, editorial card corner */
   --measure: 42rem;   /* reading column */
   --site-width: 64rem;
+
+  /* shadows — layered: sharp near + soft far, tinted toward accent blue */
+  --shadow-sm:
+    0 1px 2px rgba(25, 35, 90, 0.06),
+    0 4px 12px -4px rgba(25, 92, 255, 0.10);
+  --shadow-md:
+    0 2px 6px rgba(40, 40, 90, 0.08),
+    0 16px 40px -12px rgba(25, 92, 255, 0.18);
+  --shadow-lg:
+    0 4px 12px rgba(40, 40, 90, 0.10),
+    0 40px 80px -24px rgba(25, 92, 255, 0.28);
+  --shadow-float:
+    0 2px 8px rgba(25, 35, 90, 0.08),
+    0 24px 60px -24px rgba(20, 40, 120, 0.40);
+
+  /* easing — named curves from the Constellation codebase */
+  --ease-pop:      cubic-bezier(0.34, 1.28, 0.4,  1); /* overshoot spring — signature */
+  --ease-out:      cubic-bezier(0.2,  0.75, 0.2,  1); /* smooth deceleration */
+  --ease-in-out:   cubic-bezier(0.62, 0.04, 0.22, 1); /* flips, modals */
+  --ease-standard: cubic-bezier(0.4,  0,    0.2,  1); /* general purpose */
+
+  /* durations */
+  --duration-instant:   80ms;
+  --duration-fast:     160ms;
+  --duration-normal:   320ms;
+  --duration-slow:     500ms;
+  --duration-entrance: 800ms;
+
+  /* z-index scale */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-overlay: 40;
+  --z-nav:     80;
+  --z-modal:   100;
+  --z-toast:   120;
 }

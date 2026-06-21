@@ -1,11 +1,18 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Card from '../../components/Card.astro';
-import CardGrid from '../../components/CardGrid.astro';
+import { LabsGrid } from '../../components/ui/LabsGrid';
 import { getVisible, byDateDesc } from '../../lib/content';
 import { formatDate } from '../../lib/format';
 
 const labs = (await getVisible('labs')).sort(byDateDesc);
+
+const cards = labs.map((lab) => ({
+  href: `/labs/${lab.id}/`,
+  title: lab.data.title,
+  description: lab.data.description,
+  meta: formatDate(lab.data.date),
+  draft: lab.data.status === 'draft',
+}));
 ---
 
 <Base
@@ -14,20 +21,7 @@ const labs = (await getVisible('labs')).sort(byDateDesc);
 >
   <h1>Labs</h1>
   <p class="intro">Interactive experiments. Each one is a self-contained prototype you can open full screen.</p>
-
-  <CardGrid>
-    {
-      labs.map((lab) => (
-        <Card
-          href={`/labs/${lab.id}/`}
-          title={lab.data.title}
-          description={lab.data.description}
-          meta={formatDate(lab.data.date)}
-          draft={lab.data.status === 'draft'}
-        />
-      ))
-    }
-  </CardGrid>
+  <LabsGrid client:visible {cards} />
 </Base>
 
 <style>
