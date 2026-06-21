@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — constellation v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C; --mute:#8A8A92; --line:#EAEAEC; --bg:#FCFCFD;
+    --ease:cubic-bezier(.2,.75,.2,1);
+    --spring:cubic-bezier(.34,1.28,.4,1);
+    --cardW:268px; --cardH:340px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;
+    overflow:hidden;overscroll-behavior:none;}
+
+  /* ---------- background: optimistic wash + grain, pushed back ---------- */
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(60% 55% at 32% 30%, rgba(255,214,170,.28), transparent 70%),
+      radial-gradient(55% 55% at 70% 38%, rgba(196,184,255,.26), transparent 70%),
+      radial-gradient(60% 60% at 52% 78%, rgba(168,214,255,.30), transparent 72%),
+      var(--bg);
+    animation:wash 18s ease-in-out infinite;}
+  @keyframes wash{0%,100%{filter:saturate(1) brightness(1);transform:scale(1);}
+    50%{filter:saturate(1.12) brightness(1.02);transform:scale(1.04);}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");}
+
+  /* ---------- viewport (pan surface) ---------- */
+  .viewport{position:fixed;inset:0;z-index:2;cursor:grab;touch-action:none;}
+  .viewport.dragging{cursor:grabbing;}
+  .canvas{position:absolute;left:50%;top:50%;width:0;height:0;
+    will-change:transform;}
+
+  /* ---------- card ---------- */
+  .card{position:absolute;width:var(--cardW);height:var(--cardH);
+    margin-left:calc(var(--cardW) / -2);margin-top:calc(var(--cardH) / -2);
+    perspective:1500px;opacity:0;
+    transform:translate(0,0) scale(1) rotate(var(--jit));
+    transition:transform .62s var(--spring), opacity .55s ease;
+    will-change:transform,opacity;}
+  /* deck / pre-reveal: bunched near center, scaled down, face-down */
+  .card.deck{opacity:0;
+    transform:translate(var(--tx), var(--ty)) scale(.42) rotate(calc(var(--jit) * 4));}
+  .card.in{opacity:1;}
+  .card:hover{z-index:60;
+    transform:translate(0,-10px) scale(1.055) rotate(0deg);}
+
+  .flipper{position:absolute;inset:0;transform-style:preserve-3d;
+    transform:rotateY(0deg);
+    transition:transform .62s var(--spring);}
+  .card.deck .flipper{transform:rotateY(180deg);}
+
+  .face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;overflow:hidden;}
+
+  /* ----- FRONT: minimal default ----- */
+  .front{background:#fff;border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(16,24,40,.04), 0 18px 40px -26px rgba(16,24,40,.22);
+    display:flex;flex-direction:column;justify-content:space-between;padding:22px 22px 20px;
+    transition:box-shadow .45s var(--ease), border-color .45s var(--ease);}
+  /* bloom overlay — the "explosion of life" on hover */
+  .front::before{content:'';position:absolute;inset:0;opacity:0;
+    background:linear-gradient(150deg, var(--g1), var(--g2));
+    transition:opacity .5s var(--ease);}
+  .card:hover .front{border-color:transparent;
+    box-shadow:0 8px 18px -8px var(--shadow), 0 40px 80px -34px var(--shadow);}
+  .card:hover .front::before{opacity:1;}
+
+  .f-top{position:relative;z-index:2;display:flex;align-items:center;gap:8px;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--mute);transition:color .45s var(--ease);}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;
+    transition:background .45s var(--ease);}
+  .card:hover .kicker{color:rgba(255,255,255,.85);}
+  .card:hover .dot{background:#fff;}
+
+  .f-body{position:relative;z-index:2;}
+  .title{font-size:25px;line-height:1.1;letter-spacing:-.015em;font-weight:600;
+    transition:color .45s var(--ease);}
+  .title.serif{font-family:'Instrument Serif',serif;font-weight:400;font-size:31px;line-height:1.04;}
+  .title.serif .it{font-style:italic;}
+  .blurb{margin-top:10px;font-size:13.5px;line-height:1.5;color:#5C5C66;max-width:30ch;
+    transition:color .45s var(--ease);}
+  .card:hover .title{color:#fff;}
+  .card:hover .blurb{color:rgba(255,255,255,.82);}
+
+  .f-foot{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--mute);
+    transition:color .45s var(--ease);}
+  .f-foot .go{opacity:0;transform:translateX(-4px);transition:opacity .45s var(--ease), transform .45s var(--ease);}
+  .card:hover .f-foot{color:rgba(255,255,255,.78);}
+  .card:hover .f-foot .go{opacity:1;transform:translateX(0);}
+
+  /* identity (center) card — slightly warmer rest state */
+  .card.center .front{background:#fff;border-color:#E7E2F5;}
+  .card.center .name{font-family:'Instrument Serif',serif;font-size:33px;line-height:1;}
+
+  /* travel cards — photo (gradient stand-in) revealed on hover */
+  .front.photo{justify-content:flex-end;}
+  .front.photo::before{background:var(--photo);} /* the "photo" */
+  .photo .place{position:relative;z-index:2;font-family:'Instrument Serif',serif;font-size:30px;
+    transition:color .45s var(--ease);}
+  .photo .coord{position:relative;z-index:2;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.14em;color:var(--mute);margin-top:4px;transition:color .45s var(--ease);}
+  .card:hover .photo .place{color:#fff;}
+  .card:hover .photo .coord{color:rgba(255,255,255,.85);}
+
+  /* ----- BACK: expressive, seen only mid-flip ----- */
+  .back{transform:rotateY(180deg);border:none;
+    background:#12121A;box-shadow:0 24px 60px -28px rgba(16,24,40,.5);}
+  .back::after{content:'';position:absolute;inset:0;opacity:.95;}
+  .back.b0::after{background:
+      repeating-conic-gradient(from 0deg at 50% 50%, #1B2B6B 0 15deg, #2C49C9 15deg 30deg),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,.12), transparent 60%);}
+  .back.b1::after{background:
+      repeating-linear-gradient(45deg, #3A2350 0 14px, #6A3C8F 14px 28px),
+      repeating-linear-gradient(-45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);}
+  .back.b2::after{background:
+      radial-gradient(circle at 50% 50%, #0E5E54 0 22%, transparent 22%),
+      repeating-radial-gradient(circle at 50% 50%, #0B3F39 0 18px, #14756A 18px 36px);}
+  .back.b3::after{background:
+      conic-gradient(from 45deg, #C2410C, #E8742C, #C2410C, #8A2D08, #C2410C),
+      repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,.08) 0 10deg, transparent 10deg 20deg);}
+  .back .mono{position:absolute;left:0;right:0;bottom:18px;z-index:2;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;
+    color:rgba(255,255,255,.6);text-transform:uppercase;}
+
+  /* ---------- floating nav (visual only in v1) ---------- */
+  .nav{position:fixed;left:50%;bottom:26px;z-index:80;
+    transform:translateX(-50%) translateY(160%);opacity:0;
+    transition:transform .9s var(--spring), opacity .6s ease;}
+  .nav.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  .navpill{display:flex;align-items:center;gap:0;
+    background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(16,24,40,.07);border-radius:999px;
+    box-shadow:0 24px 60px -24px rgba(20,40,120,.4);
+    padding:7px;cursor:default;transition:gap .4s var(--ease);}
+  .navdot{width:34px;height:34px;border-radius:50%;flex-shrink:0;position:relative;
+    background:radial-gradient(circle at 35% 30%, #4d78ff, #143cd4);
+    box-shadow:0 2px 8px -2px rgba(20,40,120,.5);}
+  .navlinks{display:flex;align-items:center;max-width:0;overflow:hidden;opacity:0;
+    transition:max-width .45s var(--ease), opacity .35s var(--ease);}
+  .navlinks a{font-family:'Hanken Grotesk';font-weight:500;font-size:14px;color:var(--ink);
+    text-decoration:none;padding:6px 14px;border-radius:999px;white-space:nowrap;
+    transition:background .2s ease,color .2s ease;}
+  .navlinks a:hover{background:rgba(20,40,120,.07);}
+  .nav:hover .navpill{gap:6px;}
+  .nav:hover .navlinks{max-width:340px;opacity:1;padding-left:4px;}
+
+  /* hint that fades */
+  .hint{position:fixed;left:50%;bottom:84px;z-index:79;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--mute);
+    text-transform:uppercase;opacity:0;transition:opacity .8s ease;pointer-events:none;}
+  .hint.show{opacity:.7;}
+
+  @media (prefers-reduced-motion: reduce){
+    .bg{animation:none;}
+    .card,.flipper{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grain"></div>
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas"></div>
+  </div>
+
+  <div class="hint" id="hint">Drag to explore · scroll anywhere</div>
+  <nav class="nav" id="nav">
+    <div class="navpill">
+      <span class="navdot"></span>
+      <span class="navlinks">
+        <a href="#" data-cat="writing">Writing</a>
+        <a href="#" data-cat="lab">Lab</a>
+        <a href="#" data-cat="about">About</a>
+      </span>
+    </div>
+  </nav>
+
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- content ---------------- */
+  // kind drives the front layout + palette; back style cycles by index.
+  const PAL = {
+    writing:   {g1:'#3B2BE0', g2:'#7A5CFF', accent:'#3B2BE0', shadow:'rgba(59,43,224,.45)'},
+    reflection:{g1:'#0E7C6B', g2:'#3FB89E', accent:'#0E7C6B', shadow:'rgba(14,124,107,.42)'},
+    lab:       {g1:'#0A4DFF', g2:'#3FC6FF', accent:'#0A4DFF', shadow:'rgba(10,77,255,.45)'},
+    bio:       {g1:'#D2691E', g2:'#F2A65A', accent:'#C2410C', shadow:'rgba(194,65,12,.4)'},
+    work:      {g1:'#2A2F45', g2:'#5563FF', accent:'#3A4060', shadow:'rgba(42,47,69,.5)'},
+    center:    {g1:'#1B1B2E', g2:'#4d4d6e', accent:'#143cd4', shadow:'rgba(20,40,120,.4)'},
+  };
+  const TRAVEL = [
+    {place:'Istanbul', coord:'41.0°N · 28.9°E', photo:'linear-gradient(160deg,#F6B26B,#C2410C 55%,#7A1F66)'},
+    {place:'Kyoto',    coord:'35.0°N · 135.7°E', photo:'linear-gradient(160deg,#7AC6A0,#0E7C6B 60%,#10333A)'},
+    {place:'Atlas Mtns', coord:'31.1°N · 7.9°W', photo:'linear-gradient(160deg,#E8A87C,#B65A3C 50%,#41263B)'},
+    {place:'Lisbon',   coord:'38.7°N · 9.1°W', photo:'linear-gradient(160deg,#9AD0EC,#3F7AC6 55%,#23306B)'},
+  ];
+
+  const cards = [
+    {kind:'center', cat:'about', center:true,
+      name:'Omar Jalalzada', blurb:'A design lead in love with designing — a craftsman first.', foot:'OMAR.BUILD'},
+
+    {kind:'writing', cat:'writing', serif:true, title:'Manage <span class="it">work</span>, not people',
+      blurb:'Why I design the environment and feedback loops instead of managing people into performance.', foot:'ESSAY · DESIGN LEADERSHIP', date:'JUN 2026'},
+    {kind:'reflection', cat:'writing', serif:true, title:'The <span class="it">middle</span> ground',
+      blurb:'Define the extremes, then make a life between them. A note on calm and ambition.', foot:'REFLECTION', date:'MAY 2026'},
+    {kind:'writing', cat:'writing', title:'Design as a business multiplier',
+      blurb:'Good design at a startup isn’t pretty pixels — it’s the best solution within the constraints.', foot:'ESSAY · DESIGN LEADERSHIP', date:'APR 2026'},
+    {kind:'reflection', cat:'writing', serif:true, title:'On <span class="it">taste</span>',
+      blurb:'Taste as a cosmic web of ideas and feeling — earned through intentional observation.', foot:'REFLECTION', date:'MAR 2026'},
+    {kind:'writing', cat:'writing', title:'Org design for startup design teams',
+      blurb:'How early-stage teams should shape design for agency, IQ and EQ — not headcount.', foot:'ESSAY · DESIGN LEADERSHIP', date:'FEB 2026'},
+
+    {kind:'lab', cat:'lab', title:'Living Stage',
+      blurb:'A self-constructing OMAR logotype that assembles itself, block by block.', foot:'PROTOTYPE', date:'JUN 2026'},
+    {kind:'lab', cat:'lab', title:'Constellation',
+      blurb:'This canvas. Everything is a card; the field breathes and ripples into being.', foot:'PROTOTYPE', date:'JUN 2026'},
+    {kind:'lab', cat:'lab', title:'Calligraphic ink',
+      blurb:'Generative strokes that follow the gesture of an Arabic line.', foot:'PROTOTYPE', date:'MAY 2026'},
+    {kind:'lab', cat:'lab', title:'Type in motion',
+      blurb:'Kinetic typography experiments — weight, kerning and rhythm over time.', foot:'PROTOTYPE', date:'APR 2026'},
+
+    {kind:'bio', cat:'about', serif:true, title:'About <span class="it">Omar</span>',
+      blurb:'Head of Design at Sublime Security. Afghan-American — Kabul, Pakistan, California.', foot:'ABOUT · LINKS', date:''},
+    {kind:'work', cat:'about', title:'Where I’ve worked',
+      blurb:'Sublime (0→Series D) · Kin · Alto · Coatue. Cybersecurity, healthcare, finance.', foot:'WORK HISTORY', date:''},
+
+    {kind:'travel', cat:'about', t:0},
+    {kind:'travel', cat:'about', t:1},
+    {kind:'travel', cat:'about', t:2},
+    {kind:'travel', cat:'about', t:3},
+  ];
+
+  /* ---------------- layout: phyllotaxis spiral ---------------- */
+  const SPACING = 360, GOLDEN = 137.50776 * Math.PI / 180;
+  cards.forEach((c, i) => {
+    if (i === 0) { c.x = 0; c.y = 0; }
+    else {
+      const r = SPACING * Math.sqrt(i);
+      const a = i * GOLDEN;
+      c.x = Math.cos(a) * r;
+      c.y = Math.sin(a) * r;
+    }
+    // deterministic jitter so it doesn't reshuffle on resize
+    c.jit = ((Math.sin(i * 12.9898) * 43758.5453) % 1) * 5 - 2.5;
+  });
+
+  /* ---------------- build DOM ---------------- */
+  const canvas = document.getElementById('canvas');
+  const els = [];
+  cards.forEach((c, i) => {
+    const pal = PAL[c.kind] || PAL.writing;
+    const card = document.createElement('div');
+    card.className = 'card deck' + (c.center ? ' center' : '');
+    card.style.setProperty('--g1', pal.g1);
+    card.style.setProperty('--g2', pal.g2);
+    card.style.setProperty('--accent', pal.accent);
+    card.style.setProperty('--shadow', pal.shadow);
+    card.style.setProperty('--jit', c.jit.toFixed(2) + 'deg');
+    card.style.left = c.x.toFixed(1) + 'px';
+    card.style.top  = c.y.toFixed(1) + 'px';
+    // deck offset: bunched ~toward center
+    card.style.setProperty('--tx', (-c.x * 0.82).toFixed(1) + 'px');
+    card.style.setProperty('--ty', (-c.y * 0.82).toFixed(1) + 'px');
+
+    let front;
+    if (c.kind === 'travel') {
+      const t = TRAVEL[c.t];
+      card.style.setProperty('--photo', t.photo);
+      front = `<div class="face front photo">
+        <div class="f-top"><span class="dot"></span><span class="kicker">Travel</span></div>
+        <div><div class="place">${t.place}</div><div class="coord">${t.coord}</div></div>
+      </div>`;
+    } else if (c.center) {
+      front = `<div class="face front">
+        <div class="f-top"><span class="dot"></span><span class="kicker">${c.foot}</span></div>
+        <div class="f-body"><div class="name">${c.name}</div><div class="blurb">${c.blurb}</div></div>
+        <div class="f-foot"><span>Craftsman · Design lead</span><span class="go">↻ explore</span></div>
+      </div>`;
+    } else {
+      const kicker = c.foot.split(' · ')[0] || c.cat;
+      front = `<div class="face front">
+        <div class="f-top"><span class="dot"></span><span class="kicker">${kicker}</span></div>
+        <div class="f-body"><div class="title${c.serif ? ' serif' : ''}">${c.title}</div>
+          <div class="blurb">${c.blurb}</div></div>
+        <div class="f-foot"><span>${c.date || c.foot}</span><span class="go">→ open</span></div>
+      </div>`;
+    }
+    const back = `<div class="face back b${i % 4}"><div class="mono">omar · build</div></div>`;
+    card.innerHTML = `<div class="flipper">${front}${back}</div>`;
+    canvas.appendChild(card);
+    els.push(card);
+  });
+
+  /* ---------------- entrance: cinematic center, then ripple ---------------- */
+  const reveal = (el) => { el.classList.add('in'); el.classList.remove('deck'); };
+  if (reduce) {
+    els.forEach(reveal);
+    showChrome();
+  } else {
+    // Stage A: the center card lands alone
+    setTimeout(() => reveal(els[0]), 350);
+    // Stage B: ripple out, ordered by distance (= index in a spiral)
+    els.forEach((el, i) => {
+      if (i === 0) return;
+      const delay = 950 + Math.sqrt(i) * 230;
+      setTimeout(() => reveal(el), delay);
+    });
+    const last = 950 + Math.sqrt(els.length) * 230 + 700;
+    setTimeout(showChrome, last);
+  }
+  function showChrome() {
+    document.getElementById('nav').classList.add('show');
+    const hint = document.getElementById('hint');
+    hint.classList.add('show');
+    setTimeout(() => hint.classList.remove('show'), 4200);
+  }
+
+  /* ---------------- inertial pan + rubber-band ---------------- */
+  let posX = 0, posY = 0, velX = 0, velY = 0;
+  let dragging = false, lastX = 0, lastY = 0, moved = false;
+  const vp = document.getElementById('viewport');
+
+  // bounds from content extent
+  let boundX = 0, boundY = 0;
+  function computeBounds() {
+    let mx = 0, my = 0;
+    cards.forEach(c => { mx = Math.max(mx, Math.abs(c.x)); my = Math.max(my, Math.abs(c.y)); });
+    boundX = mx + 140; boundY = my + 60;
+  }
+  computeBounds();
+  window.addEventListener('resize', computeBounds);
+
+  const resist = (val, bound) => {
+    if (val > bound)  return bound + (val - bound) * 0.35;
+    if (val < -bound) return -bound + (val + bound) * 0.35;
+    return val;
+  };
+
+  vp.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.card')) { /* allow card hover but still pan from card too */ }
+    dragging = true; moved = false;
+    lastX = e.clientX; lastY = e.clientY; velX = velY = 0;
+    vp.classList.add('dragging'); vp.setPointerCapture(e.pointerId);
+  });
+  vp.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+    // apply with resistance when already beyond bounds
+    posX += (Math.abs(posX) > boundX) ? dx * 0.35 : dx;
+    posY += (Math.abs(posY) > boundY) ? dy * 0.35 : dy;
+    velX = dx; velY = dy;
+  });
+  const endDrag = (e) => {
+    if (!dragging) return;
+    dragging = false; vp.classList.remove('dragging');
+  };
+  vp.addEventListener('pointerup', endDrag);
+  vp.addEventListener('pointercancel', endDrag);
+
+  // trackpad / wheel pans the field
+  vp.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    posX -= e.deltaX; posY -= e.deltaY;
+    velX = -e.deltaX * 0.18; velY = -e.deltaY * 0.18;
+  }, { passive: false });
+
+  // swallow click after a drag so it doesn't feel like a mis-tap
+  vp.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+  function frame() {
+    if (!dragging) {
+      // spring back when beyond bounds
+      if (posX > boundX) velX += (boundX - posX) * 0.10;
+      else if (posX < -boundX) velX += (-boundX - posX) * 0.10;
+      if (posY > boundY) velY += (boundY - posY) * 0.10;
+      else if (posY < -boundY) velY += (-boundY - posY) * 0.10;
+
+      posX += velX; posY += velY;
+      // friction — heavier when out of bounds so it settles
+      const fX = (Math.abs(posX) > boundX) ? 0.78 : 0.93;
+      const fY = (Math.abs(posY) > boundY) ? 0.78 : 0.93;
+      velX *= fX; velY *= fY;
+      if (Math.abs(velX) < 0.02) velX = 0;
+      if (Math.abs(velY) < 0.02) velY = 0;
+    }
+    canvas.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // nav links are visual-only in v1 (filter/rearrange lands in v2)
+  document.querySelectorAll('.navlinks a').forEach(a =>
+    a.addEventListener('click', e => e.preventDefault()));
+})();
+</script>
+</body>
+</html>

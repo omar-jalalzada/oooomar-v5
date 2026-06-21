@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — constellation v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C; --mute:#8A8A92; --line:#EAEAEC; --bg:#FCFCFD;
+    --ease:cubic-bezier(.2,.75,.2,1);
+    --spring:cubic-bezier(.34,1.22,.4,1);
+    --flip:cubic-bezier(.62,.04,.22,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;
+    overflow:hidden;overscroll-behavior:none;}
+
+  /* ---------- background ---------- */
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(58% 52% at 34% 32%, rgba(255,214,170,.22), transparent 70%),
+      radial-gradient(52% 52% at 68% 40%, rgba(196,184,255,.20), transparent 70%),
+      radial-gradient(60% 58% at 52% 76%, rgba(168,214,255,.24), transparent 72%),
+      var(--bg);
+    animation:wash 20s ease-in-out infinite;}
+  @keyframes wash{0%,100%{filter:saturate(1) brightness(1);transform:scale(1);}
+    50%{filter:saturate(1.1) brightness(1.02);transform:scale(1.03);}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");}
+
+  /* ---------- viewport / canvas ---------- */
+  .viewport{position:fixed;inset:0;z-index:2;cursor:grab;touch-action:none;}
+  .viewport.dragging{cursor:grabbing;}
+  .canvas{position:absolute;left:50%;top:50%;width:0;height:0;will-change:transform;}
+
+  .heroglow{position:absolute;left:0;top:0;width:760px;height:760px;
+    margin-left:-380px;margin-top:-380px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(closest-side, rgba(120,140,255,.34), rgba(255,200,150,.16) 55%, transparent 72%);
+    filter:blur(34px);opacity:0;transform:scale(.6);
+    transition:opacity 1.4s var(--ease), transform 1.6s var(--ease);}
+  .heroglow.in{opacity:1;transform:scale(1);animation:glowbreathe 11s ease-in-out 1.6s infinite;}
+  @keyframes glowbreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+
+  /* ---------- card ---------- */
+  .card{position:absolute;perspective:1600px;
+    opacity:0;transform:translateY(22px) scale(.965);
+    transition:transform .58s var(--spring), opacity .5s ease;
+    will-change:transform,opacity;}
+  .card.in{opacity:1;transform:translateY(0) scale(1);}
+  .card:hover{z-index:60;transform:translateY(-10px) scale(1.045);}
+
+  .flipper{position:absolute;inset:0;transform-style:preserve-3d;
+    transform:rotateY(180deg);transition:transform .8s var(--flip);}
+  .card.up .flipper{transform:rotateY(0deg);}
+
+  .face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;overflow:hidden;}
+
+  /* ----- FRONT (minimal: content only; meta revealed on hover) ----- */
+  .front{background:#fff;border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(16,24,40,.04), 0 16px 38px -26px rgba(16,24,40,.20);
+    display:flex;flex-direction:column;justify-content:space-between;padding:22px;
+    transition:box-shadow .45s var(--ease), border-color .45s var(--ease);}
+  /* hover flood — echoes the card's own back motif (set per card via --hoverbg) */
+  .front::before{content:'';position:absolute;inset:0;opacity:0;
+    background:var(--hoverbg);background-size:cover;
+    transition:opacity .5s var(--ease);}
+  .card:hover .front{border-color:transparent;
+    box-shadow:0 8px 18px -8px var(--shadow), 0 38px 76px -34px var(--shadow);}
+  .card:hover .front::before{opacity:1;}
+
+  /* meta (type + date) — hidden until hover */
+  .f-top{position:relative;z-index:2;display:flex;align-items:center;gap:8px;
+    opacity:0;transition:opacity .42s var(--ease);}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(255,255,255,.85);}
+  .dot{width:7px;height:7px;border-radius:50%;background:#fff;flex-shrink:0;}
+  .card:hover .f-top{opacity:1;}
+
+  .f-body{position:relative;z-index:2;}
+  .title{font-size:21px;line-height:1.16;letter-spacing:-.012em;font-weight:600;
+    transition:color .45s var(--ease);}
+  .blurb{margin-top:9px;font-size:13px;line-height:1.5;color:#5C5C66;transition:color .45s var(--ease);}
+  .card:hover .title{color:#fff;}
+  .card:hover .blurb{color:rgba(255,255,255,.85);}
+
+  .f-foot{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(255,255,255,.78);
+    opacity:0;transition:opacity .42s var(--ease);}
+  .card:hover .f-foot{opacity:1;}
+
+  /* template: pull-quote (same Hanken type, just larger) */
+  .quote .q{position:relative;z-index:2;font-size:19px;font-weight:500;line-height:1.36;
+    letter-spacing:-.01em;transition:color .45s var(--ease);}
+  .card:hover .quote .q{color:#fff;}
+
+  /* template: work list */
+  .orgs{position:relative;z-index:2;list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:7px;}
+  .orgs li{font-size:14px;font-weight:500;display:flex;justify-content:space-between;
+    padding-bottom:7px;border-bottom:1px solid var(--line);transition:color .45s var(--ease),border-color .45s var(--ease);}
+  .orgs li span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--mute);transition:color .45s var(--ease);}
+  .card:hover .orgs li{color:#fff;border-color:rgba(255,255,255,.22);}
+  .card:hover .orgs li span{color:rgba(255,255,255,.7);}
+
+  /* template: travel photo */
+  .front.photo{justify-content:flex-end;}
+  .photo .place{position:relative;z-index:2;font-size:22px;font-weight:600;letter-spacing:-.01em;
+    transition:color .45s var(--ease);}
+  .photo .coord{position:relative;z-index:2;font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.14em;color:var(--mute);margin-top:3px;opacity:0;transition:opacity .42s var(--ease),color .45s var(--ease);}
+  .card:hover .photo .place{color:#fff;}
+  .card:hover .photo .coord{color:rgba(255,255,255,.85);opacity:1;}
+
+  /* ----- HERO (protagonist — serif, alive by default, never flips, no flood) ----- */
+  .hero .face.front{border-color:#E4DEF6;
+    background:linear-gradient(150deg,#fff 0%,#FBF7FF 55%,#F3F6FF 100%);
+    box-shadow:0 2px 6px rgba(40,40,90,.06), 0 40px 90px -40px rgba(60,70,180,.45);}
+  .hero .face.front::before{display:none;}
+  .hero .face.front::after{content:'';position:absolute;inset:0;z-index:1;opacity:.5;
+    background:conic-gradient(from 0deg at 70% 20%, transparent, rgba(120,140,255,.16), transparent 38%);
+    animation:sheen 14s linear infinite;}
+  @keyframes sheen{to{transform:rotate(1turn);}}
+  .hero .f-top{opacity:1;}
+  .hero .f-top .kicker{color:var(--mute);}
+  .hero .f-top .dot{background:var(--accent);}
+  .hero .name{position:relative;z-index:2;font-family:'Instrument Serif',serif;font-size:38px;line-height:1;}
+  .hero .herotag{position:relative;z-index:2;margin-top:12px;font-size:15px;line-height:1.45;color:#4A4A55;max-width:24ch;}
+  .hero .f-foot{opacity:1;color:var(--mute);}
+
+  /* ----- BACK (category motif; seen during the deal) ----- */
+  .back{transform:rotateY(180deg);border:none;background:#12121A;
+    box-shadow:0 22px 56px -28px rgba(16,24,40,.5);}
+  .back::after{content:'';position:absolute;inset:0;opacity:.96;}
+  .b-indigo::after{background:repeating-conic-gradient(from 0deg at 50% 50%, #1B246B 0 15deg, #3147C9 15deg 30deg);}
+  .b-teal::after{background:radial-gradient(circle at 50% 50%, #14756A 0 20%, transparent 20%),
+      repeating-radial-gradient(circle at 50% 50%, #0B3F39 0 16px, #0E5E54 16px 32px);}
+  .b-blue::after{background:repeating-linear-gradient(45deg, #0A3DBF 0 13px, #1E63E8 13px 26px),
+      repeating-linear-gradient(-45deg, rgba(255,255,255,.05) 0 13px, transparent 13px 26px);}
+  .b-amber::after{background:conic-gradient(from 30deg, #C2410C, #E8843C, #C2410C, #8A2D08, #C2410C);}
+  .b-sun::after{background:repeating-conic-gradient(from 0deg at 50% 50%, #7A1F66 0 12deg, #C2410C 12deg 24deg, #E8843C 24deg 36deg);}
+  .back .mono{position:absolute;left:0;right:0;bottom:18px;z-index:2;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.32em;
+    color:rgba(255,255,255,.55);text-transform:uppercase;}
+
+  /* ---------- floating nav (visual only) ---------- */
+  .nav{position:fixed;left:50%;bottom:26px;z-index:80;
+    transform:translateX(-50%) translateY(160%);opacity:0;
+    transition:transform .9s var(--spring), opacity .6s ease;}
+  .nav.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  .navpill{display:flex;align-items:center;gap:0;
+    background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(16,24,40,.07);border-radius:999px;
+    box-shadow:0 24px 60px -24px rgba(20,40,120,.4);padding:7px;cursor:default;transition:gap .4s var(--ease);}
+  .navdot{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle at 35% 30%, #4d78ff, #143cd4);box-shadow:0 2px 8px -2px rgba(20,40,120,.5);}
+  .navlinks{display:flex;align-items:center;max-width:0;overflow:hidden;opacity:0;
+    transition:max-width .45s var(--ease), opacity .35s var(--ease);}
+  .navlinks a{font-family:'Hanken Grotesk';font-weight:500;font-size:14px;color:var(--ink);
+    text-decoration:none;padding:6px 14px;border-radius:999px;white-space:nowrap;transition:background .2s ease;}
+  .navlinks a:hover{background:rgba(20,40,120,.07);}
+  .nav:hover .navpill{gap:6px;}
+  .nav:hover .navlinks{max-width:340px;opacity:1;padding-left:4px;}
+
+  .hint{position:fixed;left:50%;bottom:84px;z-index:79;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--mute);
+    text-transform:uppercase;opacity:0;transition:opacity .8s ease;pointer-events:none;}
+  .hint.show{opacity:.65;}
+
+  @media (prefers-reduced-motion: reduce){
+    .bg,.hero .face.front::after,.heroglow{animation:none;}
+    .card,.flipper{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grain"></div>
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas">
+      <div class="heroglow" id="heroglow"></div>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">Drag to explore · scroll anywhere</div>
+  <nav class="nav" id="nav">
+    <div class="navpill">
+      <span class="navdot"></span>
+      <span class="navlinks">
+        <a href="#" data-cat="writing">Writing</a>
+        <a href="#" data-cat="lab">Lab</a>
+        <a href="#" data-cat="about">About</a>
+      </span>
+    </div>
+  </nav>
+
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* shadow tint per category (for the hover lift) */
+  const SHADOW = {
+    writing:'rgba(59,43,224,.45)', reflection:'rgba(14,124,107,.42)', lab:'rgba(10,77,255,.45)',
+    bio:'rgba(194,65,12,.4)', work:'rgba(42,47,69,.5)', travel:'rgba(194,65,12,.4)',
+  };
+  const ACCENT = {writing:'#3B2BE0', reflection:'#0E7C6B', lab:'#0A4DFF', bio:'#C2410C', work:'#3A4060', travel:'#C2410C', center:'#143cd4'};
+  // hover flood echoes the back motif (pattern + legibility scrim)
+  const HOVERBG = {
+    writing:   'linear-gradient(155deg,rgba(8,8,30,.40),rgba(8,8,30,.14)),repeating-conic-gradient(from 0deg at 50% 50%,#1B246B 0 15deg,#3147C9 15deg 30deg)',
+    reflection:'linear-gradient(155deg,rgba(4,28,24,.40),rgba(4,28,24,.14)),radial-gradient(circle at 50% 50%,#14756A 0 20%,transparent 20%),repeating-radial-gradient(circle at 50% 50%,#0B3F39 0 16px,#0E5E54 16px 32px)',
+    lab:       'linear-gradient(155deg,rgba(4,16,60,.40),rgba(4,16,60,.14)),repeating-linear-gradient(45deg,#0A3DBF 0 13px,#1E63E8 13px 26px)',
+    bio:       'linear-gradient(155deg,rgba(50,18,4,.38),rgba(50,18,4,.12)),conic-gradient(from 30deg,#C2410C,#E8843C,#C2410C,#8A2D08,#C2410C)',
+    work:      'linear-gradient(155deg,rgba(50,18,4,.38),rgba(50,18,4,.12)),conic-gradient(from 30deg,#C2410C,#E8843C,#C2410C,#8A2D08,#C2410C)',
+  };
+  const BACK = {writing:'b-indigo', reflection:'b-teal', lab:'b-blue', bio:'b-amber', work:'b-amber', travel:'b-sun'};
+  const PHOTO = {
+    Istanbul:   {coord:'41.0°N · 28.9°E', g:'linear-gradient(160deg,#F6B26B,#C2410C 55%,#7A1F66)'},
+    Kyoto:      {coord:'35.0°N · 135.7°E', g:'linear-gradient(160deg,#7AC6A0,#0E7C6B 60%,#10333A)'},
+    'Atlas Mtns':{coord:'31.1°N · 7.9°W',  g:'linear-gradient(160deg,#E8A87C,#B65A3C 50%,#41263B)'},
+    Lisbon:     {coord:'38.7°N · 9.1°W',  g:'linear-gradient(160deg,#9AD0EC,#3F7AC6 55%,#23306B)'},
+  };
+
+  /* ---------------- content board (col = column; order within follows array) ---------------- */
+  const CARDS = [
+    {id:'hero', kind:'hero', cat:'center', col:0, h:404},
+
+    {id:'org',      kind:'essay', cat:'writing',    col:-3, h:360, kicker:'Design Leadership', title:'Org design for design teams', meta:'Essay · 2026'},
+    {id:'taste',    kind:'quote', cat:'reflection', col:-3, h:232, q:'Taste is earned — a slow accretion of intentional looking.', meta:'Reflection'},
+    {id:'lisbon',   kind:'travel', cat:'travel',    col:-3, h:200, place:'Lisbon'},
+    {id:'manage',   kind:'essay', cat:'writing',    col:-2, h:372, kicker:'Design Leadership', title:'Manage work, not people', meta:'Essay · 2026'},
+    {id:'type',     kind:'lab',   cat:'lab',        col:-2, h:288, title:'Type in motion', blurb:'Kinetic typography — weight, kerning and rhythm over time.', meta:'Prototype'},
+    {id:'middle',   kind:'quote', cat:'reflection', col:-1, h:236, q:'Define the extremes, then make a life in the middle.', meta:'Reflection'},
+    {id:'business', kind:'essay', cat:'writing',    col:-1, h:372, kicker:'Design Leadership', title:'Design as a business multiplier', meta:'Essay · 2026'},
+
+    {id:'bio',   kind:'bio',  cat:'bio',   col:1, h:344, title:'About', blurb:'Head of Design at Sublime. Afghan-American — Kabul, Pakistan, California.', meta:'Bio · Links'},
+    {id:'work',  kind:'work', cat:'work',  col:1, h:288, title:'Where I’ve worked', orgs:[['Sublime','Sec'],['Kin','Insure'],['Alto','Health'],['Coatue','Finance']], meta:'Work'},
+    {id:'istanbul', kind:'travel', cat:'travel', col:1, h:200, place:'Istanbul'},
+    {id:'stage', kind:'lab', cat:'lab', col:2, h:300, title:'Living Stage', blurb:'A self-constructing OMAR logotype that assembles itself, block by block.', meta:'Prototype'},
+    {id:'const', kind:'lab', cat:'lab', col:2, h:300, title:'Constellation', blurb:'This canvas. Everything is a card; the field breathes into being.', meta:'Prototype'},
+    {id:'kyoto', kind:'travel', cat:'travel', col:2, h:200, place:'Kyoto'},
+    {id:'ink',   kind:'lab', cat:'lab', col:3, h:268, title:'Calligraphic ink', blurb:'Generative strokes following the gesture of an Arabic line.', meta:'Prototype'},
+    {id:'atlas', kind:'travel', cat:'travel', col:3, h:200, place:'Atlas Mtns'},
+  ];
+
+  /* ---------------- layout: tidy columns of varied width, one uniform gap ---------------- */
+  const GAP = 30;                                  // same gap horizontally & vertically
+  const COLW = {'-3':235, '-2':268, '-1':238, '0':312, '1':250, '2':272, '3':228};
+
+  const byCol = {};
+  CARDS.forEach(c => { (byCol[c.col] ||= []).push(c); });
+
+  // horizontal: walk outward from the centered hero column, packing edge-to-edge
+  const cx = {0:0};
+  let e = COLW['0']/2;
+  for (let k = 1;  byCol[k];  k++) { cx[k] =  e + GAP + COLW[k]/2; e = cx[k] + COLW[k]/2; }
+  e = -COLW['0']/2;
+  for (let k = -1; byCol[k]; k--) { cx[k] =  e - GAP - COLW[k]/2; e = cx[k] - COLW[k]/2; }
+
+  // vertical: each column stacked with the same gap, centered around y=0
+  Object.keys(byCol).forEach(col => {
+    const list = byCol[col];
+    const total = list.reduce((s,c) => s + c.h, 0) + GAP * (list.length - 1);
+    let y = -total / 2;
+    list.forEach(c => { c.w = COLW[col]; c.x = cx[col]; c.y = y + c.h/2; y += c.h + GAP; });
+  });
+
+  /* ---------------- build DOM ---------------- */
+  const canvas = document.getElementById('canvas');
+  const els = [];
+  CARDS.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'card' + (c.kind === 'hero' ? ' hero up' : '');
+    Object.assign(card.style, {
+      width: c.w + 'px', height: c.h + 'px',
+      left: c.x + 'px', top: c.y + 'px',
+      marginLeft: (-c.w/2) + 'px', marginTop: (-c.h/2) + 'px',
+    });
+    card.style.setProperty('--accent', ACCENT[c.cat] || ACCENT.writing);
+    card.style.setProperty('--shadow', SHADOW[c.cat] || SHADOW.writing);
+    card.style.setProperty('--hoverbg', HOVERBG[c.cat] || HOVERBG.writing);
+
+    let front;
+    if (c.kind === 'hero') {
+      front = `<div class="face front">
+        <div class="f-top"><span class="dot"></span><span class="kicker">OMAR · BUILD</span></div>
+        <div class="f-body"><div class="name">Omar Jalalzada</div>
+          <div class="herotag">A design lead in love with designing — a craftsman first.</div></div>
+        <div class="f-foot"><span>Head of Design · Sublime</span><span>↻</span></div>
+      </div>`;
+    } else if (c.kind === 'quote') {
+      front = `<div class="face front quote">
+        <div class="q">${c.q}</div>
+        <div class="f-foot"><span>${c.meta}</span><span>→</span></div>
+      </div>`;
+    } else if (c.kind === 'work') {
+      front = `<div class="face front">
+        <div class="f-top"><span class="dot"></span><span class="kicker">${c.meta}</span></div>
+        <div class="f-body"><div class="title">${c.title}</div>
+          <ul class="orgs">${c.orgs.map(o => `<li>${o[0]}<span>${o[1]}</span></li>`).join('')}</ul></div>
+      </div>`;
+    } else if (c.kind === 'travel') {
+      const p = PHOTO[c.place];
+      card.style.setProperty('--hoverbg', p.g);   // travel flood = its photo (rhymes with the sun back)
+      front = `<div class="face front photo">
+        <div class="f-top"><span class="dot"></span><span class="kicker">Travel</span></div>
+        <div><div class="place">${c.place}</div><div class="coord">${p.coord}</div></div>
+      </div>`;
+    } else { // essay, lab, bio
+      front = `<div class="face front">
+        <div class="f-top"><span class="dot"></span><span class="kicker">${c.kicker || (c.kind === 'lab' ? 'Lab' : c.meta)}</span></div>
+        <div class="f-body"><div class="title">${c.title}</div>
+          ${c.blurb ? `<div class="blurb">${c.blurb}</div>` : ''}</div>
+        <div class="f-foot"><span>${c.meta}</span><span>${c.kind === 'lab' ? '→ open' : '→ read'}</span></div>
+      </div>`;
+    }
+    const back = c.kind === 'hero' ? '' :
+      `<div class="face back ${BACK[c.cat] || 'b-indigo'}"><div class="mono">omar · build</div></div>`;
+    card.innerHTML = `<div class="flipper">${front}${back}</div>`;
+    canvas.appendChild(card);
+    els.push({ el: card, c });
+  });
+
+  /* ---------------- entrance: hero first, deal face-down, then flip wave ---------------- */
+  const HERO_AT = 350, DEAL_BASE = 1150, DEAL_STAG = 70, FLIP_BASE = 2350, FLIP_STAG = 95;
+  const others = els.filter(e => e.c.kind !== 'hero')
+    .map(e => ({ ...e, d: Math.hypot(e.c.x, e.c.y) }))
+    .sort((a, b) => a.d - b.d);
+
+  if (reduce) {
+    els.forEach(e => e.el.classList.add('in', 'up'));
+    document.getElementById('heroglow').classList.add('in');
+    showChrome();
+  } else {
+    const hero = els.find(e => e.c.kind === 'hero');
+    setTimeout(() => { document.getElementById('heroglow').classList.add('in'); hero.el.classList.add('in'); }, HERO_AT);
+    others.forEach((e, i) => setTimeout(() => e.el.classList.add('in'), DEAL_BASE + i * DEAL_STAG));
+    others.forEach((e, i) => setTimeout(() => e.el.classList.add('up'), FLIP_BASE + i * FLIP_STAG));
+    setTimeout(showChrome, FLIP_BASE + others.length * FLIP_STAG + 800);
+  }
+  function showChrome() {
+    document.getElementById('nav').classList.add('show');
+    const hint = document.getElementById('hint');
+    hint.classList.add('show');
+    setTimeout(() => hint.classList.remove('show'), 4200);
+  }
+
+  /* ---------------- inertial pan + rubber-band ---------------- */
+  let posX = 0, posY = 0, velX = 0, velY = 0;
+  let dragging = false, lastX = 0, lastY = 0, moved = false;
+  const vp = document.getElementById('viewport');
+
+  let boundX = 0, boundY = 0;
+  function computeBounds() {
+    let mx = 0, my = 0;
+    CARDS.forEach(c => { mx = Math.max(mx, Math.abs(c.x) + c.w/2); my = Math.max(my, Math.abs(c.y) + c.h/2); });
+    boundX = mx + 60; boundY = my + 20;
+  }
+  computeBounds();
+  window.addEventListener('resize', computeBounds);
+
+  vp.addEventListener('pointerdown', (ev) => {
+    dragging = true; moved = false;
+    lastX = ev.clientX; lastY = ev.clientY; velX = velY = 0;
+    vp.classList.add('dragging'); vp.setPointerCapture(ev.pointerId);
+  });
+  vp.addEventListener('pointermove', (ev) => {
+    if (!dragging) return;
+    const dx = ev.clientX - lastX, dy = ev.clientY - lastY;
+    lastX = ev.clientX; lastY = ev.clientY;
+    if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+    posX += (Math.abs(posX) > boundX) ? dx * 0.35 : dx;
+    posY += (Math.abs(posY) > boundY) ? dy * 0.35 : dy;
+    velX = dx; velY = dy;
+  });
+  const endDrag = () => { if (dragging) { dragging = false; vp.classList.remove('dragging'); } };
+  vp.addEventListener('pointerup', endDrag);
+  vp.addEventListener('pointercancel', endDrag);
+  vp.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    posX -= ev.deltaX; posY -= ev.deltaY;
+    velX = -ev.deltaX * 0.18; velY = -ev.deltaY * 0.18;
+  }, { passive: false });
+  vp.addEventListener('click', (ev) => { if (moved) { ev.preventDefault(); ev.stopPropagation(); } }, true);
+
+  function frame() {
+    if (!dragging) {
+      if (posX > boundX) velX += (boundX - posX) * 0.10;
+      else if (posX < -boundX) velX += (-boundX - posX) * 0.10;
+      if (posY > boundY) velY += (boundY - posY) * 0.10;
+      else if (posY < -boundY) velY += (-boundY - posY) * 0.10;
+      posX += velX; posY += velY;
+      velX *= (Math.abs(posX) > boundX) ? 0.78 : 0.93;
+      velY *= (Math.abs(posY) > boundY) ? 0.78 : 0.93;
+      if (Math.abs(velX) < 0.02) velX = 0;
+      if (Math.abs(velY) < 0.02) velY = 0;
+    }
+    canvas.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', ev => ev.preventDefault()));
+})();
+</script>
+</body>
+</html>
