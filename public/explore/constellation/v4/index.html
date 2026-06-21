@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>omar.build — constellation v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C; --mute:#8A8A92; --line:#E4DEF6; --bg:#FCFCFD; --accent:#195CFF;
+    --ease:cubic-bezier(.2,.75,.2,1);
+    --spring:cubic-bezier(.34,1.28,.4,1);
+    --assemble:cubic-bezier(.34,1.4,.5,1);
+    --flip:cubic-bezier(.62,.04,.22,1);
+    /* live-tunable (DialKit) */
+    --logo-w:460px; --card-pad:16px; --card-radius:3px; --rest-glow:0.20;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;
+    overflow:hidden;overscroll-behavior:none;}
+
+  /* ---------- background ---------- */
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(56% 50% at 36% 32%, rgba(255,214,170,.16), transparent 70%),
+      radial-gradient(50% 50% at 66% 40%, rgba(196,184,255,.16), transparent 70%),
+      radial-gradient(58% 56% at 52% 74%, rgba(168,214,255,.18), transparent 72%),
+      var(--bg);
+    animation:wash 22s ease-in-out infinite;}
+  @keyframes wash{0%,100%{filter:saturate(1);transform:scale(1);}50%{filter:saturate(1.08);transform:scale(1.03);}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.4;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");}
+
+  /* ---------- viewport / canvas ---------- */
+  .viewport{position:fixed;inset:0;z-index:2;cursor:grab;touch-action:none;}
+  .viewport.dragging{cursor:grabbing;}
+  .canvas{position:absolute;left:50%;top:50%;width:0;height:0;will-change:transform;}
+
+  /* ---------- centre graphic: the self-constructing OMAR mark ---------- */
+  .centre{position:absolute;left:0;top:0;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:none;z-index:5;}
+  .markwrap{width:var(--logo-w);}
+  .markwrap svg{display:block;width:100%;height:auto;overflow:visible;}
+  .blk{opacity:0;transform-box:fill-box;transform-origin:bottom;transform:translateY(40px) scaleY(.7);}
+  .play .blk{animation:assemble .72s var(--assemble) forwards;animation-delay:calc(.2s + var(--i)*.045s);}
+  @keyframes assemble{to{opacity:1;transform:none;}}
+  .eye{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0);}
+  .play .eye{animation:eyepop .55s var(--assemble) 1.05s forwards;}
+  @keyframes eyepop{to{opacity:1;transform:scale(1);}}
+  .subline{font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;line-height:32px;
+    color:var(--mute);opacity:0;animation:fade 1.1s var(--ease) 1.5s forwards;}
+  @keyframes fade{to{opacity:1;}}
+
+  /* ---------- card ---------- */
+  .card{position:absolute;perspective:1500px;
+    opacity:0;transform:translateY(20px) scale(.97);
+    transition:transform .55s var(--spring), opacity .5s ease, box-shadow .5s var(--ease);
+    will-change:transform,opacity;
+    box-shadow:0 2px 6px rgba(40,40,90,.05), 0 28px 64px -44px rgba(60,70,180,var(--rest-glow));
+    border-radius:var(--card-radius);}
+  .card.in{opacity:1;transform:translateY(0) scale(1);}
+  .card:hover{z-index:60;transform:translateY(-4px) scale(1.02);
+    box-shadow:0 2px 6px rgba(40,40,90,.18), 0 50px 92px -34px var(--glow);}
+
+  .flipper{position:absolute;inset:0;transform-style:preserve-3d;
+    transform:rotateY(180deg);transition:transform .78s var(--flip);}
+  .card.up .flipper{transform:rotateY(0deg);}
+
+  .face{position:absolute;inset:0;border-radius:var(--card-radius);backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;overflow:hidden;}
+
+  /* ----- FRONT ----- */
+  .front{background:#fff;border:0.5px solid var(--line);
+    display:flex;flex-direction:column;justify-content:space-between;padding:var(--card-pad);}
+  .thumb{align-self:stretch;flex-shrink:0;border:0.5px solid var(--line);border-radius:2.5px;overflow:hidden;
+    background-image:repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 30px);
+    background-position:1px 0;}
+  .body{display:flex;flex-direction:column;}
+  .title{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:21px;line-height:24px;
+    letter-spacing:-.012em;color:#0B0B0C;}
+  .reveal{max-height:0;opacity:0;overflow:hidden;transform:translateY(4px);
+    transition:max-height .42s var(--ease), opacity .36s var(--ease), transform .42s var(--ease);
+    display:flex;flex-direction:column;gap:4px;padding-top:0;}
+  .card:hover .reveal{max-height:120px;opacity:1;transform:none;padding-top:8px;}
+  .desc{font-family:'Hanken Grotesk',sans-serif;font-size:13px;line-height:19px;color:#5C5C66;}
+  .meta{font-family:'Hanken Grotesk',sans-serif;font-size:13px;line-height:19px;color:#8A8A92;}
+
+  /* ----- BACK (plain solid, no pattern) ----- */
+  .back{transform:rotateY(180deg);border:0.5px solid var(--line);
+    background:#F4F3FA;display:flex;align-items:center;justify-content:center;}
+  .omark{position:relative;width:24px;height:24px;background:var(--accent);border-radius:5px;opacity:.85;}
+  .omark::after{content:'';position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;
+    background:#F4F3FA;transform:translate(-50%,-50%);}
+
+  /* ---------- nav (visual only) ---------- */
+  .nav{position:fixed;left:50%;bottom:26px;z-index:80;
+    transform:translateX(-50%) translateY(160%);opacity:0;
+    transition:transform .9s var(--spring), opacity .6s ease;}
+  .nav.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  .navpill{display:flex;align-items:center;gap:0;
+    background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(16,24,40,.07);border-radius:999px;
+    box-shadow:0 24px 60px -24px rgba(20,40,120,.4);padding:7px;cursor:default;transition:gap .4s var(--ease);}
+  .navdot{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle at 35% 30%, #4d78ff, #143cd4);box-shadow:0 2px 8px -2px rgba(20,40,120,.5);}
+  .navlinks{display:flex;align-items:center;max-width:0;overflow:hidden;opacity:0;
+    transition:max-width .45s var(--ease), opacity .35s var(--ease);}
+  .navlinks a{font-family:'Hanken Grotesk';font-weight:500;font-size:14px;color:var(--ink);
+    text-decoration:none;padding:6px 14px;border-radius:999px;white-space:nowrap;transition:background .2s ease;}
+  .navlinks a:hover{background:rgba(20,40,120,.07);}
+  .nav:hover .navpill{gap:6px;}
+  .nav:hover .navlinks{max-width:340px;opacity:1;padding-left:4px;}
+
+  .hint{position:fixed;left:50%;bottom:84px;z-index:79;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--mute);
+    text-transform:uppercase;opacity:0;transition:opacity .8s ease;pointer-events:none;}
+  .hint.show{opacity:.6;}
+
+  /* ---------- DialKit (vanilla, Interface Craft live-tuning panel) ---------- */
+  .dialkit{position:fixed;top:18px;right:18px;z-index:200;width:240px;
+    font-family:'JetBrains Mono',monospace;color:var(--ink);
+    background:rgba(255,255,255,.84);backdrop-filter:blur(20px) saturate(1.5);
+    -webkit-backdrop-filter:blur(20px) saturate(1.5);
+    border:1px solid rgba(16,24,40,.08);border-radius:14px;
+    box-shadow:0 24px 60px -28px rgba(20,40,120,.4);overflow:hidden;user-select:none;}
+  .dk-head{display:flex;align-items:center;justify-content:space-between;
+    padding:11px 13px;cursor:pointer;border-bottom:1px solid rgba(16,24,40,.06);}
+  .dk-title{font-size:11px;letter-spacing:.18em;}
+  .dk-title b{color:var(--accent);font-weight:500;}
+  .dk-caret{font-size:10px;color:var(--mute);transition:transform .3s var(--ease);}
+  .dialkit.collapsed .dk-caret{transform:rotate(-90deg);}
+  .dialkit.collapsed .dk-body{display:none;}
+  .dk-body{padding:4px 13px 13px;max-height:80vh;overflow-y:auto;}
+  .dk-group-t{font-size:9px;letter-spacing:.2em;color:var(--mute);text-transform:uppercase;padding:13px 0 2px;}
+  .dk-row{display:flex;flex-direction:column;gap:4px;padding:5px 0;}
+  .dk-row-top{display:flex;justify-content:space-between;align-items:baseline;font-size:10.5px;}
+  .dk-row-top .v{color:var(--accent);}
+  .dk-row input[type=range]{width:100%;height:3px;-webkit-appearance:none;appearance:none;
+    background:rgba(16,24,40,.14);border-radius:2px;outline:none;cursor:pointer;}
+  .dk-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;
+    border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 1px 3px rgba(20,40,120,.4);}
+  .dk-row input[type=range]::-moz-range-thumb{width:13px;height:13px;border:none;border-radius:50%;
+    background:var(--accent);cursor:pointer;}
+  .dk-replay{margin-top:14px;width:100%;padding:9px;border:none;border-radius:8px;cursor:pointer;
+    background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+    transition:filter .2s;}
+  .dk-replay:hover{filter:brightness(1.08);}
+
+  @media (prefers-reduced-motion: reduce){
+    .bg{animation:none;}
+    .card,.flipper{transition:none !important;}
+    .play .blk,.play .eye{animation:none;}
+    .blk{opacity:1;transform:none;} .eye{opacity:1;transform:none;} .subline{opacity:1;animation:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="grain"></div>
+  <div class="viewport" id="viewport">
+    <div class="canvas" id="canvas">
+      <div class="centre">
+        <div class="markwrap">
+          <svg id="mark" viewBox="403 624 1232 281" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round">
+              <rect class="blk" x="1491" y="631" width="69" height="163"/>
+              <rect class="blk" x="450" y="631" width="254" height="233"/>
+              <rect class="blk" x="714" y="631" width="103" height="233"/>
+              <path class="blk" d="M817 631L866 690.744V864L817 804.256 817 631Z"/>
+              <path class="blk" d="M915 631L866 690.744V864L915 804.256 915 631Z"/>
+              <rect class="blk" x="915" y="631" width="103" height="233"/>
+              <rect class="blk" x="1031" y="631" width="122" height="233"/>
+              <rect class="blk" x="1319" y="631" width="103" height="233"/>
+              <rect class="blk" x="1203" y="631" width="103" height="233"/>
+              <path class="blk" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"/>
+              <rect class="blk" x="1134" y="631" width="69" height="90"/>
+              <rect class="blk" x="1422" y="631" width="69" height="90"/>
+              <rect class="blk" x="1134" y="709" width="69" height="85"/>
+              <rect class="blk" x="1422" y="721" width="69" height="73"/>
+              <path class="blk" d="M1421 792H1516L1560 864H1471L1421 792Z"/>
+            </g>
+            <circle class="eye" cx="574" cy="747" r="24" fill="#FFFFFF"/>
+            <circle class="eye" cx="1169" cy="734" r="24" fill="#FFFFFF"/>
+            <circle class="eye" cx="1469" cy="734" r="24" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="subline">Always a work in progress</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">Drag to explore · scroll anywhere</div>
+  <nav class="nav" id="nav">
+    <div class="navpill">
+      <span class="navdot"></span>
+      <span class="navlinks">
+        <a href="#" data-cat="writing">Writing</a>
+        <a href="#" data-cat="lab">Lab</a>
+        <a href="#" data-cat="about">About</a>
+      </span>
+    </div>
+  </nav>
+
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement.style;
+
+  /* hover glow tint per category (RGB; alpha is live-tunable) */
+  const GLOW = {
+    writing:'60,70,180', reflection:'14,124,107', lab:'10,90,255',
+    bio:'194,100,40', work:'70,80,150', travel:'200,90,60',
+  };
+
+  /* ---------------- live params (DialKit) ---------------- */
+  const P = {
+    RX:380, RY:380, bandV:360, bandH:360, logoW:460,
+    cardPad:16, cardRadius:2, restGlow:0.20, hoverGlow:0.5,
+    dealBase:1350, dealStag:65, flipBase:2500, flipStag:90,
+  };
+
+  /* ---------------- content ---------------- */
+  const CARDS = [
+    {id:'manage',   cat:'writing',    big:true,  w:300, title:'Manage work, not people',       desc:'Why I design the environment and feedback loops instead of managing people into performance.', meta:'Essay · Design Leadership'},
+    {id:'org',      cat:'writing',    big:false, w:262, title:'Org design for design teams',    desc:'How early teams should shape design for agency, IQ and EQ — not headcount.', meta:'Essay · Design Leadership'},
+    {id:'business', cat:'writing',    big:true,  w:288, title:'Design as a business multiplier', desc:"Good design at a startup isn't pretty pixels — it's the best solution within the constraints.", meta:'Essay · Design Leadership'},
+    {id:'middle',   cat:'reflection', big:false, w:250, title:'The middle ground',              desc:'Define the extremes, then make a life in the middle.', meta:'Reflection · 2026'},
+    {id:'taste',    cat:'reflection', big:false, w:250, title:'On taste',                       desc:'Taste is earned — a slow accretion of intentional looking.', meta:'Reflection · 2026'},
+    {id:'stage',    cat:'lab',        big:true,  w:300, title:'Living Stage',                   desc:'A self-constructing OMAR logotype that assembles itself, block by block.', meta:'Prototype · 2026'},
+    {id:'const',    cat:'lab',        big:true,  w:300, title:'Constellation',                  desc:'This canvas. Everything is a card; the field breathes into being.', meta:'Prototype · 2026'},
+    {id:'type',     cat:'lab',        big:false, w:262, title:'Type in motion',                 desc:'Kinetic typography — weight, kerning and rhythm over time.', meta:'Prototype · 2026'},
+    {id:'ink',      cat:'lab',        big:false, w:262, title:'Calligraphic ink',               desc:'Generative strokes following the gesture of an Arabic line.', meta:'Prototype · 2026'},
+    {id:'bio',      cat:'bio',        big:true,  w:288, title:'About',                          desc:'Head of Design at Sublime. Afghan-American — Kabul, Pakistan, California.', meta:'Bio · Links'},
+    {id:'work',     cat:'work',       big:false, w:270, title:"Where I've worked",              desc:'Sublime · Kin · Alto · Coatue — security, insurance, health, finance.', meta:'Work history'},
+    {id:'istanbul', cat:'travel',     big:false, w:300, title:'Istanbul',                       desc:'A week framing the Bosphorus at golden hour.', meta:'Travel · 41.0°N 28.9°E'},
+    {id:'kyoto',    cat:'travel',     big:false, w:286, title:'Kyoto',                          desc:'Temples, moss gardens, and very deliberate restraint.', meta:'Travel · 35.0°N 135.7°E'},
+    {id:'atlas',    cat:'travel',     big:false, w:286, title:'Atlas Mtns',                     desc:'High passes and Berber villages in the late light.', meta:'Travel · 31.1°N 7.9°W'},
+    {id:'lisbon',   cat:'travel',     big:false, w:300, title:'Lisbon',                         desc:'Tile, hills, and Atlantic haze.', meta:'Travel · 38.7°N 9.1°W'},
+    {id:'trust',    cat:'writing',    big:false, w:262, title:'Designing trust',                desc:"What earns a user's confidence in a security product — and what quietly erodes it.", meta:'Essay · Design Leadership'},
+    {id:'calm',     cat:'reflection', big:false, w:250, title:'Calm systems',                   desc:'Designing the environment so good work happens without force.', meta:'Reflection · 2026'},
+    {id:'grain',    cat:'lab',        big:false, w:262, title:'Grain',                          desc:'A study in texture — noise, paper, and the warmth of imperfection.', meta:'Prototype · 2026'},
+    {id:'craft',    cat:'reflection', big:false, w:250, title:'Notes on craft',                 desc:'Small disciplines — kerning, cropping, the gesture of a line.', meta:'Reflection · 2026'},
+    {id:'marrakech',cat:'travel',     big:false, w:286, title:'Marrakech',                      desc:'Souks, zellige, and dust-gold afternoons.', meta:'Travel · 31.6°N 8.0°W'},
+  ];
+  CARDS.forEach((c, i) => { c.slot = i; c.h = c.big ? 272 : 206; c.thumbH = c.big ? 138 : 100; });
+
+  /* frame slots — every bordering card aligns its INNER edge to the frame (logo + uniform margin) */
+  function buildSlots() {
+    const { RX, RY, bandV, bandH } = P;
+    return [
+      ['T',-RY,-720],['T',-RY,-360],['T',-RY,0],['T',-RY,360],['T',-RY,720],
+      ['B', RY,-720],['B', RY,-360],['B', RY,0],['B', RY,360],['B', RY,720],
+      ['L',-RX,0],['R', RX,0],
+      ['T',-(RY+bandV),-360],['T',-(RY+bandV),0],['T',-(RY+bandV),360],
+      ['B', (RY+bandV),-360],['B', (RY+bandV),0],['B', (RY+bandV),360],
+      ['L',-(RX+bandH),0],['R', (RX+bandH),0],
+    ];
+  }
+
+  /* ---------------- build DOM once ---------------- */
+  const canvas = document.getElementById('canvas');
+  const els = [];
+  CARDS.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    Object.assign(card.style, {
+      width: c.w + 'px', height: c.h + 'px',
+      marginLeft: (-c.w/2) + 'px', marginTop: (-c.h/2) + 'px',
+    });
+    const front = `<div class="face front">
+      <div class="thumb" style="height:${c.thumbH}px"></div>
+      <div class="body">
+        <div class="title">${c.title}</div>
+        <div class="reveal"><div class="desc">${c.desc}</div><div class="meta">${c.meta}</div></div>
+      </div>
+    </div>`;
+    const back = `<div class="face back"><span class="omark"></span></div>`;
+    card.innerHTML = `<div class="flipper">${front}${back}</div>`;
+    canvas.appendChild(card);
+    els.push({ el: card, c });
+  });
+
+  /* ---------------- apply params ---------------- */
+  let boundX = 0, boundY = 0;
+  function applyStyles() {
+    root.setProperty('--logo-w', P.logoW + 'px');
+    root.setProperty('--card-pad', P.cardPad + 'px');
+    root.setProperty('--card-radius', P.cardRadius + 'px');
+    root.setProperty('--rest-glow', P.restGlow);
+    els.forEach(({ el, c }) => el.style.setProperty('--glow', `rgba(${GLOW[c.cat] || GLOW.writing},${P.hoverGlow})`));
+  }
+  function applyLayout() {
+    const slots = buildSlots();
+    els.forEach(({ el, c }) => {
+      const [t, line, cross] = slots[c.slot];
+      if (t === 'T')      { c.x = cross;          c.y = line - c.h / 2; }
+      else if (t === 'B') { c.x = cross;          c.y = line + c.h / 2; }
+      else if (t === 'L') { c.x = line - c.w / 2; c.y = cross; }
+      else                { c.x = line + c.w / 2; c.y = cross; }
+      el.style.left = c.x + 'px'; el.style.top = c.y + 'px';
+    });
+    let mx = 0, my = 0;
+    CARDS.forEach(c => { mx = Math.max(mx, Math.abs(c.x) + c.w/2); my = Math.max(my, Math.abs(c.y) + c.h/2); });
+    boundX = mx + 80; boundY = my + 40;
+  }
+
+  /* ---------------- entrance (replayable) ---------------- */
+  const mark = document.getElementById('mark');
+  let timers = [];
+  function showChrome() {
+    document.getElementById('nav').classList.add('show');
+    const hint = document.getElementById('hint');
+    hint.classList.add('show');
+    timers.push(setTimeout(() => hint.classList.remove('show'), 4200));
+  }
+  function playEntrance() {
+    timers.forEach(clearTimeout); timers = [];
+    els.forEach(({ el }) => el.classList.remove('in', 'up'));
+    const order = [...els].sort((a, b) => Math.hypot(a.c.x, a.c.y) - Math.hypot(b.c.x, b.c.y));
+    if (reduce) { els.forEach(({ el }) => el.classList.add('in', 'up')); showChrome(); return; }
+    // (re)play the self-constructing mark
+    mark.classList.remove('play');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const blks = [...mark.querySelectorAll('.blk')];
+      blks.map(b => ({ b, x: b.getBBox().x })).sort((a, c) => a.x - c.x).forEach((o, i) => o.b.style.setProperty('--i', i));
+      mark.classList.add('play');
+    }));
+    order.forEach((e, i) => timers.push(setTimeout(() => e.el.classList.add('in'), P.dealBase + i * P.dealStag)));
+    order.forEach((e, i) => timers.push(setTimeout(() => e.el.classList.add('up'), P.flipBase + i * P.flipStag)));
+    timers.push(setTimeout(showChrome, P.flipBase + order.length * P.flipStag + 800));
+  }
+
+  /* ---------------- inertial pan + rubber-band ---------------- */
+  let posX = 0, posY = 0, velX = 0, velY = 0;
+  let dragging = false, lastX = 0, lastY = 0, moved = false;
+  const vp = document.getElementById('viewport');
+  window.addEventListener('resize', applyLayout);
+
+  vp.addEventListener('pointerdown', (ev) => {
+    dragging = true; moved = false;
+    lastX = ev.clientX; lastY = ev.clientY; velX = velY = 0;
+    vp.classList.add('dragging'); vp.setPointerCapture(ev.pointerId);
+  });
+  vp.addEventListener('pointermove', (ev) => {
+    if (!dragging) return;
+    const dx = ev.clientX - lastX, dy = ev.clientY - lastY;
+    lastX = ev.clientX; lastY = ev.clientY;
+    if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+    posX += (Math.abs(posX) > boundX) ? dx * 0.35 : dx;
+    posY += (Math.abs(posY) > boundY) ? dy * 0.35 : dy;
+    velX = dx; velY = dy;
+  });
+  const endDrag = () => { if (dragging) { dragging = false; vp.classList.remove('dragging'); } };
+  vp.addEventListener('pointerup', endDrag);
+  vp.addEventListener('pointercancel', endDrag);
+  vp.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    posX -= ev.deltaX; posY -= ev.deltaY;
+    velX = -ev.deltaX * 0.18; velY = -ev.deltaY * 0.18;
+  }, { passive: false });
+  vp.addEventListener('click', (ev) => { if (moved) { ev.preventDefault(); ev.stopPropagation(); } }, true);
+
+  function frame() {
+    if (!dragging) {
+      if (posX > boundX) velX += (boundX - posX) * 0.10;
+      else if (posX < -boundX) velX += (-boundX - posX) * 0.10;
+      if (posY > boundY) velY += (boundY - posY) * 0.10;
+      else if (posY < -boundY) velY += (-boundY - posY) * 0.10;
+      posX += velX; posY += velY;
+      velX *= (Math.abs(posX) > boundX) ? 0.78 : 0.93;
+      velY *= (Math.abs(posY) > boundY) ? 0.78 : 0.93;
+      if (Math.abs(velX) < 0.02) velX = 0;
+      if (Math.abs(velY) < 0.02) velY = 0;
+    }
+    canvas.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0)`;
+    requestAnimationFrame(frame);
+  }
+
+  document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', ev => ev.preventDefault()));
+
+  /* ---------------- DialKit: vanilla live-tuning panel ---------------- */
+  // [key, label, min, max, step, mode]  — mode 'motion' applies on replay; others live
+  const DK = [
+    ['Frame', [
+      ['RX', 'Side margin', 120, 600, 1, 'layout'],
+      ['RY', 'Top / bottom margin', 80, 400, 1, 'layout'],
+      ['bandV', 'Outer row gap', 200, 520, 1, 'layout'],
+      ['bandH', 'Outer side gap', 200, 560, 1, 'layout'],
+    ]],
+    ['Logotype', [
+      ['logoW', 'Logo width', 280, 760, 1, 'layout'],
+    ]],
+    ['Card', [
+      ['cardPad', 'Padding', 6, 32, 1, 'style'],
+      ['cardRadius', 'Corner radius', 0, 24, 0.5, 'style'],
+    ]],
+    ['Shadow', [
+      ['restGlow', 'Rest glow', 0, 0.6, 0.01, 'style'],
+      ['hoverGlow', 'Hover glow', 0, 1, 0.01, 'style'],
+    ]],
+    ['Motion', [
+      ['dealBase', 'Deal start (ms)', 0, 3000, 10, 'motion'],
+      ['dealStag', 'Deal stagger (ms)', 0, 200, 1, 'motion'],
+      ['flipBase', 'Flip start (ms)', 0, 4000, 10, 'motion'],
+      ['flipStag', 'Flip stagger (ms)', 0, 300, 1, 'motion'],
+    ]],
+  ];
+  const fmt = (v) => (v % 1 === 0 ? v : v.toFixed(2));
+  function buildPanel() {
+    const panel = document.createElement('div');
+    panel.className = 'dialkit';
+    let rows = '';
+    DK.forEach(([group, items]) => {
+      rows += `<div class="dk-group-t">${group}</div>`;
+      items.forEach(([key, label, min, max, step]) => {
+        rows += `<div class="dk-row">
+          <div class="dk-row-top"><span>${label}</span><span class="v" data-v="${key}">${fmt(P[key])}</span></div>
+          <input type="range" min="${min}" max="${max}" step="${step}" value="${P[key]}" data-k="${key}">
+        </div>`;
+      });
+    });
+    panel.innerHTML = `
+      <div class="dk-head"><span class="dk-title"><b>◆</b> DIALKIT</span><span class="dk-caret">▾</span></div>
+      <div class="dk-body">${rows}<button class="dk-replay">↻ REPLAY ENTRANCE</button></div>`;
+    document.body.appendChild(panel);
+
+    panel.querySelector('.dk-head').addEventListener('click', () => panel.classList.toggle('collapsed'));
+    panel.querySelectorAll('input[type=range]').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const key = inp.dataset.k, val = parseFloat(inp.value);
+        P[key] = val;
+        panel.querySelector(`[data-v="${key}"]`).textContent = fmt(val);
+        const mode = DK.flatMap(g => g[1]).find(i => i[0] === key)[5];
+        if (mode === 'style') applyStyles();
+        else if (mode === 'layout') applyLayout();
+      });
+    });
+    panel.querySelector('.dk-replay').addEventListener('click', playEntrance);
+  }
+
+  /* ---------------- init ---------------- */
+  buildPanel();
+  applyStyles();
+  applyLayout();
+  requestAnimationFrame(frame);
+  playEntrance();
+})();
+</script>
+</body>
+</html>

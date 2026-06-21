@@ -1,141 +1,54 @@
 ---
 import Base from '../layouts/Base.astro';
-import Card from '../components/Card.astro';
-import CardGrid from '../components/CardGrid.astro';
+import Constellation from '../components/constellation/Constellation.astro';
 import { getVisible, byDateDesc } from '../lib/content';
 import { formatDate, topicLabels } from '../lib/format';
 
-const writing = (await getVisible('writing')).sort(byDateDesc).slice(0, 3);
-const labs = (await getVisible('labs')).sort(byDateDesc).slice(0, 2);
+const writing = (await getVisible('writing')).sort(byDateDesc);
+const labs = (await getVisible('labs')).sort(byDateDesc);
 
-const categories = [
-  {
-    href: '/writing/',
-    title: 'Writing',
-    description: 'Design leadership, cybersecurity, and reflections on systems for a calm life.',
-  },
-  {
-    href: '/labs/',
-    title: 'Labs',
-    description: 'Interactive experiments — AI-native creative work, built and shared in the open.',
-  },
-  {
-    href: '/about/',
-    title: 'About',
-    description: 'Who I am, where I’ve worked — 0 to Series D in cybersecurity, founding, healthcare, finance — and how to reach me.',
-  },
-];
+const writingCards = writing.map((p) => ({
+  href: `/writing/${p.id}/`,
+  cat: 'writing' as const,
+  title: p.data.title,
+  desc: p.data.description,
+  meta: `${topicLabels[p.data.topic]} · ${formatDate(p.data.date)}`,
+}));
+
+const labCards = labs.map((l) => ({
+  href: `/labs/${l.id}/`,
+  cat: 'lab' as const,
+  title: l.data.title,
+  desc: l.data.description,
+  meta: `Prototype · ${formatDate(l.data.date)}`,
+}));
+
+const aboutCard = {
+  href: '/about/',
+  cat: 'about' as const,
+  title: 'About',
+  desc: 'Head of Design at Sublime Security. Afghan-American — Kabul, Pakistan, California.',
+  meta: 'Bio · Links',
+};
+
+// Mix writing + labs, drop the About card near the middle so it lands on a side slot.
+const cards = [...writingCards, ...labCards];
+cards.splice(Math.floor(cards.length / 2), 0, aboutCard);
 ---
 
 <Base
   title="Omar Jalalzada — Design leadership in cybersecurity"
   description="Design leader at Sublime Security. Writing on design leadership, interactive experiments, and case studies from cybersecurity, healthcare, and finance."
+  immersive
 >
-  <section class="hero">
-    <h1>Design leadership,<br />made legible.</h1>
+  <!-- Legible to search engines & screen readers; the visual identity is the canvas below. -->
+  <header class="sr-only">
+    <h1>Omar Jalalzada — Head of Design at Sublime Security</h1>
     <p>
-      I lead design at <a href="https://sublime.security">Sublime Security</a>. I write about
-      building design teams, making complex systems legible, and working as an AI-native creative.
+      A design lead in love with designing — a craftsman first. Writing on design leadership and
+      reflections, interactive Lab experiments, and how to get in touch.
     </p>
-  </section>
+  </header>
 
-  <section>
-    <h2>Explore</h2>
-    <CardGrid>
-      {
-        categories.map((cat) => (
-          <Card href={cat.href} title={cat.title} description={cat.description} />
-        ))
-      }
-    </CardGrid>
-  </section>
-
-  <section>
-    <div class="section-head">
-      <h2>Featured experiments</h2>
-      <a href="/labs/">All labs →</a>
-    </div>
-    <CardGrid>
-      {
-        labs.map((lab) => (
-          <Card
-            href={`/labs/${lab.id}/`}
-            title={lab.data.title}
-            description={lab.data.description}
-            meta={formatDate(lab.data.date)}
-          />
-        ))
-      }
-    </CardGrid>
-  </section>
-
-  <section>
-    <div class="section-head">
-      <h2>Recent writing</h2>
-      <a href="/writing/">All writing →</a>
-    </div>
-    <CardGrid>
-      {
-        writing.map((post) => (
-          <Card
-            href={`/writing/${post.id}/`}
-            title={post.data.title}
-            description={post.data.description}
-            meta={`${topicLabels[post.data.topic]} · ${formatDate(post.data.date)}`}
-            draft={post.data.status === 'draft'}
-          />
-        ))
-      }
-    </CardGrid>
-  </section>
+  <Constellation cards={cards} />
 </Base>
-
-<style>
-  .hero {
-    padding-block: var(--space-12) var(--space-16);
-  }
-
-  .hero h1 {
-    font-size: var(--text-2xl);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-4);
-  }
-
-  .hero p {
-    max-width: var(--measure);
-    font-size: var(--text-lg);
-    line-height: 1.45;
-    color: var(--color-ink-secondary);
-  }
-
-  section + section {
-    margin-top: var(--space-16);
-  }
-
-  h2 {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-ink-tertiary);
-    margin-bottom: var(--space-4);
-  }
-
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4);
-  }
-
-  .section-head a {
-    font-size: var(--text-sm);
-    color: var(--color-ink-secondary);
-    text-decoration: none;
-  }
-
-  .section-head a:hover {
-    color: var(--color-ink);
-  }
-</style>

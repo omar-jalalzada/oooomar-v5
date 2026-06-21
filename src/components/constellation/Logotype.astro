@@ -1,0 +1,111 @@
+---
+/* The self-constructing OMAR logotype. Lifted from explore/constellation/v4.
+   Fill/stroke use the accent token; the mark assembles block-by-block on load. */
+interface Props {
+  /** When true, the mark animates in on load. Static (instant) otherwise. */
+  animate?: boolean;
+}
+const { animate = false } = Astro.props;
+---
+
+<svg
+  class:list={['omar-mark', { animate }]}
+  viewBox="403 624 1232 281"
+  role="img"
+  aria-label="OMAR"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <g class="blocks">
+    <rect class="blk" x="1491" y="631" width="69" height="163"></rect>
+    <rect class="blk" x="450" y="631" width="254" height="233"></rect>
+    <rect class="blk" x="714" y="631" width="103" height="233"></rect>
+    <path class="blk" d="M817 631L866 690.744V864L817 804.256 817 631Z"></path>
+    <path class="blk" d="M915 631L866 690.744V864L915 804.256 915 631Z"></path>
+    <rect class="blk" x="915" y="631" width="103" height="233"></rect>
+    <rect class="blk" x="1031" y="631" width="122" height="233"></rect>
+    <rect class="blk" x="1319" y="631" width="103" height="233"></rect>
+    <rect class="blk" x="1203" y="631" width="103" height="233"></rect>
+    <path class="blk" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"></path>
+    <rect class="blk" x="1134" y="631" width="69" height="90"></rect>
+    <rect class="blk" x="1422" y="631" width="69" height="90"></rect>
+    <rect class="blk" x="1134" y="709" width="69" height="85"></rect>
+    <rect class="blk" x="1422" y="721" width="69" height="73"></rect>
+    <path class="blk" d="M1421 792H1516L1560 864H1471L1421 792Z"></path>
+  </g>
+  <circle class="eye" cx="574" cy="747" r="24"></circle>
+  <circle class="eye" cx="1169" cy="734" r="24"></circle>
+  <circle class="eye" cx="1469" cy="734" r="24"></circle>
+</svg>
+
+<style>
+  .omar-mark {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .blocks {
+    fill: var(--color-accent);
+    stroke: var(--color-accent);
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+  }
+  .eye {
+    fill: var(--color-surface);
+  }
+
+  /* assemble: each modular block grows into place, left to right */
+  .omar-mark.animate .blk {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transform: translateY(40px) scaleY(0.7);
+  }
+  .omar-mark.animate.play .blk {
+    animation: blk-assemble 0.72s cubic-bezier(0.34, 1.4, 0.5, 1) forwards;
+    animation-delay: calc(0.2s + var(--i, 0) * 0.045s);
+  }
+  @keyframes blk-assemble {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .omar-mark.animate .eye {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+  }
+  .omar-mark.animate.play .eye {
+    animation: eye-pop 0.55s cubic-bezier(0.34, 1.4, 0.5, 1) 1.05s forwards;
+  }
+  @keyframes eye-pop {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .omar-mark.animate .blk,
+    .omar-mark.animate .eye {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Order the blocks left-to-right so the mark builds across, then play.
+  const mark = document.querySelector<SVGSVGElement>('.omar-mark.animate');
+  if (mark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const blks = [...mark.querySelectorAll<SVGGraphicsElement>('.blk')];
+    blks
+      .map((b) => ({ b, x: b.getBBox().x }))
+      .sort((a, c) => a.x - c.x)
+      .forEach((o, i) => o.b.style.setProperty('--i', String(i)));
+    requestAnimationFrame(() => mark.classList.add('play'));
+  }
+</script>

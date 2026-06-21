@@ -1,0 +1,549 @@
+---
+import Logotype from './Logotype.astro';
+
+export interface ConstellationCard {
+  href: string;
+  cat: 'writing' | 'lab' | 'about';
+  title: string;
+  desc: string;
+  meta: string;
+}
+interface Props {
+  cards: ConstellationCard[];
+}
+const { cards } = Astro.props;
+---
+
+<div class="constellation" id="constellation">
+  <div class="cnst-bg" aria-hidden="true"></div>
+  <div class="cnst-grain" aria-hidden="true"></div>
+
+  <div class="viewport" id="cnst-vp">
+    <div class="canvas" id="cnst-canvas">
+      <div class="centre">
+        <div class="markwrap"><Logotype animate /></div>
+        <p class="subline">Always a work in progress</p>
+      </div>
+
+      <div class="field" id="cnst-field">
+        {
+          cards.map((card) => (
+            <a class="card" href={card.href} data-cat={card.cat} aria-label={card.title}>
+              <span class="flipper">
+                <span class="face front">
+                  <span class="thumb" aria-hidden="true" />
+                  <span class="body">
+                    <span class="title">{card.title}</span>
+                    <span class="reveal">
+                      <span class="desc">{card.desc}</span>
+                      <span class="meta">{card.meta}</span>
+                    </span>
+                  </span>
+                </span>
+                <span class="face back" aria-hidden="true">
+                  <span class="omark" />
+                </span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <p class="hint" id="cnst-hint">Drag to explore · scroll anywhere</p>
+
+  <nav class="cnst-nav" id="cnst-nav" aria-label="Filter the constellation">
+    <button class="navdot" type="button" id="cnst-navdot" aria-label="Show everything"></button>
+    <span class="navlinks">
+      <a href="/writing/" data-cat="writing">Writing</a>
+      <a href="/labs/" data-cat="lab">Lab</a>
+      <a href="/about/" data-cat="about">About</a>
+    </span>
+  </nav>
+</div>
+
+<style>
+  /* ============ shared ============ */
+  .constellation { position: relative; }
+
+  .cnst-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(56% 50% at 36% 32%, rgba(255, 214, 170, 0.16), transparent 70%),
+      radial-gradient(50% 50% at 66% 40%, rgba(196, 184, 255, 0.16), transparent 70%),
+      radial-gradient(58% 56% at 52% 74%, rgba(168, 214, 255, 0.18), transparent 72%),
+      var(--color-bg);
+    animation: cnst-wash 22s ease-in-out infinite;
+  }
+  @keyframes cnst-wash {
+    0%, 100% { filter: saturate(1); transform: scale(1); }
+    50% { filter: saturate(1.08); transform: scale(1.03); }
+  }
+  .cnst-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  }
+
+  .centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    pointer-events: none;
+  }
+  .markwrap { width: min(460px, 72vw); }
+  .subline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--text-xl);
+    line-height: 1.15;
+    color: var(--color-ink-tertiary);
+  }
+
+  /* card */
+  .card {
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-card);
+  }
+  .flipper { display: block; }
+  .face {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .front {
+    background: var(--color-surface);
+    border: 0.5px solid var(--color-hairline);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+  .thumb {
+    display: block;
+    align-self: stretch;
+    flex-shrink: 0;
+    height: var(--thumb, 120px);
+    border: 0.5px solid var(--color-hairline);
+    border-radius: var(--radius-card);
+    background-image: repeating-linear-gradient(to right, var(--color-hairline) 0 1px, transparent 1px 30px);
+    background-position: 1px 0;
+  }
+  .body { display: flex; flex-direction: column; }
+  .title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+  }
+  .desc {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--color-ink-secondary);
+  }
+  .meta {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--color-ink-tertiary);
+  }
+  .back {
+    background: #f4f3fa;
+    border: 0.5px solid var(--color-hairline);
+    align-items: center;
+    justify-content: center;
+  }
+  .omark {
+    position: relative;
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: var(--color-accent);
+    border-radius: 5px;
+    opacity: 0.85;
+  }
+  .omark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f4f3fa;
+    transform: translate(-50%, -50%);
+  }
+
+  /* per-category hover glow (set in CSS, not JS) */
+  .card[data-cat='writing'] { --glow: rgba(60, 70, 180, 0.5); }
+  .card[data-cat='lab'] { --glow: rgba(10, 90, 255, 0.5); }
+  .card[data-cat='about'] { --glow: rgba(194, 100, 40, 0.5); }
+
+  /* ============ static fallback (no JS) — readable grid ============ */
+  .constellation:not(.ready) .viewport { position: static; }
+  .constellation:not(.ready) .canvas {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+    max-width: var(--site-width);
+    margin-inline: auto;
+    padding: var(--space-16) var(--space-6) var(--space-24);
+    z-index: 2;
+  }
+  .constellation:not(.ready) .centre { position: static; padding-top: var(--space-12); }
+  .constellation:not(.ready) .field {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: var(--space-4);
+    width: 100%;
+  }
+  .constellation:not(.ready) .card { position: static; }
+  .constellation:not(.ready) .flipper { transform: none; }
+  .constellation:not(.ready) .face { position: relative; backface-visibility: visible; }
+  .constellation:not(.ready) .back { display: none; }
+  .constellation:not(.ready) .hint { display: none; }
+  .constellation:not(.ready) .cnst-nav {
+    position: static;
+    margin: var(--space-8) auto 0;
+    justify-content: center;
+  }
+
+  /* ============ canvas mode (JS ready) ============ */
+  .constellation.ready { position: static; }
+  .constellation.ready .viewport {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    cursor: grab;
+    touch-action: none;
+  }
+  .constellation.ready .viewport.dragging { cursor: grabbing; }
+  .constellation.ready .canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    will-change: transform;
+  }
+  .constellation.ready .field { display: contents; }
+
+  .constellation.ready .centre {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+  }
+
+  .constellation.ready .card {
+    position: absolute;
+    left: var(--x, 0);
+    top: var(--y, 0);
+    width: var(--cw, 260px);
+    height: var(--ch, 206px);
+    margin-left: calc(var(--cw, 260px) / -2);
+    margin-top: calc(var(--ch, 206px) / -2);
+    perspective: 1500px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.55s cubic-bezier(0.34, 1.28, 0.4, 1), opacity 0.5s ease,
+      box-shadow 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(40, 40, 90, 0.05), 0 28px 64px -44px rgba(60, 70, 180, 0.2);
+  }
+  .constellation.ready .card.in { opacity: 1; transform: translateY(0) scale(1); }
+  .constellation.ready .card.hidden {
+    opacity: 0;
+    transform: translateY(0) scale(0.9);
+    pointer-events: none;
+  }
+  .constellation.ready .card:hover {
+    z-index: 60;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 2px 6px rgba(40, 40, 90, 0.18), 0 50px 92px -34px var(--glow);
+  }
+
+  .constellation.ready .flipper {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+    transition: transform 0.78s cubic-bezier(0.62, 0.04, 0.22, 1);
+  }
+  .constellation.ready .card.up .flipper { transform: rotateY(0deg); }
+  .constellation.ready .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .constellation.ready .back { transform: rotateY(180deg); }
+
+  /* reveal-on-hover (canvas only) */
+  .constellation.ready .reveal {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(4px);
+    transition: max-height 0.42s cubic-bezier(0.2, 0.75, 0.2, 1), opacity 0.36s ease,
+      transform 0.42s ease;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .constellation.ready .card:hover .reveal {
+    max-height: 140px;
+    opacity: 1;
+    transform: none;
+    padding-top: var(--space-2);
+  }
+  /* static mode: reveal always visible (no hover) */
+  .constellation:not(.ready) .reveal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+  }
+
+  /* hint */
+  .hint {
+    position: fixed;
+    left: 50%;
+    bottom: 84px;
+    z-index: 79;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.16em;
+    color: var(--color-ink-tertiary);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .hint.show { opacity: 0.6; }
+
+  /* nav circle */
+  .cnst-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px) saturate(1.6);
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    border: 1px solid rgba(16, 24, 40, 0.07);
+    border-radius: 999px;
+    box-shadow: 0 24px 60px -24px rgba(20, 40, 120, 0.4);
+    padding: 7px;
+    width: fit-content;
+    transition: gap 0.4s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .constellation.ready .cnst-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    z-index: 80;
+    transform: translateX(-50%) translateY(160%);
+    opacity: 0;
+    transition: transform 0.9s cubic-bezier(0.34, 1.28, 0.4, 1), opacity 0.6s ease;
+  }
+  .constellation.ready .cnst-nav.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .navdot {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    flex-shrink: 0;
+    cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, #4d78ff, var(--color-accent));
+    box-shadow: 0 2px 8px -2px rgba(20, 40, 120, 0.5);
+  }
+  .navlinks { display: flex; align-items: center; }
+  .constellation.ready .navlinks {
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-width 0.45s cubic-bezier(0.2, 0.75, 0.2, 1), opacity 0.35s ease;
+  }
+  .navlinks a {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .navlinks a:hover { background: rgba(20, 40, 120, 0.07); }
+  .navlinks a.active { color: var(--color-accent-ink); background: var(--color-accent); }
+  .constellation.ready .cnst-nav:hover { gap: 6px; }
+  .constellation.ready .cnst-nav:hover .navlinks { max-width: 360px; opacity: 1; padding-left: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cnst-bg { animation: none; }
+    .constellation.ready .card,
+    .constellation.ready .flipper { transition: none !important; }
+  }
+</style>
+
+<script>
+  type Card = { el: HTMLElement; cat: string; big: boolean; w: number; h: number; thumb: number; x: number; y: number };
+
+  // baked-in values dialled in on the v4 prototype
+  const RX = 380, RY = 380, STEP = 360;
+  const DEAL_BASE = 1350, DEAL_STAG = 65, FLIP_BASE = 2500, FLIP_STAG = 90;
+  const WIDTHS = [300, 262, 288, 250, 272, 286];
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.getElementById('constellation');
+  const vp = document.getElementById('cnst-vp');
+  const canvas = document.getElementById('cnst-canvas');
+  const field = document.getElementById('cnst-field');
+  if (root && vp && canvas && field) init(root, vp, canvas, field);
+
+  function init(root: HTMLElement, vp: HTMLElement, canvas: HTMLElement, field: HTMLElement) {
+    const cards: Card[] = [...field.querySelectorAll<HTMLElement>('.card')].map((el, i) => {
+      const big = i % 3 === 0;
+      const w = WIDTHS[i % WIDTHS.length];
+      const h = big ? 272 : 206;
+      const thumb = big ? 138 : 100;
+      el.style.setProperty('--cw', w + 'px');
+      el.style.setProperty('--ch', h + 'px');
+      el.style.setProperty('--thumb', thumb + 'px');
+      return { el, cat: el.dataset.cat || 'writing', big, w, h, thumb, x: 0, y: 0 };
+    });
+
+    // upgrade to canvas mode
+    root.classList.add('ready');
+
+    // ---- frame-slot layout: inner edges align to a frame around the centre ----
+    function buildSlots(n: number): Array<['T' | 'B' | 'L' | 'R', number, number]> {
+      const sides = n >= 6 ? 2 : 0;
+      const rest = n - sides;
+      const topN = Math.ceil(rest / 2);
+      const botN = rest - topN;
+      const rowXs = (k: number) => Array.from({ length: k }, (_, i) => (i - (k - 1) / 2) * STEP);
+      const slots: Array<['T' | 'B' | 'L' | 'R', number, number]> = [];
+      rowXs(topN).forEach((x) => slots.push(['T', -RY, x]));
+      if (sides >= 1) slots.push(['L', -RX, 0]);
+      if (sides >= 2) slots.push(['R', RX, 0]);
+      rowXs(botN).forEach((x) => slots.push(['B', RY, x]));
+      return slots;
+    }
+
+    let boundX = 0, boundY = 0;
+    function layoutCards(list: Card[]) {
+      const slots = buildSlots(list.length);
+      list.forEach((c, i) => {
+        const s = slots[i % slots.length];
+        const [t, line, cross] = s;
+        if (t === 'T') { c.x = cross; c.y = line - c.h / 2; }
+        else if (t === 'B') { c.x = cross; c.y = line + c.h / 2; }
+        else if (t === 'L') { c.x = line - c.w / 2; c.y = cross; }
+        else { c.x = line + c.w / 2; c.y = cross; }
+        c.el.style.setProperty('--x', c.x + 'px');
+        c.el.style.setProperty('--y', c.y + 'px');
+      });
+      let mx = 0, my = 0;
+      list.forEach((c) => { mx = Math.max(mx, Math.abs(c.x) + c.w / 2); my = Math.max(my, Math.abs(c.y) + c.h / 2); });
+      boundX = mx + 80; boundY = my + 40;
+    }
+    layoutCards(cards);
+
+    // ---- category filter (in place) ----
+    let filter: string | null = null;
+    const navLinks = [...root.querySelectorAll<HTMLAnchorElement>('.navlinks a')];
+    function setFilter(cat: string | null) {
+      filter = cat === filter ? null : cat;
+      const visible = cards.filter((c) => !filter || c.cat === filter);
+      cards.forEach((c) => c.el.classList.toggle('hidden', !!filter && c.cat !== filter));
+      layoutCards(visible);
+      posX = posY = velX = velY = 0;
+      navLinks.forEach((a) => a.classList.toggle('active', a.dataset.cat === filter));
+    }
+    navLinks.forEach((a) =>
+      a.addEventListener('click', (e) => { e.preventDefault(); setFilter(a.dataset.cat || null); })
+    );
+    document.getElementById('cnst-navdot')?.addEventListener('click', () => setFilter(null));
+
+    // ---- entrance ----
+    function showChrome() {
+      document.getElementById('cnst-nav')?.classList.add('show');
+      const hint = document.getElementById('cnst-hint');
+      hint?.classList.add('show');
+      setTimeout(() => hint?.classList.remove('show'), 4200);
+    }
+    if (reduce) {
+      cards.forEach((c) => c.el.classList.add('in', 'up'));
+      showChrome();
+    } else {
+      const order = [...cards].sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y));
+      order.forEach((c, i) => setTimeout(() => c.el.classList.add('in'), DEAL_BASE + i * DEAL_STAG));
+      order.forEach((c, i) => setTimeout(() => c.el.classList.add('up'), FLIP_BASE + i * FLIP_STAG));
+      setTimeout(showChrome, FLIP_BASE + order.length * FLIP_STAG + 800);
+    }
+
+    // ---- inertial pan + rubber-band ----
+    let posX = 0, posY = 0, velX = 0, velY = 0;
+    let dragging = false, lastX = 0, lastY = 0, moved = false;
+
+    vp.addEventListener('pointerdown', (ev) => {
+      dragging = true; moved = false;
+      lastX = ev.clientX; lastY = ev.clientY; velX = velY = 0;
+      vp.classList.add('dragging'); vp.setPointerCapture(ev.pointerId);
+    });
+    vp.addEventListener('pointermove', (ev) => {
+      if (!dragging) return;
+      const dx = ev.clientX - lastX, dy = ev.clientY - lastY;
+      lastX = ev.clientX; lastY = ev.clientY;
+      if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+      posX += Math.abs(posX) > boundX ? dx * 0.35 : dx;
+      posY += Math.abs(posY) > boundY ? dy * 0.35 : dy;
+      velX = dx; velY = dy;
+    });
+    const endDrag = () => { if (dragging) { dragging = false; vp.classList.remove('dragging'); } };
+    vp.addEventListener('pointerup', endDrag);
+    vp.addEventListener('pointercancel', endDrag);
+    vp.addEventListener('wheel', (ev) => {
+      ev.preventDefault();
+      posX -= ev.deltaX; posY -= ev.deltaY;
+      velX = -ev.deltaX * 0.18; velY = -ev.deltaY * 0.18;
+    }, { passive: false });
+    // swallow the click that ends a drag so cards don't navigate on a pan
+    vp.addEventListener('click', (ev) => { if (moved) { ev.preventDefault(); ev.stopPropagation(); } }, true);
+
+    function frame() {
+      if (!dragging) {
+        if (posX > boundX) velX += (boundX - posX) * 0.1;
+        else if (posX < -boundX) velX += (-boundX - posX) * 0.1;
+        if (posY > boundY) velY += (boundY - posY) * 0.1;
+        else if (posY < -boundY) velY += (-boundY - posY) * 0.1;
+        posX += velX; posY += velY;
+        velX *= Math.abs(posX) > boundX ? 0.78 : 0.93;
+        velY *= Math.abs(posY) > boundY ? 0.78 : 0.93;
+        if (Math.abs(velX) < 0.02) velX = 0;
+        if (Math.abs(velY) < 0.02) velY = 0;
+      }
+      canvas.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0)`;
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+</script>

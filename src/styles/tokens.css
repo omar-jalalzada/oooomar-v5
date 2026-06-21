@@ -1,5 +1,5 @@
-/* Wireframe tokens. The real brand system replaces this file later;
-   pages reference tokens only, never raw values. */
+/* Brand tokens — the Constellation identity (introduced 2026-06-21, replacing the wireframe set).
+   Pages and components reference these tokens only, never raw values. Spacing stays on the 4px grid. */
 :root {
   /* spacing — 4px base grid */
   --space-1: 0.25rem; /*  4px */
@@ -12,26 +12,30 @@
   --space-16: 4rem;   /* 64px */
   --space-24: 6rem;   /* 96px */
 
-  /* type — 3-level hierarchy: primary / secondary / tertiary */
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --text-xs: 0.8125rem;
-  --text-sm: 0.9375rem;
-  --text-base: 1.0625rem;
-  --text-lg: 1.375rem;
-  --text-xl: 1.75rem;
-  --text-2xl: 2.5rem;
+  /* type — Hanken Grotesk (UI), Instrument Serif (voice), JetBrains Mono (labels) */
+  --font-sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-xs: 0.8125rem;  /* 13px */
+  --text-sm: 0.9375rem;  /* 15px */
+  --text-base: 1.0625rem;/* 17px */
+  --text-lg: 1.375rem;   /* 22px */
+  --text-xl: 1.75rem;    /* 28px */
+  --text-2xl: 2.5rem;    /* 40px */
 
-  /* color — neutral wireframe palette */
-  --color-bg: #fafaf8;
+  /* color — Constellation palette */
+  --color-bg: #fcfcfd;            /* optimistic near-white */
   --color-surface: #ffffff;
-  --color-border: #e4e2dd;
-  --color-ink: #1a1a18;
-  --color-ink-secondary: #55534e;
-  --color-ink-tertiary: #8a877f;
-  --color-accent: #1a1a18;
+  --color-border: #e6e4ee;        /* cool neutral divider */
+  --color-hairline: #e4def6;      /* lavender card hairline */
+  --color-ink: #0b0b0c;           /* near-black */
+  --color-ink-secondary: #5c5c66; /* secondary text */
+  --color-ink-tertiary: #8a8a92;  /* tertiary / meta */
+  --color-accent: #195cff;        /* electric blue */
+  --color-accent-ink: #ffffff;    /* text on accent */
 
   --radius: 8px;
-  --measure: 42rem; /* reading column */
+  --radius-card: 2px; /* sharp, editorial card corner */
+  --measure: 42rem;   /* reading column */
   --site-width: 64rem;
 }
