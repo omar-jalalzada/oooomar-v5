@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sacred Geometry — Flower of Life · v3 · omar.build/explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0B0B0C;
+  --mute:   #9A9AA4;
+  --accent: #2D5BFF;
+  --bg:     #F8F7F5;
+  --card:   #FFFFFF;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 960px; margin: 0 auto; padding: 64px 48px 140px; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: .2em; color: var(--mute);
+  text-transform: uppercase; margin-bottom: 18px;
+}
+h1 {
+  font-family: 'Instrument Serif', serif; font-weight: 400;
+  font-size: clamp(28px, 4vw, 44px); line-height: 1.1;
+  letter-spacing: -.01em; margin-bottom: 12px;
+}
+h1 .it { font-style: italic; color: var(--accent); }
+.intro {
+  font-size: 15px; line-height: 1.65; color: #55555E;
+  max-width: 60ch; margin-bottom: 48px;
+}
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 32px rgba(0,0,0,.08);
+}
+.frame canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.note {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--mute); margin-top: 20px; line-height: 1.6;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow">explore / sacred-geometry / v3</div>
+  <h1>Flower of Life — <span class="it">a cosmology</span></h1>
+  <p class="intro">
+    Each circle is a world: tilted on its own axis, spinning at its own pace.
+    Inner worlds orbit faster — outer ones turn slowly, steadily.
+    Two meridian rings cross each globe, showing it spin. The whole lattice
+    turns as one. Space itself breathes.
+  </p>
+
+  <div class="frame">
+    <canvas id="canvas"></canvas>
+  </div>
+  <p class="note">// v3 — each circle a spinning globe. Vesica fills in v4.</p>
+</div>
+
+<script>
+/* ── CONFIG ──────────────────────────────────────────────────────
+   Tuning all motion in one place.                                  */
+const TILT         = 0.28;      // main disk tilt (radians, ~16°)
+const SPIN_SPEED   = 0.000205;  // main disk spin — ~30s/revolution
+const BREATHE_AMP  = 0.08;      // Z breathing amplitude (fraction of R)
+const BREATHE_FREQ = 0.85;      // spatial frequency of breathing wave
+const BREATHE_SPD  = 0.00055;   // temporal speed of breathing
+const FOCAL        = 950;       // perspective focal length
+const RINGS        = 2;         // hex lattice ring count
+
+// Globe spin: inner circles spin at GLOBE_BASE rate; outer circles slower
+const GLOBE_BASE   = 0.00125;   // rad/ms → ~5s/rev at center, ~12s at edge
+
+const [AR, AG, AB] = [45, 91, 255]; // cobalt accent RGB
+
+/* ── DETERMINISTIC HASHES ─────────────────────────────────────── */
+function h1(x, y) { return Math.abs(Math.sin(x * 127.1 + y * 311.7) * 43758.5453) % 1; }
+function h2(x, y) { return Math.abs(Math.sin(x * 269.5 + y * 183.3) * 43758.5453) % 1; }
+
+/* ── CANVAS SETUP ─────────────────────────────────────────────── */
+const canvas = document.getElementById('canvas');
+const dpr = window.devicePixelRatio || 1;
+function resize() {
+  const f = canvas.parentElement;
+  canvas.width  = f.clientWidth  * dpr;
+  canvas.height = f.clientHeight * dpr;
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* ── HEX LATTICE ─────────────────────────────────────────────── */
+let lattice = null, lastR = 0;
+
+function buildLattice(R) {
+  const dx = R, dy = R * Math.sqrt(3) / 2;
+  const out = [];
+  const seen = new Set();
+  const limit = R * (RINGS + 0.18);
+
+  for (let row = -RINGS * 2; row <= RINGS * 2; row++) {
+    for (let col = -RINGS * 2; col <= RINGS * 2; col++) {
+      const x = (col + (row & 1) * 0.5) * dx;
+      const y = row * dy;
+      const dist = Math.hypot(x, y);
+      if (dist <= limit) {
+        const key = `${Math.round(x * 10)}:${Math.round(y * 10)}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          const nx = x / R, ny = y / R;   // normalised for hash
+          out.push({
+            x, y, dist,
+            // Each world's axis tilt: ±0.45 rad (more tilt toward outer rings)
+            axisTilt:  (h1(nx, ny) * 2 - 1) * (0.2 + dist / R * 0.25),
+            spinPhase: h2(nx, ny) * Math.PI * 2,
+          });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+/* ── DRAW A SPINNING MERIDIAN ─────────────────────────────────────
+   Called inside the main disk transform context.
+   a:     semi-axis width (oscillates 0→R as globe spins)
+   R:     full radius
+   front: which half of the ellipse faces the viewer
+   ─────────────────────────────────────────────────────────────── */
+function drawMeridian(ctx, a, R, front, alpha, lw) {
+  if (a < 1.5) return;  // skip near-line phase — avoids hairline artifacts
+
+  const brightA = (alpha * 0.70).toFixed(3);
+  const dimA    = (alpha * 0.16).toFixed(3);
+
+  // Back-facing arc (dim)
+  ctx.beginPath();
+  if (front) {
+    ctx.ellipse(0, 0, a, R, 0,  Math.PI / 2, 3 * Math.PI / 2);
+  } else {
+    ctx.ellipse(0, 0, a, R, 0, -Math.PI / 2,     Math.PI / 2);
+  }
+  ctx.strokeStyle = `rgba(${AR},${AG},${AB},${dimA})`;
+  ctx.lineWidth = lw;
+  ctx.stroke();
+
+  // Front-facing arc (bright)
+  ctx.beginPath();
+  if (front) {
+    ctx.ellipse(0, 0, a, R, 0, -Math.PI / 2,     Math.PI / 2);
+  } else {
+    ctx.ellipse(0, 0, a, R, 0,  Math.PI / 2, 3 * Math.PI / 2);
+  }
+  ctx.strokeStyle = `rgba(${AR},${AG},${AB},${brightA})`;
+  ctx.lineWidth = lw;
+  ctx.stroke();
+}
+
+/* ── RENDER LOOP ──────────────────────────────────────────────── */
+function render(t) {
+  const W = canvas.width  / dpr;
+  const H = canvas.height / dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(W, H) * 0.195;
+
+  if (Math.abs(R - lastR) > 0.5) { lattice = buildLattice(R); lastR = R; }
+
+  const spin = t * SPIN_SPEED;
+  const ct = Math.cos(TILT),  st = Math.sin(TILT);
+  const cs = Math.cos(spin),  ss = Math.sin(spin);
+
+  /* Project all circle centers into screen space */
+  const projected = lattice.map(c => {
+    const pz = R * BREATHE_AMP * Math.sin(c.dist / R * BREATHE_FREQ - t * BREATHE_SPD);
+
+    // X-tilt
+    const y1 = c.y * ct - pz * st;
+    const z1 = c.y * st + pz * ct;
+    // Y-spin
+    const x2 = c.x * cs + z1 * ss;
+    const y2 = y1;
+    const z2 = -c.x * ss + z1 * cs;
+
+    const pS = FOCAL / (FOCAL + z2 + FOCAL * 0.22);
+    return { sx: cx + x2 * pS, sy: cy + y2 * pS, z2, pS, c };
+  });
+
+  /* Depth range for opacity/weight normalisation */
+  let zMin = Infinity, zMax = -Infinity;
+  for (const p of projected) {
+    if (p.z2 < zMin) zMin = p.z2;
+    if (p.z2 > zMax) zMax = p.z2;
+  }
+  const zRange = zMax - zMin || 1;
+
+  /* Painter's algorithm: back → front */
+  projected.sort((a, b) => b.z2 - a.z2);
+
+  for (const { sx, sy, z2, pS, c } of projected) {
+    const zNorm = (z2 - zMin) / zRange; // 0 = farthest back, 1 = closest front
+
+    const alpha  = 0.10 + zNorm * 0.82;
+    const weight = 0.50 + zNorm * 1.20; // thicker up front
+
+    /* Globe spin — inner worlds faster, outer slower (orbital mechanics) */
+    const globeSpeed = GLOBE_BASE / (1 + c.dist / R * 0.85);
+    const θ = t * globeSpeed + c.spinPhase;
+
+    /* Two meridians 90° apart — when one collapses to a line, the other is full */
+    // Meridian 1: at θ
+    const a1     = Math.abs(Math.cos(θ)) * R;
+    const front1 = Math.cos(θ) >= 0;
+    // Meridian 2: at θ + π/2  → a2 = |cos(θ+π/2)| = |sin(θ)|; front when -sin(θ) ≥ 0
+    const a2     = Math.abs(Math.sin(θ)) * R;
+    const front2 = Math.sin(θ) <= 0;
+
+    const lw = weight / pS;  // compensate perspective scale
+
+    ctx.save();
+    ctx.translate(sx, sy);
+    // Main disk projection: maps local (dx,dy) → projected screen offsets
+    ctx.transform(cs * pS, 0, st * ss * pS, ct * pS, 0, 0);
+
+    /* Spinning meridians — drawn first (behind outer ring) */
+    ctx.save();
+    ctx.rotate(c.axisTilt);    // each world's unique axial tilt
+
+    drawMeridian(ctx, a1, R, front1, alpha, lw * 0.55);
+    drawMeridian(ctx, a2, R, front2, alpha, lw * 0.55);
+
+    /* Pole dots — visible only on front-facing worlds */
+    if (zNorm > 0.48) {
+      const poleA = ((zNorm - 0.48) / 0.52 * alpha * 0.85).toFixed(3);
+      const dotR  = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(dotR, R);
+      ctx.arc(0,  R, dotR, 0, Math.PI * 2);
+      ctx.moveTo(dotR, -R);
+      ctx.arc(0, -R, dotR, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${AR},${AG},${AB},${poleA})`;
+      ctx.fill();
+    }
+
+    ctx.restore(); // axis tilt
+
+    /* Outer silhouette ring — drawn last, sits on top of meridians */
+    ctx.beginPath();
+    ctx.arc(0, 0, R, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(${AR},${AG},${AB},${alpha.toFixed(3)})`;
+    ctx.lineWidth = lw;
+    ctx.stroke();
+
+    ctx.restore(); // main transform
+  }
+
+  /* Envelope ring around the whole lattice */
+  const envPZ  = R * BREATHE_AMP * 0.12 * Math.sin(-t * BREATHE_SPD * 0.55);
+  const envY1  = -envPZ * st;
+  const envZ1  =  envPZ * ct;
+  const envZ2  =  envZ1 * cs;
+  const envPS  = FOCAL / (FOCAL + envZ2 + FOCAL * 0.22);
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.transform(cs * envPS, 0, st * ss * envPS, ct * envPS, 0, 0);
+  ctx.beginPath();
+  ctx.arc(0, 0, R * (RINGS + 0.14), 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(${AR},${AG},${AB},0.48)`;
+  ctx.lineWidth = 1.5 / envPS;
+  ctx.stroke();
+  ctx.restore();
+
+  requestAnimationFrame(render);
+}
+
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
