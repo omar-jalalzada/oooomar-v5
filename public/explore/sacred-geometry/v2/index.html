@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sacred Geometry — Flower of Life · v2 · omar.build/explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0B0B0C;
+  --mute:    #9A9AA4;
+  --accent:  #2D5BFF;
+  --bg:      #F8F7F5;
+  --surface: #FFFFFF;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 960px; margin: 0 auto; padding: 64px 48px 140px; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: .2em; color: var(--mute);
+  text-transform: uppercase; margin-bottom: 18px;
+}
+h1 {
+  font-family: 'Instrument Serif', serif; font-weight: 400;
+  font-size: clamp(28px, 4vw, 44px); line-height: 1.1;
+  letter-spacing: -.01em; margin-bottom: 12px;
+}
+h1 .it { font-style: italic; color: var(--accent); }
+.intro {
+  font-size: 15px; line-height: 1.65; color: #55555E;
+  max-width: 58ch; margin-bottom: 48px;
+}
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: var(--surface);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 32px rgba(0,0,0,.08);
+}
+.frame canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.note {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--mute); margin-top: 20px; line-height: 1.6;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow">explore / sacred-geometry / v2</div>
+  <h1>Flower of Life — <span class="it">in 3D space</span></h1>
+  <p class="intro">
+    Concepts A + B: the lattice tilts ~18° and slowly spins on a slightly off-axis Y, while
+    a breathing sine wave propagates outward from center — each circle's depth pulsing in and
+    out of the plane. Near circles are brighter and heavier; far ones recede.
+  </p>
+
+  <div class="frame">
+    <canvas id="canvas"></canvas>
+  </div>
+  <p class="note">// v2 — 3D projection + breathing. Vesica fills in v3.</p>
+</div>
+
+<script>
+/* ── CONFIG ────────────────────────────────────────────────────── */
+const TILT         = 0.32;       // ~18° fixed X-tilt (radians)
+const SPIN_SPEED   = 0.000295;   // rad/ms → ~21s per revolution
+const BREATHE_AMP  = 0.14;       // Z amplitude as fraction of R
+const BREATHE_FREQ = 0.85;       // spatial wave frequency
+const BREATHE_SPD  = 0.00072;    // temporal wave speed
+const FOCAL        = 950;        // perspective focal length
+const RINGS        = 2;          // hex lattice ring count
+
+const ACCENT = [45, 91, 255];    // cobalt RGB
+
+/* ── CANVAS SETUP ──────────────────────────────────────────────── */
+const canvas = document.getElementById('canvas');
+const dpr = window.devicePixelRatio || 1;
+
+function resize() {
+  const frame = canvas.parentElement;
+  canvas.width  = frame.clientWidth  * dpr;
+  canvas.height = frame.clientHeight * dpr;
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* ── HEX LATTICE (built once, relative to origin) ─────────────── */
+function buildLattice(R) {
+  const dx = R, dy = R * Math.sqrt(3) / 2;
+  const out = [];
+  const seen = new Set();
+  const limit = R * (RINGS + 0.18);
+
+  for (let row = -RINGS * 2; row <= RINGS * 2; row++) {
+    for (let col = -RINGS * 2; col <= RINGS * 2; col++) {
+      const x = (col + (row & 1) * 0.5) * dx;
+      const y = row * dy;
+      if (Math.hypot(x, y) <= limit) {
+        const key = `${Math.round(x * 10)}:${Math.round(y * 10)}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          out.push({ x, y, dist: Math.hypot(x, y) });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+let lattice = null;
+let lastR   = 0;
+
+/* ── RENDER LOOP ───────────────────────────────────────────────── */
+function render(t) {
+  const W = canvas.width  / dpr;
+  const H = canvas.height / dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(W, H) * 0.195;
+
+  // Rebuild lattice only when canvas size changes
+  if (Math.abs(R - lastR) > 0.5) {
+    lattice = buildLattice(R);
+    lastR = R;
+  }
+
+  const spin = t * SPIN_SPEED;
+  const ct = Math.cos(TILT), st = Math.sin(TILT);
+  const cs = Math.cos(spin), ss = Math.sin(spin);
+
+  /* ── PROJECT ALL CIRCLE CENTERS INTO 3D ── */
+  const projected = lattice.map(c => {
+    // Breathing: Z oscillates as a wave propagating outward from center
+    const pz = R * BREATHE_AMP * Math.sin(c.dist / R * BREATHE_FREQ - t * BREATHE_SPD);
+
+    // Apply X-tilt rotation
+    const y1 = c.y * ct - pz * st;
+    const z1 = c.y * st + pz * ct;
+
+    // Apply Y-spin rotation
+    const x2 = c.x * cs + z1 * ss;
+    const y2 = y1;
+    const z2 = -c.x * ss + z1 * cs;
+
+    // Perspective divide — bias Z so the disk stays fully in front of camera
+    const pS = FOCAL / (FOCAL + z2 + FOCAL * 0.22);
+
+    return {
+      sx: cx + x2 * pS,
+      sy: cy + y2 * pS,
+      z2,
+      pS,
+    };
+  });
+
+  /* ── DEPTH RANGE for normalising opacity/weight ── */
+  let zMin = Infinity, zMax = -Infinity;
+  for (const p of projected) {
+    if (p.z2 < zMin) zMin = p.z2;
+    if (p.z2 > zMax) zMax = p.z2;
+  }
+  const zRange = zMax - zMin || 1;
+
+  /* ── DEPTH SORT back → front (painter's algorithm) ── */
+  const order = projected
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => b.p.z2 - a.p.z2);
+
+  /* ── DRAW CIRCLES ── */
+  for (const { p } of order) {
+    const zNorm = (p.z2 - zMin) / zRange; // 0 = furthest back, 1 = closest front
+
+    const alpha  = 0.12 + zNorm * 0.78;
+    const weight = 0.55 + zNorm * 1.1;    // 0.55px back → 1.65px front
+
+    ctx.save();
+    ctx.translate(p.sx, p.sy);
+
+    // Ellipse transform: maps local (dx, dy) on unit circle → projected screen offsets
+    //   X-basis (1,0) → (cs·pS, 0)
+    //   Y-basis (0,1) → (st·ss·pS, ct·pS)
+    ctx.transform(cs * p.pS, 0, st * ss * p.pS, ct * p.pS, 0, 0);
+
+    ctx.beginPath();
+    ctx.arc(0, 0, R, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${alpha.toFixed(3)})`;
+    // Compensate lineWidth for the perspective scale (approximate)
+    ctx.lineWidth = weight / p.pS;
+    ctx.stroke();
+    ctx.restore();
+
+    // Node accent dot — only visible on the front-facing half
+    if (zNorm > 0.62) {
+      const dotAlpha = (zNorm - 0.62) / 0.38;
+      const dotR = 2.2 * p.pS;
+      ctx.beginPath();
+      ctx.arc(p.sx, p.sy, dotR, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${(dotAlpha * 0.85).toFixed(3)})`;
+      ctx.fill();
+    }
+  }
+
+  /* ── ENVELOPE ELLIPSE — framing ring around the whole lattice ── */
+  const envR  = R * (RINGS + 0.14);  // radius of the envelope in the original plane
+  // Center of envelope is (0,0) in the lattice → projects to (cx, cy) always
+  // Envelope is just the bounding circle of the lattice, projected as an ellipse
+  const envPz = R * BREATHE_AMP * 0.15 * Math.sin(-t * BREATHE_SPD * 0.6); // subtle breathe
+  const envY1 = -envPz * st;
+  const envZ1 =  envPz * ct;
+  const envZ2 = envZ1 * cs;  // x2 term is 0 since cx=0
+  const envPS = FOCAL / (FOCAL + envZ2 + FOCAL * 0.22);
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.transform(cs * envPS, 0, st * ss * envPS, ct * envPS, 0, 0);
+  ctx.beginPath();
+  ctx.arc(0, 0, envR, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},0.55)`;
+  ctx.lineWidth = 1.6 / envPS;
+  ctx.stroke();
+  ctx.restore();
+
+  requestAnimationFrame(render);
+}
+
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
