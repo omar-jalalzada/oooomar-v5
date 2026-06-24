@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>omar.build — logo reveal / v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fcfcfd;        /* matches the main site (--color-bg) */
+  --surface:#ffffff;
+  --ink:#0B0B0C;
+  --mute:#8A8A92;
+  --accent:#195cff;
+  --line:rgba(11,11,12,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Hanken Grotesk',sans-serif;
+  height:100dvh;display:flex;flex-direction:column;
+  overflow:hidden;user-select:none;
+}
+.stage{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;position:relative;
+}
+.mark-wrap{
+  width:min(620px,86vw);
+  display:flex;flex-direction:column;align-items:center;
+}
+#mark{display:block;width:100%;height:auto;overflow:visible;}
+
+/* tagline — the voice, beneath the constructed mark.
+   Built from per-word slots so each reveal can borrow the logo's motion. */
+.tagline{
+  margin-top:30px;
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:clamp(20px,2.6vw,28px);letter-spacing:.005em;line-height:1.3;
+  color:var(--mute);text-align:center;white-space:nowrap;
+}
+.tagline .tw{display:inline-block;}        /* word slot (clips when a reveal needs it) */
+.tagline .tw + .tw{margin-left:.26em;}
+.tagline .twi{display:inline-block;will-change:transform;}          /* word inner — word-level motion */
+.tagline .ti{display:inline-block;will-change:transform,opacity;}   /* per-letter */
+
+/* scrub bar */
+.scrub{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:rgba(11,11,12,0.05);
+}
+.scrub-fill{
+  height:100%;width:0%;background:var(--accent);
+  transition:width linear;
+}
+
+/* controls */
+.controls{
+  padding:16px 28px 20px;
+  border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:20px;
+}
+.vmeta{flex:1;}
+.vlabel{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.18em;color:#C2C2C8;
+  margin-bottom:3px;
+}
+.vname{font-size:15px;font-weight:600;letter-spacing:-.01em;}
+.vdesc{font-size:12px;color:#6A6A72;margin-top:3px;line-height:1.5;max-width:520px;}
+.nav{display:flex;gap:6px;align-items:center;}
+.vbtn{
+  width:32px;height:32px;border-radius:7px;
+  border:1px solid rgba(11,11,12,0.10);
+  background:transparent;color:#9A9AA2;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;cursor:pointer;transition:all .18s;
+}
+.vbtn:hover{border-color:rgba(11,11,12,0.22);color:var(--ink);}
+.vbtn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.rbtn{
+  padding:7px 15px;border-radius:7px;
+  border:1px solid rgba(11,11,12,0.10);
+  background:transparent;color:#555;
+  font-family:'Hanken Grotesk',sans-serif;
+  font-size:12px;font-weight:500;cursor:pointer;
+  transition:background .18s,color .18s;margin-left:6px;
+}
+.rbtn:hover{background:rgba(11,11,12,0.04);color:var(--ink);}
+.kbhint{
+  position:absolute;top:18px;right:22px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:.16em;color:#CFCFD6;
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <span class="kbhint">← → SWITCH · SPACE / R — REPLAY</span>
+  <div class="mark-wrap">
+    <svg id="mark" viewBox="403 624 1232 281" xmlns="http://www.w3.org/2000/svg">
+      <!-- O -->
+      <rect id="b0" class="blk o" x="450" y="631" width="254" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <!-- M -->
+      <rect id="b1" class="blk m" x="714" y="631" width="103" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <path id="b2" class="blk m" d="M817 631L866 690.744V864L817 804.256 817 631Z" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <path id="b3" class="blk m" d="M915 631L866 690.744V864L915 804.256 915 631Z" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b4" class="blk m" x="915" y="631" width="103" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b5" class="blk m" x="1031" y="631" width="122" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <!-- A -->
+      <rect id="b6" class="blk a" x="1134" y="631" width="69" height="90" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b7" class="blk a" x="1134" y="709" width="69" height="85" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <path id="b8" class="blk a" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b9" class="blk a" x="1203" y="631" width="103" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <!-- R -->
+      <rect id="b10" class="blk r" x="1319" y="631" width="103" height="233" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b11" class="blk r" x="1422" y="631" width="69" height="90" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b12" class="blk r" x="1422" y="721" width="69" height="73" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <rect id="b13" class="blk r" x="1491" y="631" width="69" height="163" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <path id="b14" class="blk r" d="M1421 792H1516L1560 864H1471L1421 792Z" fill="#195CFF" stroke="#195CFF" stroke-width="1.3" stroke-linejoin="round"/>
+      <!-- Eyes (holes) -->
+      <circle id="eye0" class="eye" cx="574" cy="747" r="24" fill="#fcfcfd"/>
+      <circle id="eye1" class="eye" cx="1169" cy="734" r="24" fill="#fcfcfd"/>
+      <circle id="eye2" class="eye" cx="1469" cy="734" r="24" fill="#fcfcfd"/>
+    </svg>
+    <div class="tagline" id="tagline">Always a work in progress</div>
+  </div>
+  <div class="scrub"><div class="scrub-fill" id="scrub"></div></div>
+</div>
+
+<div class="controls">
+  <div class="vmeta">
+    <div class="vlabel">CONCEPT A&nbsp;&nbsp;·&nbsp;&nbsp;VERSION <span id="vi">1</span> / 2</div>
+    <div class="vname" id="vn">—</div>
+    <div class="vdesc" id="vd">—</div>
+  </div>
+  <div class="nav">
+    <button class="vbtn on" data-i="0">1</button>
+    <button class="vbtn" data-i="1">2</button>
+    <button class="rbtn" id="rb">Replay</button>
+  </div>
+</div>
+
+<script>
+const E    = 'cubic-bezier(.2,.75,.2,1)';
+const SP   = 'cubic-bezier(.34,1.4,.5,1)';     // springy overshoot (logo blocks)
+const SP2  = 'cubic-bezier(.34,1.15,.5,1)';    // gentle overshoot
+const SLIDE = 'cubic-bezier(.22,1,.36,1)';     // smooth cinematic settle
+
+const svg  = document.getElementById('mark');
+const oBlk = [...svg.querySelectorAll('.o')];
+const mBlk = [...svg.querySelectorAll('.m')];
+const aBlk = [...svg.querySelectorAll('.a')];
+const rBlk = [...svg.querySelectorAll('.r')];
+const eye0 = document.getElementById('eye0');
+const eye1 = document.getElementById('eye1');
+const eye2 = document.getElementById('eye2');
+const allBlk = [...oBlk, ...mBlk, ...aBlk, ...rBlk];
+const allEl  = [...allBlk, eye0, eye1, eye2];
+
+// ─── Tagline: build per-word slots so each reveal can move words like blocks
+const tagline = document.getElementById('tagline');
+const WORDS = ['Always', 'a', 'work', 'in', 'progress'];
+tagline.innerHTML = WORDS.map(w =>
+  `<span class="tw"><span class="twi">${[...w].map(c => `<span class="ti">${c}</span>`).join('')}</span></span>`
+).join('');
+const tws  = [...tagline.querySelectorAll('.tw')];   // word slots (clip)
+const twis = [...tagline.querySelectorAll('.twi')];  // word inners (word-level motion)
+const tis  = [...tagline.querySelectorAll('.ti')];   // letters (letter-level motion)
+
+let tagTimers = [];
+function clearTagTimers() { tagTimers.forEach(clearTimeout); tagTimers = []; }
+function tafter(ms, fn) { tagTimers.push(setTimeout(fn, ms)); }
+function resetTag() {
+  clearTagTimers();
+  tagline.style.cssText = '';
+  tws.forEach(w => { w.style.cssText = ''; });
+  twis.forEach(w => { w.style.cssText = ''; });
+  tis.forEach(t => { t.style.cssText = ''; });
+  // each treatment sets its own hidden initial state synchronously in go()
+}
+
+function resetAll() {
+  allEl.forEach(el => { el.style.cssText = 'opacity:0;'; });
+  svg.style.transition = 'none';
+  svg.style.transform = 'none';
+  svg.style.filter = 'none';
+  resetTag();
+}
+
+// O-glyph center sits at this fraction of the rendered mark width.
+// viewBox 403..1635 (w 1232); O center ≈ x577 → (577-403)/1232 = 0.1412.
+// Shifting the mark right by (0.5 - 0.1412) puts the O at screen center.
+const O_OFFSET = '35.88%';
+
+function runScrub(ms) {
+  const bar = document.getElementById('scrub');
+  bar.style.transition = 'none'; bar.style.width = '0%';
+  requestAnimationFrame(() => {
+    bar.style.transition = `width ${ms}ms linear`;
+    bar.style.width = '100%';
+  });
+}
+
+// ─── THE LOGO REVEAL (Concept A) ─────────────────────────────────────────
+// O lands dead-center and holds, then slides left to its final spot. As the
+// mark moves left, M·A·R reveal in a single left-to-right sweep: each
+// bar/column grows from its LEFT edge to the right and fades up in sync
+// (same duration & easing), ordered by horizontal position — so the build
+// rides along with the leftward slide and stacks across to the right.
+const marBars = [...mBlk, ...aBlk, ...rBlk];
+let marX = null, marRange = null;
+function ensureMarX() {
+  if (marX) return;
+  marX = new Map();
+  let lo = Infinity, hi = -Infinity;
+  marBars.forEach(el => { const x = el.getBBox().x; marX.set(el, x); lo = Math.min(lo, x); hi = Math.max(hi, x); });
+  [eye1, eye2].forEach(el => marX.set(el, el.getBBox().x));
+  marRange = { lo, hi };
+}
+// horizontal position (left edge) → delay along the sweep
+function sweepDelay(el, start, spread) {
+  const t = (marX.get(el) - marRange.lo) / (marRange.hi - marRange.lo);
+  return start + t * spread;
+}
+
+// livelier easings used by version 2
+const EZ_IN  = 'cubic-bezier(.4,0,.2,1)';        // soft fade-in
+const LIVELY = 'cubic-bezier(.22,1.25,.32,1)';   // springy settle (overshoot)
+const FLUID  = 'cubic-bezier(.16,1,.3,1)';       // smooth, fluid slide
+
+// shared: park the mark off-center and hide the counters
+function initMark() {
+  svg.style.transition = 'none';
+  svg.style.transform = `translateX(${O_OFFSET})`;
+  svg.style.filter = 'none';
+  eye0.style.transform = 'scale(0)'; eye0.style.transformBox = 'fill-box'; eye0.style.transformOrigin = 'center';
+  [eye1, eye2].forEach(el => { el.style.transform = 'scale(0)'; el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; });
+}
+// each MAR bar starts as a zero-width sliver pinned to its LEFT edge
+function initMar(blur) {
+  marBars.forEach(el => {
+    el.style.transformBox = 'fill-box';
+    el.style.transformOrigin = 'left center';
+    el.style.transform = 'scaleX(0)';
+    el.style.opacity = '0';
+    el.style.filter = blur ? 'blur(4px)' : 'none';
+  });
+}
+// the leftward slide of the whole mark
+function slideMark(at, ease) {
+  setTimeout(() => {
+    svg.style.transition = `transform 880ms ${ease}`;
+    svg.style.transform = 'translateX(0)';
+  }, at);
+}
+// the left-to-right reveal sweep (+ counters), optional per-bar motion blur
+function marSweep(slideAt, blur) {
+  const SWEEP_AT = slideAt + 40, SWEEP = 760, REV = 460;
+  const ez = blur ? SP2 : E;
+  marBars.forEach(el => {
+    const d = sweepDelay(el, SWEEP_AT, SWEEP);
+    el.style.transition = `opacity ${REV}ms ${E} ${d}ms, transform ${REV}ms ${ez} ${d}ms`
+      + (blur ? `, filter ${REV}ms ${E} ${d}ms` : '');
+    el.style.opacity = '1'; el.style.transform = 'scaleX(1)';
+    if (blur) el.style.filter = 'blur(0px)';
+  });
+  [eye1, eye2].forEach(el => {
+    const d = sweepDelay(el, SWEEP_AT, SWEEP) + 200;
+    setTimeout(() => {
+      el.style.transition = `opacity 260ms ${E}, transform 340ms ${SP}`;
+      el.style.opacity = '1'; el.style.transform = 'scale(1)';
+    }, d);
+  });
+}
+
+// ── Version 1: O scales up from half-size, then the left-to-right sweep ──
+function play1() {
+  ensureMarX();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    initMark();
+    oBlk.forEach(el => { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = 'scale(.5)'; el.style.opacity = '0'; el.style.filter = 'none'; });
+    initMar(false);
+    requestAnimationFrame(() => {
+      oBlk.forEach(el => { el.style.transition = `opacity 420ms ${E}, transform 580ms ${SP}`; el.style.opacity = '1'; el.style.transform = 'scale(1)'; });
+      setTimeout(() => { eye0.style.transition = `opacity 300ms ${E}, transform 380ms ${SP}`; eye0.style.opacity = '1'; eye0.style.transform = 'scale(1)'; }, 360);
+      slideMark(620, SLIDE);
+      marSweep(620, false);
+    });
+  }));
+}
+
+// ── Version 2: cinematic — O bursts in OVERSIZED & soft, settles to its
+//    true size with motion blur and a lively spring, then slide + sweep ──
+function play2() {
+  ensureMarX();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    initMark();
+    oBlk.forEach(el => { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; el.style.transform = 'scale(1.75)'; el.style.opacity = '0'; el.style.filter = 'blur(13px)'; });
+    initMar(true);
+    requestAnimationFrame(() => {
+      // O appears big and soft
+      oBlk.forEach(el => { el.style.transition = `opacity 440ms ${EZ_IN}, filter 480ms ${E}`; el.style.opacity = '1'; el.style.filter = 'blur(2.5px)'; });
+      // settle to true size — motion blur clears as it slows, lively overshoot
+      const SHRINK_AT = 640, SHRINK = 740;
+      setTimeout(() => {
+        oBlk.forEach(el => { el.style.transition = `transform ${SHRINK}ms ${LIVELY}, filter ${SHRINK}ms ${E}`; el.style.transform = 'scale(1)'; el.style.filter = 'blur(0px)'; });
+      }, SHRINK_AT);
+      // counter opens as the O settles
+      setTimeout(() => { eye0.style.transition = `opacity 300ms ${E}, transform 420ms ${SP}`; eye0.style.opacity = '1'; eye0.style.transform = 'scale(1)'; }, SHRINK_AT + SHRINK - 140);
+      // then the slide + sweep, as usual (with a touch of motion blur)
+      const SLIDE_AT2 = SHRINK_AT + SHRINK + 80;
+      slideMark(SLIDE_AT2, FLUID);
+      marSweep(SLIDE_AT2, true);
+    });
+  }));
+}
+
+// Tagline stays the letter-slide you liked (treatment 1), fixed for now.
+function revealTagline(base) {
+  tis.forEach((t, i) => {
+    t.style.transition = 'none'; t.style.opacity = '0'; t.style.transform = 'translateX(20px)';
+    tafter(base + i * 30, () => {
+      t.style.transition = `opacity 340ms ${E}, transform 480ms ${SP2}`;
+      t.style.opacity = '1'; t.style.transform = 'translateX(0)';
+    });
+  });
+}
+
+const VERSIONS = [
+  {
+    label:'1', name:'Left-to-right reveal',
+    desc:'The O lands centered and slides left; M·A·R reveal left-to-right, each bar growing from its left edge and fading up in sync.',
+    play: play1, tagAt: 1700, scrub: 2700
+  },
+  {
+    label:'2', name:'Cinematic O',
+    desc:'The O bursts in oversized and soft, then settles to its true size with motion blur and a lively spring — then the slide and sweep follow. More dramatic, more alive.',
+    play: play2, tagAt: 2750, scrub: 3900
+  },
+];
+
+let cur = 0;
+function go(i) {
+  if (typeof i === 'number') cur = i;   // no arg = replay current
+  const v = VERSIONS[cur];
+  document.getElementById('vi').textContent = v.label;
+  document.getElementById('vn').textContent = v.name;
+  document.getElementById('vd').textContent = v.desc;
+  document.querySelectorAll('.vbtn').forEach((b, j) => b.classList.toggle('on', j === cur));
+
+  resetAll();
+  v.play();
+  runScrub(v.scrub);
+  revealTagline(v.tagAt);
+}
+
+document.querySelectorAll('.vbtn').forEach(b => b.addEventListener('click', () => go(+b.dataset.i)));
+document.getElementById('rb').addEventListener('click', () => go());
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight')      go((cur + 1) % VERSIONS.length);
+  else if (e.key === 'ArrowLeft')  go((cur + VERSIONS.length - 1) % VERSIONS.length);
+  else if (e.key === ' ' || e.key === 'r') { e.preventDefault(); go(); }
+});
+
+go(0);
+</script>
+</body>
+</html>
