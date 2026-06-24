@@ -4,6 +4,7 @@ import Logotype from './Logotype.astro';
 export interface ConstellationCard {
   href: string;
   cat: 'writing' | 'lab' | 'about';
+  slug: string;
   title: string;
   desc: string;
   meta: string;
@@ -61,6 +62,20 @@ const { cards } = Astro.props;
       <a href="/about/" data-cat="about">About</a>
     </span>
   </nav>
+
+  <!-- In-place detail overlay: a card expands into this panel over the live canvas.
+       Content is fetched from the real route; the URL updates via History API. -->
+  <div class="cnst-overlay" id="cnst-overlay" hidden>
+    <div class="cnst-scrim" id="cnst-scrim"></div>
+    <div class="cnst-panel" id="cnst-panel" role="dialog" aria-modal="true" tabindex="-1">
+      <button class="cnst-close" id="cnst-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </button>
+      <div class="cnst-panel-scroll" id="cnst-panel-scroll"></div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -73,9 +88,9 @@ const { cards } = Astro.props;
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(56% 50% at 36% 32%, rgba(255, 214, 170, 0.16), transparent 70%),
-      radial-gradient(50% 50% at 66% 40%, rgba(196, 184, 255, 0.16), transparent 70%),
-      radial-gradient(58% 56% at 52% 74%, rgba(168, 214, 255, 0.18), transparent 72%),
+      radial-gradient(56% 50% at 36% 32%, rgba(255, 214, 170, 0.22), transparent 70%),
+      radial-gradient(50% 50% at 66% 40%, rgba(196, 184, 255, 0.22), transparent 70%),
+      radial-gradient(58% 56% at 52% 74%, rgba(168, 214, 255, 0.26), transparent 72%),
       var(--color-bg);
     animation: cnst-wash 22s ease-in-out infinite;
   }
@@ -106,7 +121,8 @@ const { cards } = Astro.props;
     font-style: italic;
     font-size: var(--text-xl);
     line-height: 1.15;
-    color: var(--color-ink-tertiary);
+    color: var(--color-ink-secondary);
+    text-wrap: balance;
   }
 
   /* card */
@@ -127,38 +143,49 @@ const { cards } = Astro.props;
     flex-direction: column;
     justify-content: space-between;
     padding: var(--space-4);
-    gap: var(--space-4);
   }
   .thumb {
     display: block;
     align-self: stretch;
     flex-shrink: 0;
     height: var(--thumb, 120px);
+    margin-bottom: var(--space-4);
     border: 0.5px solid var(--color-hairline);
     border-radius: var(--radius-card);
-    background-image: repeating-linear-gradient(to right, var(--color-hairline) 0 1px, transparent 1px 30px);
-    background-position: 1px 0;
   }
   .body { display: flex; flex-direction: column; }
   .title {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: var(--text-lg);
-    line-height: 1.15;
-    letter-spacing: -0.012em;
+    font-size: var(--text-base);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
     color: var(--color-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-wrap: balance;
   }
   .desc {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     line-height: 1.45;
     color: var(--color-ink-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-wrap: pretty;
   }
   .meta {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     line-height: 1.45;
     color: var(--color-ink-tertiary);
+    font-variant-numeric: tabular-nums;
   }
   .back {
     background: #f4f3fa;
@@ -249,6 +276,12 @@ const { cards } = Astro.props;
     top: 0;
     transform: translate(-50%, -50%);
     z-index: 5;
+    transition: opacity 0.35s ease;
+  }
+
+  .constellation.ready .centre.filtered {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .constellation.ready .card {
@@ -265,6 +298,15 @@ const { cards } = Astro.props;
     transition: transform 0.55s cubic-bezier(0.34, 1.28, 0.4, 1), opacity 0.5s ease,
       box-shadow 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
     box-shadow: 0 2px 6px rgba(40, 40, 90, 0.05), 0 28px 64px -44px rgba(60, 70, 180, 0.2);
+  }
+
+  /* Position transition only while a filter is active — keeps entrance animation unaffected */
+  .constellation.ready.filtering .card {
+    transition: left 0.55s cubic-bezier(0.25, 1, 0.5, 1),
+      top 0.55s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.55s cubic-bezier(0.34, 1.28, 0.4, 1),
+      opacity 0.4s ease,
+      box-shadow 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
   }
   .constellation.ready .card.in { opacity: 1; transform: translateY(0) scale(1); }
   .constellation.ready .card.hidden {
@@ -311,6 +353,21 @@ const { cards } = Astro.props;
     opacity: 1;
     transform: none;
     padding-top: var(--space-2);
+  }
+
+  /* on hover the thumbnail slides up out of the frame, freeing the full card
+     height for the title + description + meta */
+  .constellation.ready .thumb {
+    transition: height 0.44s cubic-bezier(0.2, 0.75, 0.2, 1),
+      margin-bottom 0.44s cubic-bezier(0.2, 0.75, 0.2, 1),
+      opacity 0.3s ease, transform 0.44s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .constellation.ready .card:hover .thumb {
+    height: 0;
+    margin-bottom: 0;
+    opacity: 0;
+    border-width: 0;
+    transform: translateY(-8px);
   }
   /* static mode: reveal always visible (no hover) */
   .constellation:not(.ready) .reveal {
@@ -364,8 +421,8 @@ const { cards } = Astro.props;
   }
   .constellation.ready .cnst-nav.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .navdot {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
     flex-shrink: 0;
@@ -396,10 +453,79 @@ const { cards } = Astro.props;
   .constellation.ready .cnst-nav:hover { gap: 6px; }
   .constellation.ready .cnst-nav:hover .navlinks { max-width: 360px; opacity: 1; padding-left: 4px; }
 
+  /* ============ in-place detail overlay ============ */
+  .cnst-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+  }
+  .cnst-overlay[hidden] { display: none; }
+
+  .cnst-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(252, 252, 253, 0.55);
+    backdrop-filter: blur(10px) saturate(1.2);
+    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    opacity: 0;
+    transition: opacity 0.36s ease;
+  }
+
+  .cnst-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--space-8);
+    bottom: 0;
+    width: min(52rem, 100%);
+    margin-inline: auto;
+    background: var(--color-surface);
+    border: 0.5px solid var(--color-hairline);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -2px 10px rgba(40, 40, 90, 0.06), 0 40px 90px -28px rgba(60, 70, 180, 0.4);
+    overflow: hidden;
+    opacity: 0;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+  .cnst-panel.animate {
+    transition: transform 0.46s cubic-bezier(0.22, 0.78, 0.28, 1), opacity 0.3s ease;
+  }
+
+  .cnst-panel-scroll {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-16) var(--space-8) var(--space-24);
+  }
+
+  .cnst-close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--color-ink-secondary);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .cnst-close:hover {
+    color: var(--color-ink);
+    background: #fff;
+    transform: scale(1.06);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cnst-bg { animation: none; }
     .constellation.ready .card,
     .constellation.ready .flipper { transition: none !important; }
+    .cnst-panel.animate { transition: opacity 0.2s ease; }
   }
 </style>
 
@@ -407,11 +533,13 @@ const { cards } = Astro.props;
   type Card = { el: HTMLElement; cat: string; big: boolean; w: number; h: number; thumb: number; x: number; y: number };
 
   // baked-in values dialled in on the v4 prototype
-  const RX = 380, RY = 380, STEP = 360;
+  const RX = 330, RY = 300, GAP = 40;
   const DEAL_BASE = 1350, DEAL_STAG = 65, FLIP_BASE = 2500, FLIP_STAG = 90;
-  const WIDTHS = [300, 262, 288, 250, 272, 286];
+  // Uniform card size — a neat, even frame around the logomark.
+  const CW = 264, CH = 204, THUMB = 108;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rafId = 0;
   const root = document.getElementById('constellation');
   const vp = document.getElementById('cnst-vp');
   const canvas = document.getElementById('cnst-canvas');
@@ -419,64 +547,113 @@ const { cards } = Astro.props;
   if (root && vp && canvas && field) init(root, vp, canvas, field);
 
   function init(root: HTMLElement, vp: HTMLElement, canvas: HTMLElement, field: HTMLElement) {
-    const cards: Card[] = [...field.querySelectorAll<HTMLElement>('.card')].map((el, i) => {
-      const big = i % 3 === 0;
-      const w = WIDTHS[i % WIDTHS.length];
-      const h = big ? 272 : 206;
-      const thumb = big ? 138 : 100;
-      el.style.setProperty('--cw', w + 'px');
-      el.style.setProperty('--ch', h + 'px');
-      el.style.setProperty('--thumb', thumb + 'px');
-      return { el, cat: el.dataset.cat || 'writing', big, w, h, thumb, x: 0, y: 0 };
+    const cards: Card[] = [...field.querySelectorAll<HTMLElement>('.card')].map((el) => {
+      el.style.setProperty('--cw', CW + 'px');
+      el.style.setProperty('--ch', CH + 'px');
+      el.style.setProperty('--thumb', THUMB + 'px');
+      return { el, cat: el.dataset.cat || 'writing', big: false, w: CW, h: CH, thumb: THUMB, x: 0, y: 0 };
     });
 
     // upgrade to canvas mode
     root.classList.add('ready');
 
-    // ---- frame-slot layout: inner edges align to a frame around the centre ----
-    function buildSlots(n: number): Array<['T' | 'B' | 'L' | 'R', number, number]> {
-      const sides = n >= 6 ? 2 : 0;
-      const rest = n - sides;
-      const topN = Math.ceil(rest / 2);
-      const botN = rest - topN;
-      const rowXs = (k: number) => Array.from({ length: k }, (_, i) => (i - (k - 1) / 2) * STEP);
-      const slots: Array<['T' | 'B' | 'L' | 'R', number, number]> = [];
-      rowXs(topN).forEach((x) => slots.push(['T', -RY, x]));
-      if (sides >= 1) slots.push(['L', -RX, 0]);
-      if (sides >= 2) slots.push(['R', RX, 0]);
-      rowXs(botN).forEach((x) => slots.push(['B', RY, x]));
-      return slots;
-    }
-
     let boundX = 0, boundY = 0;
-    function layoutCards(list: Card[]) {
-      const slots = buildSlots(list.length);
-      list.forEach((c, i) => {
-        const s = slots[i % slots.length];
-        const [t, line, cross] = s;
-        if (t === 'T') { c.x = cross; c.y = line - c.h / 2; }
-        else if (t === 'B') { c.x = cross; c.y = line + c.h / 2; }
-        else if (t === 'L') { c.x = line - c.w / 2; c.y = cross; }
-        else { c.x = line + c.w / 2; c.y = cross; }
-        c.el.style.setProperty('--x', c.x + 'px');
-        c.el.style.setProperty('--y', c.y + 'px');
-      });
+    function setBounds(list: Card[]) {
       let mx = 0, my = 0;
       list.forEach((c) => { mx = Math.max(mx, Math.abs(c.x) + c.w / 2); my = Math.max(my, Math.abs(c.y) + c.h / 2); });
       boundX = mx + 80; boundY = my + 40;
     }
-    layoutCards(cards);
+    function applyPos(c: Card) {
+      c.el.style.setProperty('--x', c.x + 'px');
+      c.el.style.setProperty('--y', c.y + 'px');
+    }
+
+    // A horizontal run of cards: separated by a fixed GAP (so spacing stays even
+    // despite varied widths), with one edge aligned to the frame line.
+    function rowLayout(cards: Card[], line: number, align: 'top' | 'bottom') {
+      const totalW = cards.reduce((s, c) => s + c.w, 0) + GAP * Math.max(0, cards.length - 1);
+      let x = -totalW / 2;
+      cards.forEach((c) => {
+        c.x = x + c.w / 2;
+        c.y = align === 'bottom' ? line - c.h / 2 : line + c.h / 2;
+        x += c.w + GAP;
+        applyPos(c);
+      });
+    }
+    // A vertical stack: separated by a fixed GAP (even spacing despite varied
+    // heights), inner edge aligned to the frame line.
+    function colLayout(cards: Card[], line: number, align: 'left' | 'right') {
+      const totalH = cards.reduce((s, c) => s + c.h, 0) + GAP * Math.max(0, cards.length - 1);
+      let y = -totalH / 2;
+      cards.forEach((c) => {
+        c.y = y + c.h / 2;
+        c.x = align === 'right' ? line - c.w / 2 : line + c.w / 2;
+        y += c.h + GAP;
+        applyPos(c);
+      });
+    }
+
+    // Default (unfiltered): frame around the centre, leaving room for the OMAR mark.
+    // Sides are capped at two cards each; the rest fill the top and bottom rows.
+    function frameLayout(list: Card[]) {
+      const n = list.length;
+      const perSide = n >= 8 ? 2 : n >= 6 ? 1 : 0;
+      const rest = n - perSide * 2;
+      const topN = Math.ceil(rest / 2);
+      let i = 0;
+      const top = list.slice(i, (i += topN));
+      const left = list.slice(i, (i += perSide));
+      const right = list.slice(i, (i += perSide));
+      const bottom = list.slice(i);
+      rowLayout(top, -RY, 'bottom');
+      colLayout(left, -RX, 'right');
+      colLayout(right, RX, 'left');
+      rowLayout(bottom, RY, 'top');
+      setBounds(list);
+    }
+
+    // Filtered: a centred grid that fills the middle (the mark is hidden).
+    const COL_STEP = 330, ROW_STEP = 300;
+    function gridLayout(list: Card[]) {
+      const n = list.length;
+      const cols = n <= 3 ? n : n <= 8 ? 3 : 4;
+      const rows = Math.ceil(n / cols);
+      list.forEach((c, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const inRow = row === rows - 1 ? n - row * cols : cols;
+        c.x = (col - (inRow - 1) / 2) * COL_STEP;
+        c.y = (row - (rows - 1) / 2) * ROW_STEP;
+        applyPos(c);
+      });
+      setBounds(list);
+    }
+    frameLayout(cards);
 
     // ---- category filter (in place) ----
     let filter: string | null = null;
     const navLinks = [...root.querySelectorAll<HTMLAnchorElement>('.navlinks a')];
+    const centre = canvas.querySelector<HTMLElement>('.centre');
     function setFilter(cat: string | null) {
       filter = cat === filter ? null : cat;
-      const visible = cards.filter((c) => !filter || c.cat === filter);
-      cards.forEach((c) => c.el.classList.toggle('hidden', !!filter && c.cat !== filter));
-      layoutCards(visible);
-      posX = posY = velX = velY = 0;
       navLinks.forEach((a) => a.classList.toggle('active', a.dataset.cat === filter));
+      if (centre) centre.classList.toggle('filtered', !!filter);
+
+      if (filter) {
+        // Activating or switching filter: fade out non-matching cards, slide the
+        // matching ones into a centred grid that fills the middle.
+        root.classList.add('filtering');
+        cards.forEach((c) => c.el.classList.toggle('hidden', c.cat !== filter));
+        gridLayout(cards.filter((c) => c.cat === filter));
+        posX = posY = velX = velY = 0;
+      } else {
+        // Clearing filter: snap all cards back to the frame layout while hidden,
+        // then reveal them so they fade in at their correct positions.
+        root.classList.remove('filtering');
+        frameLayout(cards);
+        posX = posY = velX = velY = 0;
+        requestAnimationFrame(() => cards.forEach((c) => c.el.classList.remove('hidden')));
+      }
     }
     navLinks.forEach((a) =>
       a.addEventListener('click', (e) => { e.preventDefault(); setFilter(a.dataset.cat || null); })
@@ -490,14 +667,18 @@ const { cards } = Astro.props;
       hint?.classList.add('show');
       setTimeout(() => hint?.classList.remove('show'), 4200);
     }
-    if (reduce) {
+    // Play the full entrance only once per session. On return visits (navigating
+    // back from a detail page) jump straight to the final state — no replay.
+    const entered = sessionStorage.getItem('cnst-entered') === '1';
+    if (reduce || entered) {
       cards.forEach((c) => c.el.classList.add('in', 'up'));
       showChrome();
     } else {
       const order = [...cards].sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y));
       order.forEach((c, i) => setTimeout(() => c.el.classList.add('in'), DEAL_BASE + i * DEAL_STAG));
       order.forEach((c, i) => setTimeout(() => c.el.classList.add('up'), FLIP_BASE + i * FLIP_STAG));
-      setTimeout(showChrome, FLIP_BASE + order.length * FLIP_STAG + 800);
+      setTimeout(showChrome, DEAL_BASE + 200);
+      sessionStorage.setItem('cnst-entered', '1');
     }
 
     // ---- inertial pan + rubber-band ----
@@ -507,7 +688,7 @@ const { cards } = Astro.props;
     vp.addEventListener('pointerdown', (ev) => {
       dragging = true; moved = false;
       lastX = ev.clientX; lastY = ev.clientY; velX = velY = 0;
-      vp.classList.add('dragging'); vp.setPointerCapture(ev.pointerId);
+      vp.classList.add('dragging');
     });
     vp.addEventListener('pointermove', (ev) => {
       if (!dragging) return;
@@ -529,6 +710,137 @@ const { cards } = Astro.props;
     // swallow the click that ends a drag so cards don't navigate on a pan
     vp.addEventListener('click', (ev) => { if (moved) { ev.preventDefault(); ev.stopPropagation(); } }, true);
 
+    // ---- in-place detail overlay (Path B) ----
+    setupOverlay();
+    function setupOverlay() {
+      const overlay = document.getElementById('cnst-overlay');
+      const scrim = document.getElementById('cnst-scrim');
+      const panel = document.getElementById('cnst-panel');
+      const scroll = document.getElementById('cnst-panel-scroll');
+      const closeBtn = document.getElementById('cnst-close');
+      if (!overlay || !scrim || !panel || !scroll || !closeBtn) return;
+
+      const homeTitle = document.title;
+      const cache = new Map<string, Promise<string>>();
+      let open = false;
+      let originCard: HTMLElement | null = null;
+
+      const isDetailPath = (p: string) => /^\/(writing|labs|about)\/[^/]+\/?$/.test(p);
+
+      function fetchDetail(href: string): Promise<string> {
+        if (!cache.has(href)) {
+          cache.set(href, fetch(href).then((r) => (r.ok ? r.text() : '')).catch(() => ''));
+        }
+        return cache.get(href)!;
+      }
+
+      function extract(html: string) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const article = doc.querySelector('article.detail');
+        return {
+          article: article ? article.outerHTML : '',
+          title: doc.querySelector('title')?.textContent || homeTitle,
+        };
+      }
+
+      // transform that maps the panel onto the origin card (for the expand/collapse)
+      function cardTransform(card: HTMLElement) {
+        const cr = card.getBoundingClientRect();
+        const pr = panel.getBoundingClientRect();
+        const dx = cr.left + cr.width / 2 - (pr.left + pr.width / 2);
+        const dy = cr.top + cr.height / 2 - (pr.top + pr.height / 2);
+        return `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(0.9)`;
+      }
+
+      async function openCard(href: string, card: HTMLElement | null, push: boolean) {
+        const html = await fetchDetail(href);
+        if (!html) { location.href = href; return; } // graceful fallback
+        const { article, title } = extract(html);
+        scroll.innerHTML = article;
+        scroll.scrollTop = 0;
+        panel.setAttribute('aria-label', title.split(' — ')[0] || 'Detail');
+        document.title = title;
+        if (push) history.pushState({ cnstOverlay: href }, '', href);
+
+        originCard = card;
+        open = true;
+        document.body.style.overflow = 'hidden';
+        overlay.hidden = false;
+
+        // start from the card's position, then settle to rest
+        panel.classList.remove('animate');
+        panel.style.transform = 'none';
+        panel.style.opacity = '0';
+        scrim.style.opacity = '0';
+        void panel.offsetWidth;
+        if (!reduce && card) panel.style.transform = cardTransform(card);
+        void panel.offsetWidth;
+        panel.classList.add('animate');
+        scrim.style.opacity = '1';
+        panel.style.transform = 'none';
+        panel.style.opacity = '1';
+
+        closeBtn.focus();
+      }
+
+      function closeCard() {
+        if (!open) return;
+        open = false;
+        document.body.style.overflow = '';
+        document.title = homeTitle;
+        panel.classList.add('animate');
+        scrim.style.opacity = '0';
+        if (!reduce && originCard) panel.style.transform = cardTransform(originCard);
+        panel.style.opacity = '0';
+
+        const done = () => {
+          if (open) return; // re-opened in the meantime
+          overlay.hidden = true;
+          scroll.innerHTML = '';
+          panel.classList.remove('animate');
+          panel.style.transform = 'none';
+        };
+        let fired = false;
+        const finish = () => { if (!fired) { fired = true; done(); } };
+        panel.addEventListener('transitionend', function te(e) {
+          if (e.propertyName !== 'transform' && e.propertyName !== 'opacity') return;
+          panel.removeEventListener('transitionend', te);
+          finish();
+        });
+        setTimeout(finish, 600);
+
+        originCard?.focus?.();
+      }
+
+      field.addEventListener('click', (ev) => {
+        if (moved) return; // it was a pan
+        const a = (ev.target as HTMLElement).closest('a.card') as HTMLAnchorElement | null;
+        if (!a) return;
+        const url = new URL(a.href);
+        if (url.origin !== location.origin || !isDetailPath(url.pathname)) return; // external → normal nav
+        ev.preventDefault();
+        openCard(url.pathname, a, true);
+      });
+
+      // warm the cache on hover so the open is instant
+      field.addEventListener('pointerover', (ev) => {
+        const a = (ev.target as HTMLElement).closest('a.card') as HTMLAnchorElement | null;
+        if (!a) return;
+        const url = new URL(a.href);
+        if (url.origin === location.origin && isDetailPath(url.pathname)) fetchDetail(url.pathname);
+      });
+
+      closeBtn.addEventListener('click', () => history.back());
+      scrim.addEventListener('click', () => history.back());
+      document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && open) history.back(); });
+
+      window.addEventListener('popstate', (ev) => {
+        const st = ev.state as { cnstOverlay?: string } | null;
+        if (st && st.cnstOverlay) openCard(st.cnstOverlay, originCard, false);
+        else if (open) closeCard();
+      });
+    }
+
     function frame() {
       if (!dragging) {
         if (posX > boundX) velX += (boundX - posX) * 0.1;
@@ -542,8 +854,8 @@ const { cards } = Astro.props;
         if (Math.abs(velY) < 0.02) velY = 0;
       }
       canvas.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0)`;
-      requestAnimationFrame(frame);
+      rafId = requestAnimationFrame(frame);
     }
-    requestAnimationFrame(frame);
+    rafId = requestAnimationFrame(frame);
   }
 </script>

@@ -6,10 +6,12 @@ import { formatDate, topicLabels } from '../lib/format';
 
 const writing = (await getVisible('writing')).sort(byDateDesc);
 const labs = (await getVisible('labs')).sort(byDateDesc);
+const aboutEntries = (await getVisible('about')).sort(byDateDesc);
 
 const writingCards = writing.map((p) => ({
   href: `/writing/${p.id}/`,
   cat: 'writing' as const,
+  slug: p.id,
   title: p.data.title,
   desc: p.data.description,
   meta: `${topicLabels[p.data.topic]} · ${formatDate(p.data.date)}`,
@@ -18,22 +20,22 @@ const writingCards = writing.map((p) => ({
 const labCards = labs.map((l) => ({
   href: `/labs/${l.id}/`,
   cat: 'lab' as const,
+  slug: l.id,
   title: l.data.title,
   desc: l.data.description,
   meta: `Prototype · ${formatDate(l.data.date)}`,
 }));
 
-const aboutCard = {
-  href: '/about/',
+const aboutCards = aboutEntries.map((a) => ({
+  href: a.data.href ?? `/about/${a.id}/`,
   cat: 'about' as const,
-  title: 'About',
-  desc: 'Head of Design at Sublime Security. Afghan-American — Kabul, Pakistan, California.',
-  meta: 'Bio · Links',
-};
+  slug: a.id,
+  title: a.data.title,
+  desc: a.data.description,
+  meta: a.data.meta ?? '',
+}));
 
-// Mix writing + labs, drop the About card near the middle so it lands on a side slot.
-const cards = [...writingCards, ...labCards];
-cards.splice(Math.floor(cards.length / 2), 0, aboutCard);
+const cards = [...writingCards, ...labCards, ...aboutCards];
 ---
 
 <Base

@@ -22,13 +22,17 @@ const { href, title, description, meta, tags = [], draft = false } = Astro.props
 
 <style>
   .card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-6);
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border: 0.5px solid var(--color-hairline);
+    border-radius: var(--radius-card);
+    box-shadow: 0 2px 6px rgba(40, 40, 90, 0.05), 0 28px 64px -44px rgba(60, 70, 180, 0.2);
+    transition: transform 0.4s cubic-bezier(0.2, 0.75, 0.2, 1),
+      box-shadow 0.4s cubic-bezier(0.2, 0.75, 0.2, 1);
   }
 
   h3 {
@@ -48,12 +52,18 @@ const { href, title, description, meta, tags = [], draft = false } = Astro.props
     inset: 0;
   }
 
-  .card {
-    position: relative;
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 6px rgba(40, 40, 90, 0.12), 0 44px 84px -36px rgba(60, 70, 180, 0.35);
   }
 
-  .card:hover {
-    border-color: var(--color-ink-tertiary);
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      transition: none;
+    }
+    .card:hover {
+      transform: none;
+    }
   }
 
   .draft {
