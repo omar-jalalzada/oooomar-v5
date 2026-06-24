@@ -1,0 +1,596 @@
+---
+import Base from '../layouts/Base.astro';
+import { EasingDemo } from '../components/ui/EasingDemo';
+import { FilterBar } from '../components/ui/FilterBar';
+
+if (!import.meta.env.DEV) return Astro.redirect('/');
+
+const demoTopics = [
+  { value: 'all', label: 'All' },
+  { value: 'design', label: 'Design' },
+  { value: 'code', label: 'Code' },
+];
+
+const demoCards = [
+  {
+    href: '#ds-1',
+    title: 'On Visual Hierarchy',
+    description: 'How the eye moves through a composition — and how to guide it deliberately.',
+    meta: 'Design · Jun 21, 2026',
+    draft: false,
+    topic: 'design',
+  },
+  {
+    href: '#ds-2',
+    title: 'Motion as a Medium',
+    description: 'Treating animation as a first-class design material, not an afterthought.',
+    meta: 'Design · Jun 18, 2026',
+    draft: false,
+    topic: 'design',
+  },
+  {
+    href: '#ds-3',
+    title: 'Cursor Fields',
+    description: 'Reactive particle fields driven by pointer position and velocity.',
+    meta: 'Code · Jun 15, 2026',
+    draft: false,
+    topic: 'code',
+  },
+  {
+    href: '#ds-4',
+    title: 'Spring Physics',
+    description: 'Natural-feeling motion using spring dynamics rather than fixed curves.',
+    meta: 'Code · Jun 10, 2026',
+    draft: true,
+    topic: 'code',
+  },
+];
+---
+
+<Base title="Design System — omar.build" description="Design tokens and component reference for the Constellation identity.">
+  <div class="ds">
+
+    <header class="ds-header">
+      <h1>Design System</h1>
+      <p class="ds-subtitle">Constellation — the visual identity behind omar.build</p>
+    </header>
+
+    <!-- ─── Colors ───────────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Color</h2>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-bg); border: 1px solid var(--color-border)"></div>
+          <code>--color-bg</code><span>#fcfcfd</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-surface); border: 1px solid var(--color-border)"></div>
+          <code>--color-surface</code><span>#ffffff</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-border)"></div>
+          <code>--color-border</code><span>#e6e4ee</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-hairline)"></div>
+          <code>--color-hairline</code><span>#e4def6</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-ink)"></div>
+          <code>--color-ink</code><span>#0b0b0c</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-ink-secondary)"></div>
+          <code>--color-ink-secondary</code><span>#5c5c66</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-ink-tertiary)"></div>
+          <code>--color-ink-tertiary</code><span>#8a8a92</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-accent)"></div>
+          <code>--color-accent</code><span>#195cff</span>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background: var(--color-accent-ink); border: 1px solid var(--color-border)"></div>
+          <code>--color-accent-ink</code><span>#ffffff</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Typography ───────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Typography</h2>
+
+      <div class="type-families">
+        <div class="type-family">
+          <span class="family-label">Hanken Grotesk — UI</span>
+          <p class="family-sample sans">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+        <div class="type-family">
+          <span class="family-label">Instrument Serif — Voice</span>
+          <p class="family-sample serif">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+        <div class="type-family">
+          <span class="family-label">JetBrains Mono — Labels</span>
+          <p class="family-sample mono">const hello = "world"; // omar.build</p>
+        </div>
+      </div>
+
+      <div class="type-scale">
+        {[
+          { token: '--text-2xl', size: '40px', label: 'Display' },
+          { token: '--text-xl',  size: '28px', label: 'Heading' },
+          { token: '--text-lg',  size: '22px', label: 'Subheading' },
+          { token: '--text-base',size: '17px', label: 'Body' },
+          { token: '--text-sm',  size: '15px', label: 'Secondary' },
+          { token: '--text-xs',  size: '13px', label: 'Caption' },
+        ].map(({ token, size, label }) => (
+          <div class="scale-row">
+            <div class="scale-meta">
+              <code>{token}</code>
+              <span class="scale-size">{size}</span>
+              <span class="scale-role">{label}</span>
+            </div>
+            <p class="scale-sample" style={`font-size: var(${token})`}>Designing with Intent</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ─── Spacing ──────────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Spacing</h2>
+      <p class="ds-desc">4px base grid. All layout uses these tokens — never raw values.</p>
+      <div class="spacing-rows">
+        {[
+          { token: '--space-1',  px: '4px' },
+          { token: '--space-2',  px: '8px' },
+          { token: '--space-3',  px: '12px' },
+          { token: '--space-4',  px: '16px' },
+          { token: '--space-6',  px: '24px' },
+          { token: '--space-8',  px: '32px' },
+          { token: '--space-12', px: '48px' },
+          { token: '--space-16', px: '64px' },
+          { token: '--space-24', px: '96px' },
+        ].map(({ token, px }) => (
+          <div class="spacing-row">
+            <div class="spacing-meta">
+              <code>{token}</code>
+              <span>{px}</span>
+            </div>
+            <div class="spacing-bar-track">
+              <div class="spacing-bar" style={`width: var(${token})`}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ─── Elevation ────────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Elevation</h2>
+      <p class="ds-desc">Layered shadows tinted toward the accent blue (#195cff). Sharp near-shadow + soft far-shadow.</p>
+      <div class="elevation-grid">
+        {[
+          { token: '--shadow-sm',    label: 'Resting',     usage: 'Default card state' },
+          { token: '--shadow-md',    label: 'Hover',       usage: 'Card on hover' },
+          { token: '--shadow-lg',    label: 'Floating',    usage: 'Overlays, drawers' },
+          { token: '--shadow-float', label: 'Glass Float', usage: 'Navigation, popovers' },
+        ].map(({ token, label, usage }) => (
+          <div class="elev-card" style={`box-shadow: var(${token})`}>
+            <span class="elev-label">{label}</span>
+            <code class="elev-token">{token}</code>
+            <span class="elev-usage">{usage}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ─── Radius & Borders ─────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Radius &amp; Borders</h2>
+      <div class="radius-row">
+        <div class="radius-demo" style="border-radius: var(--radius-card)">
+          <code>--radius-card</code>
+          <span>2px — editorial, sharp</span>
+        </div>
+        <div class="radius-demo" style="border-radius: var(--radius)">
+          <code>--radius</code>
+          <span>8px — standard UI</span>
+        </div>
+      </div>
+      <div class="border-row">
+        <div class="border-demo" style="border-color: var(--color-border)">
+          <code>--color-border</code>
+          <span>Cool neutral divider</span>
+        </div>
+        <div class="border-demo" style="border-color: var(--color-hairline)">
+          <code>--color-hairline</code>
+          <span>Lavender card hairline</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Motion ───────────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Motion</h2>
+      <p class="ds-desc">Named easing curves from the Constellation codebase. Click ▶ to replay each curve.</p>
+
+      <div class="duration-grid">
+        {[
+          { token: '--duration-instant',  val: '80ms'  },
+          { token: '--duration-fast',     val: '160ms' },
+          { token: '--duration-normal',   val: '320ms' },
+          { token: '--duration-slow',     val: '500ms' },
+          { token: '--duration-entrance', val: '800ms' },
+        ].map(({ token, val }) => (
+          <div class="dur-pill">
+            <code>{token}</code>
+            <span>{val}</span>
+          </div>
+        ))}
+      </div>
+
+      <EasingDemo client:load />
+    </section>
+
+    <!-- ─── Components ───────────────────────────────────────────── -->
+    <section class="ds-section">
+      <h2>Components</h2>
+      <p class="ds-desc">Live components. Hover cards to feel the elevation spring. Use the filter to see AnimatePresence transitions.</p>
+
+      <h3 class="ds-subheading">Card + FilterBar</h3>
+      <FilterBar client:load topics={demoTopics} cards={demoCards} />
+    </section>
+
+  </div>
+</Base>
+
+<style>
+  .ds {
+    max-width: var(--site-width);
+  }
+
+  .ds-header {
+    margin-bottom: var(--space-16);
+  }
+
+  .ds-header h1 {
+    font-size: var(--text-2xl);
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-2);
+  }
+
+  .ds-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-ink-secondary);
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .ds-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-12);
+    margin-bottom: var(--space-16);
+  }
+
+  .ds-section h2 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-6);
+  }
+
+  .ds-desc {
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+    margin-bottom: var(--space-8);
+    max-width: var(--measure);
+  }
+
+  .ds-subheading {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+    color: var(--color-ink-secondary);
+  }
+
+  /* ── Colors ── */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .swatch-block {
+    height: 72px;
+    border-radius: var(--radius);
+  }
+
+  .swatch code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-style: normal;
+    color: var(--color-ink-secondary);
+    word-break: break-all;
+  }
+
+  .swatch span {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    font-family: var(--font-mono);
+  }
+
+  /* ── Typography ── */
+  .type-families {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .type-family {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .family-label {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .family-sample {
+    font-size: var(--text-lg);
+    margin: 0;
+    color: var(--color-ink);
+  }
+
+  .sans  { font-family: var(--font-sans); }
+  .serif { font-family: var(--font-serif); font-style: italic; }
+  .mono  { font-family: var(--font-mono); font-size: var(--text-base); }
+
+  .type-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .scale-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-8);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .scale-row:last-child {
+    border-bottom: none;
+  }
+
+  .scale-meta {
+    width: 14rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .scale-meta code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+  }
+
+  .scale-size {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    font-family: var(--font-mono);
+  }
+
+  .scale-role {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+  }
+
+  .scale-sample {
+    margin: 0;
+    color: var(--color-ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  /* ── Spacing ── */
+  .spacing-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .spacing-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .spacing-meta {
+    width: 10rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .spacing-meta code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+  }
+
+  .spacing-meta span {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    font-family: var(--font-mono);
+  }
+
+  .spacing-bar-track {
+    width: 240px;
+    flex-shrink: 0;
+    height: 20px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    overflow: hidden;
+  }
+
+  .spacing-bar {
+    height: 10px;
+    background: var(--color-accent);
+    border-radius: 2px;
+    opacity: 0.7;
+    min-width: 4px;
+    max-width: 100%;
+  }
+
+  /* ── Elevation ── */
+  .elevation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-8);
+    padding: var(--space-8) 0;
+  }
+
+  .elev-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .elev-label {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .elev-token {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+    font-style: normal;
+  }
+
+  .elev-usage {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    margin-top: var(--space-2);
+  }
+
+  /* ── Radius & Borders ── */
+  .radius-row {
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+
+  .radius-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6) var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    min-width: 12rem;
+  }
+
+  .radius-demo code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+  }
+
+  .radius-demo span {
+    font-size: var(--text-xs);
+    color: var(--color-ink-secondary);
+  }
+
+  .border-row {
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+  }
+
+  .border-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-surface);
+    border: 2px solid;
+    border-radius: var(--radius);
+    min-width: 12rem;
+  }
+
+  .border-demo code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+  }
+
+  .border-demo span {
+    font-size: var(--text-xs);
+    color: var(--color-ink-secondary);
+  }
+
+  /* ── Motion ── */
+  .duration-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+
+  .dur-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .dur-pill code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent);
+  }
+
+  .dur-pill span {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    font-family: var(--font-mono);
+  }
+</style>

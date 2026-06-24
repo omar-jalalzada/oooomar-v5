@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Card from '../../components/Card.astro';
-import CardGrid from '../../components/CardGrid.astro';
+import { FilterBar } from '../../components/ui/FilterBar';
 import { getVisible, byDateDesc } from '../../lib/content';
 import { formatDate, topicLabels } from '../../lib/format';
 
@@ -12,6 +11,17 @@ const topics = [
   { value: 'design-leadership', label: 'Design Leadership' },
   { value: 'reflections', label: 'Reflections' },
 ];
+
+const cards = posts.map((post) => ({
+  href: `/writing/${post.id}/`,
+  title: post.data.title,
+  description: post.data.description,
+  meta: `${topicLabels[post.data.topic]} · ${formatDate(post.data.date)}`,
+  draft: post.data.status === 'draft',
+  topic: post.data.topic,
+}));
+
+const initialTopic = Astro.url.searchParams.get('topic') ?? 'all';
 ---
 
 <Base
@@ -19,95 +29,13 @@ const topics = [
   description="Writing on design leadership, cybersecurity, and systems for a calm life."
 >
   <h1>Writing</h1>
-
-  <div class="filter" role="group" aria-label="Filter by topic">
-    {
-      topics.map((topic) => (
-        <button data-topic={topic.value} aria-pressed={topic.value === 'all' ? 'true' : 'false'}>
-          {topic.label}
-        </button>
-      ))
-    }
-  </div>
-
-  <CardGrid>
-    {
-      posts.map((post) => (
-        <div class="cell" data-topic={post.data.topic}>
-          <Card
-            href={`/writing/${post.id}/`}
-            title={post.data.title}
-            description={post.data.description}
-            meta={`${topicLabels[post.data.topic]} · ${formatDate(post.data.date)}`}
-            draft={post.data.status === 'draft'}
-          />
-        </div>
-      ))
-    }
-  </CardGrid>
+  <FilterBar client:load {topics} {cards} {initialTopic} />
 </Base>
-
-<script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter button');
-  const cells = document.querySelectorAll<HTMLElement>('.cell');
-
-  function apply(topic: string) {
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.topic === topic)));
-    cells.forEach((cell) => {
-      cell.hidden = topic !== 'all' && cell.dataset.topic !== topic;
-    });
-    const url = new URL(location.href);
-    if (topic === 'all') url.searchParams.delete('topic');
-    else url.searchParams.set('topic', topic);
-    history.replaceState(null, '', url);
-  }
-
-  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.topic!)));
-
-  const initial = new URLSearchParams(location.search).get('topic');
-  if (initial && [...buttons].some((b) => b.dataset.topic === initial)) apply(initial);
-</script>
 
 <style>
   h1 {
     font-size: var(--text-xl);
     letter-spacing: -0.02em;
     margin-bottom: var(--space-6);
-  }
-
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-bottom: var(--space-8);
-  }
-
-  .filter button {
-    font: inherit;
-    font-size: var(--text-sm);
-    color: var(--color-ink-secondary);
-    background: none;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: var(--space-1) var(--space-3);
-    cursor: pointer;
-  }
-
-  .filter button:hover {
-    color: var(--color-ink);
-  }
-
-  .filter button[aria-pressed='true'] {
-    color: var(--color-bg);
-    background: var(--color-ink);
-    border-color: var(--color-ink);
-  }
-
-  .cell {
-    display: contents;
-  }
-
-  .cell[hidden] {
-    display: none;
   }
 </style>
