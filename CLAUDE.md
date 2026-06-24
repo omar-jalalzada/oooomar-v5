@@ -14,6 +14,16 @@ comes later as its own phase.
 
 ## Conventions
 
+- **Screenshot API (dev — verify your UI)**: a screenshot endpoint is available while
+  `npm run dev` is running at `GET /api/screenshot?view=<path>` (e.g. `view=/` for the home
+  canvas, `view=/writing/<slug>/` for a detail page, or `prototype=<name>` for a Lab). It returns
+  a PNG. **Always use it after building or changing UI to confirm the page actually renders
+  correctly** — don't guess from the code. Save and inspect it, e.g.
+  `curl -s "http://localhost:4321/api/screenshot?view=/" -o /tmp/shot.png` then read the image.
+  Params: `w`/`h` (viewport, default 1440×900), `full=1` (full page), `animate=1` (play the canvas
+  entrance instead of the default settled capture), `wait=<ms>` (extra settle time). Implemented in
+  `scripts/vite-screenshot-plugin.js`, registered via `vite.plugins` in `astro.config.mjs`; dev-only
+  (`apply: 'serve'`), so it never ships in the production build.
 - **Tokens only**: pages and components reference CSS custom properties from `tokens.css`, never
   raw px/hex values. Spacing stays on the 4px grid.
 - **Drafts**: content with `status: draft` renders in dev, is excluded from production builds.

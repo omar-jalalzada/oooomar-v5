@@ -19,7 +19,7 @@ const prototypeUrl = import.meta.env.DEV
 ---
 
 <Base title={`${lab.data.title} — Labs — Omar Jalalzada`} description={lab.data.description}>
-  <article>
+  <article class="detail">
     <header>
       <p class="meta">
         <a href="/labs/">Labs</a>
@@ -51,77 +51,3 @@ const prototypeUrl = import.meta.env.DEV
     }
   </article>
 </Base>
-
-<style>
-  article > header {
-    max-width: var(--measure);
-    margin-bottom: var(--space-8);
-  }
-
-  .meta {
-    font-size: var(--text-sm);
-    color: var(--color-ink-tertiary);
-    margin-bottom: var(--space-3);
-  }
-
-  .meta a {
-    color: var(--color-ink-secondary);
-    text-decoration: none;
-  }
-
-  .meta a:hover {
-    text-decoration: underline;
-  }
-
-  h1 {
-    font-size: var(--text-2xl);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-4);
-  }
-
-  .description {
-    font-size: var(--text-lg);
-    line-height: 1.4;
-    color: var(--color-ink-secondary);
-  }
-
-  .frame {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  iframe {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border: none;
-  }
-
-  .actions {
-    margin-block: var(--space-3) var(--space-12);
-    font-size: var(--text-sm);
-  }
-
-  .actions a {
-    color: var(--color-ink-secondary);
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    list-style: none;
-    margin: var(--space-12) 0 0;
-    padding: 0;
-  }
-
-  .tags li {
-    font-size: var(--text-xs);
-    color: var(--color-ink-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: var(--space-1) var(--space-3);
-  }
-</style>
