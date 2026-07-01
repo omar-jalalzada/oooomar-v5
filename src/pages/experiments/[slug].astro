@@ -1,0 +1,53 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getVisible } from '../../lib/content';
+import { formatDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const experiments = await getVisible('experiments');
+  return experiments.map((experiment) => ({ params: { slug: experiment.id }, props: { experiment } }));
+}
+
+const { experiment } = Astro.props;
+const { Content } = await render(experiment);
+// dev's Vite server doesn't resolve directory indexes for public/ folders;
+// production (Vercel) serves the pretty URL
+const prototypeUrl = import.meta.env.DEV
+  ? `/prototypes/${experiment.data.prototype}/index.html`
+  : `/prototypes/${experiment.data.prototype}/`;
+---
+
+<Base title={`${experiment.data.title} — Experiments — Omar Jalalzada`} description={experiment.data.description}>
+  <article class="detail">
+    <header>
+      <p class="meta">
+        <a href="/experiments/">Experiments</a>
+        · <time datetime={experiment.data.date.toISOString()}>{formatDate(experiment.data.date)}</time>
+      </p>
+      <h1>{experiment.data.title}</h1>
+      <p class="description">{experiment.data.description}</p>
+    </header>
+
+    <div class="frame">
+      <iframe src={prototypeUrl} title={experiment.data.title} loading="lazy"></iframe>
+    </div>
+    <p class="actions">
+      <a href={prototypeUrl} target="_blank" rel="noopener">Open full screen ↗</a>
+    </p>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      experiment.data.tags.length > 0 && (
+        <ul class="tags">
+          {experiment.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+  </article>
+</Base>

@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-type CollectionName = 'writing' | 'labs' | 'work' | 'about';
+type CollectionName = 'writing' | 'experiments' | 'work' | 'about';
 
 // Drafts render in `npm run dev` so they can be previewed,
 // but are excluded from production builds.
@@ -13,7 +13,7 @@ export async function getVisible<C extends CollectionName>(
   );
 }
 
-export function byDateDesc<C extends 'writing' | 'labs'>(
+export function byDateDesc<C extends 'writing' | 'experiments'>(
   a: CollectionEntry<C>,
   b: CollectionEntry<C>
 ): number {

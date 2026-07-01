@@ -5,7 +5,7 @@ import { getVisible, byDateDesc } from '../lib/content';
 import { formatDate, topicLabels } from '../lib/format';
 
 const writing = (await getVisible('writing')).sort(byDateDesc);
-const labs = (await getVisible('labs')).sort(byDateDesc);
+const experiments = (await getVisible('experiments')).sort(byDateDesc);
 const aboutEntries = (await getVisible('about')).sort(byDateDesc);
 
 const writingCards = writing.map((p) => ({
@@ -17,9 +17,9 @@ const writingCards = writing.map((p) => ({
   meta: `${topicLabels[p.data.topic]} · ${formatDate(p.data.date)}`,
 }));
 
-const labCards = labs.map((l) => ({
-  href: `/labs/${l.id}/`,
-  cat: 'lab' as const,
+const experimentCards = experiments.map((l) => ({
+  href: `/experiments/${l.id}/`,
+  cat: 'experiment' as const,
   slug: l.id,
   title: l.data.title,
   desc: l.data.description,
@@ -35,7 +35,7 @@ const aboutCards = aboutEntries.map((a) => ({
   meta: a.data.meta ?? '',
 }));
 
-const cards = [...writingCards, ...labCards, ...aboutCards];
+const cards = [...writingCards, ...experimentCards, ...aboutCards];
 ---
 
 <Base
@@ -48,7 +48,7 @@ const cards = [...writingCards, ...labCards, ...aboutCards];
     <h1>Omar Jalalzada — Head of Design at Sublime Security</h1>
     <p>
       A design lead in love with designing — a craftsman first. Writing on design leadership and
-      reflections, interactive Lab experiments, and how to get in touch.
+      reflections, interactive experiments, and how to get in touch.
     </p>
   </header>
 
