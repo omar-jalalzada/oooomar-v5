@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sankey — Remediation Activity</title>
+  <style>
+    :root {
+      --ribbon-opacity: 0.24;
+      --sheen-opacity: 0.4;
+
+      /* light theme (default) */
+      --bg-0: #eef1ef;
+      --bg-1: #f6f4f1;
+      --blob-a: rgba(254,134,68,0.13);
+      --blob-b: rgba(56,214,175,0.14);
+      --blob-c: rgba(120,163,250,0.12);
+      --blob-d: rgba(206,75,129,0.10);
+      --card-bg: #ffffff;
+      --card-border: rgba(0,0,0,0.05);
+      --card-shadow: 0 1px 2px rgba(17,95,77,0.05), 0 14px 34px rgba(17,95,77,0.10), 0 40px 90px rgba(17,95,77,0.05);
+      --text-strong: #1d1d1b;
+      --text-weak: #6d6d6a;
+      --node-stroke: rgba(255,255,255,0.92);
+      --hint: #8c8b86;
+      --panel-bg: rgba(255,255,255,0.72);
+      --panel-border: rgba(0,0,0,0.06);
+      --track: rgba(0,0,0,0.10);
+    }
+    [data-theme="dark"] {
+      --bg-0: #0c0f12;
+      --bg-1: #14191e;
+      --blob-a: rgba(254,134,68,0.20);
+      --blob-b: rgba(56,214,175,0.22);
+      --blob-c: rgba(120,163,250,0.20);
+      --blob-d: rgba(206,75,129,0.18);
+      --card-bg: rgba(22,27,32,0.50);
+      --card-border: rgba(255,255,255,0.09);
+      --card-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 12px 40px rgba(0,0,0,0.45), 0 40px 90px rgba(0,0,0,0.35);
+      --text-strong: #f3f3f0;
+      --text-weak: #9a9a95;
+      --node-stroke: rgba(18,22,26,0.85);
+      --hint: #76756f;
+      --panel-bg: rgba(20,25,30,0.72);
+      --panel-border: rgba(255,255,255,0.08);
+      --track: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+    ::selection { background: rgba(56,214,175,0.28); }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-strong);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-optical-sizing: auto;
+      font-feature-settings: "ss01", "cv05", "cv11"; /* Inter: friendlier 'l', single-story 'a' (ignored otherwise) */
+      text-rendering: optimizeLegibility;
+      background:
+        radial-gradient(65% 75% at 16% 8%, var(--blob-a), transparent 68%),
+        radial-gradient(60% 70% at 86% 18%, var(--blob-b), transparent 70%),
+        radial-gradient(65% 75% at 74% 92%, var(--blob-c), transparent 70%),
+        radial-gradient(55% 65% at 26% 90%, var(--blob-d), transparent 68%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-0));
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px 64px;
+      transition: background .5s ease, color .4s ease;
+    }
+
+    .card {
+      position: relative;
+      width: min(1180px, 100%);
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(40px) saturate(1.4);
+      -webkit-backdrop-filter: blur(40px) saturate(1.4);
+      padding: 44px 48px 40px;
+      transition: background .5s ease, border-color .5s ease, box-shadow .5s ease;
+      animation: cardIn .7s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes cardIn { from { opacity: 0; transform: translateY(6px) scale(.992); } to { opacity: 1; transform: none; } }
+    @keyframes introUp { from { opacity: 0; transform: translateY(10px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+    .head { margin-bottom: 28px; }
+    .head h1 {
+      margin: 0 0 6px;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.62px;
+      color: var(--text-strong);
+      text-wrap: balance;
+      opacity: 0;
+      animation: introUp .7s cubic-bezier(.22,1,.36,1) .08s forwards;
+    }
+    .head p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+      color: var(--text-weak);
+      text-wrap: pretty;
+      opacity: 0;
+      animation: introUp .7s cubic-bezier(.22,1,.36,1) .18s forwards;
+    }
+
+    .stage { position: relative; }
+    svg.diagram { display: block; width: 100%; height: auto; overflow: visible; cursor: default; }
+
+    /* ---- entrance (on groups) ---- */
+    .links { clip-path: inset(0 100% 0 0); }
+    .nodes { opacity: 0; }
+    .labels { opacity: 0; }
+    .node  { transform: translateY(14px); filter: blur(5px); }
+    .label { filter: blur(4px); }
+
+    .diagram.play .links  { clip-path: inset(0 -2% 0 0); transition: clip-path 1.7s cubic-bezier(.22,1,.36,1) .12s; }
+    .diagram.play .nodes  { opacity: 1; transition: opacity .7s ease; }
+    .diagram.play .labels { opacity: 1; transition: opacity .7s ease .55s; }
+    .diagram.play .node   { transform: none; filter: blur(0); transition: transform .85s cubic-bezier(.22,1,.36,1), filter .6s ease; }
+    .diagram.play .label  { filter: blur(0); transition: filter .7s ease .5s; }
+
+    /* ---- interaction dim (on individual els) ---- */
+    .link, .node, .label { transition: opacity .22s ease; }
+    .link {
+      fill-opacity: var(--ribbon-opacity);
+      mix-blend-mode: multiply;
+      cursor: pointer;
+    }
+    [data-theme="dark"] .link { mix-blend-mode: screen; }
+    .node { cursor: pointer; transform-box: fill-box; transform-origin: center; }
+    .label { pointer-events: none; user-select: none; }
+
+    .diagram.focused .link     { opacity: 0.08; }
+    .diagram.focused .link.on  { opacity: 1; }
+    .diagram.focused .node     { opacity: 0.22; }
+    .diagram.focused .node.on  { opacity: 1; }
+    .diagram.focused .label    { opacity: 0.20; }
+    .diagram.focused .label.on { opacity: 1; }
+
+    /* ---- hover flow: the band's OWN colors intensify in a soft wave moving along it ---- */
+    .wave { opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+    .diagram.nowave .wave { display: none; }
+    .diagram.focused .wave.on { opacity: var(--sheen-opacity, 0.4); }
+    .sheen { filter: blur(1px); }
+
+    /* ---- collapse/expand affordance on the node ---- */
+    .aff { opacity: 0; pointer-events: none; transition: opacity .16s ease; filter: drop-shadow(0 1px 2.5px rgba(0,0,0,0.28)); }
+    .aff.show, .aff.persist { opacity: 1; }
+    .aff circle { fill: var(--card-bg); stroke: var(--panel-border); stroke-width: 1; }
+    .aff line { stroke: var(--text-strong); stroke-width: 1.7; stroke-linecap: round; }
+    .aff .v { opacity: 0; transition: opacity .15s ease; }
+    .aff.collapsed .v { opacity: 1; }
+
+    .label .ttl { font-size: 18px; font-weight: 600; letter-spacing: -0.2px; fill: var(--text-strong); }
+    .label .val { font-size: 13.5px; font-weight: 500; fill: var(--text-weak); font-variant-numeric: tabular-nums; }
+
+    /* ---- tooltip ---- */
+    .tip {
+      position: fixed; left: 0; top: 0; z-index: 40; pointer-events: none;
+      padding: 10px 12px; border-radius: 12px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      font-size: 13px; color: var(--text-strong);
+      max-width: 280px;
+      transform-origin: top left;
+      opacity: 0;
+      filter: blur(5px);
+      transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(.9);
+      transition: opacity .16s ease, filter .18s ease,
+                  transform .24s cubic-bezier(.22, 1, .36, 1);
+      will-change: transform;
+    }
+    .tip.show {
+      opacity: 1; filter: blur(0);
+      transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(1);
+    }
+    .tip .tip-row { display: flex; align-items: center; gap: 7px; font-weight: 600; }
+    .tip .dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+    .tip .arrow { opacity: .5; }
+    .tip .tip-sub { margin-top: 4px; color: var(--text-weak); font-weight: 500; font-size: 12.5px; }
+    .tip .tip-big { font-size: 17px; font-weight: 700; letter-spacing: -0.4px; font-variant-numeric: tabular-nums; }
+    /* breakdown table: where this node's flow goes next */
+    .tip .tip-divider { height: 1px; background: var(--panel-border); margin: 9px -2px 8px; }
+    .tip .tip-cap { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-weak); margin-bottom: 6px; }
+    .tip .tip-table { display: grid; gap: 6px; }
+    .tip .tip-tr { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 9px; }
+    .tip .tip-tr .dot { width: 8px; height: 8px; border-radius: 2.5px; }
+    .tip .tip-name { color: var(--text-weak); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tip .tip-pct { color: var(--text-strong); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.1px; }
+    /* band tooltip: source → big % → target */
+    .tip .tip-flowto { font-size: 12px; font-weight: 500; color: var(--text-weak); letter-spacing: 0; }
+    .tip .tip-target { display: flex; align-items: center; gap: 7px; margin-top: 4px; font-size: 14px; font-weight: 600; }
+    .tip .tip-target .dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+
+    .hint {
+      margin-top: 22px; text-align: center;
+      font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--hint); letter-spacing: .02em;
+      opacity: 0; animation: introUp .7s cubic-bezier(.22,1,.36,1) .95s forwards;
+    }
+
+    /* ---- DialKit-style control panel (config-driven, generated in JS) ---- */
+    .dk {
+      position: fixed; right: 18px; bottom: 18px; z-index: 50; width: 232px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 15px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.02), 0 10px 24px rgba(17,95,77,0.10), 0 28px 60px rgba(17,95,77,0.10);
+      backdrop-filter: blur(26px) saturate(1.5);
+      -webkit-backdrop-filter: blur(26px) saturate(1.5);
+      color: var(--text-strong); overflow: hidden;
+      transition: background .5s ease, border-color .5s ease;
+    }
+    .dk-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 14px 10px; cursor: pointer; user-select: none;
+    }
+    .dk-title { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-weak); }
+    .dk-chev { color: var(--text-weak); font-size: 11px; transition: transform .25s cubic-bezier(.22,1,.36,1); }
+    .dk.collapsed .dk-chev { transform: rotate(-90deg); }
+    .dk-body { padding: 2px 14px 14px; display: grid; gap: 14px; overflow: hidden; transition: opacity .2s ease; }
+    .dk.collapsed .dk-body { display: none; }
+
+    .dk-group { display: grid; gap: 10px; }
+    .dk-group + .dk-group { padding-top: 13px; border-top: 1px solid var(--panel-border); }
+    .dk-glabel { font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-weak); opacity: .75; }
+
+    .dk-row { display: grid; gap: 7px; }
+    .dk-rowhead { display: flex; align-items: baseline; justify-content: space-between; }
+    .dk-name { font-size: 12px; font-weight: 500; color: var(--text-weak); }
+    .dk-val { font-size: 11.5px; font-weight: 600; color: var(--text-strong); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+
+    .dk-slider {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px;
+      background: var(--track); outline: none; cursor: pointer;
+    }
+    .dk-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%;
+      background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.28); cursor: pointer;
+      transition: scale .12s ease;
+    }
+    .dk-slider:active::-webkit-slider-thumb { scale: 1.18; }
+    .dk-slider::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; border: none;
+      background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.28); cursor: pointer;
+    }
+
+    /* switch (toggle) */
+    .dk-switch { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+    .dk-track {
+      width: 32px; height: 18px; border-radius: 999px; background: var(--track);
+      position: relative; transition: background .2s ease; flex: none;
+    }
+    .dk-track::after {
+      content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3);
+      transition: transform .2s cubic-bezier(.22,1,.36,1);
+    }
+    .dk-switch.on .dk-track { background: #33c6a3; }
+    .dk-switch.on .dk-track::after { transform: translateX(14px); }
+    .dk-switch:active .dk-track::after { width: 16px; }
+
+    /* segmented select */
+    .dk-seg { display: flex; gap: 3px; padding: 3px; border-radius: 9px; background: var(--track); }
+    .dk-seg button {
+      flex: 1; border: none; background: transparent; cursor: pointer; padding: 5px 6px; border-radius: 6px;
+      font: inherit; font-size: 11.5px; font-weight: 600; color: var(--text-weak);
+      transition: color .18s ease, background .18s ease, scale .12s ease;
+    }
+    .dk-seg button:active { scale: .95; }
+    .dk-seg button.on { color: var(--text-strong); background: var(--card-bg); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+
+    /* action button */
+    .dk-action {
+      width: 100%; padding: 9px; border-radius: 9px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--panel-border); background: transparent; color: var(--text-strong);
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: background .18s ease, border-color .18s ease, scale .12s ease;
+    }
+    .dk-action:hover { background: var(--track); }
+    .dk-action:active { scale: .96; }
+
+    /* collapsed node: a muted in-place stub; its label notes the true (collapsed) size */
+    .node.collapsed { fill-opacity: 0.5; }
+    .label.collapsed .val { fill: var(--text-strong); font-weight: 600; }
+
+    /* inactive diagram elements fade out (geometry tweens via JS) */
+    .gone { opacity: 0 !important; pointer-events: none !important; }
+
+    /* ---- respect reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+      .sheen { display: none; }
+      .card, .head h1, .head p, .hint { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
+      .diagram.play .links { clip-path: inset(0 -2% 0 0); transition: none; }
+      .nodes, .labels { opacity: 1; }
+      .node, .label { filter: none; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>Remediation Activity</h1>
+      <p>Tracking message dispositions, automations, and remediations.</p>
+    </div>
+    <div class="stage">
+      <svg class="diagram" id="svg" viewBox="0 0 1180 600" preserveAspectRatio="xMidYMid meet" aria-label="Sankey diagram of message remediation flow">
+        <defs id="defs"></defs>
+        <g class="links" id="g-links"></g>
+        <g class="waves" id="g-waves"></g>
+        <g class="nodes" id="g-nodes"></g>
+        <g class="labels" id="g-labels"></g>
+        <g class="affs" id="g-affs"></g>
+      </svg>
+    </div>
+    <p class="hint">hover to trace a flow · <b>click a node to collapse it</b> · click again to expand</p>
+  </div>
+
+  <div class="tip" id="tip"></div>
+
+  <div class="dk" id="dk">
+    <div class="dk-head" id="dkHead">
+      <span class="dk-title">Sankey</span><span class="dk-chev">▾</span>
+    </div>
+    <div class="dk-body" id="dkBody"></div>
+  </div>
+
+  <script>
+  (function () {
+    const SVGNS = 'http://www.w3.org/2000/svg';
+
+    // ---- node catalog (meta only; values are derived from the flows below) ----
+    const NODES = [
+      { id: 'unwanted',   label: 'Unwanted Messages',   layer: 0, color: '#bcbcb9' },
+      { id: 'spam',       label: 'Spam',                 layer: 1, color: '#f0934e' },
+      { id: 'malicious',  label: 'Malicious',            layer: 1, color: '#e35c4d' },
+      { id: 'graymail',   label: 'Graymail',             layer: 1, color: '#a9a8a2' },
+      { id: 'suspicious', label: 'Suspicious',           layer: 1, color: '#e15c93' },
+      { id: 'unknown',    label: 'Unknown',              layer: 1, color: '#d2d1cd' },
+      { id: 'auto',       label: 'Auto Remediated',      layer: 2, color: '#33c6a3' },
+      { id: 'manual',     label: 'Manually Remediated',  layer: 2, color: '#b4b3ae' },
+      { id: 'wouldve',    label: "Would’ve Remediated", layer: 2, color: '#5e90ef' },
+      { id: 'unrem',      label: 'Unremediated',         layer: 2, color: '#d8d7d3' },
+      { id: 'movespam',   label: 'Move to Spam',         layer: 3, color: '#f0934e' },
+      { id: 'trash',      label: 'Trash',                layer: 3, color: '#e35c4d' },
+      { id: 'quarantine', label: 'Quarantine',           layer: 3, color: '#e35c4d' },
+    ];
+
+    // ---- data modelled as full source→sink FLOWS (not per-edge totals) ----
+    // Modelling whole paths is what lets us hide any node and stay mass-consistent:
+    // hiding a node removes the flows *through* it, so downstream stays balanced.
+    // Graymail is deliberately dominant (~80%) to demonstrate the legibility problem.
+    const VERDICTS = [
+      { id: 'graymail',   to: { auto: 2240, manual: 24, wouldve: 112, unrem: 24 } },
+      { id: 'spam',       to: { auto: 222,  manual: 18, wouldve: 48,  unrem: 12 } },
+      { id: 'malicious',  to: { auto: 112,  manual: 22, wouldve: 32,  unrem: 14 } },
+      { id: 'suspicious', to: { auto: 52,   manual: 9,  wouldve: 22,  unrem: 7  } },
+      { id: 'unknown',    to: { auto: 15,   manual: 3,  wouldve: 8,   unrem: 4  } },
+    ];
+    const STATUS_TO_ACTION = {
+      auto:   { movespam: 1500, trash: 820, quarantine: 321 },
+      manual: { movespam: 30,   trash: 28,  quarantine: 18 },
+    };
+    // status inflow totals → used to split shared status→action edges by verdict provenance
+    const statusIn = { auto: 0, manual: 0, wouldve: 0, unrem: 0 };
+    VERDICTS.forEach(v => Object.entries(v.to).forEach(([s, val]) => statusIn[s] += val));
+
+    const FLOWS = [];
+    VERDICTS.forEach(v => {
+      Object.entries(v.to).forEach(([s, e1]) => {
+        if (e1 <= 0) return;
+        if (s === 'auto' || s === 'manual') {
+          Object.entries(STATUS_TO_ACTION[s]).forEach(([a, e2]) => {
+            FLOWS.push({ path: ['unwanted', v.id, s, a], value: e1 * e2 / statusIn[s] });
+          });
+        } else {
+          FLOWS.push({ path: ['unwanted', v.id, s], value: e1 });
+        }
+      });
+    });
+
+    const NW = 18, VBW = 1180, VBH = 600, PAD_TOP = 30, H = 540, MINH = 4;
+    const LAYER_X = [10, 337, 664, 992];
+
+    const byId = {};
+    NODES.forEach(n => { byId[n.id] = n; n.x = LAYER_X[n.layer]; n.inL = []; n.outL = []; });
+
+    // every possible edge (from the full flow set) — built once, kept as persistent DOM
+    const edgeByKey = {};
+    const ALL_EDGES = [];
+    FLOWS.forEach(f => {
+      for (let i = 0; i < f.path.length - 1; i++) {
+        const k = f.path[i] + '|' + f.path[i + 1];
+        if (!edgeByKey[k]) {
+          const l = { source: f.path[i], target: f.path[i + 1], s: byId[f.path[i]], t: byId[f.path[i + 1]], idx: ALL_EDGES.length };
+          edgeByKey[k] = l; ALL_EDGES.push(l);
+          l.s.outL.push(l); l.t.inL.push(l);
+        }
+      }
+    });
+
+    const collapsed = new Set();
+    const COLLAPSED_VALUE = 40; // effective size a collapsed node shrinks to (data units)
+    let CURVE = 0.5, GAP = 46, GRADIENT = true, BASE_TOTAL = 1, rafId = null;
+
+    const factorFor = id => Math.min(1, COLLAPSED_VALUE / (byId[id].baseValue || 1));
+
+    // recompute every edge + node value. Collapsing a node TOKENIZES the flows passing
+    // through it (scales them down) rather than removing them — so the node stays in place
+    // as a small stub while the rest of the graph rebalances, all mass-consistent.
+    function computeValues() {
+      NODES.forEach(n => { n.in = 0; n.out = 0; });
+      ALL_EDGES.forEach(l => { l.value = 0; });
+      FLOWS.forEach(f => {
+        let v = f.value;
+        for (const id of f.path) if (collapsed.has(id)) v *= factorFor(id);
+        for (let i = 0; i < f.path.length - 1; i++) edgeByKey[f.path[i] + '|' + f.path[i + 1]].value += v;
+        f.path.forEach((id, i) => { if (i > 0) byId[id].in += v; if (i < f.path.length - 1) byId[id].out += v; });
+      });
+      NODES.forEach(n => { n.value = Math.max(n.in, n.out); n.collapsed = collapsed.has(n.id); n.active = n.value > 1e-6; });
+      ALL_EDGES.forEach(l => { l.active = l.value > 1e-6 && l.s.active && l.t.active; });
+    }
+    // baseline (nothing collapsed) values — these drive ALL labels/percentages, so the
+    // numbers reflect true counts and never change when something is collapsed.
+    computeValues();
+    NODES.forEach(n => { n.baseValue = n.value; n.baseOut = n.out; });
+    ALL_EDGES.forEach(l => { l.baseValue = l.value; });
+    BASE_TOTAL = byId.unwanted.baseValue || 1;
+
+    // ---- layout ---- (writes TARGET geometry: n.Ty/n.Th, l.Tsy/l.Tty/l.Tw)
+    function layout() {
+      computeValues();
+      // only visible nodes occupy space → the scale is recomputed over what remains
+      const layers = [[],[],[],[]];
+      NODES.forEach(n => { if (n.active) layers[n.layer].push(n); });
+      let ky = Infinity;
+      layers.forEach(col => {
+        if (!col.length) return;
+        const sum = col.reduce((a,n)=>a+n.value,0);
+        const avail = H - (col.length - 1) * GAP;
+        ky = Math.min(ky, avail / sum);
+      });
+      if (!isFinite(ky)) ky = 1;
+      layers.forEach(col => {
+        col.forEach(n => { n.Th = n.value * ky; });
+        const total = col.reduce((a,n)=>a+n.Th,0) + (col.length - 1) * GAP;
+        let y = PAD_TOP + (H - total) / 2;
+        col.forEach(n => { n.Ty = y; y += n.Th + GAP; });
+      });
+      // link offsets among the active links only (sort to reduce crossings)
+      NODES.forEach(n => {
+        const outA = n.outL.filter(l => l.active).sort((a,b)=> a.t.Ty - b.t.Ty);
+        const inA  = n.inL.filter(l => l.active).sort((a,b)=> a.s.Ty - b.s.Ty);
+        let so = n.Ty; outA.forEach(l => { l.Tsy = so; so += l.value * ky; });
+        let ti = n.Ty; inA.forEach(l => { l.Tty = ti; ti += l.value * ky; });
+      });
+      ALL_EDGES.forEach(l => { l.Tw = l.value * ky; });
+    }
+
+    function ribbonPath(l) {
+      const x0 = l.s.x + NW, x1 = l.t.x;
+      const dx = x1 - x0;
+      const cp1 = x0 + dx * CURVE, cp2 = x1 - dx * CURVE;
+      const t0 = l.sy, t1 = l.ty, b0 = l.sy + l.w, b1 = l.ty + l.w;
+      return `M${x0},${t0} C${cp1},${t0} ${cp2},${t1} ${x1},${t1} L${x1},${b1} C${cp2},${b1} ${cp1},${b0} ${x0},${b0} Z`;
+    }
+    // a path running through the band at vertical fraction f (0 = top edge, 1 = bottom edge)
+    function streamPath(l, f) {
+      const x0 = l.s.x + NW, x1 = l.t.x;
+      const dx = x1 - x0;
+      const cp1 = x0 + dx * CURVE, cp2 = x1 - dx * CURVE;
+      const c0 = l.sy + l.w * f, c1 = l.ty + l.w * f;
+      return `M${x0},${c0} C${cp1},${c0} ${cp2},${c1} ${x1},${c1}`;
+    }
+    const centerPath = l => streamPath(l, 0.5);
+
+    const fmt = v => {
+      v = Math.round(v);
+      return v >= 1000 ? (v / 1000).toFixed(v % 1000 === 0 ? 0 : 1).replace(/\.0$/, '') + 'M' : v + 'k';
+    };
+    const pct = v => Math.round(v / BASE_TOTAL * 100) + '%';
+
+    const defs = document.getElementById('defs');
+    const gLinks = document.getElementById('g-links');
+    const gWaves = document.getElementById('g-waves');
+    const gNodes = document.getElementById('g-nodes');
+    const gLabels = document.getElementById('g-labels');
+    const gAffs = document.getElementById('g-affs');
+    const svg = document.getElementById('svg');
+    const tip = document.getElementById('tip');
+
+    function el(tag, attrs) {
+      const e = document.createElementNS(SVGNS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+
+    const SHEEN_PERIOD = 124; // px between soft waves scrolling along a band
+
+    // ---- build the DOM once; geometry is updated/tweened afterwards ----
+    function build() {
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const delays = [0, 0.12, 0.24, 0.36];
+      ALL_EDGES.forEach(l => {
+        const gid = `grad${l.idx}`;
+        const grad = el('linearGradient', { id: gid, gradientUnits: 'userSpaceOnUse',
+          x1: l.s.x + NW, y1: 0, x2: l.t.x, y2: 0 });
+        grad.appendChild(el('stop', { offset: '0%', 'stop-color': l.s.color }));
+        grad.appendChild(el('stop', { offset: '100%', 'stop-color': l.t.color }));
+        defs.appendChild(grad);
+
+        // luminance mask: a soft black→white→black wave that scrolls along the band
+        const sid = `sheen${l.idx}`, mid = `mask${l.idx}`;
+        const sg = el('linearGradient', { id: sid, gradientUnits: 'userSpaceOnUse',
+          x1: l.s.x + NW, y1: 0, x2: l.s.x + NW + SHEEN_PERIOD, y2: 0, spreadMethod: 'repeat' });
+        sg.appendChild(el('stop', { offset: '0',    'stop-color': '#000' }));
+        sg.appendChild(el('stop', { offset: '0.5',  'stop-color': '#fff' }));
+        sg.appendChild(el('stop', { offset: '1',    'stop-color': '#000' }));
+        if (!reduceMotion) {
+          const anim = el('animateTransform', { attributeName: 'gradientTransform', type: 'translate',
+            from: '0 0', to: `${SHEEN_PERIOD} 0`, dur: '2.6s', repeatCount: 'indefinite' });
+          sg.appendChild(anim); l.sheenAnim = anim;
+        }
+        defs.appendChild(sg);
+        const mask = el('mask', { id: mid, maskUnits: 'userSpaceOnUse' });
+        mask.appendChild(el('rect', { x: 0, y: 0, width: VBW, height: VBH, fill: `url(#${sid})` }));
+        defs.appendChild(mask);
+
+        const path = el('path', { class: 'link', fill: GRADIENT ? `url(#${gid})` : l.s.color });
+        l.el = path;
+        path.addEventListener('mouseenter', (e) => { moveTip(e); focusLink(l); });
+        path.addEventListener('mousemove', moveTip);
+        path.addEventListener('mouseleave', clearFocus);
+        gLinks.appendChild(path);
+
+        // sheen overlay: the band's OWN gradient, revealed only inside the moving wave →
+        // the colours themselves brighten and flow (no white, low contrast)
+        const wave = el('path', { class: 'wave sheen', fill: `url(#${gid})`, mask: `url(#${mid})`, 'pointer-events': 'none' });
+        l.waveEl = wave;
+        gWaves.appendChild(wave);
+      });
+
+      NODES.forEach(n => {
+        const r = el('rect', { class: 'node', x: n.x, width: NW, rx: 6,
+          fill: n.color, stroke: 'var(--node-stroke)', 'stroke-width': 3 });
+        r.style.transitionDelay = delays[n.layer] + 's';
+        n.el = r;
+        r.addEventListener('mouseenter', (e) => { moveTip(e); focusNode(n); });
+        r.addEventListener('mousemove', moveTip);
+        r.addEventListener('mouseleave', clearFocus);
+        r.addEventListener('click', () => toggleCollapse(n));
+        gNodes.appendChild(r);
+
+        const lx = n.x + NW + 12;
+        const t = el('text', { class: 'label', x: lx });
+        const t1 = el('tspan', { class: 'ttl', x: lx }); t1.textContent = n.label;
+        const t2 = el('tspan', { class: 'val', x: lx });
+        t.appendChild(t1); t.appendChild(t2);
+        t.style.transitionDelay = (delays[n.layer] + 0.1) + 's';
+        n.labelEl = t; n.t1 = t1; n.t2 = t2;
+        gLabels.appendChild(t);
+
+        // collapse/expand cue: '–' on hover (collapse), persistent '+' when collapsed (expand)
+        const aff = el('g', { class: 'aff' });
+        aff.appendChild(el('circle', { r: 6.5, cx: 0, cy: 0 }));
+        aff.appendChild(el('line', { x1: -3.2, y1: 0, x2: 3.2, y2: 0 }));
+        aff.appendChild(el('line', { class: 'v', x1: 0, y1: -3.2, x2: 0, y2: 3.2 }));
+        n.affEl = aff;
+        gAffs.appendChild(aff);
+      });
+    }
+
+    // push current (possibly mid-tween) geometry into the DOM
+    function applyGeometry(updateWaves) {
+      ALL_EDGES.forEach(l => {
+        if (!l.active) return;
+        const d = ribbonPath(l);
+        l.el.setAttribute('d', d);
+        l.waveEl.setAttribute('d', d); // sheen overlay shares the band's shape
+      });
+      NODES.forEach(n => {
+        if (!n.active) return;
+        n.el.setAttribute('y', n.y);
+        n.el.setAttribute('height', Math.max(n.h, MINH));
+        const cy = n.y + n.h / 2;
+        n.t1.setAttribute('y', cy - 3);
+        n.t2.setAttribute('y', cy + 15);
+        n.affEl.setAttribute('transform', `translate(${n.x + NW / 2}, ${cy})`);
+      });
+    }
+
+    // recompute layout and animate from the current geometry to the new targets
+    function relayout(animate) {
+      const prevN = {}; NODES.forEach(n => prevN[n.id] = n.active);
+      const prevL = ALL_EDGES.map(l => l.active);
+      layout();
+
+      ALL_EDGES.forEach((l, i) => { l.el.classList.toggle('gone', !l.active); l.waveEl.classList.toggle('gone', !l.active); });
+      NODES.forEach(n => {
+        n.el.classList.toggle('gone', !n.active);
+        n.labelEl.classList.toggle('gone', !n.active);
+        n.el.classList.toggle('collapsed', n.collapsed);
+        n.labelEl.classList.toggle('collapsed', n.collapsed);
+        n.affEl.classList.toggle('gone', !n.active);
+        n.affEl.classList.toggle('collapsed', n.collapsed);
+        n.affEl.classList.toggle('persist', n.collapsed);
+        n.t2.textContent = n.collapsed
+          ? `${fmt(n.baseValue)} · collapsed`
+          : `${fmt(n.baseValue)} · ${pct(n.baseValue)}`;
+      });
+
+      // elements appearing for the first time (or freshly un-hidden) snap to target, then fade in
+      NODES.forEach(n => { if (n.y === undefined || !prevN[n.id]) { n.y = n.Ty; n.h = n.Th; } });
+      ALL_EDGES.forEach((l, i) => { if (l.sy === undefined || !prevL[i]) { l.sy = l.Tsy; l.ty = l.Tty; l.w = l.Tw; } });
+
+      if (!animate) {
+        NODES.forEach(n => { n.y = n.Ty; n.h = n.Th; });
+        ALL_EDGES.forEach(l => { if (l.active) { l.sy = l.Tsy; l.ty = l.Tty; l.w = l.Tw; } });
+        applyGeometry(true);
+        return;
+      }
+      NODES.forEach(n => { n.y0 = n.y; n.h0 = n.h; });
+      ALL_EDGES.forEach(l => { l.sy0 = l.sy; l.ty0 = l.ty; l.w0 = l.w; });
+      cancelAnimationFrame(rafId);
+      let t0 = null; const DUR = 560;
+      const frame = (now) => {
+        if (t0 === null) t0 = now;
+        const e = Math.min(1, (now - t0) / DUR), k = 1 - Math.pow(1 - e, 3);
+        NODES.forEach(n => { if (!n.active) return; n.y = n.y0 + (n.Ty - n.y0) * k; n.h = n.h0 + (n.Th - n.h0) * k; });
+        ALL_EDGES.forEach(l => { if (!l.active) return; l.sy = l.sy0 + (l.Tsy - l.sy0) * k; l.ty = l.ty0 + (l.Tty - l.ty0) * k; l.w = l.w0 + (l.Tw - l.w0) * k; });
+        applyGeometry(false);
+        if (e < 1) rafId = requestAnimationFrame(frame); else applyGeometry(true);
+      };
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function toggleCollapse(n) {
+      if (n.id === 'unwanted') return; // never collapse the root
+      if (collapsed.has(n.id)) collapsed.delete(n.id); else collapsed.add(n.id);
+      clearFocus();
+      relayout(true);
+    }
+
+    // ---- interaction ----
+    function trace(node) {
+      const nset = new Set([node.id]), lset = new Set();
+      let stack = [node];
+      while (stack.length) { const c = stack.pop(); c.outL.forEach(l => { if (!l.active) return; lset.add(l.idx); if (!nset.has(l.t.id)) { nset.add(l.t.id); stack.push(l.t); } }); }
+      stack = [node];
+      while (stack.length) { const c = stack.pop(); c.inL.forEach(l => { if (!l.active) return; lset.add(l.idx); if (!nset.has(l.s.id)) { nset.add(l.s.id); stack.push(l.s); } }); }
+      return { nset, lset };
+    }
+
+    function applyFocus(nset, lset) {
+      svg.classList.add('focused');
+      NODES.forEach(n => {
+        const on = nset.has(n.id);
+        n.el.classList.toggle('on', on);
+        n.labelEl.classList.toggle('on', on);
+      });
+      ALL_EDGES.forEach(l => {
+        const on = lset.has(l.idx);
+        l.el.classList.toggle('on', on);
+        l.waveEl.classList.toggle('on', on);
+      });
+    }
+
+    function focusNode(n) {
+      const { nset, lset } = trace(n);
+      applyFocus(nset, lset);
+      n.affEl.classList.add('show');
+      // breakdown from BASELINE values, so shares are true regardless of what's collapsed
+      const outs = n.outL.filter(l => l.baseValue > 1e-6).sort((a, b) => b.baseValue - a.baseValue);
+      let table = '';
+      if (outs.length && n.baseOut > 1e-6) {
+        table = `<div class="tip-divider"></div><div class="tip-cap">Flows to</div><div class="tip-table">`
+          + outs.map(l => `<div class="tip-tr"><span class="dot" style="background:${l.t.color}"></span><span class="tip-name">${l.t.label}</span><span class="tip-pct">${Math.round(l.baseValue / n.baseOut * 100)}%</span></div>`).join('')
+          + `</div>`;
+      }
+      const sub = n.collapsed ? `${pct(n.baseValue)} of all messages · collapsed` : `${pct(n.baseValue)} of all messages`;
+      showTip(`<div class="tip-row"><span class="dot" style="background:${n.color}"></span>${n.label}</div>
+        <div class="tip-big">${fmt(n.baseValue)}</div>
+        <div class="tip-sub">${sub}</div>${table}`);
+    }
+
+    function focusLink(l) {
+      applyFocus(new Set([l.s.id, l.t.id]), new Set([l.idx]));
+      const share = Math.round(l.baseValue / l.s.baseValue * 100);
+      // Lead with the source, make the % the hero, then where it flows.
+      showTip(`<div class="tip-row"><span class="dot" style="background:${l.s.color}"></span>${l.s.label}</div>
+        <div class="tip-big">${share}% <span class="tip-flowto">flows to</span></div>
+        <div class="tip-target"><span class="dot" style="background:${l.t.color}"></span>${l.t.label}</div>
+        <div class="tip-sub">${fmt(l.baseValue)} of ${fmt(l.s.baseValue)}</div>`);
+    }
+
+    function clearFocus() {
+      svg.classList.remove('focused');
+      NODES.forEach(n => { n.el.classList.remove('on'); n.labelEl.classList.remove('on'); n.affEl.classList.remove('show'); });
+      ALL_EDGES.forEach(l => { l.el.classList.remove('on'); l.waveEl.classList.remove('on'); });
+      tip.classList.remove('show');
+    }
+
+    function showTip(html) { tip.innerHTML = html; tip.classList.add('show'); }
+    // tooltip glides toward the cursor via a transitioned transform (set as CSS vars)
+    function moveTip(e) {
+      const pad = 16; let x = e.clientX + pad, y = e.clientY + pad;
+      const r = tip.getBoundingClientRect();
+      if (x + r.width > innerWidth - 8)  x = e.clientX - r.width - pad;
+      if (y + r.height > innerHeight - 8) y = e.clientY - r.height - pad;
+      tip.style.setProperty('--tx', x + 'px');
+      tip.style.setProperty('--ty', y + 'px');
+    }
+
+    // ---- entrance ----
+    function play() {
+      svg.classList.remove('play');
+      void svg.getBoundingClientRect();
+      svg.classList.add('play');
+    }
+
+    // build the diagram once, lay it out, then wire controls (their init touches els)
+    build();
+    relayout(false);
+
+    // ---- DialKit-style controls: one declarative config → generated panel ----
+    const $ = id => document.getElementById(id);
+    const root = document.documentElement;
+    const setSheenSpeed = v => {
+      if (v === 0) { svg.classList.add('nowave'); return; }
+      svg.classList.remove('nowave');
+      const dur = (2.6 / v).toFixed(2) + 's';
+      ALL_EDGES.forEach(l => { if (l.sheenAnim) l.sheenAnim.setAttribute('dur', dur); });
+    };
+    const state = { speed: 1 };
+    const handlers = {
+      opacity:   v => root.style.setProperty('--ribbon-opacity', v),
+      curvature: v => { CURVE = v; applyGeometry(true); },
+      gap:       v => { GAP = v; relayout(true); },
+      gradient:  v => { GRADIENT = v; ALL_EDGES.forEach(l => l.el.setAttribute('fill', GRADIENT ? `url(#grad${l.idx})` : l.s.color)); },
+      flow:      v => { svg.classList.toggle('nowave', !v); if (v) setSheenSpeed(state.speed || 1); },
+      speed:     v => { state.speed = v; setSheenSpeed(v); },
+      intensity: v => root.style.setProperty('--sheen-opacity', v),
+      theme:     v => root.setAttribute('data-theme', v),
+      replay:    () => play(),
+    };
+
+    // [DialKit idiom] declarative config — each entry generates the right control
+    const DIALS = {
+      Ribbons: {
+        opacity:   { type: 'slider', value: 0.24, min: 0.12, max: 0.9, step: 0.02, fmt: v => v.toFixed(2) },
+        curvature: { type: 'slider', value: 0.5,  min: 0.2,  max: 0.8, step: 0.02, fmt: v => v.toFixed(2) },
+        gap:       { type: 'slider', value: 46, min: 10, max: 46, step: 1, fmt: v => String(v | 0), label: 'node gap' },
+        gradient:  { type: 'switch', value: true },
+      },
+      Flow: {
+        flow:      { type: 'switch', value: true, label: 'sheen' },
+        speed:     { type: 'slider', value: 1, min: 0, max: 3, step: 0.1, fmt: v => v === 0 ? 'off' : v.toFixed(1) + '×' },
+        intensity: { type: 'slider', value: 0.4, min: 0, max: 0.9, step: 0.02, fmt: v => v.toFixed(2) },
+      },
+      View: {
+        theme:  { type: 'select', value: 'light', options: ['light', 'dark'] },
+        replay: { type: 'action', label: '↻ Replay' },
+      },
+    };
+    const dispatch = (key, v) => { state[key] = v; (handlers[key] || (() => {}))(v); };
+
+    function buildDials() {
+      const body = $('dkBody');
+      for (const group in DIALS) {
+        const g = document.createElement('div'); g.className = 'dk-group';
+        const gl = document.createElement('div'); gl.className = 'dk-glabel'; gl.textContent = group; g.appendChild(gl);
+        for (const key in DIALS[group]) {
+          const c = DIALS[group][key], name = c.label || key;
+          if (c.type === 'slider') {
+            const row = document.createElement('div'); row.className = 'dk-row';
+            row.innerHTML = `<div class="dk-rowhead"><span class="dk-name">${name}</span><span class="dk-val"></span></div>`;
+            const input = document.createElement('input');
+            input.type = 'range'; input.className = 'dk-slider';
+            input.min = c.min; input.max = c.max; input.step = c.step; input.value = c.value;
+            const val = row.querySelector('.dk-val');
+            const upd = () => { const v = parseFloat(input.value); val.textContent = c.fmt(v); dispatch(key, v); };
+            input.addEventListener('input', upd);
+            row.appendChild(input); g.appendChild(row); upd();
+          } else if (c.type === 'switch') {
+            const sw = document.createElement('div'); sw.className = 'dk-switch' + (c.value ? ' on' : '');
+            sw.innerHTML = `<span class="dk-name">${name}</span><span class="dk-track"></span>`;
+            sw.addEventListener('click', () => { const on = !sw.classList.contains('on'); sw.classList.toggle('on', on); dispatch(key, on); });
+            g.appendChild(sw); dispatch(key, c.value);
+          } else if (c.type === 'select') {
+            const row = document.createElement('div'); row.className = 'dk-row';
+            row.innerHTML = `<div class="dk-rowhead"><span class="dk-name">${name}</span></div>`;
+            const seg = document.createElement('div'); seg.className = 'dk-seg';
+            c.options.forEach(opt => {
+              const b = document.createElement('button'); b.textContent = opt; if (opt === c.value) b.className = 'on';
+              b.addEventListener('click', () => { seg.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); dispatch(key, opt); });
+              seg.appendChild(b);
+            });
+            row.appendChild(seg); g.appendChild(row); dispatch(key, c.value);
+          } else if (c.type === 'action') {
+            const b = document.createElement('button'); b.className = 'dk-action'; b.textContent = name;
+            b.addEventListener('click', handlers[key] || (() => {}));
+            g.appendChild(b);
+          }
+        }
+        body.appendChild(g);
+      }
+    }
+    buildDials();
+    $('dkHead').addEventListener('click', () => $('dk').classList.toggle('collapsed'));
+
+    // ---- go ----
+    requestAnimationFrame(play);
+  })();
+  </script>
+</body>
+</html>
