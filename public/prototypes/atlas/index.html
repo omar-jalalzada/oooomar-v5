@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atlas</title>
+  <style>
+    :root {
+      --bg: #fcfcfd;
+      --land: #e7e9f0;
+      --land-edge: #dadeea;
+      --land-visited: #d6e0fb;
+      --land-visited-edge: rgba(25,92,255,0.34);
+      --ink: #0b0b0c;
+      --ink-2: #5c5c66;
+      --ink-3: #9b9ba6;
+      --accent: #195cff;
+      --mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
+    canvas { display: block; position: absolute; inset: 0; }
+
+    .overlay { position: absolute; inset: 0; pointer-events: none; color: var(--ink); }
+    .overlay > * { pointer-events: auto; }
+
+    /* top-left identity */
+    .brand { position: absolute; top: 20px; left: 24px; }
+    .brand h1 {
+      margin: 0; font: 600 13px/1 var(--mono);
+      letter-spacing: 0.42em; text-transform: uppercase; color: var(--ink);
+    }
+    .brand p {
+      margin: 8px 0 0; font: 400 12px/1.3 var(--mono);
+      letter-spacing: 0.02em; color: var(--ink-2);
+    }
+    .tag {
+      display: inline-block; margin-top: 10px; padding: 2px 7px 3px;
+      font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(25,92,255,0.32); border-radius: 999px;
+    }
+
+    /* top-right highlights */
+    .highlights {
+      position: absolute; top: 20px; right: 24px; text-align: right;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .hl { display: flex; flex-direction: column; gap: 2px; }
+    .hl .k { font: 500 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+    .hl .v { font: 500 13px/1.2 var(--mono); letter-spacing: 0.01em; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+    /* hover tooltip */
+    .tip {
+      position: absolute; transform: translate(-50%, calc(-100% - 14px));
+      background: var(--ink); color: #fff; padding: 8px 11px; border-radius: 6px;
+      font: 500 11px/1.45 var(--mono); white-space: nowrap; opacity: 0;
+      transition: opacity 120ms ease; box-shadow: 0 6px 24px -8px rgba(11,11,12,0.5);
+      letter-spacing: 0.01em; font-variant-numeric: tabular-nums;
+    }
+    .tip.on { opacity: 1; }
+    .tip .city { color: #fff; }
+    .tip .sub { color: #b9c2e8; }
+    .tip::after {
+      content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: var(--ink);
+    }
+
+    /* bottom scrubber */
+    .scrubber {
+      position: absolute; left: 24px; right: 24px; bottom: 22px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .play {
+      flex: none; width: 34px; height: 34px; border-radius: 999px;
+      border: 1px solid var(--land-edge); background: #fff; cursor: pointer;
+      display: grid; place-items: center; color: var(--ink);
+      box-shadow: 0 1px 2px rgba(25,35,90,0.06), 0 6px 16px -8px rgba(25,92,255,0.18);
+      transition: transform 120ms cubic-bezier(0.34,1.28,0.4,1), border-color 120ms ease;
+    }
+    .play:hover { transform: scale(1.06); border-color: var(--accent); }
+    .play:active { transform: scale(0.96); }
+    .play svg { display: block; }
+
+    .track-wrap { flex: 1; min-width: 0; }
+    .readout {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 8px; gap: 16px;
+    }
+    .readout .when { font: 500 13px/1 var(--mono); letter-spacing: 0.08em; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .readout .totals { font: 400 12px/1 var(--mono); letter-spacing: 0.01em; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .readout .totals b { color: var(--ink); font-weight: 600; }
+
+    .track {
+      position: relative; height: 18px; cursor: pointer;
+    }
+    .track .rail { position: absolute; top: 8px; left: 0; right: 0; height: 2px; background: var(--land-edge); border-radius: 2px; }
+    .track .fill { position: absolute; top: 8px; left: 0; height: 2px; background: var(--accent); border-radius: 2px; }
+    .track .tick { position: absolute; top: 4px; width: 1px; height: 10px; background: var(--land-edge); }
+    .track .tick span {
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      font: 400 9px/1 var(--mono); color: var(--ink-3); letter-spacing: 0.04em;
+    }
+    .track .handle {
+      position: absolute; top: 9px; width: 13px; height: 13px; border-radius: 999px;
+      background: #fff; border: 2px solid var(--accent); transform: translate(-50%, -50%);
+      box-shadow: 0 2px 6px -1px rgba(25,92,255,0.4); transition: transform 80ms ease;
+    }
+    .track:hover .handle { transform: translate(-50%, -50%) scale(1.12); }
+
+    @media (max-width: 640px) {
+      .highlights { display: none; }
+      .brand { top: 16px; left: 16px; }
+      .scrubber { left: 16px; right: 16px; bottom: 16px; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div class="overlay">
+    <div class="brand">
+      <h1>Atlas</h1>
+      <p>a decade of check-ins</p>
+      <span class="tag" id="sampleTag" hidden>sample data</span>
+    </div>
+    <div class="highlights" id="highlights"></div>
+    <div class="tip" id="tip"></div>
+    <div class="scrubber">
+      <button class="play" id="play" aria-label="Play the decade">
+        <svg id="playIcon" width="13" height="14" viewBox="0 0 13 14"><path d="M1 1l11 6L1 13z" fill="currentColor"/></svg>
+      </button>
+      <div class="track-wrap">
+        <div class="readout">
+          <span class="when" id="when"></span>
+          <span class="totals" id="totals"></span>
+        </div>
+        <div class="track" id="track">
+          <div class="rail"></div>
+          <div class="fill" id="fill"></div>
+          <div class="handle" id="handle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (async function () {
+    const cv = document.getElementById('map');
+    const ctx = cv.getContext('2d');
+
+    const [world, data] = await Promise.all([
+      fetch('./world.json').then(r => r.json()),   // { countries: [{ cc, polygons }] }
+      fetch('./data.json').then(r => r.json()),
+    ]);
+
+    // ---- continuous month timeline ----------------------------------------
+    function monthsBetween(a, b) {
+      const [ay, am] = a.split('-').map(Number), [by, bm] = b.split('-').map(Number);
+      const out = [];
+      let y = ay, m = am;
+      while (y < by || (y === by && m <= bm)) {
+        out.push(`${y}-${String(m).padStart(2, '0')}`);
+        m++; if (m > 12) { m = 1; y++; }
+      }
+      return out;
+    }
+    const MONTHS = monthsBetween(data.meta.firstVisit, data.meta.lastVisit);
+    const monthIndex = Object.fromEntries(MONTHS.map((m, i) => [m, i]));
+
+    // ---- precompute cumulative counts per city + global totals ------------
+    const cities = data.cities.map(c => {
+      const cum = new Array(MONTHS.length).fill(0);
+      let running = 0;
+      for (let i = 0; i < MONTHS.length; i++) {
+        running += c.visitsByMonth[MONTHS[i]] || 0;
+        cum[i] = running;
+      }
+      const activeFrom = monthIndex[c.firstVisit] ?? 0;
+      const topCat = Object.keys(c.categories)[0];
+      return { ...c, cum, activeFrom, topCat };
+    });
+    const maxCount = Math.max(...cities.map(c => c.count));
+
+    // running global totals per month index
+    const totalCum = [], citiesCum = [], countriesCum = [];
+    for (let i = 0; i < MONTHS.length; i++) {
+      let chk = 0; const cset = new Set(), nset = new Set();
+      for (const c of cities) {
+        if (c.cum[i] > 0) { chk += c.cum[i]; cset.add(c.city + c.countryCode); nset.add(c.country); }
+      }
+      totalCum[i] = chk; citiesCum[i] = cset.size; countriesCum[i] = nset.size;
+    }
+
+    // ---- "fun" all-time facts ---------------------------------------------
+    const fmt = n => n.toLocaleString('en-US');
+    const home = cities.find(c => c.city === data.meta.home) || cities[0];
+    function haversine(a, b) {
+      const R = 6371, toR = d => d * Math.PI / 180;
+      const dLat = toR(b.lat - a.lat), dLng = toR(b.lng - a.lng);
+      const s = Math.sin(dLat/2)**2 + Math.cos(toR(a.lat))*Math.cos(toR(b.lat))*Math.sin(dLng/2)**2;
+      return 2 * R * Math.asin(Math.sqrt(s));
+    }
+    let furthest = cities[0], fdist = 0;
+    for (const c of cities) { const d = haversine(home, c); if (d > fdist) { fdist = d; furthest = c; } }
+    const mostVisited = cities.reduce((a, b) => b.count > a.count ? b : a);
+    const catTotals = {};
+    for (const c of cities) for (const [k, v] of Object.entries(c.categories)) catTotals[k] = (catTotals[k] || 0) + v;
+    const topCat = Object.entries(catTotals).sort((a, b) => b[1] - a[1])[0];
+
+    if (data.meta.sample) document.getElementById('sampleTag').hidden = false;
+    document.getElementById('highlights').innerHTML = [
+      ['Most visited', `${mostVisited.city} · ${fmt(mostVisited.count)}`],
+      ['Furthest from home', `${furthest.city} · ${fmt(Math.round(fdist))} km`],
+      ['Top category', `${topCat[0]} · ${fmt(topCat[1])}`],
+    ].map(([k, v]) => `<div class="hl"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+
+    // ---- projection (plate carrée, fitted + centered above the scrubber) ---
+    const BOUNDS = { west: -169, east: 191, north: 74, south: -56 };
+    const TOP_PAD = 12, BOT_PAD = 108;   // leave room for the scrubber below
+    let W, H, dpr, k, ox, oy;
+    function layout() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      cv.style.width = W + 'px'; cv.style.height = H + 'px';
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const lonSpan = BOUNDS.east - BOUNDS.west, latSpan = BOUNDS.north - BOUNDS.south;
+      const availH = Math.max(120, H - TOP_PAD - BOT_PAD);
+      k = Math.min(W / lonSpan, availH / latSpan);
+      ox = (W - lonSpan * k) / 2;
+      oy = TOP_PAD + (availH - latSpan * k) / 2;
+    }
+    const px = lng => ox + (lng - BOUNDS.west) * k;
+    const py = lat => oy + (BOUNDS.north - lat) * k;
+
+    const rOf = count => 2.4 + Math.sqrt(count / maxCount) * 13.5;
+
+    // ---- state -------------------------------------------------------------
+    let head = MONTHS.length - 1;   // playhead month index (default: present = all data)
+    // ?p=<0..1> sets the initial playhead (used for verification screenshots)
+    const pParam = new URLSearchParams(location.search).get('p');
+    if (pParam !== null) head = Math.max(0, Math.min(MONTHS.length - 1, Math.round(parseFloat(pParam) * (MONTHS.length - 1))));
+    let playing = false;
+    let hover = null;
+    const ripples = [];             // {x, y, born} during play
+
+    // ---- render ------------------------------------------------------------
+    function draw(now) {
+      ctx.clearRect(0, 0, W, H);
+
+      // countries — quiet land, with visited ones gently tinted (scrubber-aware)
+      const visited = new Set();
+      for (const c of cities) if (c.cum[head] > 0) visited.add(c.countryCode);
+      const LAND = getCSS('--land'), LAND_EDGE = getCSS('--land-edge');
+      const VIS = getCSS('--land-visited'), VIS_EDGE = getCSS('--land-visited-edge');
+      ctx.lineWidth = 0.6;
+      for (const country of world.countries) {
+        ctx.beginPath();
+        for (const poly of country.polygons) {
+          for (const ring of poly) {
+            for (let i = 0; i < ring.length; i++) {
+              const x = px(ring[i][0]), y = py(ring[i][1]);
+              i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+            }
+            ctx.closePath();
+          }
+        }
+        const on = visited.has(country.cc);
+        ctx.fillStyle = on ? VIS : LAND;
+        ctx.fill('evenodd');
+        ctx.strokeStyle = on ? VIS_EDGE : LAND_EDGE;
+        ctx.lineWidth = on ? 0.9 : 0.6;
+        ctx.stroke();
+      }
+
+      // ripples (during play)
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const age = (now - ripples[i].born) / 850;
+        if (age >= 1) { ripples.splice(i, 1); continue; }
+        const rp = ripples[i];
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, 4 + age * 26, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(25,92,255,${(1 - age) * 0.5})`;
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+      }
+
+      // city dots
+      for (const c of cities) {
+        const shown = c.cum[head];
+        if (shown <= 0) continue;
+        const x = px(c.lng), y = py(c.lat);
+        const grow = Math.min(1, shown / c.count);
+        const r = rOf(shown) * (0.5 + 0.5 * grow);
+        const isHover = hover === c;
+
+        // halo
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
+        g.addColorStop(0, 'rgba(25,92,255,0.30)');
+        g.addColorStop(1, 'rgba(25,92,255,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, r * 3, 0, Math.PI * 2); ctx.fill();
+
+        // core
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = isHover ? '#0b3fd6' : getCSS('--accent');
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(252,252,253,0.9)';
+        ctx.stroke();
+
+        if (isHover) {
+          ctx.beginPath(); ctx.arc(x, y, r + 4, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(25,92,255,0.5)'; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+      }
+    }
+
+    const cssCache = {};
+    function getCSS(v) {
+      return cssCache[v] || (cssCache[v] = getComputedStyle(document.documentElement).getPropertyValue(v).trim());
+    }
+
+    // ---- readout + scrubber UI --------------------------------------------
+    const whenEl = document.getElementById('when');
+    const totalsEl = document.getElementById('totals');
+    const fillEl = document.getElementById('fill');
+    const handleEl = document.getElementById('handle');
+    const trackEl = document.getElementById('track');
+
+    function prettyMonth(m) {
+      const [y, mo] = m.split('-').map(Number);
+      return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo-1]} ${y}`;
+    }
+    function syncUI() {
+      const pct = head / (MONTHS.length - 1);
+      fillEl.style.width = (pct * 100) + '%';
+      handleEl.style.left = (pct * 100) + '%';
+      const atEnd = head === MONTHS.length - 1;
+      whenEl.textContent = atEnd ? `${prettyMonth(MONTHS[0])} — ${prettyMonth(MONTHS[head])}` : prettyMonth(MONTHS[head]);
+      totalsEl.innerHTML = `<b>${fmt(totalCum[head])}</b> check-ins · <b>${citiesCum[head]}</b> cities · <b>${countriesCum[head]}</b> countries`;
+    }
+
+    // year ticks
+    (function ticks() {
+      const seen = new Set();
+      MONTHS.forEach((m, i) => {
+        const y = m.split('-')[0];
+        if (m.endsWith('-01') && !seen.has(y) && Number(y) % 2 === 0) {
+          seen.add(y);
+          const t = document.createElement('div');
+          t.className = 'tick';
+          t.style.left = (i / (MONTHS.length - 1) * 100) + '%';
+          t.innerHTML = `<span>'${y.slice(2)}</span>`;
+          trackEl.appendChild(t);
+        }
+      });
+    })();
+
+    // ---- play loop ---------------------------------------------------------
+    const playIcon = document.getElementById('playIcon');
+    function setPlaying(on) {
+      playing = on;
+      playIcon.innerHTML = on
+        ? '<rect x="1" y="1" width="3.5" height="12" fill="currentColor"/><rect x="8.5" y="1" width="3.5" height="12" fill="currentColor"/>'
+        : '<path d="M1 1l11 6L1 13z" fill="currentColor"/>';
+    }
+    document.getElementById('play').addEventListener('click', () => {
+      if (playing) { setPlaying(false); return; }
+      if (head >= MONTHS.length - 1) head = 0;   // restart from the beginning
+      setPlaying(true);
+    });
+
+    let last = 0, acc = 0;
+    const MS_PER_MONTH = 95;
+    function loop(t) {
+      if (!last) last = t;
+      const dt = t - last; last = t;
+      if (playing) {
+        acc += dt;
+        while (acc >= MS_PER_MONTH && head < MONTHS.length - 1) {
+          acc -= MS_PER_MONTH; head++;
+          // spawn ripples for cities active this month
+          for (const c of cities) {
+            if (c.visitsByMonth[MONTHS[head]]) ripples.push({ x: px(c.lng), y: py(c.lat), born: t });
+          }
+          syncUI();
+        }
+        if (head >= MONTHS.length - 1) { setPlaying(false); }
+      }
+      draw(t);
+      requestAnimationFrame(loop);
+    }
+
+    // ---- scrub interaction -------------------------------------------------
+    function seekFromEvent(e) {
+      const rect = trackEl.getBoundingClientRect();
+      const x = ((e.touches ? e.touches[0].clientX : e.clientX) - rect.left) / rect.width;
+      head = Math.max(0, Math.min(MONTHS.length - 1, Math.round(x * (MONTHS.length - 1))));
+      syncUI();
+    }
+    let scrubbing = false;
+    const startScrub = e => { scrubbing = true; setPlaying(false); seekFromEvent(e); e.preventDefault(); };
+    trackEl.addEventListener('mousedown', startScrub);
+    trackEl.addEventListener('touchstart', startScrub, { passive: false });
+    window.addEventListener('mousemove', e => { if (scrubbing) seekFromEvent(e); });
+    window.addEventListener('touchmove', e => { if (scrubbing) seekFromEvent(e); }, { passive: false });
+    window.addEventListener('mouseup', () => scrubbing = false);
+    window.addEventListener('touchend', () => scrubbing = false);
+
+    // ---- hover tooltip -----------------------------------------------------
+    const tip = document.getElementById('tip');
+    cv.addEventListener('mousemove', e => {
+      const rect = cv.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      let best = null, bestD = 18 * 18;
+      for (const c of cities) {
+        if (c.cum[head] <= 0) continue;
+        const dx = px(c.lng) - mx, dy = py(c.lat) - my, d = dx*dx + dy*dy;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+      hover = best;
+      if (best) {
+        const shown = best.cum[head];
+        tip.classList.add('on');
+        tip.style.left = px(best.lng) + 'px';
+        tip.style.top = py(best.lat) + 'px';
+        tip.innerHTML =
+          `<span class="city">${best.city}, ${best.countryCode}</span><br>` +
+          `<span class="sub">${fmt(shown)} check-in${shown === 1 ? '' : 's'} · ${best.topCat}</span>`;
+        cv.style.cursor = 'pointer';
+      } else {
+        tip.classList.remove('on'); cv.style.cursor = 'default';
+      }
+    });
+    cv.addEventListener('mouseleave', () => { hover = null; tip.classList.remove('on'); });
+
+    // ---- boot --------------------------------------------------------------
+    function onResize() { layout(); syncUI(); }
+    window.addEventListener('resize', onResize);
+    layout(); syncUI(); requestAnimationFrame(loop);
+  })();
+  </script>
+</body>
+</html>
