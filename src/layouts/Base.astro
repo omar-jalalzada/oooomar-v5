@@ -13,7 +13,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
 const nav = [
   { href: '/writing/', label: 'Writing' },
-  { href: '/labs/', label: 'Labs' },
+  { href: '/experiments/', label: 'Experiments' },
   { href: '/about/', label: 'About' },
 ];
 
@@ -53,7 +53,15 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
           </main>
 
           <nav class="cnst-nav" aria-label="Site navigation">
-            <a href="/" class="navdot" aria-label="Home"></a>
+            <a href="/" class="navdot" aria-label="Home">
+              <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
+                <mask id="navdot-o">
+                  <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
+                  <circle cx="50" cy="50" r="14" fill="#000" />
+                </mask>
+                <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
+              </svg>
+            </a>
             <span class="navlinks">
               {nav.map((item) => (
                 <a
@@ -73,18 +81,13 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
 </html>
 
 <style>
-  /* Calm, static echo of the canvas world — same palette, no grain, no animation.
-     Sits behind content so detail/list pages feel related to the home canvas. */
+  /* Plain white, behind content — matches the home canvas. */
   .calm-bg {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(60% 50% at 18% 0%, rgba(255, 214, 170, 0.1), transparent 60%),
-      radial-gradient(50% 45% at 88% 8%, rgba(196, 184, 255, 0.1), transparent 62%),
-      radial-gradient(70% 60% at 50% 100%, rgba(168, 214, 255, 0.1), transparent 70%),
-      var(--color-bg);
+    background: var(--color-bg);
   }
 
   main {
@@ -120,17 +123,25 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
   }
 
   .navdot {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     border: none;
-    border-radius: 50%;
+    background: none;
+    padding: 0;
     flex-shrink: 0;
     cursor: pointer;
-    background: radial-gradient(circle at 35% 30%, #4d78ff, var(--color-accent));
-    box-shadow: 0 2px 8px -2px rgba(20, 40, 120, 0.5);
-    display: block;
+    display: grid;
+    place-items: center;
     text-decoration: none;
   }
+  .navdot-mark {
+    width: 30px;
+    height: 30px;
+    display: block;
+    transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .navdot:hover .navdot-mark { transform: scale(1.08); }
+  .navdot:active .navdot-mark { transform: scale(0.94); }
 
   .navlinks {
     display: flex;

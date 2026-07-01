@@ -19,8 +19,8 @@ const writing = defineCollection({
   }),
 });
 
-const labs = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/labs' }),
+const experiments = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/experiments' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -58,4 +58,4 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { writing, labs, work, about };
+export const collections = { writing, experiments, work, about };
