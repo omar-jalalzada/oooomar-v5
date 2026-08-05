@@ -18,6 +18,7 @@
       --mono: ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, monospace;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
     canvas { display: block; position: absolute; inset: 0; }
 
@@ -210,8 +211,8 @@
     document.getElementById('highlights').innerHTML = [
       ['Most visited', `${mostVisited.city} · ${fmt(mostVisited.count)}`],
       ['Furthest from home', `${furthest.city} · ${fmt(Math.round(fdist))} km`],
-      ['Top category', `${topCat[0]} · ${fmt(topCat[1])}`],
-    ].map(([k, v]) => `<div class="hl"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+      topCat ? ['Top category', `${topCat[0]} · ${fmt(topCat[1])}`] : null,
+    ].filter(Boolean).map(([k, v]) => `<div class="hl"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
 
     // ---- projection (plate carrée, fitted + centered above the scrubber) ---
     const BOUNDS = { west: -169, east: 191, north: 74, south: -56 };
