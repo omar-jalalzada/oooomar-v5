@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import { ExperimentsGrid } from '../../components/ui/ExperimentsGrid';
 import { getVisible, byDateDesc } from '../../lib/content';
 import { formatDate } from '../../lib/format';
+import { SOFT_PRESENCE } from '../../lib/soft-presence';
+
+if (SOFT_PRESENCE) return Astro.redirect('/');
 
 const experiments = (await getVisible('experiments')).sort(byDateDesc);
 

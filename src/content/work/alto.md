@@ -6,5 +6,5 @@ role: Product Designer
 period: ""
 tags: [healthcare, systems]
 order: 3
-status: published
+status: draft
 ---

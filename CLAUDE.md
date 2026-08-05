@@ -29,6 +29,10 @@ comes later as its own phase.
 - **Drafts**: content with `status: draft` renders in dev, is excluded from production builds.
   Use `getVisible()` from `src/lib/content.ts` for all collection queries — never raw
   `getCollection()` in pages (the RSS feed is the one exception, it filters explicitly).
+- **Soft presence**: while `SOFT_PRESENCE_ENABLED` is true in `src/lib/soft-presence.ts`,
+  production builds (omar.build) show only the OMAR mark + tagline. `npm run dev` always shows
+  the full site so you can keep iterating. Reopen by setting the flag to `false` and publishing
+  the content you want live.
 - **Experiments**: an experiment = self-contained static folder `public/prototypes/<slug>/index.html`
   (no build step, no external deps) + a metadata entry `src/content/experiments/<slug>.md` whose
   `prototype` field names the folder.

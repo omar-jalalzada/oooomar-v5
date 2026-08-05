@@ -3,7 +3,7 @@ title: Girih
 description: A generative tessellation of eight-point stars — Islamic geometry drawn live on canvas, rotating slowly with the cursor.
 tags: [geometry, generative, heritage]
 date: 2026-06-14
-status: published
+status: draft
 prototype: girih
 ---
 

@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import { FilterBar } from '../../components/ui/FilterBar';
 import { getVisible, byDateDesc } from '../../lib/content';
 import { formatDate, topicLabels } from '../../lib/format';
+import { SOFT_PRESENCE } from '../../lib/soft-presence';
+
+if (SOFT_PRESENCE) return Astro.redirect('/');
 
 const posts = (await getVisible('writing')).sort(byDateDesc);
 

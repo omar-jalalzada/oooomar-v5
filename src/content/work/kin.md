@@ -6,5 +6,5 @@ role: Co-founder
 period: ""
 tags: [founding, fundraising, team-building]
 order: 2
-status: published
+status: draft
 ---

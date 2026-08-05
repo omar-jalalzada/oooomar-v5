@@ -3,7 +3,7 @@ title: Type Weight
 description: Letterforms whose weight follows your cursor — typography responding to presence.
 tags: []
 date: 2026-05-20
-status: published
+status: draft
 prototype: type-weight
 ---
 

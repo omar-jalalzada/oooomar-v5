@@ -4,7 +4,7 @@ description: Notes from the reed pen — on rhythm, negative space, and the disc
 topic: design-leadership
 tags: [craft, typography, calligraphy]
 date: 2026-05-28
-status: published
+status: draft
 format: article
 cover: /images/writing/calligraphy.svg
 coverAlt: An abstract calligraphic stroke crossing a faint geometric grid.

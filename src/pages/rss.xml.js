@@ -1,10 +1,13 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import { SOFT_PRESENCE } from '../lib/soft-presence';
 
 export async function GET(context) {
-  const posts = (await getCollection('writing'))
-    .filter((post) => post.data.status === 'published')
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = SOFT_PRESENCE
+    ? []
+    : (await getCollection('writing'))
+        .filter((post) => post.data.status === 'published')
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   return rss({
     title: 'Omar Jalalzada — Writing',

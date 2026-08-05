@@ -1,6 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getVisible } from '../lib/content';
+import { SOFT_PRESENCE } from '../lib/soft-presence';
+
+if (SOFT_PRESENCE) return Astro.redirect('/');
 
 const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.order);
 ---
