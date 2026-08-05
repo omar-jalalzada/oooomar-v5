@@ -3,10 +3,11 @@ import Base from '../layouts/Base.astro';
 import Constellation from '../components/constellation/Constellation.astro';
 import { getVisible, byDateDesc } from '../lib/content';
 import { formatDate, topicLabels } from '../lib/format';
+import { SOFT_PRESENCE } from '../lib/soft-presence';
 
-const writing = (await getVisible('writing')).sort(byDateDesc);
-const experiments = (await getVisible('experiments')).sort(byDateDesc);
-const aboutEntries = (await getVisible('about')).sort(byDateDesc);
+const writing = SOFT_PRESENCE ? [] : (await getVisible('writing')).sort(byDateDesc);
+const experiments = SOFT_PRESENCE ? [] : (await getVisible('experiments')).sort(byDateDesc);
+const aboutEntries = SOFT_PRESENCE ? [] : (await getVisible('about')).sort(byDateDesc);
 
 const writingCards = writing.map((p) => ({
   href: `/writing/${p.id}/`,
@@ -39,17 +40,14 @@ const cards = [...writingCards, ...experimentCards, ...aboutCards];
 ---
 
 <Base
-  title="Omar Jalalzada — Design leadership in cybersecurity"
-  description="Design leader at Sublime Security. Writing on design leadership, interactive experiments, and case studies from cybersecurity, healthcare, and finance."
+  title="Omar Jalalzada"
+  description="Omar Jalalzada — Head of Design at Sublime Security. Always a work in progress."
   immersive
 >
   <!-- Legible to search engines & screen readers; the visual identity is the canvas below. -->
   <header class="sr-only">
-    <h1>Omar Jalalzada — Head of Design at Sublime Security</h1>
-    <p>
-      A design lead in love with designing — a craftsman first. Writing on design leadership and
-      reflections, interactive experiments, and how to get in touch.
-    </p>
+    <h1>Omar Jalalzada</h1>
+    <p>Always a work in progress.</p>
   </header>
 
   <Constellation cards={cards} />

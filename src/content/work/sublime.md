@@ -6,5 +6,5 @@ role: Head of Design
 period: 2023 — present
 tags: [cybersecurity, org-design, leadership]
 order: 1
-status: published
+status: draft
 ---

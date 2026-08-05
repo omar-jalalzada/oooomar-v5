@@ -13,6 +13,7 @@ interface Props {
   cards: ConstellationCard[];
 }
 const { cards } = Astro.props;
+const soft = cards.length === 0;
 ---
 
 <!-- Runs synchronously before first paint: decides whether this load plays the
@@ -48,7 +49,7 @@ const { cards } = Astro.props;
   }
 </style>
 
-<div class="constellation" id="constellation">
+<div class:list={['constellation', { soft }]} id="constellation">
   <div class="cnst-bg" aria-hidden="true"></div>
   <div class="cnst-grain" aria-hidden="true"></div>
 
@@ -59,58 +60,66 @@ const { cards } = Astro.props;
         <p class="subline">Always a work in progress</p>
       </div>
 
-      <div class="field" id="cnst-field">
-        {
-          cards.map((card) => (
-            <a class="card" href={card.href} data-cat={card.cat} aria-label={card.title}>
-              <span class="face front">
-                <span class="body">
-                  <span class="title">{card.title}</span>
-                  <span class="reveal">
-                    <span class="desc">{card.desc}</span>
-                    <span class="meta">{card.meta}</span>
+      {
+        !soft && (
+          <div class="field" id="cnst-field">
+            {cards.map((card) => (
+              <a class="card" href={card.href} data-cat={card.cat} aria-label={card.title}>
+                <span class="face front">
+                  <span class="body">
+                    <span class="title">{card.title}</span>
+                    <span class="reveal">
+                      <span class="desc">{card.desc}</span>
+                      <span class="meta">{card.meta}</span>
+                    </span>
                   </span>
                 </span>
-              </span>
-            </a>
-          ))
-        }
-      </div>
+              </a>
+            ))}
+          </div>
+        )
+      }
     </div>
   </div>
 
-  <p class="hint" id="cnst-hint">Drag to explore · scroll anywhere</p>
+  {
+    !soft && (
+      <>
+        <p class="hint" id="cnst-hint">Drag to explore · scroll anywhere</p>
 
-  <nav class="cnst-nav" id="cnst-nav" aria-label="Filter the constellation">
-    <button class="navdot" type="button" id="cnst-navdot" aria-label="Show everything">
-      <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
-        <mask id="navdot-o">
-          <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
-          <circle cx="50" cy="50" r="14" fill="#000" />
-        </mask>
-        <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
-      </svg>
-    </button>
-    <span class="navlinks">
-      <a href="/writing/" data-cat="writing">Writing</a>
-      <a href="/experiments/" data-cat="experiment">Experiments</a>
-      <a href="/about/" data-cat="about">About</a>
-    </span>
-  </nav>
+        <nav class="cnst-nav" id="cnst-nav" aria-label="Filter the constellation">
+          <button class="navdot" type="button" id="cnst-navdot" aria-label="Show everything">
+            <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
+              <mask id="navdot-o">
+                <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
+                <circle cx="50" cy="50" r="14" fill="#000" />
+              </mask>
+              <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
+            </svg>
+          </button>
+          <span class="navlinks">
+            <a href="/writing/" data-cat="writing">Writing</a>
+            <a href="/experiments/" data-cat="experiment">Experiments</a>
+            <a href="/about/" data-cat="about">About</a>
+          </span>
+        </nav>
 
-  <!-- In-place detail overlay: a card expands into this panel over the live canvas.
-       Content is fetched from the real route; the URL updates via History API. -->
-  <div class="cnst-overlay" id="cnst-overlay" hidden>
-    <div class="cnst-scrim" id="cnst-scrim"></div>
-    <div class="cnst-panel" id="cnst-panel" role="dialog" aria-modal="true" tabindex="-1">
-      <button class="cnst-close" id="cnst-close" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-      </button>
-      <div class="cnst-panel-scroll" id="cnst-panel-scroll"></div>
-    </div>
-  </div>
+        <!-- In-place detail overlay: a card expands into this panel over the live canvas.
+             Content is fetched from the real route; the URL updates via History API. -->
+        <div class="cnst-overlay" id="cnst-overlay" hidden>
+          <div class="cnst-scrim" id="cnst-scrim"></div>
+          <div class="cnst-panel" id="cnst-panel" role="dialog" aria-modal="true" tabindex="-1">
+            <button class="cnst-close" id="cnst-close" type="button" aria-label="Close">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </button>
+            <div class="cnst-panel-scroll" id="cnst-panel-scroll"></div>
+          </div>
+        </div>
+      </>
+    )
+  }
 </div>
 
 <style>
@@ -532,6 +541,12 @@ const { cards } = Astro.props;
     transform: scale(1.06);
   }
 
+  /* Soft presence — mark + tagline only, locked to the viewport centre. */
+  .constellation.soft.ready .viewport {
+    cursor: default;
+    touch-action: auto;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .constellation.ready .card { transition: none !important; }
     .cnst-panel.animate,
@@ -554,7 +569,21 @@ const { cards } = Astro.props;
   const vp = document.getElementById('cnst-vp');
   const canvas = document.getElementById('cnst-canvas');
   const field = document.getElementById('cnst-field');
-  if (root && vp && canvas && field) init(root, vp, canvas, field);
+
+  // Soft presence: centre the mark, reveal the tagline, skip the card canvas.
+  if (root?.classList.contains('soft')) {
+    root.classList.add('ready');
+    const intro = document.documentElement.classList.contains('cnst-intro');
+    const subline = document.querySelector('.subline');
+    if (!intro) {
+      subline?.classList.add('in');
+    } else {
+      setTimeout(() => subline?.classList.add('in'), TAGLINE_AT);
+      try { sessionStorage.setItem('cnst-entered', '1'); } catch (e) {}
+    }
+  } else if (root && vp && canvas && field) {
+    init(root, vp, canvas, field);
+  }
 
   function init(root: HTMLElement, vp: HTMLElement, canvas: HTMLElement, field: HTMLElement) {
     const cards: Card[] = [...field.querySelectorAll<HTMLElement>('.card')].map((el) => {

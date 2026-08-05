@@ -4,7 +4,7 @@ description: A systems-oriented approach to staying calm — treating maturity a
 topic: reflections
 tags: [mindfulness, systems, philosophy]
 date: 2026-05-15
-status: published
+status: draft
 format: article
 ---
 

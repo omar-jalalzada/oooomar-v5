@@ -3,7 +3,7 @@ title: Cursor Field
 description: A grid of particles that orient and brighten toward the cursor — a study in presence and proximity on canvas.
 tags: [canvas, interaction, generative]
 date: 2026-06-05
-status: published
+status: draft
 prototype: cursor-field
 ---
 
