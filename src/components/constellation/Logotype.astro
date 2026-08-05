@@ -1,6 +1,9 @@
 ---
-/* The self-constructing OMAR logotype. Lifted from explore/constellation/v4.
-   Fill/stroke use the accent token; the mark assembles block-by-block on load. */
+/* The OMAR logotype with the "left-to-right reveal" entrance (explore/logo-reveal v1):
+   the O scales up dead-center, then the whole mark slides left as M·A·R reveal in a
+   single left-to-right sweep — each bar growing from its left edge and fading up in sync.
+   Fill/stroke use the accent token. Static (full mark, no motion) without JS or when
+   the entrance has already played this session / reduced motion is requested. */
 interface Props {
   /** When true, the mark animates in on load. Static (instant) otherwise. */
   animate?: boolean;
@@ -16,25 +19,25 @@ const { animate = false } = Astro.props;
   xmlns="http://www.w3.org/2000/svg"
 >
   <g class="blocks">
-    <rect class="blk" x="1491" y="631" width="69" height="163"></rect>
-    <rect class="blk" x="450" y="631" width="254" height="233"></rect>
-    <rect class="blk" x="714" y="631" width="103" height="233"></rect>
-    <path class="blk" d="M817 631L866 690.744V864L817 804.256 817 631Z"></path>
-    <path class="blk" d="M915 631L866 690.744V864L915 804.256 915 631Z"></path>
-    <rect class="blk" x="915" y="631" width="103" height="233"></rect>
-    <rect class="blk" x="1031" y="631" width="122" height="233"></rect>
-    <rect class="blk" x="1319" y="631" width="103" height="233"></rect>
-    <rect class="blk" x="1203" y="631" width="103" height="233"></rect>
-    <path class="blk" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"></path>
-    <rect class="blk" x="1134" y="631" width="69" height="90"></rect>
-    <rect class="blk" x="1422" y="631" width="69" height="90"></rect>
-    <rect class="blk" x="1134" y="709" width="69" height="85"></rect>
-    <rect class="blk" x="1422" y="721" width="69" height="73"></rect>
-    <path class="blk" d="M1421 792H1516L1560 864H1471L1421 792Z"></path>
+    <rect class="blk r" x="1491" y="631" width="69" height="163"></rect>
+    <rect class="blk o" x="450" y="631" width="254" height="233"></rect>
+    <rect class="blk m" x="714" y="631" width="103" height="233"></rect>
+    <path class="blk m" d="M817 631L866 690.744V864L817 804.256 817 631Z"></path>
+    <path class="blk m" d="M915 631L866 690.744V864L915 804.256 915 631Z"></path>
+    <rect class="blk m" x="915" y="631" width="103" height="233"></rect>
+    <rect class="blk m" x="1031" y="631" width="122" height="233"></rect>
+    <rect class="blk r" x="1319" y="631" width="103" height="233"></rect>
+    <rect class="blk a" x="1203" y="631" width="103" height="233"></rect>
+    <path class="blk a" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"></path>
+    <rect class="blk a" x="1134" y="631" width="69" height="90"></rect>
+    <rect class="blk r" x="1422" y="631" width="69" height="90"></rect>
+    <rect class="blk a" x="1134" y="709" width="69" height="85"></rect>
+    <rect class="blk r" x="1422" y="721" width="69" height="73"></rect>
+    <path class="blk r" d="M1421 792H1516L1560 864H1471L1421 792Z"></path>
   </g>
-  <circle class="eye" cx="574" cy="747" r="24"></circle>
-  <circle class="eye" cx="1169" cy="734" r="24"></circle>
-  <circle class="eye" cx="1469" cy="734" r="24"></circle>
+  <circle class="eye eye-o" cx="574" cy="747" r="24"></circle>
+  <circle class="eye eye-a" cx="1169" cy="734" r="24"></circle>
+  <circle class="eye eye-r" cx="1469" cy="734" r="24"></circle>
 </svg>
 
 <style>
@@ -53,59 +56,111 @@ const { animate = false } = Astro.props;
   .eye {
     fill: var(--color-surface);
   }
-
-  /* assemble: each modular block grows into place, left to right */
-  .omar-mark.animate .blk {
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: bottom;
-    transform: translateY(40px) scaleY(0.7);
-  }
-  .omar-mark.animate.play .blk {
-    animation: blk-assemble 0.72s cubic-bezier(0.34, 1.4, 0.5, 1) forwards;
-    animation-delay: calc(0.2s + var(--i, 0) * 0.045s);
-  }
-  @keyframes blk-assemble {
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-  .omar-mark.animate .eye {
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: center;
-    transform: scale(0);
-  }
-  .omar-mark.animate.play .eye {
-    animation: eye-pop 0.55s cubic-bezier(0.34, 1.4, 0.5, 1) 1.05s forwards;
-  }
-  @keyframes eye-pop {
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .omar-mark.animate .blk,
-    .omar-mark.animate .eye {
-      opacity: 1;
-      transform: none;
-      animation: none;
-    }
-  }
 </style>
 
 <script>
-  // Order the blocks left-to-right so the mark builds across, then play.
+  // ─── The left-to-right reveal (explore/logo-reveal v1, "Left-to-right reveal").
+  // The mark parks off-center so the O sits dead-center, scales the O up from
+  // half-size, then slides the whole mark left while M·A·R sweep in from their
+  // left edges, ordered by horizontal position. Hidden states are applied in JS
+  // so the mark renders fully without JS (progressive enhancement).
   const mark = document.querySelector<SVGSVGElement>('.omar-mark.animate');
-  if (mark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const blks = [...mark.querySelectorAll<SVGGraphicsElement>('.blk')];
-    blks
-      .map((b) => ({ b, x: b.getBBox().x }))
-      .sort((a, c) => a.x - c.x)
-      .forEach((o, i) => o.b.style.setProperty('--i', String(i)));
-    requestAnimationFrame(() => mark.classList.add('play'));
+  // The intro flag is set synchronously before paint (Constellation's is:inline
+  // script), already accounting for reduced motion and return visits — read it
+  // directly so the mark and the cards stay in lockstep with no sessionStorage race.
+  const intro = document.documentElement.classList.contains('cnst-intro');
+
+  if (mark && intro) {
+    const E = 'cubic-bezier(.2,.75,.2,1)';
+    const SP = 'cubic-bezier(.34,1.4,.5,1)'; // springy overshoot
+    const SLIDE = 'cubic-bezier(.22,1,.36,1)'; // smooth cinematic settle
+
+    // O-glyph center sits at ~14.12% of the rendered mark width (viewBox 403..1635,
+    // O center ≈ x577). Shifting right by (0.5 − 0.1412) puts the O at screen center.
+    const O_OFFSET = '35.88%';
+
+    const oBlk = [...mark.querySelectorAll<SVGGraphicsElement>('.blk.o')];
+    const marBars = [...mark.querySelectorAll<SVGGraphicsElement>('.blk.m, .blk.a, .blk.r')];
+    const eyeO = mark.querySelector<SVGGraphicsElement>('.eye-o')!;
+    const eyeA = mark.querySelector<SVGGraphicsElement>('.eye-a')!;
+    const eyeR = mark.querySelector<SVGGraphicsElement>('.eye-r')!;
+
+    // measure horizontal position (left edge) of every MAR bar + the A/R eyes,
+    // for ordering the left-to-right sweep
+    const xMap = new Map<SVGGraphicsElement, number>();
+    let lo = Infinity, hi = -Infinity;
+    marBars.forEach((el) => {
+      const x = el.getBBox().x;
+      xMap.set(el, x);
+      lo = Math.min(lo, x);
+      hi = Math.max(hi, x);
+    });
+    [eyeA, eyeR].forEach((el) => xMap.set(el, el.getBBox().x));
+    const sweepDelay = (el: SVGGraphicsElement, start: number, spread: number) =>
+      start + ((xMap.get(el)! - lo) / (hi - lo)) * spread;
+
+    // hidden initial state
+    mark.style.transition = 'none';
+    mark.style.transform = `translateX(${O_OFFSET})`;
+    [eyeO, eyeA, eyeR].forEach((el) => {
+      el.style.transformBox = 'fill-box';
+      el.style.transformOrigin = 'center';
+      el.style.transform = 'scale(0)';
+      el.style.opacity = '0';
+    });
+    oBlk.forEach((el) => {
+      el.style.transformBox = 'fill-box';
+      el.style.transformOrigin = 'center';
+      el.style.transform = 'scale(.5)';
+      el.style.opacity = '0';
+    });
+    marBars.forEach((el) => {
+      el.style.transformBox = 'fill-box';
+      el.style.transformOrigin = 'left center';
+      el.style.transform = 'scaleX(0)';
+      el.style.opacity = '0';
+    });
+
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        // the O scales up from half-size, dead-center
+        oBlk.forEach((el) => {
+          el.style.transition = `opacity 420ms ${E}, transform 580ms ${SP}`;
+          el.style.opacity = '1';
+          el.style.transform = 'scale(1)';
+        });
+        // the O's counter opens as it settles
+        setTimeout(() => {
+          eyeO.style.transition = `opacity 300ms ${E}, transform 380ms ${SP}`;
+          eyeO.style.opacity = '1';
+          eyeO.style.transform = 'scale(1)';
+        }, 360);
+
+        // the whole mark slides left to its final, centered position
+        const SLIDE_AT = 620;
+        setTimeout(() => {
+          mark.style.transition = `transform 880ms ${SLIDE}`;
+          mark.style.transform = 'translateX(0)';
+        }, SLIDE_AT);
+
+        // …and M·A·R sweep in left-to-right, each bar growing from its left edge
+        const SWEEP_AT = SLIDE_AT + 40, SWEEP = 760, REV = 460;
+        marBars.forEach((el) => {
+          const d = sweepDelay(el, SWEEP_AT, SWEEP);
+          el.style.transition = `opacity ${REV}ms ${E} ${d}ms, transform ${REV}ms ${E} ${d}ms`;
+          el.style.opacity = '1';
+          el.style.transform = 'scaleX(1)';
+        });
+        // the A and R counters pop just behind their bars
+        [eyeA, eyeR].forEach((el) => {
+          const d = sweepDelay(el, SWEEP_AT, SWEEP) + 200;
+          setTimeout(() => {
+            el.style.transition = `opacity 260ms ${E}, transform 340ms ${SP}`;
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1)';
+          }, d);
+        });
+      })
+    );
   }
 </script>

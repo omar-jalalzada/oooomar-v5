@@ -4,7 +4,7 @@ description: A short note — what taste actually is, and why it can't be downlo
 topic: reflections
 tags: [taste, craft]
 date: 2026-06-12
-status: published
+status: draft
 format: note
 ---
 

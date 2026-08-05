@@ -3,7 +3,7 @@ title: Spring
 description: A spring-physics playground — click to launch the dot, drag stiffness and damping, and feel the difference between values.
 tags: [motion, interaction, physics]
 date: 2026-06-10
-status: published
+status: draft
 prototype: spring
 ---
 

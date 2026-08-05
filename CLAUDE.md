@@ -1,6 +1,6 @@
 # Omar's personal site
 
-Personal site for Omar Jalalzada: design leadership writing, reflections, interactive Lab
+Personal site for Omar Jalalzada: design leadership writing, reflections, interactive
 experiments, and a head-of-design portfolio. Wireframe-level MVP first; brand/visual identity
 comes later as its own phase.
 
@@ -16,7 +16,7 @@ comes later as its own phase.
 
 - **Screenshot API (dev — verify your UI)**: a screenshot endpoint is available while
   `npm run dev` is running at `GET /api/screenshot?view=<path>` (e.g. `view=/` for the home
-  canvas, `view=/writing/<slug>/` for a detail page, or `prototype=<name>` for a Lab). It returns
+  canvas, `view=/writing/<slug>/` for a detail page, or `prototype=<name>` for an experiment). It returns
   a PNG. **Always use it after building or changing UI to confirm the page actually renders
   correctly** — don't guess from the code. Save and inspect it, e.g.
   `curl -s "http://localhost:4321/api/screenshot?view=/" -o /tmp/shot.png` then read the image.
@@ -29,9 +29,13 @@ comes later as its own phase.
 - **Drafts**: content with `status: draft` renders in dev, is excluded from production builds.
   Use `getVisible()` from `src/lib/content.ts` for all collection queries — never raw
   `getCollection()` in pages (the RSS feed is the one exception, it filters explicitly).
-- **Labs**: a lab = self-contained static folder `public/prototypes/<slug>/index.html` (no build
-  step, no external deps) + a metadata entry `src/content/labs/<slug>.md` whose `prototype` field
-  names the folder.
+- **Soft presence**: while `SOFT_PRESENCE_ENABLED` is true in `src/lib/soft-presence.ts`,
+  production builds (omar.build) show only the OMAR mark + tagline. `npm run dev` always shows
+  the full site so you can keep iterating. Reopen by setting the flag to `false` and publishing
+  the content you want live.
+- **Experiments**: an experiment = self-contained static folder `public/prototypes/<slug>/index.html`
+  (no build step, no external deps) + a metadata entry `src/content/experiments/<slug>.md` whose
+  `prototype` field names the folder.
 - **Tools**: prefer well-known tools with deep community and AI training data (Astro, React)
   over niche ones.
 - `site` in `astro.config.mjs` is a placeholder until the real domain is connected in Vercel.
@@ -71,7 +75,7 @@ comes later as its own phase.
 - `public/explore/<concept>/<version>/` is the deliberately-public "making of" record — the
   design sketchbook, showing the iteration behind the site. It ships (this is intentional; Omar
   wants it browsable) and is **separate from `public/prototypes/`** (which is the finished,
-  shipped Labs).
+  shipped Experiments).
 - **Never overwrite an iteration.** Each pass is a new `vN/` folder; `explore/<concept>/index.html`
   redirects to the latest. The journey is the point.
 - These are throwaway-style static HTML (fast motion prototypes). The *winning* concept gets

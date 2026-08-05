@@ -4,7 +4,7 @@ description: Why the best design leaders act like midfielders — playmakers in 
 topic: design-leadership
 tags: [people-management, design-ops, org-design]
 date: 2026-06-01
-status: published
+status: draft
 format: article
 ---
 

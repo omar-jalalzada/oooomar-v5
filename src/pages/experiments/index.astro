@@ -1,27 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { LabsGrid } from '../../components/ui/LabsGrid';
+import { ExperimentsGrid } from '../../components/ui/ExperimentsGrid';
 import { getVisible, byDateDesc } from '../../lib/content';
 import { formatDate } from '../../lib/format';
+import { SOFT_PRESENCE } from '../../lib/soft-presence';
 
-const labs = (await getVisible('labs')).sort(byDateDesc);
+if (SOFT_PRESENCE) return Astro.redirect('/');
 
-const cards = labs.map((lab) => ({
-  href: `/labs/${lab.id}/`,
-  title: lab.data.title,
-  description: lab.data.description,
-  meta: formatDate(lab.data.date),
-  draft: lab.data.status === 'draft',
+const experiments = (await getVisible('experiments')).sort(byDateDesc);
+
+const cards = experiments.map((experiment) => ({
+  href: `/experiments/${experiment.id}/`,
+  title: experiment.data.title,
+  description: experiment.data.description,
+  meta: formatDate(experiment.data.date),
+  draft: experiment.data.status === 'draft',
 }));
 ---
 
 <Base
-  title="Labs — Omar Jalalzada"
+  title="Experiments — Omar Jalalzada"
   description="Interactive experiments and prototypes — visually captivating, boundary-pushing, AI-native creative work."
 >
-  <h1>Labs</h1>
+  <h1>Experiments</h1>
   <p class="intro">Interactive experiments. Each one is a self-contained prototype you can open full screen.</p>
-  <LabsGrid client:visible {cards} />
+  <ExperimentsGrid client:visible {cards} />
 </Base>
 
 <style>

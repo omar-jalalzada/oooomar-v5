@@ -3,7 +3,7 @@ import Logotype from './Logotype.astro';
 
 export interface ConstellationCard {
   href: string;
-  cat: 'writing' | 'lab' | 'about';
+  cat: 'writing' | 'experiment' | 'about';
   slug: string;
   title: string;
   desc: string;
@@ -13,9 +13,43 @@ interface Props {
   cards: ConstellationCard[];
 }
 const { cards } = Astro.props;
+const soft = cards.length === 0;
 ---
 
-<div class="constellation" id="constellation">
+<!-- Runs synchronously before first paint: decides whether this load plays the
+     intro (first visit, motion allowed) and flags <html> so CSS can hide the cards
+     and the mark from frame one — no flash of the static grid or the full logotype.
+     The class is the single source of truth both entrance scripts read, so there's
+     no race with sessionStorage. -->
+<script is:inline>
+  (function () {
+    try {
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var entered = sessionStorage.getItem('cnst-entered') === '1';
+      if (!reduce && !entered) document.documentElement.classList.add('cnst-intro');
+    } catch (e) {}
+  })();
+</script>
+
+<!-- Inline + global so it's guaranteed in effect at the very first paint (no scoping,
+     no dev style-injection lag): during the intro everything is hidden except the
+     mark, which is parked so the O sits centered. The reveal script animates the O in
+     first, then M·A·R, then the cards/nav deal in — nothing flashes beforehand. -->
+<style is:inline>
+  html.cnst-intro .constellation:not(.ready) .card,
+  html.cnst-intro .constellation:not(.ready) .cnst-nav,
+  html.cnst-intro .constellation:not(.ready) .hint,
+  html.cnst-intro .constellation:not(.ready) .subline,
+  html.cnst-intro .omar-mark .blk,
+  html.cnst-intro .omar-mark .eye {
+    opacity: 0;
+  }
+  html.cnst-intro .omar-mark {
+    transform: translateX(35.88%);
+  }
+</style>
+
+<div class:list={['constellation', { soft }]} id="constellation">
   <div class="cnst-bg" aria-hidden="true"></div>
   <div class="cnst-grain" aria-hidden="true"></div>
 
@@ -26,13 +60,12 @@ const { cards } = Astro.props;
         <p class="subline">Always a work in progress</p>
       </div>
 
-      <div class="field" id="cnst-field">
-        {
-          cards.map((card) => (
-            <a class="card" href={card.href} data-cat={card.cat} aria-label={card.title}>
-              <span class="flipper">
+      {
+        !soft && (
+          <div class="field" id="cnst-field">
+            {cards.map((card) => (
+              <a class="card" href={card.href} data-cat={card.cat} aria-label={card.title}>
                 <span class="face front">
-                  <span class="thumb" aria-hidden="true" />
                   <span class="body">
                     <span class="title">{card.title}</span>
                     <span class="reveal">
@@ -41,41 +74,52 @@ const { cards } = Astro.props;
                     </span>
                   </span>
                 </span>
-                <span class="face back" aria-hidden="true">
-                  <span class="omark" />
-                </span>
-              </span>
-            </a>
-          ))
-        }
-      </div>
+              </a>
+            ))}
+          </div>
+        )
+      }
     </div>
   </div>
 
-  <p class="hint" id="cnst-hint">Drag to explore · scroll anywhere</p>
+  {
+    !soft && (
+      <>
+        <p class="hint" id="cnst-hint">Drag to explore · scroll anywhere</p>
 
-  <nav class="cnst-nav" id="cnst-nav" aria-label="Filter the constellation">
-    <button class="navdot" type="button" id="cnst-navdot" aria-label="Show everything"></button>
-    <span class="navlinks">
-      <a href="/writing/" data-cat="writing">Writing</a>
-      <a href="/labs/" data-cat="lab">Lab</a>
-      <a href="/about/" data-cat="about">About</a>
-    </span>
-  </nav>
+        <nav class="cnst-nav" id="cnst-nav" aria-label="Filter the constellation">
+          <button class="navdot" type="button" id="cnst-navdot" aria-label="Show everything">
+            <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
+              <mask id="navdot-o">
+                <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
+                <circle cx="50" cy="50" r="14" fill="#000" />
+              </mask>
+              <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
+            </svg>
+          </button>
+          <span class="navlinks">
+            <a href="/writing/" data-cat="writing">Writing</a>
+            <a href="/experiments/" data-cat="experiment">Experiments</a>
+            <a href="/about/" data-cat="about">About</a>
+          </span>
+        </nav>
 
-  <!-- In-place detail overlay: a card expands into this panel over the live canvas.
-       Content is fetched from the real route; the URL updates via History API. -->
-  <div class="cnst-overlay" id="cnst-overlay" hidden>
-    <div class="cnst-scrim" id="cnst-scrim"></div>
-    <div class="cnst-panel" id="cnst-panel" role="dialog" aria-modal="true" tabindex="-1">
-      <button class="cnst-close" id="cnst-close" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-      </button>
-      <div class="cnst-panel-scroll" id="cnst-panel-scroll"></div>
-    </div>
-  </div>
+        <!-- In-place detail overlay: a card expands into this panel over the live canvas.
+             Content is fetched from the real route; the URL updates via History API. -->
+        <div class="cnst-overlay" id="cnst-overlay" hidden>
+          <div class="cnst-scrim" id="cnst-scrim"></div>
+          <div class="cnst-panel" id="cnst-panel" role="dialog" aria-modal="true" tabindex="-1">
+            <button class="cnst-close" id="cnst-close" type="button" aria-label="Close">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </button>
+            <div class="cnst-panel-scroll" id="cnst-panel-scroll"></div>
+          </div>
+        </div>
+      </>
+    )
+  }
 </div>
 
 <style>
@@ -87,16 +131,7 @@ const { cards } = Astro.props;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background:
-      radial-gradient(56% 50% at 36% 32%, rgba(255, 214, 170, 0.22), transparent 70%),
-      radial-gradient(50% 50% at 66% 40%, rgba(196, 184, 255, 0.22), transparent 70%),
-      radial-gradient(58% 56% at 52% 74%, rgba(168, 214, 255, 0.26), transparent 72%),
-      var(--color-bg);
-    animation: cnst-wash 22s ease-in-out infinite;
-  }
-  @keyframes cnst-wash {
-    0%, 100% { filter: saturate(1); transform: scale(1); }
-    50% { filter: saturate(1.08); transform: scale(1.03); }
+    background: var(--color-bg);
   }
   .cnst-grain {
     position: fixed;
@@ -124,6 +159,20 @@ const { cards } = Astro.props;
     color: var(--color-ink-secondary);
     text-wrap: balance;
   }
+  /* tagline reveal — lands just after the logotype settles (JS-driven, so it
+     stays visible without JS) */
+  .constellation.ready .subline {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .constellation.ready .subline.in {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .constellation.ready .subline { opacity: 1; transform: none; transition: none; }
+  }
 
   /* card */
   .card {
@@ -131,7 +180,6 @@ const { cards } = Astro.props;
     color: inherit;
     border-radius: var(--radius-card);
   }
-  .flipper { display: block; }
   .face {
     border-radius: var(--radius-card);
     overflow: hidden;
@@ -141,17 +189,8 @@ const { cards } = Astro.props;
     border: 0.5px solid var(--color-hairline);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: var(--space-4);
-  }
-  .thumb {
-    display: block;
-    align-self: stretch;
-    flex-shrink: 0;
-    height: var(--thumb, 120px);
-    margin-bottom: var(--space-4);
-    border: 0.5px solid var(--color-hairline);
-    border-radius: var(--radius-card);
   }
   .body { display: flex; flex-direction: column; }
   .title {
@@ -187,36 +226,9 @@ const { cards } = Astro.props;
     color: var(--color-ink-tertiary);
     font-variant-numeric: tabular-nums;
   }
-  .back {
-    background: #f4f3fa;
-    border: 0.5px solid var(--color-hairline);
-    align-items: center;
-    justify-content: center;
-  }
-  .omark {
-    position: relative;
-    display: block;
-    width: 24px;
-    height: 24px;
-    background: var(--color-accent);
-    border-radius: 5px;
-    opacity: 0.85;
-  }
-  .omark::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #f4f3fa;
-    transform: translate(-50%, -50%);
-  }
-
   /* per-category hover glow (set in CSS, not JS) */
   .card[data-cat='writing'] { --glow: rgba(60, 70, 180, 0.5); }
-  .card[data-cat='lab'] { --glow: rgba(10, 90, 255, 0.5); }
+  .card[data-cat='experiment'] { --glow: rgba(10, 90, 255, 0.5); }
   .card[data-cat='about'] { --glow: rgba(194, 100, 40, 0.5); }
 
   /* ============ static fallback (no JS) — readable grid ============ */
@@ -240,9 +252,7 @@ const { cards } = Astro.props;
     width: 100%;
   }
   .constellation:not(.ready) .card { position: static; }
-  .constellation:not(.ready) .flipper { transform: none; }
-  .constellation:not(.ready) .face { position: relative; backface-visibility: visible; }
-  .constellation:not(.ready) .back { display: none; }
+  .constellation:not(.ready) .face { position: relative; }
   .constellation:not(.ready) .hint { display: none; }
   .constellation:not(.ready) .cnst-nav {
     position: static;
@@ -292,10 +302,11 @@ const { cards } = Astro.props;
     height: var(--ch, 206px);
     margin-left: calc(var(--cw, 260px) / -2);
     margin-top: calc(var(--ch, 206px) / -2);
-    perspective: 1500px;
     opacity: 0;
     transform: translateY(20px) scale(0.97);
-    transition: transform 0.55s cubic-bezier(0.34, 1.28, 0.4, 1), opacity 0.5s ease,
+    /* smooth, non-overshoot ease so the hover scale (and the title inside it) glides
+       instead of bouncing; duration matches the reveal so everything settles together */
+    transition: transform 0.5s cubic-bezier(0.2, 0.75, 0.2, 1), opacity 0.5s ease,
       box-shadow 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
     box-shadow: 0 2px 6px rgba(40, 40, 90, 0.05), 0 28px 64px -44px rgba(60, 70, 180, 0.2);
   }
@@ -316,59 +327,54 @@ const { cards } = Astro.props;
   }
   .constellation.ready .card:hover {
     z-index: 60;
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 2px 6px rgba(40, 40, 90, 0.18), 0 50px 92px -34px var(--glow);
+    transform: translateY(-7px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(40, 40, 90, 0.2), 0 64px 110px -30px var(--glow);
   }
 
-  .constellation.ready .flipper {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-    transform: rotateY(180deg);
-    transition: transform 0.78s cubic-bezier(0.62, 0.04, 0.22, 1);
-  }
-  .constellation.ready .card.up .flipper { transform: rotateY(0deg); }
   .constellation.ready .face {
     position: absolute;
     inset: 0;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
   }
-  .constellation.ready .back { transform: rotateY(180deg); }
 
-  /* reveal-on-hover (canvas only) */
+  /* reveal-on-hover (canvas only). The container ONLY opens vertical space, on a
+     single clean ease-out — this is what raises the title. It carries no transform of
+     its own, so the title's rise is monotonic (no overshoot). The lines inside then
+     stagger in on top of it (see .desc / .meta below). */
   .constellation.ready .reveal {
     max-height: 0;
-    opacity: 0;
     overflow: hidden;
-    transform: translateY(4px);
-    transition: max-height 0.42s cubic-bezier(0.2, 0.75, 0.2, 1), opacity 0.36s ease,
-      transform 0.42s ease;
+    /* static top padding — clipped at max-height:0, so it can't jump on open */
+    padding-top: var(--space-2);
+    transition: max-height 0.5s cubic-bezier(0.2, 0.75, 0.2, 1);
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
   }
   .constellation.ready .card:hover .reveal {
-    max-height: 140px;
-    opacity: 1;
-    transform: none;
-    padding-top: var(--space-2);
+    /* tuned to the real content height (≈2-line desc + meta), not an arbitrary large
+       value — so the space opens over the full duration and the title settles cleanly */
+    max-height: 80px;
   }
 
-  /* on hover the thumbnail slides up out of the frame, freeing the full card
-     height for the title + description + meta */
-  .constellation.ready .thumb {
-    transition: height 0.44s cubic-bezier(0.2, 0.75, 0.2, 1),
-      margin-bottom 0.44s cubic-bezier(0.2, 0.75, 0.2, 1),
-      opacity 0.3s ease, transform 0.44s cubic-bezier(0.2, 0.75, 0.2, 1);
-  }
-  .constellation.ready .card:hover .thumb {
-    height: 0;
-    margin-bottom: 0;
+  /* description + tag rise and fade in one after another, behind the title —
+     so the card resolves in sequence: title → description → tag */
+  .constellation.ready .desc,
+  .constellation.ready .meta {
     opacity: 0;
-    border-width: 0;
-    transform: translateY(-8px);
+    transform: translateY(6px);
+    transition: opacity 0.34s ease, transform 0.42s cubic-bezier(0.2, 0.75, 0.2, 1);
   }
+  .constellation.ready .card:hover .desc {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.14s;
+  }
+  .constellation.ready .card:hover .meta {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.26s;
+  }
+
   /* static mode: reveal always visible (no hover) */
   .constellation:not(.ready) .reveal {
     display: flex;
@@ -424,12 +430,21 @@ const { cards } = Astro.props;
     width: 40px;
     height: 40px;
     border: none;
-    border-radius: 50%;
+    background: none;
+    padding: 0;
     flex-shrink: 0;
     cursor: pointer;
-    background: radial-gradient(circle at 35% 30%, #4d78ff, var(--color-accent));
-    box-shadow: 0 2px 8px -2px rgba(20, 40, 120, 0.5);
+    display: grid;
+    place-items: center;
   }
+  .navdot-mark {
+    width: 30px;
+    height: 30px;
+    display: block;
+    transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .navdot:hover .navdot-mark { transform: scale(1.08); }
+  .navdot:active .navdot-mark { transform: scale(0.94); }
   .navlinks { display: flex; align-items: center; }
   .constellation.ready .navlinks {
     max-width: 0;
@@ -477,7 +492,7 @@ const { cards } = Astro.props;
     right: 0;
     top: var(--space-8);
     bottom: 0;
-    width: min(52rem, 100%);
+    width: min(62rem, 100%);
     margin-inline: auto;
     background: var(--color-surface);
     border: 0.5px solid var(--color-hairline);
@@ -491,12 +506,17 @@ const { cards } = Astro.props;
   .cnst-panel.animate {
     transition: transform 0.46s cubic-bezier(0.22, 0.78, 0.28, 1), opacity 0.3s ease;
   }
+  /* close: a quick, snappy slide straight down off the bottom — no rewind to the
+     origin card */
+  .cnst-panel.closing {
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease 0.04s;
+  }
 
   .cnst-panel-scroll {
     height: 100%;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: var(--space-16) var(--space-8) var(--space-24);
+    padding: var(--space-16) var(--space-16) var(--space-24);
   }
 
   .cnst-close {
@@ -521,22 +541,27 @@ const { cards } = Astro.props;
     transform: scale(1.06);
   }
 
+  /* Soft presence — mark + tagline only, locked to the viewport centre. */
+  .constellation.soft.ready .viewport {
+    cursor: default;
+    touch-action: auto;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .cnst-bg { animation: none; }
-    .constellation.ready .card,
-    .constellation.ready .flipper { transition: none !important; }
-    .cnst-panel.animate { transition: opacity 0.2s ease; }
+    .constellation.ready .card { transition: none !important; }
+    .cnst-panel.animate,
+    .cnst-panel.closing { transition: opacity 0.2s ease; }
   }
 </style>
 
 <script>
-  type Card = { el: HTMLElement; cat: string; big: boolean; w: number; h: number; thumb: number; x: number; y: number };
+  type Card = { el: HTMLElement; cat: string; big: boolean; w: number; h: number; x: number; y: number };
 
   // baked-in values dialled in on the v4 prototype
   const RX = 330, RY = 300, GAP = 40;
-  const DEAL_BASE = 1350, DEAL_STAG = 65, FLIP_BASE = 2500, FLIP_STAG = 90;
+  const DEAL_BASE = 1350, DEAL_STAG = 65, TAGLINE_AT = 1550;
   // Uniform card size — a neat, even frame around the logomark.
-  const CW = 264, CH = 204, THUMB = 108;
+  const CW = 264, CH = 204;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let rafId = 0;
@@ -544,14 +569,27 @@ const { cards } = Astro.props;
   const vp = document.getElementById('cnst-vp');
   const canvas = document.getElementById('cnst-canvas');
   const field = document.getElementById('cnst-field');
-  if (root && vp && canvas && field) init(root, vp, canvas, field);
+
+  // Soft presence: centre the mark, reveal the tagline, skip the card canvas.
+  if (root?.classList.contains('soft')) {
+    root.classList.add('ready');
+    const intro = document.documentElement.classList.contains('cnst-intro');
+    const subline = document.querySelector('.subline');
+    if (!intro) {
+      subline?.classList.add('in');
+    } else {
+      setTimeout(() => subline?.classList.add('in'), TAGLINE_AT);
+      try { sessionStorage.setItem('cnst-entered', '1'); } catch (e) {}
+    }
+  } else if (root && vp && canvas && field) {
+    init(root, vp, canvas, field);
+  }
 
   function init(root: HTMLElement, vp: HTMLElement, canvas: HTMLElement, field: HTMLElement) {
     const cards: Card[] = [...field.querySelectorAll<HTMLElement>('.card')].map((el) => {
       el.style.setProperty('--cw', CW + 'px');
       el.style.setProperty('--ch', CH + 'px');
-      el.style.setProperty('--thumb', THUMB + 'px');
-      return { el, cat: el.dataset.cat || 'writing', big: false, w: CW, h: CH, thumb: THUMB, x: 0, y: 0 };
+      return { el, cat: el.dataset.cat || 'writing', big: false, w: CW, h: CH, x: 0, y: 0 };
     });
 
     // upgrade to canvas mode
@@ -667,16 +705,21 @@ const { cards } = Astro.props;
       hint?.classList.add('show');
       setTimeout(() => hint?.classList.remove('show'), 4200);
     }
-    // Play the full entrance only once per session. On return visits (navigating
-    // back from a detail page) jump straight to the final state — no replay.
-    const entered = sessionStorage.getItem('cnst-entered') === '1';
-    if (reduce || entered) {
-      cards.forEach((c) => c.el.classList.add('in', 'up'));
+    // Play the full entrance only once per session. The intro flag is set
+    // synchronously before paint (see the is:inline script) and is the single
+    // source of truth — absent on return visits / reduced motion, where we jump
+    // straight to the final state with no replay.
+    const intro = document.documentElement.classList.contains('cnst-intro');
+    const subline = document.querySelector('.subline');
+    if (!intro) {
+      cards.forEach((c) => c.el.classList.add('in'));
+      subline?.classList.add('in');
       showChrome();
     } else {
       const order = [...cards].sort((a, b) => Math.hypot(a.x, a.y) - Math.hypot(b.x, b.y));
       order.forEach((c, i) => setTimeout(() => c.el.classList.add('in'), DEAL_BASE + i * DEAL_STAG));
-      order.forEach((c, i) => setTimeout(() => c.el.classList.add('up'), FLIP_BASE + i * FLIP_STAG));
+      // tagline lands just after the logotype reveal settles
+      setTimeout(() => subline?.classList.add('in'), TAGLINE_AT);
       setTimeout(showChrome, DEAL_BASE + 200);
       sessionStorage.setItem('cnst-entered', '1');
     }
@@ -725,7 +768,7 @@ const { cards } = Astro.props;
       let open = false;
       let originCard: HTMLElement | null = null;
 
-      const isDetailPath = (p: string) => /^\/(writing|labs|about)\/[^/]+\/?$/.test(p);
+      const isDetailPath = (p: string) => /^\/(writing|experiments|about)\/[^/]+\/?$/.test(p);
 
       function fetchDetail(href: string): Promise<string> {
         if (!cache.has(href)) {
@@ -768,7 +811,7 @@ const { cards } = Astro.props;
         overlay.hidden = false;
 
         // start from the card's position, then settle to rest
-        panel.classList.remove('animate');
+        panel.classList.remove('animate', 'closing');
         panel.style.transform = 'none';
         panel.style.opacity = '0';
         scrim.style.opacity = '0';
@@ -788,16 +831,18 @@ const { cards } = Astro.props;
         open = false;
         document.body.style.overflow = '';
         document.title = homeTitle;
-        panel.classList.add('animate');
+        // snappy slide straight down off the bottom (not a rewind to the card)
+        panel.classList.remove('animate');
+        panel.classList.add('closing');
         scrim.style.opacity = '0';
-        if (!reduce && originCard) panel.style.transform = cardTransform(originCard);
+        if (!reduce) panel.style.transform = 'translateY(100%)';
         panel.style.opacity = '0';
 
         const done = () => {
           if (open) return; // re-opened in the meantime
           overlay.hidden = true;
           scroll.innerHTML = '';
-          panel.classList.remove('animate');
+          panel.classList.remove('animate', 'closing');
           panel.style.transform = 'none';
         };
         let fired = false;

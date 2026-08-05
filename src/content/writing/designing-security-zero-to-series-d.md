@@ -4,7 +4,7 @@ description: What building a design function inside a cybersecurity startup taug
 topic: design-leadership
 tags: [cybersecurity, org-design, business-outcomes, scaling]
 date: 2026-06-15
-status: published
+status: draft
 format: article
 cover: /images/writing/zero-to-series-d.svg
 coverAlt: An abstract grid ascending in stages, suggesting growth from seed to scale.

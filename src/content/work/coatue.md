@@ -6,5 +6,5 @@ role: Product Designer
 period: ""
 tags: [fintech, data, systems]
 order: 4
-status: published
+status: draft
 ---
