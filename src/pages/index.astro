@@ -1,54 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
-import Constellation from '../components/constellation/Constellation.astro';
-import { getVisible, byDateDesc } from '../lib/content';
-import { formatDate, topicLabels } from '../lib/format';
-import { SOFT_PRESENCE } from '../lib/soft-presence';
-
-const writing = SOFT_PRESENCE ? [] : (await getVisible('writing')).sort(byDateDesc);
-const experiments = SOFT_PRESENCE ? [] : (await getVisible('experiments')).sort(byDateDesc);
-const aboutEntries = SOFT_PRESENCE ? [] : (await getVisible('about')).sort(byDateDesc);
-
-const writingCards = writing.map((p) => ({
-  href: `/writing/${p.id}/`,
-  cat: 'writing' as const,
-  slug: p.id,
-  title: p.data.title,
-  desc: p.data.description,
-  meta: `${topicLabels[p.data.topic]} · ${formatDate(p.data.date)}`,
-}));
-
-const experimentCards = experiments.map((l) => ({
-  href: `/experiments/${l.id}/`,
-  cat: 'experiment' as const,
-  slug: l.id,
-  title: l.data.title,
-  desc: l.data.description,
-  meta: `Prototype · ${formatDate(l.data.date)}`,
-}));
-
-const aboutCards = aboutEntries.map((a) => ({
-  href: a.data.href ?? `/about/${a.id}/`,
-  cat: 'about' as const,
-  slug: a.id,
-  title: a.data.title,
-  desc: a.data.description,
-  meta: a.data.meta ?? '',
-}));
-
-const cards = [...writingCards, ...experimentCards, ...aboutCards];
+import BarField from '../components/barfield/BarField.astro';
 ---
 
 <Base
   title="Omar Jalalzada"
-  description="Omar Jalalzada — Head of Design at Sublime Security. Always a work in progress."
+  description="Omar Jalalzada — Head of Design at Sublime Security. work in progress."
   immersive
 >
-  <!-- Legible to search engines & screen readers; the visual identity is the canvas below. -->
+  <!-- Legible to search engines & screen readers; the visual identity is the field below,
+       which is a canvas and says nothing on its own. The tagline inside it is aria-hidden
+       so this is the single copy of both. -->
   <header class="sr-only">
     <h1>Omar Jalalzada</h1>
-    <p>Always a work in progress.</p>
+    <p>work in progress.</p>
   </header>
 
-  <Constellation cards={cards} />
+  <BarField />
 </Base>
