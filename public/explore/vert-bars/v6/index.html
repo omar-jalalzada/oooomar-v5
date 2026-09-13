@@ -1,0 +1,3151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>vert-bars v5 — OMAR letters in Z space (vgpu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #140c16;
+    color: #f4f0f5;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+  .stage { position: fixed; inset: 0; }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  /* A claimed letter is a handle, so say so. Set on the stage rather than the body so
+     the dial panel keeps its own cursors. */
+  .stage.grabbable { cursor: grab; }
+  .stage.grabbing { cursor: grabbing; }
+  #gl { z-index: 1; }
+  #hud { z-index: 2; pointer-events: none; }
+
+  /* ── Tagline ──
+     Real type, not bars. At 310 columns a column is about 4.6px wide, so a
+     lowercase letter at tagline size would get two or three of them — one or two
+     lit bars, nothing legible. Scanning it would mean letters wide enough to be a
+     second wordmark. So the field is the mark and this is the voice beside it.
+     Everything about its position is set per frame from the same numbers that
+     place the letters, because the mark shifts left when the dial panel is open. */
+  .tagline {
+    position: absolute; left: 0; top: 0; z-index: 3;
+    display: flex; align-items: center; gap: 1.15em;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    white-space: nowrap;
+    /* The instrument's own yellow rather than a neutral white. Plain white read as
+       browser default text laid over a designed thing; this is the same colour as the
+       detection frames and the gauges, so the tagline belongs to the same machine.
+       Held well below full strength from JS so it reads as quiet rather than as chrome. */
+    color: #f0d24a;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  /* Tracking is applied after the last letter too, so the text box is one space wider
+     than its ink and the two flanking rules would come out unequal. The cancelling
+     negative margin is set from JS next to the tracking itself, because the tracking is
+     no longer a constant — it opens on the kick. */
+  .tagline .txt { flex: 0 0 auto; }
+  /* A dimension line rather than an underline: it spans the wordmark's exact width and
+     is ticked at each end, so it measures the mark instead of merely sitting beneath it.
+     That's the geometric tie a centred line on the same axis never had. */
+  .tagline .rule {
+    flex: 1 1 auto; height: 1px; background: currentColor; position: relative;
+  }
+  .tagline .rule::before {
+    content: ''; position: absolute; top: -4.5px; width: 1px; height: 10px;
+    background: currentColor;
+  }
+  .tagline .rule:first-child::before { left: 0; }
+  .tagline .rule:last-child::before { right: 0; }
+
+  .badge {
+    position: fixed; left: 20px; bottom: 20px; z-index: 3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+  .badge .fps { color: rgba(255,210,120,0.85); }
+
+  .fallback {
+    position: fixed; inset: 0; z-index: 10;
+    display: none; place-content: center;
+    padding: 40px; text-align: center;
+  }
+  .fallback.show { display: grid; }
+  .fallback .inner { max-width: 46ch; margin: 0 auto; }
+  .fallback h2 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+  .fallback p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.6); }
+  .fallback code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: rgba(255,210,120,0.9);
+  }
+  .fallback a { color: #ff7ac8; }
+
+  /* ── Dial panel ── */
+  .panel-toggle {
+    position: fixed; right: 16px; bottom: 16px; z-index: 5;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.72);
+  }
+  .panel-toggle:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+
+  /* Stacked above the dials toggle rather than beside it, so the two pills never
+     collide when their labels change width. */
+  .sound-toggle {
+    position: fixed; right: 16px; bottom: 58px; z-index: 5;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.72);
+  }
+  .sound-toggle:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+  .sound-toggle[aria-pressed="true"] {
+    border-color: rgba(255,122,200,0.55); color: #ff9bd6;
+  }
+
+  .dials {
+    position: fixed; top: 16px; right: 16px; z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .dials h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,210,120,0.9);
+    margin-bottom: 4px;
+  }
+  .dials .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+  .group { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .group .title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 6px 10px; align-items: center; margin-bottom: 8px;
+  }
+  .row label { font-size: 12px; color: rgba(255,255,255,0.78); }
+  .row .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255,210,120,0.95);
+    min-width: 3.4ch; text-align: right;
+  }
+  .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: #ff7ac8; }
+  .toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px;
+  }
+  .toggle input { accent-color: #ff7ac8; width: 16px; height: 16px; }
+  .reset {
+    margin-top: 12px; width: 100%;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.75);
+  }
+  .reset:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; }
+  .actions .reset { margin-top: 0; flex: 1; width: auto; }
+
+  body.panel-closed .dials {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="gl"></canvas>
+    <canvas id="hud"></canvas>
+    <div class="tagline" id="tagline"><i class="rule"></i><span class="txt" id="taglineTxt">work in progress</span><i class="rule"></i></div>
+  </div>
+
+  <div class="badge">explore / vert-bars / v6 · <span id="mode">z-space</span> · <span class="fps" id="fps">—</span></div>
+
+  <div class="fallback" id="fallback">
+    <div class="inner">
+      <h2>This one needs WebGPU</h2>
+      <p>
+        v5 runs on <a href="https://vgpu.sh/">vgpu</a>, so it needs a browser with WebGPU
+        (Chrome/Edge 113+, Safari 18+). The canvas version still runs everywhere —
+        try <a href="../v2/">v2</a>.
+      </p>
+      <p style="margin-top:12px"><code id="fallback-detail"></code></p>
+    </div>
+  </div>
+
+  <button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true">Hide dials</button>
+
+  <aside class="dials" id="dials">
+    <h1>Bar field dials</h1>
+    <div class="sub">crisp at rest · alive on contact</div>
+
+    <div class="group">
+      <div class="title">Depth</div>
+      <div class="row">
+        <label for="zSpread">Z spread</label><span class="val" data-for="zSpread"></span>
+        <input id="zSpread" type="range" min="0" max="1.5" step="0.01" value="1.50" />
+      </div>
+      <div class="row">
+        <label for="parallax">Parallax</label><span class="val" data-for="parallax"></span>
+        <input id="parallax" type="range" min="0" max="1.5" step="0.01" value="1.50" />
+      </div>
+      <div class="row">
+        <label for="driftSpeed">Drift speed</label><span class="val" data-for="driftSpeed"></span>
+        <input id="driftSpeed" type="range" min="0" max="2" step="0.01" value="1.21" />
+      </div>
+      <div class="row">
+        <label for="depthFade">Depth fade</label><span class="val" data-for="depthFade"></span>
+        <input id="depthFade" type="range" min="0" max="1" step="0.01" value="1.00" />
+      </div>
+      <div class="row">
+        <label for="idleLife">Idle life</label><span class="val" data-for="idleLife"></span>
+        <input id="idleLife" type="range" min="0" max="1" step="0.01" value="0" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Focus</div>
+      <div class="row">
+        <label for="focusScale">Focus scale</label><span class="val" data-for="focusScale"></span>
+        <input id="focusScale" type="range" min="1" max="3" step="0.01" value="2.46" />
+      </div>
+      <div class="row">
+        <label for="spaceGap">Spread gap</label><span class="val" data-for="spaceGap"></span>
+        <input id="spaceGap" type="range" min="0" max="140" step="1" value="0" />
+      </div>
+      <div class="row">
+        <label for="spaceScale">Letter scale</label><span class="val" data-for="spaceScale"></span>
+        <input id="spaceScale" type="range" min="0.5" max="1" step="0.01" value="1.00" />
+      </div>
+      <div class="row">
+        <label for="spaceDepth">Depth breathe</label><span class="val" data-for="spaceDepth"></span>
+        <input id="spaceDepth" type="range" min="0" max="0.7" step="0.01" value="0.32" />
+      </div>
+      <div class="row">
+        <label for="spaceFloat">Float</label><span class="val" data-for="spaceFloat"></span>
+        <input id="spaceFloat" type="range" min="0" max="48" step="1" value="26" />
+      </div>
+      <div class="row">
+        <label for="spaceWave">Other wave</label><span class="val" data-for="spaceWave"></span>
+        <input id="spaceWave" type="range" min="0" max="1" step="0.01" value="0.34" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Motion</div>
+      <div class="row">
+        <label for="shimmer">Stroke shimmer</label><span class="val" data-for="shimmer"></span>
+        <input id="shimmer" type="range" min="0" max="1.5" step="0.01" value="0.81" />
+      </div>
+      <div class="row">
+        <label for="flow">Flow speed</label><span class="val" data-for="flow"></span>
+        <input id="flow" type="range" min="0" max="3" step="0.01" value="1.10" />
+      </div>
+      <div class="row">
+        <label for="restCalm">Rest calm</label><span class="val" data-for="restCalm"></span>
+        <input id="restCalm" type="range" min="0" max="1" step="0.01" value="0.85" />
+      </div>
+      <div class="row">
+        <label for="snap">Snap back</label><span class="val" data-for="snap"></span>
+        <input id="snap" type="range" min="0" max="1" step="0.01" value="0.50" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Density</div>
+      <div class="row">
+        <label for="cols">Columns</label><span class="val" data-for="cols"></span>
+        <input id="cols" type="range" min="40" max="480" step="2" value="246" />
+      </div>
+      <div class="row">
+        <label for="barWidth">Bar width</label><span class="val" data-for="barWidth"></span>
+        <input id="barWidth" type="range" min="0.15" max="0.95" step="0.01" value="0.53" />
+      </div>
+      <div class="row">
+        <label for="gapNoise">Gap noise</label><span class="val" data-for="gapNoise"></span>
+        <input id="gapNoise" type="range" min="0" max="1" step="0.01" value="0" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Bloom</div>
+      <div class="row">
+        <label for="bloomThreshold">Threshold</label><span class="val" data-for="bloomThreshold"></span>
+        <input id="bloomThreshold" type="range" min="0" max="1.2" step="0.01" value="0.38" />
+      </div>
+      <div class="row">
+        <label for="bloomRadius">Radius</label><span class="val" data-for="bloomRadius"></span>
+        <input id="bloomRadius" type="range" min="0" max="10" step="0.05" value="6.40" />
+      </div>
+      <div class="row">
+        <label for="bloomAmount">Amount</label><span class="val" data-for="bloomAmount"></span>
+        <input id="bloomAmount" type="range" min="0" max="4" step="0.01" value="1.24" />
+      </div>
+      <div class="row">
+        <label for="exposure">Exposure</label><span class="val" data-for="exposure"></span>
+        <input id="exposure" type="range" min="0.4" max="3" step="0.01" value="1.35" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Shape</div>
+      <div class="row">
+        <label for="logoScale">Logo scale</label><span class="val" data-for="logoScale"></span>
+        <input id="logoScale" type="range" min="0.3" max="1.5" step="0.01" value="0.60" />
+      </div>
+      <div class="row">
+        <label for="threshold">Threshold</label><span class="val" data-for="threshold"></span>
+        <input id="threshold" type="range" min="0.05" max="0.95" step="0.01" value="0.55" />
+      </div>
+      <div class="row">
+        <label for="edgeJitter">Edge jitter</label><span class="val" data-for="edgeJitter"></span>
+        <input id="edgeJitter" type="range" min="0" max="60" step="0.5" value="12" />
+      </div>
+      <div class="row">
+        <label for="blobWarp">Blob warp</label><span class="val" data-for="blobWarp"></span>
+        <input id="blobWarp" type="range" min="0" max="1" step="0.01" value="0.44" />
+      </div>
+      <div class="row">
+        <label for="warpSpeed">Warp speed</label><span class="val" data-for="warpSpeed"></span>
+        <input id="warpSpeed" type="range" min="0" max="2" step="0.01" value="0.85" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Color / HUD</div>
+      <div class="row">
+        <label for="hue">Hue</label><span class="val" data-for="hue"></span>
+        <input id="hue" type="range" min="240" max="400" step="1" value="307" />
+      </div>
+      <div class="row">
+        <label for="sat">Saturation</label><span class="val" data-for="sat"></span>
+        <input id="sat" type="range" min="0" max="100" step="1" value="88" />
+      </div>
+      <div class="row">
+        <label for="coreGlow">White core</label><span class="val" data-for="coreGlow"></span>
+        <input id="coreGlow" type="range" min="0" max="2" step="0.01" value="0.90" />
+      </div>
+      <div class="toggle">
+        <label for="hudOn">Hover HUD</label>
+        <input id="hudOn" type="checkbox" checked />
+      </div>
+      <div class="toggle">
+        <label for="animate">Animate</label>
+        <input id="animate" type="checkbox" checked />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Sound</div>
+      <div class="row">
+        <label for="volume">Volume</label><span class="val" data-for="volume"></span>
+        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.86" />
+      </div>
+      <div class="row">
+        <label for="tempo">Tempo</label><span class="val" data-for="tempo"></span>
+        <input id="tempo" type="range" min="90" max="140" step="1" value="115" />
+      </div>
+      <div class="row">
+        <label for="grit">Grit</label><span class="val" data-for="grit"></span>
+        <input id="grit" type="range" min="0" max="1" step="0.01" value="0.10" />
+      </div>
+      <div class="row">
+        <label for="punch">Drum weight</label><span class="val" data-for="punch"></span>
+        <input id="punch" type="range" min="0.3" max="1.3" step="0.01" value="0.80" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="reset" id="copyDials" type="button">Copy dials</button>
+      <button class="reset" id="reset" type="button">Reset dials</button>
+    </div>
+  </aside>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">Sound off</button>
+
+<script type="module">
+/* ─────────────────────────────────────────────────────────
+ * vert-bars v5 — the four letters get their own depth.
+ *
+ * v3 rendered OMAR as one signed-distance field. Here it's split into four
+ * independent letters, each with its own z, drift, rotation and brightness.
+ * At rest they converge on the exact logotype — the presentation layer. The
+ * moment you move the pointer they separate into depth, and the letter under
+ * the cursor is pulled forward, agitates, and shows its detection frame.
+ *
+ * TWO STATES, ONE NUMBER
+ *
+ * `activity` runs 0 → 1 and separates what the field does at rest from what it
+ * does under the pointer. At rest the word has to read as OMAR, so everything
+ * that moves the *silhouette* — edge jitter, punched gaps, the fbm warp — is
+ * scaled down to almost nothing by `agit`. The life at rest lives entirely
+ * *inside* the strokes: energy travelling up each bar, modulating brightness and
+ * the white core while the bar's ends stay exactly where the SDF put them.
+ * Under the pointer `agit` opens up, the letters spread into depth, and the HUD
+ * frames link into one structure. Both directions are fast, and engagement is
+ * keyed to whether the pointer is actually on a letter rather than to a "moved
+ * recently" timer — hold still over a letter and it stays claimed, slide off and
+ * the whole thing snaps back to the logotype inside half a second.
+ *
+ * ONE LETTER TAKES THE STAGE
+ *
+ * Hovering doesn't just brighten a letter, it opens the word up. The claimed letter
+ * expands where it stands; the other three hold the baseline and slide away from it
+ * — left of it goes further left, right of it goes further right — far enough to
+ * clear the room it needs, plus a widening gap per step so the word breathes apart
+ * rather than just shuffling over. They stay linked to it by lines radiating from
+ * its centre, and only the claimed letter carries a readout; the rest are there to
+ * describe the space, not to be read.
+ *
+ * The set is re-centred after the shifts are worked out. Without that, claiming an
+ * outer letter walks the whole word off one side, because the shifts for letters at
+ * the ends are all in one direction.
+ *
+ * Nothing goes anywhere, but nothing is still either: each of the other letters
+ * travels in and out of depth on the spot, on its own period, with size and depth
+ * moving together so it reads as distance rather than as arbitrary growth. Because
+ * they cross in depth, the four layers are composited in depth order rather than
+ * summed — summing makes an overlap read as "brighter", the exact opposite of
+ * "behind".
+ *
+ * The pointer tests against `restRect`, each letter's slot in the *settled* word,
+ * never against where it currently is. Hit-testing the live box would mean
+ * claiming a letter moves it out from under the cursor, which drops the hover,
+ * which springs it back — an oscillation with no stable state. So the intact
+ * wordmark is the control surface and the spacing is purely the response.
+ *
+ * WHERE DEPTH LIVES
+ *
+ * The CPU owns it. Every frame it computes each letter's { z, scale, offset,
+ * rotation, dim, hover } and hands those to the shader as uniforms. The HUD
+ * reads the *same* numbers, so the boxes track the letters exactly instead of
+ * re-deriving a transform that could drift out of sync.
+ *
+ * Parallax flips sign across the focal plane: letters in front of it slide one
+ * way with the pointer, letters behind it the other. That opposition is what
+ * sells the Z more than scale alone.
+ *
+ * Splitting one SDF into four is close to free — each letter only evaluates its
+ * own blocks, so the total primitive count is unchanged from v3.
+ *
+ * PASS CHAIN (one command buffer per frame)
+ *
+ *   field    → hdr      rgba16float, full res   four letter layers, additive
+ *   bright   → bloomA   half res                luminance threshold
+ *   blurH    → bloomB   half res                separable gaussian, x
+ *   blurV    → bloomA   half res                separable gaussian, y
+ *   composite→ surface                          hdr + bloom, tone mapped
+ *
+ * vgpu.js is a vendored esbuild bundle of the npm `vgpu` package, so this
+ * folder stays self-contained like every other explore sketch:
+ *
+ *   npx esbuild node_modules/vgpu/dist/index.js \
+ *     --bundle --format=esm --minify --outfile=public/explore/vert-bars/v5/vgpu.js
+ * ───────────────────────────────────────────────────────── */
+
+import { init, effect, frameLoop, sampler, surface, target, clock } from './vgpu.js';
+
+// ── shared WGSL: noise, SDF primitives ─────────────────────────────────────
+const COMMON = /* wgsl */`
+fn hash11(n: f32) -> f32 { return fract(sin(n * 127.1) * 43758.5453); }
+fn hash21(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
+
+fn vnoise(p: vec2f) -> f32 {
+  let i = floor(p);
+  let f = fract(p);
+  let u = f * f * (3.0 - 2.0 * f);
+  let a = hash21(i);
+  let b = hash21(i + vec2f(1.0, 0.0));
+  let c = hash21(i + vec2f(0.0, 1.0));
+  let d = hash21(i + vec2f(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+fn fbm(p: vec2f) -> f32 {
+  var v = 0.0;
+  var amp = 0.5;
+  var q = p;
+  for (var i = 0; i < 4; i = i + 1) {
+    v = v + amp * vnoise(q);
+    q = q * 2.03;
+    amp = amp * 0.5;
+  }
+  return v;
+}
+
+fn sdBox(p: vec2f, c: vec2f, h: vec2f) -> f32 {
+  let d = abs(p - c) - h;
+  return length(max(d, vec2f(0.0))) + min(max(d.x, d.y), 0.0);
+}
+
+// Signed distance to a half-plane through pt with unit outward normal n —
+// negative inside. max() over several of these is an exact field for a convex
+// wedge, and that is how the notches get cut out of the M and the R.
+//
+// The letters used to be built by min()-ing abutting boxes and quads together,
+// which is only a correct distance field *outside* the union. At an internal seam
+// where two pieces merely touch, min() measures the distance to the phantom
+// shared edge, so the field dips to zero along a line the letterform doesn't
+// actually have — and the bar field dutifully antialiases a dark break into every
+// stroke crossing it. The R showed it worst: three of its four seams had no
+// overlap at all, and the horizontal one cut clean across the letter.
+//
+// Cutting instead of adding fixes it by construction: a notch's edges are real
+// edges, so every zero in the field belongs to the letter. Each half-plane whose
+// line continues on through the interior is paired with another constraint that
+// is strongly positive there, so the wedge closes before the line can do damage.
+fn sdHalf(q: vec2f, pt: vec2f, n: vec2f) -> f32 {
+  return dot(q - pt, n);
+}
+
+// The A bowl: a box whose top-right corner is a 60u arc centred at (1246, 691).
+fn sdABowl(q: vec2f) -> f32 {
+  let lo = vec2f(1186.0, 631.0);
+  let hi = vec2f(1306.0, 864.0);
+  var d = sdBox(q, (lo + hi) * 0.5, (hi - lo) * 0.5);
+  let c = vec2f(1246.0, 691.0);
+  if (q.x > c.x && q.y < c.y) { d = length(q - c) - 60.0; }
+  return d;
+}
+
+// ── the logotype, one function per letter, in viewBox units (403 624 1232 281)
+fn sdO(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(577.0, 747.5), vec2f(127.0, 116.5));
+  return max(d, -(length(q - vec2f(574.0, 747.0)) - 24.0));
+}
+
+// One block, three notches. The diagonals all share the direction (49, 59.744),
+// so every normal here is that vector's perpendicular, +/- on each axis.
+fn sdM(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(866.0, 747.5), vec2f(152.0, 116.5));
+  // The valley in the top edge: the wedge lying above both diagonals, apex where
+  // they cross at (866, 690.744).
+  d = max(d, -max(sdHalf(q, vec2f(817.0, 631.0), vec2f(-0.773098,  0.634159)),
+                  sdHalf(q, vec2f(915.0, 631.0), vec2f( 0.773098,  0.634159))));
+  // The two notches cut up from the baseline either side of the V's foot. Each is
+  // bounded by a diagonal parallel to the one above it, and by the inner edge of
+  // its own stem — which is what stops the wedge swallowing the stem as well.
+  d = max(d, -max(sdHalf(q, vec2f(817.0, 804.256), vec2f( 0.773098, -0.634159)),
+                  sdHalf(q, vec2f(817.0, 747.5),   vec2f(-1.0, 0.0))));
+  d = max(d, -max(sdHalf(q, vec2f(915.0, 804.256), vec2f(-0.773098, -0.634159)),
+                  sdHalf(q, vec2f(915.0, 747.5),   vec2f( 1.0, 0.0))));
+  return d;
+}
+
+// The full-height bar at x 1031..1153 is the A's left stroke, even though the
+// source SVG classes it as an M block — grouping it with the M made the M's
+// frame reach into the A, and the two boxes overlap by 19 units.
+fn sdA(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(1092.0, 747.5), vec2f(61.0, 116.5));
+  d = min(d, sdBox(q, vec2f(1254.5, 747.5), vec2f(51.5, 116.5)));
+  d = min(d, sdBox(q, vec2f(1168.5, 676.0), vec2f(34.5, 45.0)));
+  d = min(d, sdBox(q, vec2f(1168.5, 751.5), vec2f(34.5, 42.5)));
+  d = min(d, sdABowl(q));
+  return max(d, -(length(q - vec2f(1169.0, 734.0)) - 24.0));
+}
+
+// The R was four boxes and a quad; everything above y=794 turns out to tile one
+// solid rectangle exactly, so the whole letter is that block with two notches
+// taken out below the bowl — one either side of the leg — and the counter punched
+// through. Both notches are bounded above by the bowl's underside at y=794, which
+// is also what keeps each leg edge from cutting on up through the bowl.
+fn sdR(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(1439.5, 747.5), vec2f(120.5, 116.5));
+  // Between the stem and the leg's leading edge.
+  d = max(d, -max(max(sdHalf(q, vec2f(1421.0, 792.0), vec2f( 0.821373, -0.570398)),
+                      sdHalf(q, vec2f(1422.0, 747.5), vec2f(-1.0, 0.0))),
+                      sdHalf(q, vec2f(1439.5, 794.0), vec2f( 0.0, -1.0))));
+  // The shelf outboard of the leg, under the bowl's right shoulder.
+  d = max(d, -max(sdHalf(q, vec2f(1516.0, 792.0), vec2f(-0.853371, 0.521449)),
+                  sdHalf(q, vec2f(1439.5, 794.0), vec2f( 0.0, -1.0))));
+  return max(d, -(length(q - vec2f(1469.0, 734.0)) - 24.0));
+}
+
+fn hsl2rgb(h: f32, s: f32, l: f32) -> vec3f {
+  let hp = fract(h / 360.0) * 6.0;
+  let c = (1.0 - abs(2.0 * l - 1.0)) * s;
+  let x = c * (1.0 - abs(hp - 2.0 * floor(hp / 2.0) - 1.0));
+  var rgb = vec3f(0.0);
+  if (hp < 1.0) { rgb = vec3f(c, x, 0.0); }
+  else if (hp < 2.0) { rgb = vec3f(x, c, 0.0); }
+  else if (hp < 3.0) { rgb = vec3f(0.0, c, x); }
+  else if (hp < 4.0) { rgb = vec3f(0.0, x, c); }
+  else if (hp < 5.0) { rgb = vec3f(x, 0.0, c); }
+  else { rgb = vec3f(c, 0.0, x); }
+  return rgb + (l - c * 0.5);
+}
+`;
+
+// ── pass 1: the bar field, four letter layers ──────────────────────────────
+const FIELD_WGSL = /* wgsl */`
+struct P {
+  resX: f32, resY: f32,
+  time: f32,
+  cols: f32,
+  barWidth: f32,
+  gapNoise: f32,
+  logoScale: f32,
+  threshold: f32,
+  edgeJitter: f32,
+  blobWarp: f32,
+  warpSpeed: f32,
+  hue: f32,
+  sat: f32,
+  shimmer: f32,
+  coreGlow: f32,
+  mouseX: f32,
+  mouseY: f32,
+  offX: f32,
+  flow: f32,
+  // How much the silhouette is allowed to deform right now: near 0 while the
+  // field is at rest (crisp letterforms), 1 while you're interacting with it.
+  agit: f32,
+  // ── the visualiser ──
+  // The strokes were always alive on a clock; these put them on the music's clock.
+  // mtime counts *beats*, not seconds, so every rate derived from it speeds up when
+  // the tempo does — which is the whole point: drag a letter up and the jitter
+  // quickens. It keeps counting with the sound off, so the field is never frozen.
+  mtime: f32,
+  // How much music there is to answer, 0..1, straight off the audio fade envelope.
+  // Everything reactive is mixed in by this, so with nothing playing the field looks
+  // exactly as it did before any of this existed.
+  mus: f32,
+  // Low-band transient envelope: fast up, slower down, so a kick lands as a hit.
+  pulse: f32,
+  // The mix split four ways, each as a *signed* deviation from its own recent
+  // average, -1..1. Columns pick a band by their own hash, so different strokes answer
+  // different parts of the track. Signed because a visualiser has to redistribute
+  // energy rather than add it: passing absolute levels lifted the whole letter's
+  // brightness by a third and closed up the A's counter.
+  bandLo: f32,
+  bandMid: f32,
+  bandHi: f32,
+  bandTop: f32,
+  // Tempo across its dial, 0..1. mtime already makes the tempo set the *rate* of
+  // everything; this lets it set the amount too, so dragging a letter up doesn't just
+  // move the jitter faster, it moves it further.
+  tempoN: f32,
+  // The share of the field's deformation the letters that aren't claimed take. See
+  // calmShare below.
+  spaceWave: f32,
+  // ── the redline ──
+  // How lit the party is, 0..1. Every term it touches is multiplied by it, so at zero
+  // this version renders identically to v5 and the easter egg costs the resting picture
+  // nothing at all.
+  rave: f32,
+}
+@group(0) @binding(0) var<uniform> p: P;
+
+// Per-letter transforms, computed on the CPU so the HUD can use the same
+// numbers. xy = screen offset in device px, z = scale, w = brightness.
+struct Letters {
+  o: vec4f,
+  m: vec4f,
+  a: vec4f,
+  r: vec4f,
+  rot: vec4f,
+  hover: vec4f,
+  // Signed depth per letter, used only to order the layers.
+  zs: vec4f,
+}
+@group(0) @binding(1) var<uniform> L: Letters;
+
+${COMMON}
+
+// How much of the field's deformation a letter takes. The claimed letter takes all of
+// it; the other three take spaceWave of it, because at full strength the warp and the
+// gap noise chew a small letter into pieces — the three that aren't the subject were
+// doing more waving than the one that was.
+//
+// Only their *shape* is calmed. The depth breath and the vertical float are position,
+// and both are untouched by this: the movement stays, the waving goes.
+//
+// Faded in by foc, how claimed anything is at all, so with nothing claimed every
+// letter is deformed exactly as it always was and the resting word is unchanged.
+fn calmShare(hov: f32, foc: f32) -> f32 {
+  return mix(1.0, mix(p.spaceWave, 1.0, hov), foc);
+}
+// Only the two deformations that carry time are calmed: the fbm warp, which is the big
+// slow undulation, and the gap noise, which is the travelling holes. Those are the
+// waving. The per-column edge jitter is static and stays at full, or the letters that
+// aren't claimed flatten into rectangles.
+
+// A column's slice of the mix, signed: positive where its band is louder than it has
+// lately been, negative where it's quieter. The four bands are spread across a 0..1
+// selector and read with interpolation, so neighbouring columns answer neighbouring
+// frequencies rather than snapping between them.
+//
+// Selected by the column's own hash, not by its position on screen. A left-to-right
+// ramp would have turned the mark into a literal EQ display; scattering it keeps the
+// field looking like the field it already was, and only its movement changes.
+fn bandAt(x: f32) -> f32 {
+  let fsel = clamp(x, 0.0, 1.0) * 3.0;
+  let i = i32(floor(fsel));
+  // var, not let: WGSL only allows a runtime index into addressable memory.
+  var b = array<f32, 4>(p.bandLo, p.bandMid, p.bandHi, p.bandTop);
+  return mix(b[i], b[min(i + 1, 3)], fsel - floor(fsel));
+}
+
+const VB_W: f32 = 1232.0;
+const VB_CX: f32 = 1019.0;
+const VB_CY: f32 = 764.5;
+
+// Screen point → one letter's local viewBox space.
+//
+// The scale is applied about the *composition* centre, not each letter's own
+// centre. That's the difference between a perspective projection and four
+// independently resized letters: a nearer letter grows AND is pushed further
+// out from the middle, so the word still reads as one word. Scaling each letter
+// in place instead just breaks the logotype's alignment.
+fn toLocal(samplePt: vec2f, centre: vec2f, s: f32, lp: vec4f, rot: f32, lc: vec2f) -> vec2f {
+  // Inverse of the forward transform the CPU projects the HUD rects with:
+  //   screen = centre + ((lc - VB_C) + (v - lc) * scale) * s + offset
+  // Each letter scales about its *own* centre and then translates freely, which
+  // is what lets one letter grow and take the middle while the rest scatter. The
+  // earlier version scaled about the composition centre, so growing a letter also
+  // flung it outward — fine for shallow perspective, useless for this.
+  let base = vec2f(lc.x - VB_CX, lc.y - VB_CY);
+  var q = lc + ((samplePt - centre - vec2f(lp.x, lp.y)) / s - base) / lp.z;
+  // Then a little roll about the letter's own centre, for character.
+  let ca = cos(rot);
+  let sa = sin(rot);
+  let d = q - lc;
+  return lc + vec2f(ca * d.x + sa * d.y, -sa * d.x + ca * d.y);
+}
+
+// Threshold, per-column end jitter and punched gaps — everything that moves the
+// silhouette. All of it scales with agit, so at rest the letterforms are crisp
+// and only come apart once you interact. Hovering a letter adds a fast extra
+// flicker on top, so it reads as agitated rather than just brighter.
+// lsc is the letter's on-screen scale, and every deformation is multiplied by
+// it. The amounts are all in screen pixels, so without this a letter shrunk to
+// half size takes twice the proportional damage and falls apart into clumps while
+// the big one beside it looks fine. Scaling by lsc means each letter is distorted
+// by the same fraction of itself — and the claimed letter, being larger than 1,
+// gets correspondingly more agitated, which is what you want anyway.
+fn perturb(dRaw: f32, col: f32, px: vec2f, res: vec2f, hov: f32, lsc: f32, cs: f32) -> f32 {
+  var d = dRaw - (0.5 - p.threshold) * res.y * 0.07;
+  // Not calmed by cs, unlike the two below. This one has no time in it at all: it's a
+  // fixed offset per column, so it can't wave — it's the ragged silhouette itself, and
+  // calming it just flattened the unclaimed letters into plain blocks.
+  d = d + (hash11(col * 1.7 + 3.1) - 0.5) * p.edgeJitter * p.agit * lsc;
+  // How much of this letter's movement the music is allowed to drive. Mostly the
+  // claimed letter, because that's the one being looked at, with a little left over
+  // for the other three so the word still reads as one picture.
+  let react = p.mus * max(hov, p.agit * 0.22);
+  if (hov > 0.01) {
+    // Re-rolled on musical subdivisions instead of on wall-clock — twelve to the
+    // beat, which is a 32nd-note flicker at any tempo. The *amount* is this column's
+    // own band plus the kick, mixed in by mus so that with nothing playing the
+    // expression collapses to the flat 1.0 it used to be.
+    // Ten re-rolls to the beat, which at the default 125bpm is 21Hz — near enough the
+    // flat 20Hz this used to run at that the look is the look it always had, and only
+    // its tie to the tempo is new. At the ends of the dial it's 15Hz and 23Hz.
+    let fl = hash11(col * 2.3 + floor(p.mtime * 10.0) * 0.37) - 0.5;
+    let driven = (0.88 + bandAt(hash11(col * 5.3 + 1.7)) * 0.85 + p.pulse * 0.55)
+               * (0.82 + p.tempoN * 0.42);
+    let amp = mix(1.0, driven, p.mus);
+    d = d + fl * hov * p.edgeJitter * 1.4 * lsc * amp;
+  }
+  if (p.gapNoise > 0.0) {
+    let g = vnoise(vec2f(col * 0.6, px.y / res.y * 26.0 + p.mtime * 0.3));
+    d = d + (1.0 - g) * p.gapNoise * res.y * 0.04 * p.agit * lsc * cs;
+  }
+  // The kick lengthens the strokes a touch. The only place the music moves the
+  // silhouette itself rather than what's happening inside it, so it stays small —
+  // enough to read as the field breathing on the beat, not enough to soften the
+  // letterform.
+  d = d - p.pulse * react * res.y * 0.008 * lsc;
+  return d;
+}
+
+// Returns premultiplied colour in rgb and the layer's coverage in a, so the
+// caller can composite the layers in depth order instead of just summing them.
+fn shadeLayer(dShape: f32, lp: vec4f, hov: f32, col: f32, colW: f32,
+              px: vec2f, cxpx: f32, res: vec2f) -> vec4f {
+  // Bar profile: rounded-box combine of the horizontal and shape distances,
+  // which is what gives the capsule ends.
+  let dx = abs(px.x - cxpx) - colW * 0.5 * p.barWidth;
+  let q2 = vec2f(dx, dShape);
+  let d = min(max(dx, dShape), 0.0) + length(max(q2, vec2f(0.0)));
+  let mask = 1.0 - smoothstep(-1.2, 1.2, d);
+  if (mask <= 0.002) { return vec4f(0.0); }
+
+  let depth = clamp(-dShape / (res.y * 0.06), 0.0, 1.0);
+  let colRand = hash11(col * 5.3 + 1.7);
+  let vgrad = clamp((px.y / res.y - 0.30) / 0.44, 0.0, 1.0);
+
+  // Energy travelling along the stroke. This is where the life lives now: it
+  // modulates brightness only, so the bar's ends stay exactly where the SDF put
+  // them and the letterform stays legible while its insides keep moving. Each
+  // column carries its own phase so neighbours don't pulse in lockstep.
+  let phase = colRand * 6.2832;
+  // Musical time, so the energy travelling along the strokes runs with the track. The
+  // coefficient is set so that around the default tempo this advances at roughly the
+  // rate the wall clock did, and the tempo dial moves it either side of that.
+  let t = p.mtime * 0.56 * p.flow;
+  let wave = sin(px.y / res.y * 10.0 - t * 2.2 + phase) * 0.5 + 0.5;
+  let grain = vnoise(vec2f(col * 0.4, px.y / res.y * 6.0 - t * 1.1));
+  let energy = mix(wave, grain, 0.55);
+  // Level, per column, per band — and signed, so a quiet band pulls its columns down
+  // exactly as far as a loud one pushes them up. That's what makes it read as metering
+  // rather than as the letter simply being turned up.
+  let react = p.mus * max(hov, p.agit * 0.22);
+  let lift = (0.60 + colRand * 0.46 + vgrad * 0.30)
+           * (1.0 + (energy - 0.5) * p.shimmer * 1.4)
+           * (1.0 + bandAt(colRand) * 0.5 * react + p.pulse * 0.22 * react)
+           // At the redline the bars simply burn brighter, and harder on every kick. This is
+           // where the party's light comes from rather than from exposure: raising exposure
+           // drives all three channels toward 1.0 through the tonemap and bleaches the hue,
+           // whereas brightening a saturated bar keeps its colour on the way up.
+           // Eased off on whichever letter is claimed. That one is already brightened twice
+           // over by hov, and at the redline it blew out to white in the middle — losing the
+           // rainbow on the one letter you are actually looking at.
+           * (1.0 + p.rave * (0.35 + p.pulse * 0.55) * (1.0 - hov * 0.55));
+
+  // ── the redline's colour ─────────────────────────────────────────────────
+  // Hue fanned *across* the field rather than swept globally. A single hue uniform
+  // cycling through the spectrum is a hue rotation, and a hue rotation reads as a filter
+  // laid over the picture — everything one colour at a time. Spreading it over the
+  // per-column hash instead builds the rainbow out of the same structure the visualiser
+  // already uses, so what has gone colourful is the field itself. The band term lets the
+  // music paint it, and the drift on musical time keeps it churning at a rate the tempo
+  // sets, which at this point is pegged.
+  // Mostly a sweep across the word, with per-column scatter on top. Picking each column's
+  // hue purely from its own hash was the first attempt and it read as coloured static, not
+  // as a rainbow — a rainbow is a gradient, and the eye wants to see the spectrum travel
+  // somewhere. The scatter keeps it from being a clean printed gradient, and the drift on
+  // musical time rolls the whole thing through the word at a rate the tempo sets.
+  let hueRave = p.rave * (px.x / res.x * 300.0 + colRand * 70.0
+                          + bandAt(colRand) * 40.0 + p.mtime * 26.0);
+
+  // Letters further back lose saturation as well as brightness — atmosphere. Saturation
+  // climbs hard while lit, which it has to: see the composite, where a per-channel
+  // reinhard desaturates whatever it brightens, so a party that only added light would
+  // have bleached out the exact colour it was trying to show.
+  let sat = clamp(p.sat / 100.0 * (0.55 + 0.45 * clamp(lp.w, 0.0, 1.0))
+                  + p.rave * 0.40, 0.0, 1.0);
+  // Lightness breathes on the kick. Deliberately a breath and not a strobe, and the
+  // sequencer keeps the kick on quarter notes even at the redline: four-on-the-floor at
+  // 140 is 2.3 flashes a second, which stays under the rate that makes full-field
+  // flashing a photosensitivity risk. Doubling the kick would have put it over.
+  var base = hsl2rgb(p.hue + hov * 16.0 + hueRave, sat,
+                     0.50 + colRand * 0.12 + p.rave * p.pulse * 0.10);
+  // Even out perceived brightness across the wheel while the rainbow is lit. HSL at a fixed
+  // lightness is nowhere near equally bright per hue — green and yellow carry several times
+  // the luminance of blue and violet — so a raw sweep reads as a lime field with occasional
+  // other colours in it. Pulling every hue toward a common luminance is the difference
+  // between a spectrum that looks chosen and one that looks computed. Partially, via the
+  // exponent: full normalisation multiplies blue by nearly six and it blooms into a smear.
+  let lum = max(dot(base, vec3f(0.2126, 0.7152, 0.0722)), 0.05);
+  base = mix(base, base * pow(0.45 / lum, 0.65), p.rave);
+  var outc = base * mask * max(lift, 0.0) * lp.w * (1.0 + hov * 0.5);
+
+  // The white core rides the same energy, so the bloom pulses along the strokes
+  // instead of sitting still.
+  let core = 1.0 - smoothstep(0.0, max(0.6, colW * 0.26 * p.barWidth), abs(px.x - cxpx));
+  outc = outc + vec3f(1.0) * core * mask * p.coreGlow * (0.45 + energy * 0.9)
+              * (0.35 + depth * 0.65) * lp.w * (1.0 + hov * 0.9)
+              * (1.0 + p.pulse * 0.45 * react);
+  return vec4f(outc, mask);
+}
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let res = vec2f(p.resX, p.resY);
+  let px = uv * res;
+
+  // Quantise x to a column — this alone is what turns a silhouette into bars.
+  // The grid stays fixed to the screen while the letters move behind it, which
+  // is what makes it read as a scanner rather than as striped artwork.
+  let cols = max(8.0, floor(p.cols));
+  let colW = res.x / cols;
+  let col = floor(px.x / colW);
+  let cxpx = (col + 0.5) * colW;
+
+  let s = (res.x * p.logoScale) / VB_W;
+
+  // Warp the sample point, not the geometry: the letters stay analytic. One noise
+  // field, but each letter takes its own share of the displacement — computing the
+  // noise once and scaling the result keeps this at two fbm lookups rather than eight.
+  let basePt = vec2f(cxpx, px.y);
+  var wv = vec2f(0.0);
+  let warp = p.blobWarp * p.agit;
+  if (warp > 0.001) {
+    let tw = p.time * p.warpSpeed;
+    let n1 = fbm(vec2f(cxpx / res.x * 3.2, px.y / res.y * 2.4) + vec2f(tw, tw * 0.7));
+    let n2 = fbm(vec2f(cxpx / res.x * 2.8 + 8.0, px.y / res.y * 3.1) + vec2f(tw * 0.8, tw));
+    wv = vec2f(n1 - 0.5, n2 - 0.5) * warp * res.y * 0.24;
+  }
+
+  // How claimed anything is at all, which is what fades the calming in and out.
+  let foc = max(max(L.hover.x, L.hover.y), max(L.hover.z, L.hover.w));
+  let cO = calmShare(L.hover.x, foc);
+  let cM = calmShare(L.hover.y, foc);
+  let cA = calmShare(L.hover.z, foc);
+  let cR = calmShare(L.hover.w, foc);
+
+  // Centre of the *visible* area, so the dial panel doesn't crop the mark.
+  let centre = vec2f(res.x * 0.5 + p.offX, res.y * 0.5);
+
+  let dO = perturb(sdO(toLocal(basePt + wv * cO, centre, s, L.o, L.rot.x, vec2f( 577.0, 747.5))) * s * L.o.z, col, px, res, L.hover.x, L.o.z, cO);
+  let dM = perturb(sdM(toLocal(basePt + wv * cM, centre, s, L.m, L.rot.y, vec2f( 866.0, 747.5))) * s * L.m.z, col, px, res, L.hover.y, L.m.z, cM);
+  let dA = perturb(sdA(toLocal(basePt + wv * cA, centre, s, L.a, L.rot.z, vec2f(1168.5, 747.5))) * s * L.a.z, col, px, res, L.hover.z, L.a.z, cA);
+  let dR = perturb(sdR(toLocal(basePt + wv * cR, centre, s, L.r, L.rot.w, vec2f(1439.5, 747.5))) * s * L.r.z, col, px, res, L.hover.w, L.r.z, cR);
+
+  var lay = array<vec4f, 4>(
+    shadeLayer(dO, L.o, L.hover.x, col, colW, px, cxpx, res),
+    shadeLayer(dM, L.m, L.hover.y, col, colW, px, cxpx, res),
+    shadeLayer(dA, L.a, L.hover.z, col, colW, px, cxpx, res),
+    shadeLayer(dR, L.r, L.hover.w, col, colW, px, cxpx, res),
+  );
+  // var, not let: WGSL only allows a runtime index into addressable memory.
+  var zv = array<f32, 4>(L.zs.x, L.zs.y, L.zs.z, L.zs.w);
+
+  // Painter's order, furthest first. Summing the layers was fine while the
+  // letters sat side by side and never met, but once they cross each other in
+  // depth an overlap has to read as "behind", and adding makes it read as
+  // "brighter" — the exact opposite. Insertion sort on four elements.
+  var idx = array<i32, 4>(0, 1, 2, 3);
+  for (var i = 1; i < 4; i = i + 1) {
+    let cur = idx[i];
+    var j = i;
+    loop {
+      if (j == 0) { break; }
+      if (zv[idx[j - 1]] >= zv[cur]) { break; }
+      idx[j] = idx[j - 1];
+      j = j - 1;
+    }
+    idx[j] = cur;
+  }
+
+  var outc = vec3f(0.0);
+  for (var i = 0; i < 4; i = i + 1) {
+    let src = lay[idx[i]];
+    outc = outc * (1.0 - src.a) + src.rgb;
+  }
+
+  return vec4f(outc, 1.0);
+}
+`;
+
+// ── pass 2: luminance threshold ────────────────────────────────────────────
+const BRIGHT_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct B { threshold: f32, pad0: f32, pad1: f32, pad2: f32 }
+@group(0) @binding(2) var<uniform> b: B;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let c = textureSampleLevel(src, samp, uv, 0.0).rgb;
+  let lum = dot(c, vec3f(0.2126, 0.7152, 0.0722));
+  let k = max(0.0, lum - b.threshold) / max(lum, 1.0e-4);
+  return vec4f(c * k, 1.0);
+}
+`;
+
+// ── passes 3 & 4: separable gaussian ───────────────────────────────────────
+const BLUR_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct BL { dirX: f32, dirY: f32, radius: f32, pad: f32 }
+@group(0) @binding(2) var<uniform> bl: BL;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let dims = vec2f(textureDimensions(src, 0));
+  let stepUv = vec2f(bl.dirX, bl.dirY) / dims * bl.radius;
+  var sum = vec3f(0.0);
+  var wsum = 0.0;
+  for (var i = -8; i <= 8; i = i + 1) {
+    let fi = f32(i);
+    let w = exp(-0.5 * fi * fi / 12.0);
+    sum = sum + textureSampleLevel(src, samp, uv + stepUv * fi, 0.0).rgb * w;
+    wsum = wsum + w;
+  }
+  return vec4f(sum / wsum, 1.0);
+}
+`;
+
+// ── pass 5: composite + tone map ───────────────────────────────────────────
+const COMPOSITE_WGSL = /* wgsl */`
+@group(0) @binding(0) var scene: texture_2d<f32>;
+@group(0) @binding(1) var bloomTex: texture_2d<f32>;
+@group(0) @binding(2) var samp: sampler;
+struct C { amount: f32, exposure: f32, rave: f32, pad1: f32 }
+@group(0) @binding(3) var<uniform> c: C;
+
+const BG: vec3f = vec3f(0.078, 0.047, 0.086);
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let s = textureSampleLevel(scene, samp, uv, 0.0).rgb;
+  let b = textureSampleLevel(bloomTex, samp, uv, 0.0).rgb;
+  var col = (s + b * c.amount) * c.exposure;
+  col = col / (col + vec3f(1.0));      // reinhard
+  col = pow(col, vec3f(1.0 / 1.05));
+  // Chroma restored *after* the tonemap, and only while the party is lit. This is where the
+  // rainbow was actually being lost, and it took a while to find because every earlier
+  // attempt fought it in the wrong place: reinhard runs per channel, so anything bright
+  // enough pushes all three channels toward 1.0 and arrives white no matter how saturated it
+  // was going in. Turning brightness down instead just made a dim rave. The tonemap has to
+  // squash the range — that is its job — so the fix is to put the colour back on the far
+  // side of it rather than to feed it less.
+  let grey = dot(col, vec3f(0.2126, 0.7152, 0.0722));
+  col = mix(vec3f(grey), col, 1.0 + c.rave * 1.15);
+  return vec4f(BG + col, 1.0);
+}
+`;
+
+// ── dials ──────────────────────────────────────────────────────────────────
+const dialsEl = document.getElementById('dials');
+const P = {};
+const defaults = {};
+let onDialChange = () => {};
+
+function bindDials() {
+  dialsEl.querySelectorAll('input[type="range"]').forEach((input) => {
+    const valEl = dialsEl.querySelector(`.val[data-for="${input.id}"]`);
+    defaults[input.id] = input.value;
+    const sync = () => {
+      const n = Number(input.value);
+      P[input.id] = n;
+      if (valEl) valEl.textContent = input.step === '1' || input.step === '2' ? String(Math.round(n)) : n.toFixed(2);
+      onDialChange(input.id);
+    };
+    input.addEventListener('input', sync);
+    sync();
+  });
+  dialsEl.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    defaults[input.id] = input.checked;
+    const sync = () => { P[input.id] = input.checked; onDialChange(input.id); };
+    input.addEventListener('change', sync);
+    sync();
+  });
+  // Hand the whole panel over as text. In a sketch like this the dials are where the
+  // work actually happens, and the only way a setting that felt right in the browser
+  // becomes the committed default is by being written down — so emit it in the form
+  // that's easiest to paste back: one line per group, id=value, no punctuation to
+  // strip. Values come off the inputs rather than out of `P`, so what you copy is
+  // exactly what the sliders say, at their own precision.
+  const copyBtn = document.getElementById('copyDials');
+  const dialText = () => {
+    const lines = [`# vert-bars v6 dials · ${window.innerWidth}x${window.innerHeight}`];
+    dialsEl.querySelectorAll('.group').forEach((g) => {
+      const name = g.querySelector('.title').textContent.trim().toLowerCase();
+      const parts = [...g.querySelectorAll('input')].map((el) =>
+        `${el.id}=${el.type === 'checkbox' ? el.checked : el.value}`);
+      lines.push(`${name.padEnd(11)} ${parts.join('  ')}`);
+    });
+    return lines.join('\n');
+  };
+  copyBtn.addEventListener('click', async () => {
+    const text = dialText();
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      // The clipboard API refuses when the document isn't focused, which happens often
+      // enough while poking at a panel. The old selection-based path has no such rule.
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    copyBtn.textContent = 'Copied';
+    clearTimeout(copyBtn.dataset.t);
+    copyBtn.dataset.t = setTimeout(() => { copyBtn.textContent = 'Copy dials'; }, 1300);
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    for (const [id, v] of Object.entries(defaults)) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      if (el.type === 'checkbox') el.checked = v; else el.value = v;
+      el.dispatchEvent(new Event(el.type === 'checkbox' ? 'change' : 'input'));
+    }
+  });
+}
+bindDials();
+
+// The panel covers the right edge, so the mark is centred in the area that's
+// actually visible rather than in the viewport.
+const panelToggle = document.getElementById('panelToggle');
+panelToggle.addEventListener('click', () => {
+  const closed = document.body.classList.toggle('panel-closed');
+  panelToggle.textContent = closed ? 'Show dials' : 'Hide dials';
+  panelToggle.setAttribute('aria-expanded', String(!closed));
+});
+
+// The right-hand edge of the drawable picture. With the panel open that's the panel,
+// not the window — anything drawn past it is simply hidden behind a DOM element.
+function hudRight() {
+  if (document.body.classList.contains('panel-closed')) return window.innerWidth;
+  return dialsEl.getBoundingClientRect().left - 8;
+}
+
+function markOffsetCss() {
+  if (document.body.classList.contains('panel-closed')) return 0;
+  const covered = Math.max(0, window.innerWidth - dialsEl.getBoundingClientRect().left);
+  return -covered / 2;
+}
+
+// ── grabbing a letter ──────────────────────────────────────────────────────
+// Every letter is a handle onto one control in the mix: press it and drag up or down.
+// The letter travels with the pointer in both axes, because a handle that follows your
+// hand is what makes it feel like an object rather than an invisible modifier on a
+// hover — but only the vertical distance means anything, and the matching slider moves
+// in the panel as you go.
+//
+// One dial each rather than one dial with four ways in. It gives the four letters
+// separate jobs instead of making them interchangeable, and it means the word as a
+// whole is the mixing desk: the O sets the pace, the M the dirt, the A the weight of
+// the drums, the R how loud any of it is.
+//
+// Sideways used to drive a second dial at the same time. Two axes on one grab was one
+// more thing than the gesture wanted, and the second one was hard to avoid nudging
+// while aiming the first.
+//
+// Letting go is the same event as moving away: the letter walks back to its place.
+// Keeping it where it was dropped meant hit-testing it where it now was rather than in
+// its slot, and the moment the two disagreed the hover flickered between them.
+const stageEl = document.querySelector('.stage');
+
+// Letter order is O, M, A, R. `fmt` is how the gauge prints the number, which differs
+// per dial because a percentage, a tempo and a weight aren't read the same way.
+const LETTER_DIAL = [
+  { id: 'tempo',  label: 'BPM',  glyph: 'beat',  fmt: (v) => String(Math.round(v)) },
+  { id: 'grit',   label: 'GRIT', glyph: 'clip',  fmt: (v) => v.toFixed(2) },
+  { id: 'punch',  label: 'DRUM', glyph: 'hit',   fmt: (v) => v.toFixed(2) },
+  { id: 'volume', label: 'VOL',  glyph: 'meter', fmt: (v) => `${Math.round(v * 100)}%` },
+];
+
+const grab = {
+  idx: -1,      // letter under an active press, -1 for none
+  last: -1,     // most recently grabbed, so its readout can fade out after release
+  px: 0, py: 0, // where the press started
+  from: 0,      // what its dial read when the press landed
+  offX: 0, offY: 0,
+};
+
+// The dial's whole range in 340px of travel, measured from wherever it stood when you
+// pressed. Relative rather than absolute, so a second drag carries on from where the
+// last one left off instead of jumping to match the pointer.
+const DRAG_SPAN = 340;
+function dragDial(id, from, delta) {
+  const el = document.getElementById(id);
+  const lo = Number(el.min);
+  const hi = Number(el.max);
+  el.value = String(clamp(from + (delta / DRAG_SPAN) * (hi - lo), lo, hi));
+  // Going through the input event means the panel readout, `P` and the audio all
+  // update by exactly the path a real slider drag takes.
+  el.dispatchEvent(new Event('input'));
+}
+
+function dragTo(x, y) {
+  grab.offX = x - grab.px;
+  grab.offY = y - grab.py;
+  // Up is always more, whatever the letter happens to own.
+  dragDial(LETTER_DIAL[grab.idx].id, grab.from, -grab.offY);
+}
+
+window.addEventListener('pointerdown', (e) => {
+  if (e.button !== 0 || lastHit < 0 || dialsEl.contains(e.target)
+      || (e.target instanceof Element && e.target.closest('button'))) return;
+  e.preventDefault();
+  grab.idx = lastHit;
+  grab.last = lastHit;
+  grab.px = e.clientX;
+  grab.py = e.clientY;
+  grab.from = P[LETTER_DIAL[lastHit].id];
+  grab.offX = 0;
+  grab.offY = 0;
+  stageEl.classList.add('grabbing');
+});
+const endGrab = () => {
+  if (grab.idx < 0) return;
+  grab.idx = -1;
+  stageEl.classList.remove('grabbing');
+};
+window.addEventListener('pointerup', endGrab);
+window.addEventListener('pointercancel', endGrab);
+window.addEventListener('blur', endGrab);
+
+// ── pointer ────────────────────────────────────────────────────────────────
+const pointer = { x: 0, y: 0, nx: 0.5, ny: 0.5, seen: false, lastMove: -1e9 };
+window.addEventListener('pointermove', (e) => {
+  pointer.x = e.clientX;
+  pointer.y = e.clientY;
+  pointer.nx = e.clientX / window.innerWidth;
+  pointer.ny = e.clientY / window.innerHeight;
+  pointer.seen = true;
+  pointer.lastMove = performance.now();
+  if (grab.idx >= 0) dragTo(e.clientX, e.clientY);
+});
+window.addEventListener('pointerleave', () => {
+  pointer.seen = false;
+  // Dragging out of the window means the release happens where we'll never hear about
+  // it, so end the gesture here rather than leaving a press stuck down. Same for the
+  // window losing focus mid-drag.
+  endGrab();
+});
+
+// ── the four letters ───────────────────────────────────────────────────────
+// cx/cy are each letter's centre in viewBox units; x0..x1 its horizontal
+// extent. zBase puts it in front of (negative) or behind (positive) the
+// presentation plane once the field spreads.
+const VB_CY = 747.5;
+const LETTERS = [
+  { name: 'O', cx:  577.0, x0:  450, x1:  704, zBase: -0.62, rate: 0.29, phase: 0.4 },
+  { name: 'M', cx:  866.0, x0:  714, x1: 1018, zBase:  0.34, rate: 0.22, phase: 2.1 },
+  { name: 'A', cx: 1168.5, x0: 1031, x1: 1306, zBase: -0.18, rate: 0.26, phase: 3.7 },
+  { name: 'R', cx: 1439.5, x0: 1319, x1: 1560, zBase:  0.58, rate: 0.19, phase: 5.3 },
+];
+const states = LETTERS.map(() => ({
+  z: 0, scale: 1, offX: 0, offY: 0, dim: 1, rot: 0, hover: 0,
+  rect: { x: 0, y: 0, w: 0, h: 0 },
+  restRect: { x: 0, y: 0, w: 0, h: 0 },
+}));
+
+const TAU = Math.PI * 2;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+// Frame-rate independent easing: fraction of the remaining gap to close in dt.
+const approach = (cur, target, tau, dt) => cur + (target - cur) * (1 - Math.exp(-dt / tau));
+
+let activity = 0;
+let hudUp = 0;
+let tagIn = 0;
+let grabIn = 0;
+// ── visualiser state ───────────────────────────────────────────────────────
+// `mtime` is the musical clock the strokes now run on, counted in beats so its rate
+// follows the tempo. The rest is the mix, smoothed for the eye: fast attack so a kick
+// arrives as a hit, slower release so it doesn't flicker between frames.
+let mtime = 0;
+const vis = { lo: 0, mid: 0, hi: 0, top: 0, pulse: 0, mus: 0 };
+
+// Per-band auto-gain. Loudness falls off steeply with frequency, so a single fixed
+// window is useless across four bands: the first attempt used one, and measured the
+// bottom end pinned at 1.00 for every groove while the hats sat at 0.03 — the two
+// bands that most distinguish one groove from another, both saying nothing. Each band
+// now tracks its own floor and ceiling and is stretched to fill 0..1, so what the
+// picture answers is how loud a band is *for that band*.
+const AGC = [0, 1, 2, 3].map(() => ({ lo: 1, hi: 0, avg: 0.5 }));
+
+// ── the redline ────────────────────────────────────────────────────────────
+// Maxing the tempo is the easter egg, and it has to be *held* rather than touched. The
+// tempo keeps its value after you let go of a letter, so a trigger that simply fired at
+// 140 would latch the first time anyone found it and never come off again — which makes
+// it a permanent mode rather than a secret. It charges while the dial is pegged and
+// unwinds the moment it isn't, so holding the throttle open is the whole gesture.
+const RAVE_HOLD = 1.0;                     // seconds pegged at the top before it goes
+// Four on the floor. See the sequencer for why the kick doesn't join the pattern union.
+const RAVE_KICK = [0, 4, 8, 12];
+const RAVE_MAX = 140;                      // the tempo dial's own ceiling
+const rave = { charge: 0, lit: 0 };
+// Tracks what the bloom passes were last told, since those aren't rewritten every frame.
+let raveApplied = -1;
+function autoGain(i, v, dt) {
+  const g = AGC[i];
+  g.hi = Math.max(v, g.hi - dt * 0.22);
+  g.lo = Math.min(v, g.lo + dt * 0.13);
+  const n = clamp((v - g.lo) / Math.max(0.04, g.hi - g.lo), 0, 1);
+  // Then centred on its own running mean and handed over as a deviation. What matters
+  // to the eye is whether a band is louder or quieter than it has been — an absolute
+  // level can only ever push the picture one way, and doing that measured out as a
+  // third more brightness everywhere rather than as movement.
+  g.avg += (n - g.avg) * (1 - Math.exp(-dt / 1.4));
+  return clamp((n - g.avg) * 2.2, -1, 1);
+}
+let lastHit = -1;
+let lastHitAt = -1e9;
+let focusIdx = -1;
+
+function updateLetters(t, dt) {
+  // Together at rest, separated while you're interacting. `idleLife` keeps a
+  // little breathing in the field so it never looks switched off. Both directions
+  // are quick — the snap back to the logotype is as much of the gesture as the
+  // coming apart, so it shouldn't be something you wait for.
+  // Engagement means the pointer is on a specific letter — nothing else. Moving
+  // the mouse anywhere near the mark used to count, which meant the word visibly
+  // stirred as you approached it and gave away the effect before you'd chosen
+  // anything. The grace window is only there to bridge the few pixels between
+  // adjacent letters, so sliding along the word doesn't stutter.
+  const now = performance.now();
+  if (lastHit >= 0) lastHitAt = now;
+  const engaged = pointer.seen && (lastHit >= 0 || now - lastHitAt < 130);
+  const target = engaged ? 1 : P.idleLife;
+  const fall = 0.42 - P.snap * 0.36;
+  activity = approach(activity, target, target > activity ? 0.07 : fall, dt);
+  // The HUD is chrome, not atmosphere: it goes to nothing at rest rather than
+  // idling at a whisper, so the resting state is only the letters.
+  hudUp = approach(hudUp, engaged ? 1 : 0, engaged ? 0.06 : fall * 0.7, dt);
+  const spread = activity * P.zSpread;
+
+  // Which letter is claimed, and how completely. Read from last frame's hover, so
+  // it lags by one frame — invisible at 60fps and it keeps the ordering simple.
+  focusIdx = -1;
+  let focus = 0;
+  states.forEach((st, i) => { if (st.hover > focus) { focus = st.hover; focusIdx = i; } });
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const s = (w * P.logoScale) / 1232;
+  const originX = w / 2 + markOffsetCss();
+
+  // Visible width excludes the dial panel, so nothing parks behind it.
+  const visW = originX * 2;
+
+  // ── the accordion ────────────────────────────────────────────────────────
+  // The letters hold the baseline. Everything to the left of the claimed letter
+  // slides further left and everything to the right slides further right, far
+  // enough to clear the room its expansion needs, plus a widening gap per step so
+  // the word breathes apart instead of just shuffling over.
+  //
+  // The set is re-centred afterwards, once the real boxes are known — see the
+  // pass below the loop. Without it, claiming an outer letter walks the whole word
+  // off one side, because its shifts are all in one direction.
+  const shifts = LETTERS.map(() => 0);
+  if (focusIdx >= 0 && focus > 0.001) {
+    const fl = LETTERS[focusIdx];
+    const room = (fl.x1 - fl.x0) * s * (P.focusScale - 1) * 0.5;
+    LETTERS.forEach((l, i) => {
+      if (i === focusIdx) return;
+      shifts[i] = (i < focusIdx ? -1 : 1) * (room + Math.abs(i - focusIdx) * P.spaceGap) * focus;
+    });
+  }
+
+  const layout = (fit) => LETTERS.forEach((l, i) => {
+    const st = states[i];
+    const drift = Math.sin(t * l.rate * TAU * P.driftSpeed + l.phase);
+    const sway = Math.sin(t * l.rate * TAU * P.driftSpeed * 0.63 + l.phase * 1.7);
+
+    // Settled position: where this letter sits in the intact logotype.
+    const natX = originX + (l.cx - 1019) * s;
+    const natY = h / 2 + (VB_CY - 764.5) * s;
+
+    const isFocus = i === focusIdx;
+    const hov = st.hover;
+
+    // Claimed letter expands in place; the others hold the line and give it room.
+    // Every term is scaled by focus, so at rest they all collapse to zero and the
+    // word reassembles exactly.
+    let sc = 1;
+    let tx = natX + shifts[i] * fit;
+    let tY = natY;
+    // Signed depth breath: −1 nearest, +1 furthest. Only used by the others.
+    let breath = 0;
+    if (isFocus) {
+      sc = 1 + hov * (P.focusScale - 1);
+    } else if (focus > 0.001) {
+      // The liveliness that used to come from going round a ring now comes from
+      // travelling in and out of depth on the spot — each letter breathes toward
+      // and away from you on its own period, so the group is never still even
+      // though nothing is going anywhere.
+      breath = Math.sin(t * l.rate * TAU * P.driftSpeed * 0.9 + l.phase * 2.1);
+      // Size and depth move together, which is what makes it read as distance
+      // rather than as a letter arbitrarily growing.
+      const persp = 1 / (1 + breath * P.spaceDepth);
+      sc = 1 + focus * (P.spaceScale * persp - 1);
+      // A vertical float on top of the depth breath, on its own period and out of
+      // phase with it, so they don't all rise and fall together. Position, not shape:
+      // this is the movement worth having, and it's deliberately the thing that got
+      // *more* while the waving got less.
+      tY = natY
+         + Math.sin(t * l.rate * TAU * P.driftSpeed * 0.62 + l.phase * 1.4) * P.spaceFloat * focus
+         // A slower second term at an unrelated ratio, so the float never settles into
+         // an obvious loop the way a single sine does.
+         + Math.sin(t * l.rate * TAU * P.driftSpeed * 0.23 + l.phase * 0.7)
+           * P.spaceFloat * 0.45 * focus;
+    }
+
+    // Claimed letter comes forward, the others fall back — the depth split is what
+    // keeps the big letter from just looking like a zoom. It stays the nearest
+    // thing on screen by a clear margin, so even a letter at the near end of its
+    // breath passes behind it rather than over it.
+    const z = spread * (l.zBase + drift * 0.28)
+            + (isFocus ? -hov * 1.05 : focus * (0.50 + breath * 0.80));
+    st.z = z;
+    st.scale = sc / (1 + z * 0.08);
+    // Upper bound matters: let the claimed letter go much past this and the bars
+    // blow out to flat white and the letterform stops reading.
+    st.dim = clamp(1 - z * P.depthFade, 0.22, 1.24);
+    st.rot = spread * sway * 0.020 + hov * 0.022
+           + (isFocus ? 0 : focus * Math.sin(t * 0.37 + l.phase) * 0.05);
+
+    // Parallax reverses across the focal plane, so near and far letters slide
+    // in opposite directions as the pointer moves. The claimed letter opts out of
+    // it: it's the anchor the others are spacing themselves against, and having it
+    // dragged around by the same pointer that selected it eats into the gaps the
+    // accordion just opened up on that side.
+    const paDamp = isFocus ? 1 - hov * 0.88 : 1;
+    const reach = z * P.parallax * 130 * paDamp;
+    const paX = -(pointer.nx - 0.5) * 2 * reach;
+    const paY = -(pointer.ny - 0.5) * 2 * reach * 0.55 + sway * spread * 14 * paDamp;
+    st.offX = (tx - natX) + paX;
+    st.offY = (tY - natY) + paY;
+
+    // Two rects. `rect` is where the letter actually is, for the HUD. `restRect`
+    // is its slot in the settled word, and that's what the pointer tests against
+    // — hit-testing the live rect would mean claiming the O moves it out from
+    // under the cursor, dropping the hover, springing it back, forever.
+    const proj = (vx, vy) => [
+      originX + ((l.cx - 1019) + (vx - l.cx) * st.scale) * s + st.offX,
+      h / 2 + ((VB_CY - 764.5) + (vy - VB_CY) * st.scale) * s + st.offY,
+    ];
+    const pad = 10;
+    const box = (fn) => {
+      const [x0, y0] = fn(l.x0, 631);
+      const [x1, y1] = fn(l.x1, 864);
+      return { x: x0 - pad, y: y0 - pad, w: x1 - x0 + pad * 2, h: y1 - y0 + pad * 2 };
+    };
+    st.rect = box(proj);
+    st.restRect = box((vx, vy) => [originX + (vx - 1019) * s, h / 2 + (vy - 764.5) * s]);
+  });
+
+  // ── fit the opened-up word into the space available ──────────────────────
+  // All of this works from the projected boxes, not from the inputs. An earlier
+  // version clamped target positions using the pre-perspective scale, which
+  // under-measures the real box — the claimed letter gets scaled a second time by
+  // its own depth — so the widest letter still hung off the left edge.
+  //
+  // The group's width is linear in how much of the accordion is applied, and each
+  // extreme is held by the same letter throughout, so two trial layouts are enough
+  // to solve for the largest spread that fits. Cheap at four letters, and it means
+  // the effect degrades by tightening its gaps on a narrow window instead of
+  // shoving letters under the dial panel.
+  const span = () => Math.max(...states.map((st) => st.rect.x + st.rect.w))
+                   - Math.min(...states.map((st) => st.rect.x));
+  layout(1);
+  if (focus > 0.001) {
+    const avail = visW - 20;
+    const wide = span();
+    if (wide > avail) {
+      layout(0);
+      const tight = span();
+      layout(wide > tight ? clamp((avail - tight) / (wide - tight), 0, 1) : 0);
+    }
+
+    // Then centre what's left in the visible area, faded in by focus so the
+    // resting logotype is never nudged.
+    const left = Math.min(...states.map((st) => st.rect.x));
+    const right = Math.max(...states.map((st) => st.rect.x + st.rect.w));
+    const shift = (visW / 2 - (left + right) / 2) * focus;
+    if (shift !== 0) states.forEach((st) => { st.offX += shift; st.rect.x += shift; });
+  }
+
+  // ── the grabbed letter ───────────────────────────────────────────────────
+  // Added after the layout and the re-centring, so dragging one letter moves that
+  // letter and nothing else: it doesn't feed back into the accordion, and it doesn't
+  // drag the rest of the word sideways to keep the group centred.
+  if (grab.last >= 0) {
+    // Releasing is treated exactly like moving away: the displacement eases back to
+    // nothing from wherever you let go. Holding the letter at the drop point instead
+    // meant it had to be hit-tested where it now was rather than in its slot, and the
+    // moment those two disagreed the hover flickered between them.
+    if (grab.idx < 0) {
+      grab.offX = approach(grab.offX, 0, 0.15, dt);
+      grab.offY = approach(grab.offY, 0, 0.15, dt);
+    }
+    const st = states[grab.last];
+    st.offX += grab.offX;
+    st.offY += grab.offY;
+    st.rect.x += grab.offX;
+    st.rect.y += grab.offY;
+  }
+  grabIn = approach(grabIn, grab.idx >= 0 ? 1 : 0, grab.idx >= 0 ? 0.05 : 0.11, dt);
+
+  // Hover resolves to a single letter: the pointer is over the settled wordmark, so
+  // the slots never overlap and no tie-break is needed. Always the settled slot —
+  // nothing here tests against where a letter currently is, which is what keeps a
+  // letter from moving out from under the cursor and dropping its own hover.
+  let hit = -1;
+  if (pointer.seen) {
+    states.forEach((st, i) => {
+      const r = st.restRect;
+      if (pointer.x >= r.x && pointer.x <= r.x + r.w
+       && pointer.y >= r.y && pointer.y <= r.y + r.h) hit = i;
+    });
+  }
+  // A press holds its letter regardless of where the pointer has got to, so you can
+  // drag past the end of the box without the gesture letting go.
+  if (grab.idx >= 0) hit = grab.idx;
+  stageEl.classList.toggle('grabbable', hit >= 0 && grab.idx < 0);
+  lastHit = hit;
+  states.forEach((st, i) => {
+    st.hover = approach(st.hover, i === hit ? 1 : 0, i === hit ? 0.045 : 0.09, dt);
+  });
+}
+
+// ── detection HUD ──────────────────────────────────────────────────────────
+// Vector chrome on a 2D overlay, not part of the shaded image. At rest it draws
+// nothing at all — the resting state is only the letters. Contact brings up all
+// four frames plus the links between them; hovering takes one frame to a solid
+// box with a standoff frame, a jitter, and a live position/depth readout.
+const hudCanvas = document.getElementById('hud');
+const hctx = hudCanvas.getContext('2d');
+const pseudo = (n) => { const v = Math.sin(n * 127.1) * 43758.5453; return v - Math.floor(v); };
+
+let jitterSeed = 0;
+let jitterAt = 0;
+
+function brackets(w, h, ax, ay) {
+  hctx.beginPath();
+  hctx.moveTo(0, ay);         hctx.lineTo(0, 0);         hctx.lineTo(ax, 0);
+  hctx.moveTo(w - ax, 0);     hctx.lineTo(w, 0);         hctx.lineTo(w, ay);
+  hctx.moveTo(w, h - ay);     hctx.lineTo(w, h);         hctx.lineTo(w - ax, h);
+  hctx.moveTo(ax, h);         hctx.lineTo(0, h);         hctx.lineTo(0, h - ay);
+  hctx.stroke();
+}
+
+// Interacting links the frames into a chain. Because the letters sit at
+// different depths and move in parallax, the ties skew and stretch as they
+// drift — the connection is what makes them read as one tracked object.
+function drawConnectors(presence) {
+  if (presence <= 0.04) return;
+
+  const xs = states.flatMap((st) => [st.rect.x, st.rect.x + st.rect.w]);
+  const ys = states.flatMap((st) => [st.rect.y, st.rect.y + st.rect.h]);
+  const bx0 = Math.min(...xs) - 16;
+  const bx1 = Math.max(...xs) + 16;
+  const by0 = Math.min(...ys) - 16;
+  const by1 = Math.max(...ys) + 16;
+
+  hctx.save();
+  hctx.strokeStyle = '#f0d24a';
+  hctx.fillStyle = '#f0d24a';
+  hctx.lineWidth = 1;
+
+  const centre = (st) => [st.rect.x + st.rect.w / 2, st.rect.y + st.rect.h / 2];
+  const focus = focusIdx >= 0 ? states[focusIdx].hover : 0;
+
+  // Everything radiates from the claimed letter. A star, not a chain: the point
+  // is that the others hang off *this* one, so every line has to start here.
+  if (focus > 0.04) {
+    const [fx, fy] = centre(states[focusIdx]);
+    states.forEach((st, i) => {
+      if (i === focusIdx) return;
+      const [cx, cy] = centre(st);
+      // Stop the line short of the node so it doesn't bury the dot.
+      const dx = cx - fx;
+      const dy = cy - fy;
+      const len = Math.hypot(dx, dy) || 1;
+      hctx.globalAlpha = focus * 0.45;
+      hctx.beginPath();
+      hctx.moveTo(fx + (dx / len) * 12, fy + (dy / len) * 12);
+      hctx.lineTo(cx - (dx / len) * 7, cy - (dy / len) * 7);
+      hctx.stroke();
+      hctx.globalAlpha = focus * 0.7;
+      hctx.beginPath();
+      hctx.arc(cx, cy, 2.5, 0, TAU);
+      hctx.fill();
+    });
+
+    // The hub.
+    hctx.globalAlpha = focus * 0.95;
+    hctx.beginPath();
+    hctx.arc(fx, fy, 3.5, 0, TAU);
+    hctx.fill();
+    hctx.globalAlpha = focus * 0.5;
+    hctx.beginPath();
+    hctx.arc(fx, fy, 9, 0, TAU);
+    hctx.stroke();
+  }
+
+  // Corner brackets around the group, but only while nothing is claimed — once a
+  // letter takes the stage the radial lines already say how the set is related, and
+  // a box around the lot of them on top of that is just a border.
+  const hold = presence * (1 - focus);
+  if (hold > 0.03) {
+    hctx.globalAlpha = hold * 0.4;
+    hctx.save();
+    hctx.translate(bx0, by0);
+    brackets(bx1 - bx0, by1 - by0,
+             Math.min(34, (bx1 - bx0) * 0.12), Math.min(26, (by1 - by0) * 0.2));
+    hctx.restore();
+  }
+  hctx.restore();
+}
+
+// The tagline is real type, so it stays in the DOM and only its placement comes
+// from the field. Every number is derived from the same projection that positions
+// the letters — including the dial panel's offset, since the mark slides left when
+// the panel is open and a tagline that ignored that would sit off the mark's axis.
+const modeEl = document.getElementById('mode');
+const tagEl = document.getElementById('tagline');
+const tagTxtEl = document.getElementById('taglineTxt');
+const tagRules = [...tagEl.querySelectorAll('.rule')];
+let tagBootAt = -1;
+
+function drawTagline(now, dt) {
+  if (tagBootAt < 0) tagBootAt = now;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const s = (w * P.logoScale) / 1232;
+
+  // Size and standoff both scale with the mark, so the pairing keeps its
+  // proportions at any logoScale rather than drifting as the word grows.
+  const fontPx = 20 * s;
+  const baseline = h / 2 + 99.5 * s;   // viewBox y=864, where the letters sit
+
+  // The rule spans the wordmark's own width — the left edge of the O to the right edge
+  // of the R — and the whole assembly is centred on that span rather than on the
+  // composition centre, which sits 14 units to the right of it.
+  const markW = (1560 - 450) * s;
+  const markMid = ((450 + 1560) / 2 - 1019) * s;
+
+  // Lands a beat after the field, the way it does on the real home.
+  tagIn = approach(tagIn, now - tagBootAt > 380 ? 1 : 0, 0.26, dt);
+
+  // Withdraws entirely while you're taking the mark apart. It belongs to the settled
+  // presentation layer and has no business being legible mid-gesture, and hudUp is
+  // already the engagement number, with the snappy fall on it.
+  //
+  // Which looks at first like it leaves nothing for the reaction below to be seen in,
+  // since the music only plays while you're engaged. It doesn't, because the two run on
+  // very different clocks: hudUp falls in a few hundred milliseconds and the sound takes
+  // ten seconds to go. So the window is the tail — you let go, the word snaps back to
+  // crisp, and the tagline is the last thing still moving, breathing the track down to
+  // silence. Holding it visible during the gesture instead was tried and measured out as
+  // unreadable: at a third of its strength over the expanded letter's wall of lit bars it
+  // was mud, the same problem the gauges needed a scrim for. This way its one job happens
+  // where the screen is empty enough to see it.
+  const back = hudUp;
+
+  // ── the mix, in the type ─────────────────────────────────────────────────
+  // Tracking opens on the kick, the rules brighten with the top end, and the whole line
+  // lifts a hair on the beat. Every term is scaled by `mus`, so with the sound off this
+  // is perfectly still — a settled state should stay a settled state.
+  const track = 0.30 + vis.pulse * 0.055 * vis.mus;
+
+  tagEl.style.fontSize = `${fontPx.toFixed(2)}px`;
+  tagEl.style.width = `${markW.toFixed(1)}px`;
+  tagEl.style.left = `${(w / 2 + markOffsetCss() + markMid).toFixed(1)}px`;
+  tagEl.style.top = `${(baseline + 46 * s).toFixed(1)}px`;
+  tagEl.style.transform = `translate(-50%, ${(back * 10 - (1 - tagIn) * 7
+    - vis.pulse * 1.5 * vis.mus).toFixed(2)}px)`;
+  tagEl.style.opacity = (tagIn * (1 - back)
+    * (0.58 + vis.pulse * 0.16 * vis.mus)).toFixed(3);
+  tagTxtEl.style.letterSpacing = `${track.toFixed(4)}em`;
+  tagTxtEl.style.marginRight = `${(-track).toFixed(4)}em`;
+  // The bands arrive centred on zero, so this brightens and dims either side of its
+  // resting value rather than only ever brightening.
+  const ruleA = clamp(0.36 + vis.top * 0.30 * vis.mus, 0.08, 0.9);
+  tagRules.forEach((el) => { el.style.opacity = ruleA.toFixed(3); });
+}
+
+// Each letter owns one dial in the mix, and this is the gauge for it, drawn in the
+// strip beside the letter. It has two states: a dim one that comes up with the hover and
+// exists only to say there is something here to pull, and a lit one that follows the
+// drag. The hint carets belong to the first and get out of the way for the second; the
+// ticks and the larger number belong to the second, because reading an exact value is
+// only wanted once you are setting one.
+//
+// The gesture is the same for all four letters — press, drag up for more — so the frame
+// is the same for all four too: one vertical track, caret and readout, in the same place
+// each time. What changes is the glyph under it, and that is the part that says what
+// kind of quantity you have hold of. Four different widgets would have made one gesture
+// look like four.
+function drawDialGauge(idx, r, side, A, show, act, ms) {
+  const d = LETTER_DIAL[idx];
+  const el = document.getElementById(d.id);
+  const lo = Number(el.min);
+  const hi = Number(el.max);
+  const val = P[d.id];
+  const frac = clamp((val - lo) / (hi - lo), 0, 1);
+  const H = 150;
+  const ly = (r.h - H) / 2;
+  const my = ly + H * (1 - frac);
+  const lx = side > 0 ? r.w + 34 : -34;
+  // Text runs away from the track on whichever side the gauge ended up.
+  const tx = (wide) => (side > 0 ? lx + 16 : lx - 16 - wide);
+
+  hctx.save();
+
+  // A scrim first. The gauge sits in the gap beside the letter, and the letter next to
+  // it is a wall of lit bars — thin yellow line work over that is unreadable whatever
+  // you do to its opacity. The music chip below the letter already solved this the same
+  // way. It darkens rather than covers, so the bars still show through it.
+  const px0 = side > 0 ? lx - 18 : lx - 74;
+  const py0 = ly - 26;
+  hctx.fillStyle = 'rgba(9, 5, 11, 0.86)';
+  // Reaches full darkness well before the gauge reaches full brightness, because a
+  // half-transparent scrim is worse than none: it dims the line work as much as the bars.
+  hctx.globalAlpha = A * Math.min(1, show * 1.3);
+  hctx.fillRect(px0, py0, 92, H + 70);
+  // And a frame around it once you have hold of it, so the thing you are driving is
+  // visibly live rather than merely present.
+  if (act > 0.03) {
+    hctx.strokeStyle = '#f0d24a';
+    hctx.globalAlpha = A * act * 0.45;
+    hctx.lineWidth = 1;
+    hctx.strokeRect(px0 + 0.5, py0 + 0.5, 91, H + 69);
+  }
+
+  // ── the redline zone ─────────────────────────────────────────────────────
+  // Only the tempo has one. It marks off the top eighth of the dial in a colour that is not
+  // the instrument's, and that is the entire affordance for the easter egg: one with no
+  // affordance at all is just dead code, since nobody maxes a dial they have no reason to
+  // max. It says something is here without saying what.
+  const isTempo = d.id === 'tempo';
+  const HOT = '#ff5a3c';
+  const zoneH = H * 0.125;
+  if (isTempo) {
+    hctx.fillStyle = HOT;
+    hctx.globalAlpha = A * show * (0.30 + rave.charge * 0.5);
+    hctx.fillRect(lx - 1.5, ly, 3, zoneH);
+    // Hatched, so it reads as a marked-off region rather than as a coloured length of track.
+    hctx.strokeStyle = HOT;
+    hctx.lineWidth = 1;
+    hctx.globalAlpha = A * show * 0.42;
+    for (let k = 0; k < 4; k += 1) {
+      const yy = ly + 2 + k * (zoneH / 4);
+      hctx.beginPath();
+      hctx.moveTo(lx + side * 3, yy);
+      hctx.lineTo(lx + side * 9, yy - 3);
+      hctx.stroke();
+    }
+  }
+
+  hctx.strokeStyle = '#f0d24a';
+  hctx.fillStyle = '#f0d24a';
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+
+  // The track, and how much of it you have used.
+  hctx.globalAlpha = A * show * 0.30;
+  hctx.fillRect(lx - 1.5, ly, 3, H);
+  // The fill itself turns hot inside the zone, so the gauge changes character rather than
+  // merely passing a mark.
+  hctx.fillStyle = isTempo && frac > 0.875 ? HOT : '#f0d24a';
+  hctx.globalAlpha = A * show * (0.62 + act * 0.38);
+  hctx.fillRect(lx - 1.5, my, 3, H - (my - ly));
+  hctx.fillStyle = '#f0d24a';
+
+  // Ticks, eighths of the range with the quarters longer.
+  hctx.globalAlpha = A * show * (0.22 + act * 0.42);
+  hctx.lineWidth = 1;
+  for (let k = 0; k <= 8; k += 1) {
+    const ty = ly + (H * k) / 8;
+    hctx.beginPath();
+    hctx.moveTo(lx + side * 3, ty);
+    hctx.lineTo(lx + side * (k % 2 === 0 ? 10 : 6), ty);
+    hctx.stroke();
+  }
+
+  // Caret and value. The number grows a little as you take hold of it.
+  hctx.globalAlpha = A * show * (0.8 + act * 0.2);
+  hctx.beginPath();
+  hctx.moveTo(lx - side * 4, my);
+  hctx.lineTo(lx - side * 12, my - 5.5);
+  hctx.lineTo(lx - side * 12, my + 5.5);
+  hctx.closePath();
+  hctx.fill();
+  hctx.font = `500 ${(11 + act * 3).toFixed(1)}px "JetBrains Mono", monospace`;
+  const num = d.fmt(val);
+  hctx.globalAlpha = A * show * (0.85 + act * 0.15);
+  // Kept inside the track's span. At the very top of the range the caret sits level with
+  // the label above it and the two collided; a number a few pixels away from its own
+  // caret is a much smaller problem than two pieces of type on top of each other.
+  hctx.fillText(num, tx(hctx.measureText(num).width), clamp(my + 4, ly + 11, ly + H));
+
+  // Which dial this is — except the tempo, which renames itself as it goes critical. That
+  // is the whole of the instrument's acknowledgement of the party: it keeps its own colour
+  // and its own type and just reports what is happening, which is funnier than joining in.
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+  const hotLbl = isTempo && (rave.charge > 0.02 || rave.lit > 0.5);
+  const lbl = isTempo && rave.lit > 0.5 ? 'REDLINE'
+            : isTempo && rave.charge > 0.02 ? 'HOLD' : d.label;
+  hctx.fillStyle = hotLbl ? HOT : '#f0d24a';
+  hctx.globalAlpha = A * show * (0.72 + act * 0.28);
+  hctx.fillText(lbl, tx(hctx.measureText(lbl).width), ly - 8);
+
+  // How much of the hold is done. Without it, pegging the dial and waiting looks like
+  // nothing happening at all — the charge is the one part of this gesture with no other
+  // feedback, and a second of no feedback is easily long enough to let go.
+  if (rave.charge > 0.02 && rave.lit < 0.98) {
+    hctx.fillStyle = HOT;
+    hctx.globalAlpha = A * show * 0.28;
+    hctx.fillRect(lx + side * 13, ly, side * 3, H * 0.28);
+    hctx.globalAlpha = A * show * 0.95;
+    hctx.fillRect(lx + side * 13, ly, side * 3, H * 0.28 * rave.charge);
+  }
+  hctx.fillStyle = '#f0d24a';
+
+  // The hint: a caret at each end of the track saying which way it goes. Only while you
+  // are not already dragging — once you are, the gauge itself is the feedback.
+  const hint = A * show * (1 - act) * 0.85;
+  if (hint > 0.01) {
+    hctx.globalAlpha = hint;
+    [-1, 1].forEach((dir) => {
+      const yy = dir < 0 ? ly - 5 : ly + H + 5;
+      hctx.beginPath();
+      hctx.moveTo(lx, yy + dir * 5);
+      hctx.lineTo(lx - 4, yy);
+      hctx.lineTo(lx + 4, yy);
+      hctx.closePath();
+      hctx.fill();
+    });
+  }
+
+  // ── the glyph ────────────────────────────────────────────────────────────
+  const gx = side > 0 ? lx + 10 : lx - 56;
+  const gy = ly + H + 20;
+  const lit = A * show * (0.75 + act * 0.25);
+
+  if (d.glyph === 'beat') {
+    // Four quarter notes with the one you are on lit: a rate shown as a rate, so
+    // dragging up reads as the lights arriving faster rather than as a number changing.
+    for (let k = 0; k < 4; k += 1) {
+      const on = ms !== null && Math.floor(ms.step / 4) === k;
+      hctx.globalAlpha = A * show * (on ? 1 : 0.3);
+      hctx.beginPath();
+      hctx.arc(gx + 6 + k * 12, gy + 10, on ? 4.2 : 2.4, 0, TAU);
+      hctx.fill();
+    }
+  } else if (d.glyph === 'clip') {
+    // A wave squaring off. Grit is a soft clipper, so the honest picture of it is the
+    // shape of its own transfer curve: a clean sine at nothing, a hard square at full.
+    const c = Math.max(0.08, 1 - frac * 0.92);
+    hctx.globalAlpha = lit;
+    hctx.lineWidth = 1.6;
+    hctx.beginPath();
+    for (let k = 0; k <= 46; k += 1) {
+      const yy = gy + 10 - (clamp(Math.sin((k / 46) * TAU * 1.5), -c, c) / c) * 8.5;
+      if (k === 0) hctx.moveTo(gx + k, yy); else hctx.lineTo(gx + k, yy);
+    }
+    hctx.stroke();
+  } else if (d.glyph === 'hit') {
+    // Struck bars on a floor: as tall as the weight you have set, and flashing on each
+    // kick, so the thing you are adjusting and the thing it does are one object.
+    hctx.globalAlpha = A * show * 0.22;
+    hctx.fillRect(gx, gy + 19, 46, 1.5);
+    const bh = 4 + frac * 15;
+    for (let k = 0; k < 3; k += 1) {
+      const hgt = bh * (k === 1 ? 1 : 0.6);
+      hctx.globalAlpha = A * show * Math.min(1, 0.5 + vis.pulse * 0.5);
+      hctx.fillRect(gx + 9 + k * 13, gy + 19 - hgt, 5, hgt);
+    }
+  } else {
+    // A rising staircase of segments, lit up to the level — the one gauge everybody
+    // already knows how to read.
+    for (let k = 0; k < 8; k += 1) {
+      const on = (k + 1) / 8 <= frac + 1e-6;
+      hctx.globalAlpha = A * show * (on ? 0.95 : 0.22);
+      const hgt = 4 + (k / 7) * 13;
+      hctx.fillRect(gx + k * 5.8, gy + 19 - hgt, 3.6, hgt);
+    }
+  }
+  hctx.restore();
+}
+
+function drawHud(now, presence) {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (hudCanvas.width !== Math.floor(w * dpr) || hudCanvas.height !== Math.floor(h * dpr)) {
+    hudCanvas.width = Math.floor(w * dpr);
+    hudCanvas.height = Math.floor(h * dpr);
+  }
+  hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  hctx.clearRect(0, 0, w, h);
+  if (!P.hudOn) return;
+
+  // Re-roll the jitter a few times a second rather than every frame, so it
+  // reads as a scanner re-acquiring rather than as noise.
+  if (now - jitterAt > 70) { jitterSeed = now; jitterAt = now; }
+
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+
+  drawConnectors(presence);
+
+  states.forEach((st, i) => {
+    const l = LETTERS[i];
+    const r = st.rect;
+    const hov = st.hover;
+    // Interacting raises every frame; hovering takes one of them to full. No
+    // floor term, so at rest this resolves to nothing at all.
+    const alpha = presence * 0.30 + hov * 0.70;
+    if (alpha <= 0.004) return;
+
+    // Flicker only while the frame is arriving; solid once it's locked on.
+    const flicker = hov > 0.03 && hov < 0.88
+      ? (pseudo(jitterSeed * 0.013 + i * 9.7) > 0.34 ? 1 : 0.22)
+      : 1;
+    const jx = hov * (pseudo(jitterSeed * 0.017 + i * 7.1) - 0.5) * 7;
+    const jy = hov * (pseudo(jitterSeed * 0.019 + i * 3.3) - 0.5) * 7;
+
+    hctx.save();
+    hctx.globalAlpha = alpha * flicker;
+    hctx.strokeStyle = '#f0d24a';
+    hctx.lineWidth = 1 + hov * 1.1;
+    hctx.translate(r.x + jx, r.y + jy);
+
+    brackets(r.w, r.h, Math.min(r.w * 0.3, 12 + hov * 32), Math.min(r.h * 0.3, 12 + hov * 32));
+
+    // Solid box the moment it locks on — this is the letter being claimed, so it
+    // wants to be unambiguous rather than tentative.
+    if (hov > 0.12) {
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * clamp((hov - 0.12) / 0.3, 0, 1) * 0.7;
+      hctx.strokeRect(0, 0, r.w, r.h);
+      hctx.restore();
+    }
+    // Second frame standing off the first, opening outward as it settles.
+    if (hov > 0.25) {
+      const g = 5 + hov * 9;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * (hov - 0.25) / 0.75 * 0.4;
+      hctx.setLineDash([3, 5]);
+      hctx.strokeRect(-g, -g, r.w + g * 2, r.h + g * 2);
+      hctx.restore();
+    }
+    if (hov > 0.2) {
+      const sy = ((now / 1500) % 1) * r.h;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * 0.45;
+      hctx.beginPath();
+      hctx.moveTo(0, sy);
+      hctx.lineTo(r.w, sy);
+      hctx.stroke();
+      hctx.restore();
+    }
+
+    // Label chip with live coordinates and depth, nudged to stay on screen
+    // when its letter sits near an edge.
+    if (hov > 0.06) {
+      const zs = `${st.z >= 0 ? '+' : '−'}${Math.abs(st.z).toFixed(2)}`;
+      const label = `${l.name} ${Math.round(r.x)},${Math.round(r.y)} Z${zs}`;
+      const tw = hctx.measureText(label).width + 10;
+      const absX = r.x + jx;
+      const absY = r.y + jy;
+      let dx = 0;
+      if (absX < 4) dx = 4 - absX;
+      else if (absX + tw > w - 4) dx = w - 4 - (absX + tw);
+      const dy = absY < 20 ? r.h + 30 : 0;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker;
+      hctx.fillStyle = '#f0d24a';
+      hctx.fillRect(dx, dy - 16, tw, 14);
+      hctx.fillStyle = '#111';
+      hctx.fillText(label, dx + 5, dy - 5);
+      hctx.restore();
+    }
+
+    // ── the beat ─────────────────────────────────────────────────────────────
+    // A ring leaves the box on every quarter note and fades as it grows, on whichever
+    // letter you are holding — it is the pulse of the track rather than a readout of any
+    // one dial, so it belongs to all four. Drag the O and the rings arrive faster; drag
+    // the A and they hit harder. Phase comes from the audio clock, so it cannot drift
+    // away from the kick.
+    const ms = hov > 0.3 && audio ? audio.musicState() : null;
+    if (ms) {
+      const g = ms.beat;
+      hctx.save();
+      hctx.strokeStyle = '#f0d24a';
+      // The ring has to outrun the rest of the chrome to be seen at all — the standoff
+      // frame already stands 14px off the box and the two chips reach further than
+      // that, so a ripple that faded inside 20px was drawing underneath furniture. It
+      // now clears 48px and its brightness falls off linearly rather than squared.
+      hctx.globalAlpha = alpha * flicker * (1 - g) * 0.5;
+      hctx.lineWidth = 2.2 - g * 1.4;
+      const e = 5 + g * 44;
+      hctx.strokeRect(-e, -e, r.w + e * 2, r.h + e * 2);
+      // And the box itself takes the hit, so the beat is legible even when the ring is
+      // lost against the letter behind it.
+      if (g < 0.2) {
+        hctx.globalAlpha = alpha * flicker * (1 - g / 0.2) * 0.5;
+        hctx.lineWidth = 2.4;
+        hctx.strokeRect(-1, -1, r.w + 2, r.h + 2);
+      }
+      hctx.restore();
+    }
+
+    // The sound gauge for whatever this letter owns. Two states: dim on hover, which
+    // is there only to say the letter can be pulled, and lit while you're pulling it.
+    const act = i === grab.last ? grabIn : 0;
+    // The idle state is nearly as bright as the active one on purpose. Separating them
+    // by opacity alone left the hover state too faint to read against the bars, and a
+    // hint you have to squint at isn't a hint — so the two states differ by what they
+    // contain instead: ticks and a bigger number arrive, the hint carets leave.
+    const gShow = Math.max(clamp((hov - 0.22) / 0.30, 0, 1) * 0.8, act);
+    if (gShow > 0.01) {
+      // Flip inboard when the gauge would run under the dial panel or off the window —
+      // the panel is the real edge of the picture while it's open, and the gauge needs
+      // its whole 130px, not just its anchor, to be inside it.
+      drawDialGauge(i, r, r.x + jx + r.w + 130 > hudRight() ? -1 : 1,
+                    alpha * flicker, gShow, act, ms);
+    }
+
+    // Music readout, under the claimed letter only. Outlined rather than filled so
+    // it reads as a second instrument to the coordinate chip above, not a repeat of
+    // it. It's drawn from `musicState()`, which returns null unless the sequencer is
+    // actually running — so it can never describe music you aren't hearing, and it
+    // stays absent entirely with the sound off.
+    if (ms) {
+      // Mid-crossfade it names both grooves; settled, it names the chord you're in.
+      const txt = ms.blend < 0.94
+        ? `♪ ${ms.from.label} ▸ ${ms.to.label}`
+        : `♪ ${ms.to.chord.name} · ${ms.to.label} · ${ms.bpm}`;
+      const cw = Math.max(hctx.measureText(txt).width + 12, 132);
+      const ch = 32;
+      // Flip above the letter rather than run off the bottom of the window.
+      let mx = 0;
+      let my = r.h + 10;
+      if (r.y + jy + my + ch > h - 6) my = -ch - 10;
+      if (r.x + jx + mx + cw > w - 6) mx = w - 6 - cw - (r.x + jx);
+      if (r.x + jx + mx < 6) mx = 6 - (r.x + jx);
+
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * clamp((hov - 0.3) / 0.35, 0, 1);
+      hctx.fillStyle = 'rgba(10, 6, 12, 0.82)';
+      hctx.fillRect(mx, my, cw, ch);
+      hctx.strokeStyle = '#f0d24a';
+      hctx.lineWidth = 1;
+      hctx.strokeRect(mx, my, cw, ch);
+      hctx.fillStyle = '#f0d24a';
+      hctx.fillText(txt, mx + 6, my + 12);
+
+      // The bar's sixteen sixteenths, each as tall as the number of voices landing on
+      // it, with the one you're hearing lit. Naming the groove says what changed; this
+      // shows it — the hats fill the bar in at the A and drain out of it at the R, and
+      // during a crossfade you watch one shape become the other.
+      const cellW = (cw - 12) / 16;
+      ms.density.forEach((d, k) => {
+        const bh = 2 + d * 11;
+        hctx.globalAlpha = alpha * flicker * (k === ms.step ? 1 : 0.34);
+        hctx.fillRect(mx + 6 + k * cellW, my + ch - 5 - bh,
+                      Math.max(1.4, cellW - 1.6), bh);
+      });
+      hctx.restore();
+    }
+
+    hctx.restore();
+  });
+}
+
+// ── sound ──────────────────────────────────────────────────────────────────
+// Synthesised rather than sampled, so the folder stays self-contained with nothing
+// to vendor — the music gets built out of primitives the same way the picture does.
+//
+// This is a drum record. Kick, claps, hats, shaker, toms and ride carry it; a deep
+// sine sub and short filtered chord stabs are the only tuned parts, and they sit
+// under the drums rather than on top. There are no square waves anywhere and no
+// resonant screech: the first pass had a detuned square arp and a Q-7 saw bass,
+// which is exactly where the thin piped quality came from.
+//
+// WHAT EACH LETTER DOES
+//
+// Changing only the harmony between letters was a mistake — a chord swap under a
+// pumping mix is close to inaudible, so moving across the word sounded like one
+// unchanging loop. Each letter now owns a whole groove: its own kick pattern, its
+// own percussion, its own drum weight and its own brightness, as well as its chord.
+//
+//   O  the floor      straight four, offbeat hats, rolling sub — the plain engine
+//   M  heavy, broken  kick off the grid, tribal toms, hats stripped right back —
+//                     the same weight as the floor but a different character
+//   A  the lift       sixteenth hats, doubled claps, octave-bouncing sub, wide open
+//   R  the drop out   kick and sub almost alone, half-time, drenched — the space
+//
+// So the letters really do give it different kinds of life: the drums lift at the A
+// and fall away at the R.
+//
+// HOW ONE GROOVE BECOMES THE NEXT
+//
+// Two grooves are live at once and a crossfade walks between them over half a bar,
+// so no pattern is ever switched: the hats you were hearing thin out as the toms
+// arrive, and every voice a groove doesn't want fades rather than stops. The change
+// is booked a couple of sixteenths ahead and a riser swells into it, with a soft
+// cymbal landing on the beat it lands on. The first version did the opposite — it
+// cut the master filter to 600 Hz right on the change, which put a hole in the music
+// at the one moment it has to carry you across.
+//
+// Only the harmony still moves in one step, because that is what a chord change is;
+// the riser and the cymbal are sitting on that beat to carry it. The tuned parts take
+// their rhythm from whichever groove asked for it but always their pitch from the
+// incoming chord, so two roots never sound at once.
+//
+// The sequencer keeps counting for as long as you stay engaged and the pointer only
+// steers which groove is playing, so sliding between letters undulates instead of
+// restarting. A change requested mid-crossfade is held rather than dropped and lands
+// as soon as there's room, which is what keeps a fast sweep across all four letters
+// reading as a chain of mixes. What you hear is gated by `hudUp`, the same number
+// that raises the HUD, so silence at rest is one fact in both image and sound.
+//
+// The claimed letter carries a readout of all this in its HUD, drawn from
+// `musicState()` — which returns nothing unless the sequencer is really running, so
+// the picture can't describe music you aren't hearing.
+//
+// Leaving the word is a ten-second fade rather than a stop — see `level` below. The
+// picture and the sound want opposite things here: the letters are tuned to snap back
+// the instant you leave, and following that straight down made the music sound like
+// the record being switched off.
+//
+// THE WORD IS THE DESK
+//
+// Each letter is a handle onto one control: press it and drag up or down. The O sets the
+// pace, the M the dirt, the A the weight of the drums, the R how loud any of it is — see
+// LETTER_DIAL by the pointer handling. One dial each rather than one dial reachable four
+// ways, because that gives the letters separate jobs instead of making them
+// interchangeable.
+//
+// Each has its own gauge in the HUD, in two states: dim on hover, which exists only to
+// say the letter can be pulled, and lit while you're pulling it. The frame is the same
+// for all four since the gesture is; what changes is the glyph, which is the part that
+// says what kind of quantity you have hold of. See drawDialGauge.
+//
+// AND THE PICTURE LISTENS BACK
+//
+// The strokes are the visualiser. They were always moving; they now move on the
+// music's clock rather than on a wall clock, and the mix sets how far. `readBands()`
+// hands the field a four-way split of the master plus the sequencer's own kicks, and
+// the shader's `mtime`, `mus`, `pulse` and band uniforms carry it — see the visualiser
+// block by the frame loop for the conditioning, and `bandAt` / `perturb` / `shadeLayer`
+// for what it drives. Everything reactive is mixed in by `mus`, so with the sound off
+// the field is exactly what it was before any of this existed.
+//
+// A browser will not start an AudioContext without a genuine user gesture, and
+// pointermove is explicitly not one, so hovering can never be enough to begin.
+// That is why there's a pill to click.
+const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+// step lists are sixteenths within the bar; sub entries are [step, semitones, steps]
+const GROOVES = [
+  {
+    // O — the floor. Nothing clever, just the engine running.
+    label: 'floor',
+    chord: { root: 45, tones: [0, 12, 15, 19], name: 'Am' },
+    kick: [0, 4, 8, 12],
+    clap: [4, 12],
+    hat: [2, 6, 10, 14],
+    hatGhost: [1, 3, 5, 7, 9, 11, 13, 15],
+    open: [14],
+    shake: [1, 5, 9, 13],
+    tom: [],
+    ride: [],
+    stab: [2, 6, 10, 14],
+    stabLen: 1.3,
+    sub: [[0, 0, 3], [3, 0, 1], [6, 0, 2], [8, 0, 3], [11, 0, 1], [14, 12, 2]],
+    punch: 0.95,
+    bright: 0,
+  },
+  {
+    // M — heavy and broken. The kick leaves the grid and toms fill the gaps.
+    label: 'broken',
+    chord: { root: 41, tones: [0, 12, 16, 19], name: 'F' },
+    kick: [0, 3, 6, 8, 11, 14],
+    clap: [8],
+    hat: [4, 12],
+    hatGhost: [],
+    open: [6],
+    shake: [],
+    tom: [2, 5, 7, 10, 13, 15],
+    ride: [],
+    stab: [0, 8],
+    stabLen: 3,
+    sub: [[0, 0, 3], [6, 0, 2], [8, 0, 3], [13, 7, 2]],
+    punch: 1,
+    bright: -0.06,
+  },
+  {
+    // A — the lift. Everything doubles and the filter opens up.
+    label: 'lift',
+    chord: { root: 36, tones: [0, 12, 16, 19], name: 'C' },
+    kick: [0, 4, 8, 12],
+    clap: [4, 7, 12, 15],
+    hat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    hatGhost: [],
+    open: [6, 14],
+    shake: [],
+    tom: [],
+    ride: [0, 2, 4, 6, 8, 10, 12, 14],
+    stab: [0, 2, 4, 6, 8, 10, 12, 14],
+    stabLen: 0.9,
+    sub: [[0, 0, 2], [2, 12, 1], [4, 0, 2], [6, 12, 1],
+          [8, 0, 2], [10, 12, 1], [12, 0, 2], [14, 12, 1]],
+    punch: 1,
+    bright: 0.62,
+  },
+  {
+    // R — the drop out. Half-time, almost nothing left, all of it in the reverb.
+    label: 'space',
+    chord: { root: 43, tones: [0, 12, 16, 19], name: 'G' },
+    kick: [0, 8],
+    clap: [12],
+    hat: [4, 12],
+    hatGhost: [1, 3, 5, 7, 9, 11, 13, 15],
+    open: [],
+    shake: [2, 6, 10, 14],
+    tom: [],
+    ride: [],
+    stab: [0],
+    stabLen: 12,
+    sub: [[0, 0, 8], [8, 0, 8]],
+    tuned: 0.74,
+    punch: 0.72,
+    bright: -0.32,
+  },
+];
+
+function createAudio() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  const ctx = new Ctx();
+
+  // Two procedural buffers so there are still no assets: white noise for every
+  // percussion voice, and a decaying noise burst used as a reverb impulse.
+  const noise = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 2), ctx.sampleRate);
+  const nd = noise.getChannelData(0);
+  for (let i = 0; i < nd.length; i += 1) nd[i] = Math.random() * 2 - 1;
+
+  const irLen = Math.floor(ctx.sampleRate * 2.2);
+  const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+  for (let c = 0; c < 2; c += 1) {
+    const d = ir.getChannelData(c);
+    for (let i = 0; i < irLen; i += 1) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.2);
+    }
+  }
+
+  const outGain = ctx.createGain();
+  outGain.gain.value = 0;
+  const sat = ctx.createWaveShaper();
+  sat.oversample = '2x';
+  // The sweep sits before the saturator, so opening it drives more signal into the
+  // distortion and the whole mix hardens as it brightens.
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 400;
+  lp.Q.value = 0.9;
+  const mix = ctx.createGain();
+  mix.connect(lp);
+  lp.connect(sat);
+  sat.connect(outGain);
+  outGain.connect(ctx.destination);
+
+  // Dragging a letter sideways lands here on every pointer move, and each call builds
+  // a fresh transfer curve and swaps it into a live node, so skip the ones that
+  // wouldn't change the sound.
+  let gritAt = -1;
+  const setGrit = (amount) => {
+    if (Math.abs(amount - gritAt) < 0.005) return;
+    gritAt = amount;
+    const curve = new Float32Array(1024);
+    const k = 1 + amount * 4;
+    for (let i = 0; i < 1024; i += 1) {
+      const x = (i / 1023) * 2 - 1;
+      curve[i] = (Math.tanh(x * k) / Math.tanh(k)) * 0.92;
+    }
+    sat.curve = curve;
+  };
+  setGrit(0.45);
+
+  // Tapped off the master *after* the fade, so what the field answers is what you
+  // hear — including the ten-second fade and the filter closing over it. An analyser
+  // is pulled by having an input; it doesn't need to reach the destination itself.
+  const spectrum = ctx.createAnalyser();
+  spectrum.fftSize = 2048;
+  // Barely smoothed: the FFT's own averaging blunts exactly the transients the
+  // picture wants, so the smoothing that's left is done per-band on the way out.
+  spectrum.smoothingTimeConstant = 0.15;
+  outGain.connect(spectrum);
+  const specData = new Uint8Array(spectrum.frequencyBinCount);
+  const binHz = ctx.sampleRate / spectrum.fftSize;
+  const binsFor = (lo, hi) => [
+    Math.max(1, Math.round(lo / binHz)),
+    Math.min(spectrum.frequencyBinCount - 1, Math.round(hi / binHz)),
+  ];
+  // Kick and sub / toms and stab body / claps and stab top / hats, ride and shaker.
+  const SPEC_BANDS = [binsFor(30, 130), binsFor(150, 700), binsFor(900, 4000),
+                      binsFor(5000, 14000)];
+
+  const lfo = ctx.createOscillator();
+  lfo.frequency.value = 0.13;
+  const lfoAmt = ctx.createGain();
+  lfoAmt.gain.value = 0;
+  lfo.connect(lfoAmt);
+  lfoAmt.connect(lp.frequency);
+  lfo.start();
+
+  const verb = ctx.createConvolver();
+  verb.buffer = ir;
+  const verbSend = ctx.createGain();
+  verbSend.gain.value = 0.6;
+  verbSend.connect(verb);
+  verb.connect(mix);
+
+  const dly = ctx.createDelay(1.2);
+  const dlyLp = ctx.createBiquadFilter();
+  dlyLp.type = 'lowpass';
+  dlyLp.frequency.value = 1900;
+  const fb = ctx.createGain();
+  fb.gain.value = 0.33;
+  dly.connect(dlyLp);
+  dlyLp.connect(fb);
+  fb.connect(dly);
+  dlyLp.connect(mix);
+  const dlySend = ctx.createGain();
+  dlySend.gain.value = 0.24;
+  dlySend.connect(dly);
+
+  // Sidechain. Sub and stabs run through here and get flattened by every kick; the
+  // drums bypass it so the kick isn't ducking itself. This duck is most of the
+  // pumping energy — it's deep and it recovers fast.
+  const pump = ctx.createGain();
+  const tuned = ctx.createGain();
+  tuned.gain.value = 0.62;
+  pump.connect(tuned);
+  tuned.connect(mix);
+  const drums = ctx.createGain();
+  drums.gain.value = 1;
+  drums.connect(mix);
+
+  // Every kick the sequencer books, so the picture can hit exactly when the drum
+  // does. Detecting it in the spectrum instead doesn't work here: a continuous sub
+  // sits under the kick in the same few bins, so the bottom end is always hot and its
+  // level says nothing about when the drum landed. The first attempt measured a pulse
+  // pinned at 0.98 that never moved. The sequencer already knows, so ask it.
+  const bookedKicks = [];
+  let lastKick = -1;
+  let lastKickLvl = 0;
+  const kickEnv = () => {
+    while (bookedKicks.length && bookedKicks[0][0] <= ctx.currentTime) {
+      const k = bookedKicks.shift();
+      lastKick = k[0];
+      lastKickLvl = k[1];
+    }
+    if (lastKick < 0) return 0;
+    // Linear fall over a quarter second, scaled by how loud that kick actually was —
+    // so a half-faded kick mid-crossfade pulses half as hard.
+    return Math.max(0, 1 - (ctx.currentTime - lastKick) / 0.24) * Math.min(1, lastKickLvl);
+  };
+
+  function kick(t, level) {
+    bookedKicks.push([t, level]);
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.frequency.setValueAtTime(170, t);
+    o.frequency.exponentialRampToValueAtTime(44, t + 0.075);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(level, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
+    o.connect(g);
+    g.connect(drums);
+    o.start(t);
+    o.stop(t + 0.38);
+    // A short noise transient so it reads on small speakers, where the 44 Hz body
+    // isn't there at all.
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 1400;
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(level * 0.32, t);
+    cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.022);
+    s.connect(hp);
+    hp.connect(cg);
+    cg.connect(drums);
+    s.start(t, Math.random() * 1.4);
+    s.stop(t + 0.04);
+    // The duck tracks how loud this kick actually is, so a half-faded kick during a
+    // groove crossfade doesn't flatten the whole mix as hard as a full one.
+    pump.gain.setValueAtTime(1, t);
+    pump.gain.linearRampToValueAtTime(1 - 0.84 * Math.min(1, level), t + 0.012);
+    pump.gain.linearRampToValueAtTime(1, t + 0.19);
+  }
+
+  function clap(t, level) {
+    for (let k = 0; k < 4; k += 1) {
+      const tt = t + k * 0.009;
+      const s = ctx.createBufferSource();
+      s.buffer = noise;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 1500;
+      bp.Q.value = 0.9;
+      const g = ctx.createGain();
+      const last = k === 3;
+      g.gain.setValueAtTime(0.0001, tt);
+      g.gain.exponentialRampToValueAtTime(level * (last ? 0.9 : 0.55), tt + 0.002);
+      g.gain.exponentialRampToValueAtTime(0.0001, tt + (last ? 0.16 : 0.035));
+      s.connect(bp);
+      bp.connect(g);
+      g.connect(drums);
+      g.connect(verbSend);
+      s.start(tt, Math.random() * 1.4);
+      s.stop(tt + 0.2);
+    }
+  }
+
+  function hat(t, level, open) {
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    s.playbackRate.value = 1.6;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 8200;
+    const g = ctx.createGain();
+    const dur = open ? 0.15 : 0.032;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(level, t + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(hp);
+    hp.connect(g);
+    g.connect(drums);
+    if (open) g.connect(verbSend);
+    s.start(t, Math.random() * 1.4);
+    s.stop(t + dur + 0.02);
+  }
+
+  function shaker(t, level) {
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 6200;
+    bp.Q.value = 1.6;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(level, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+    s.connect(bp);
+    bp.connect(g);
+    g.connect(drums);
+    s.start(t, Math.random() * 1.4);
+    s.stop(t + 0.1);
+  }
+
+  function ride(t, level) {
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 9500;
+    bp.Q.value = 0.7;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(level, t + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    s.connect(bp);
+    bp.connect(g);
+    g.connect(drums);
+    g.connect(verbSend);
+    s.start(t, Math.random() * 1.4);
+    s.stop(t + 0.32);
+  }
+
+  // Pitched tom. Sine body plus a noise skin, tuned off the groove's own root so
+  // the tribal fills stay in key.
+  function tom(t, midi, level) {
+    const hz = mtof(midi);
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.frequency.setValueAtTime(hz * 1.6, t);
+    o.frequency.exponentialRampToValueAtTime(hz, t + 0.09);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(level, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.24);
+    o.connect(g);
+    g.connect(drums);
+    g.connect(verbSend);
+    o.start(t);
+    o.stop(t + 0.26);
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = hz * 4;
+    const sg = ctx.createGain();
+    sg.gain.setValueAtTime(level * 0.22, t);
+    sg.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    s.connect(bp);
+    bp.connect(sg);
+    sg.connect(drums);
+    s.start(t, Math.random() * 1.4);
+    s.stop(t + 0.07);
+  }
+
+  // Deep sine sub with a triangle an octave up for definition. Gently lowpassed and
+  // nowhere near resonance — the round bottom end, not a lead.
+  function sub(t, midi, dur, lvl) {
+    const hz = mtof(midi);
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = 240;
+    f.Q.value = 0.6;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.62 * lvl, t + 0.012);
+    g.gain.setValueAtTime(0.62 * lvl, t + dur * 0.88);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    const a = ctx.createOscillator();
+    a.type = 'sine';
+    a.frequency.value = hz;
+    a.connect(f);
+    a.start(t);
+    a.stop(t + dur + 0.03);
+    const bq = ctx.createOscillator();
+    bq.type = 'triangle';
+    bq.frequency.value = hz * 2;
+    const bg = ctx.createGain();
+    bg.gain.value = 0.16;
+    bq.connect(bg);
+    bg.connect(f);
+    bq.start(t);
+    bq.stop(t + dur + 0.03);
+    f.connect(g);
+    g.connect(pump);
+  }
+
+  // Chord stab: detuned saws, fast attack, short decay, lowpassed well below any
+  // screech. Rhythmic and repeated, which is the whole point — a held pad glide was
+  // inaudible under the drums, but a stab on every offbeat states the chord clearly.
+  function stab(t, chord, dur, lvl) {
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.setValueAtTime(2600, t);
+    f.frequency.exponentialRampToValueAtTime(900, t + dur);
+    f.Q.value = 1;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.3 * lvl, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.3 * lvl * 0.34, t + Math.min(dur * 0.5, 0.22));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    chord.tones.forEach((tn, i) => {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = mtof(chord.root + tn);
+      o.detune.value = (i - 1.5) * 6;
+      o.connect(f);
+      o.start(t);
+      o.stop(t + dur + 0.05);
+    });
+    f.connect(g);
+    g.connect(pump);
+    g.connect(verbSend);
+    g.connect(dlySend);
+  }
+
+  // Announced, not sprung. The first version marked a change by cutting the master
+  // filter to 600 Hz on the downbeat — which put a hole in the music at the one
+  // moment it needs to carry you across. Both of these add energy instead: a riser
+  // swells into the change, and a soft cymbal lands on it.
+  function riser(t, dur) {
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    s.loop = true;
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.Q.value = 1.3;
+    bp.frequency.setValueAtTime(600, t);
+    bp.frequency.exponentialRampToValueAtTime(6500, t + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.16, t + dur * 0.9);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.06);
+    s.connect(bp);
+    bp.connect(g);
+    g.connect(drums);
+    g.connect(verbSend);
+    s.start(t, Math.random());
+    s.stop(t + dur + 0.12);
+  }
+
+  function swell(t) {
+    const s = ctx.createBufferSource();
+    s.buffer = noise;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 4400;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.13, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+    s.connect(hp);
+    hp.connect(g);
+    g.connect(drums);
+    g.connect(verbSend);
+    s.start(t, Math.random() * 0.4);
+    s.stop(t + 1.2);
+  }
+
+  let enabled = false;
+  let running = false;
+  let engagement = 0;
+  // What you actually hear. It comes up with the picture but takes about ten seconds
+  // to go, because the two want opposite things: the letters are tuned to snap back
+  // the instant you leave, and following that straight down made the music sound like
+  // the record being switched off. Everything downstream is gated on this rather than
+  // on engagement — including the clock, so the groove plays on underneath while it
+  // fades instead of stopping and leaving a reverb tail alone in the room, and coming
+  // back inside the fade rejoins the take mid-bar rather than restarting it.
+  let level = 0;
+  let lastAt = 0;
+  let step = 0;
+  let nextTime = 0;
+  let timer = null;
+  // Two grooves are live at once. `blend` walks from the one you left to the one you
+  // claimed over half a bar, so nothing is ever switched — the old hats thin out as
+  // the new toms arrive. `latchAt` is the step the swap is booked for, set a couple
+  // of sixteenths ahead so the riser has somewhere to swell from.
+  let prevIdx = 0;
+  let curIdx = 0;
+  let targetGroove = 0;
+  let blend = 1;
+  let latchAt = -1;
+  const BLEND_STEPS = 8;
+
+  const has = (list, st) => list.indexOf(st) >= 0;
+  const ease = (x) => x * x * (3 - 2 * x);
+  // Equal-power crossfade: the two weights are a quarter-circle apart, so their
+  // squares sum to one and the midpoint of a transition holds its level. Fading them
+  // linearly instead cost 3 dB halfway across, which is small but it is a dip, and
+  // going from the busiest groove to the sparsest is where you could hear it.
+  const weights = (x) => {
+    const th = ease(x) * Math.PI * 0.5;
+    return [Math.cos(th), Math.sin(th)];
+  };
+  // Toms walk the chord rather than sitting on one drum, so the fills stay in key.
+  const TOM_WALK = [0, 7, 3, 10, 5, 12];
+
+  function scheduleStep(i, t, s16) {
+    const st = i % 16;
+
+    // Book the change two sixteenths out and swell into it. Waiting for the current
+    // crossfade to pass halfway before booking the next one is what keeps a fast
+    // sweep across all four letters reading as a chain of mixes rather than a mess:
+    // the request is held, not dropped, and lands as soon as there's room for it.
+    if (latchAt < 0 && targetGroove !== curIdx && blend > 0.5) {
+      latchAt = i + 2 + (i % 2);
+      riser(t, s16 * (latchAt - i));
+    }
+    if (i === latchAt) {
+      prevIdx = curIdx;
+      curIdx = targetGroove;
+      blend = 0;
+      latchAt = -1;
+      swell(t);
+      // Bring the incoming bed in on the change instead of waiting for its turn in
+      // the bar. A breakdown holds the room with one long sub note starting on the
+      // downbeat, so landing on, say, the third sixteenth used to leave the outgoing
+      // drums fading out over nothing — the only dip left once the crossfade went
+      // equal-power, and the only one you could hear. This note runs until whichever
+      // of the groove's own notes comes next, so it fills the gap exactly.
+      const nb = GROOVES[curIdx];
+      const longest = Math.max(0, ...nb.sub.map(([, , len]) => len));
+      if (longest >= 4) {
+        const nxt = nb.sub.map(([s]) => s).filter((s) => s > st).sort((a, b) => a - b)[0];
+        const span = (nxt === undefined ? 16 : nxt) - st;
+        if (span > 0.5) {
+          sub(t, nb.chord.root - 24, s16 * span, nb.tuned === undefined ? 1 : nb.tuned);
+        }
+      }
+    }
+
+    const A = GROOVES[prevIdx];
+    const B = GROOVES[curIdx];
+    const [wA, wB] = weights(blend);
+    const pu = (A.punch * wA + B.punch * wB) / (wA + wB)
+             * (P.punch === undefined ? 1 : P.punch);
+    // A hit only one groove wants fades in or out; a hit they both want stays at full
+    // level rather than being summed, so the kick doesn't swell mid-transition just
+    // because two patterns happen to agree about it.
+    //
+    // At the redline all four grooves play at once: any voice that *any* groove asks for
+    // on this step fires, so the four patterns stack into one wall. That is also what
+    // makes it feel faster than the dial can go without touching the tempo — the floor
+    // groove's ghost hats cover all sixteen sixteenths, so the union is already
+    // double-time — which matters, because actually raising the rate here would drag the
+    // visualiser's beat clock and the HUD's bar out of step with it.
+    //
+    // The kick is the one exception and is pinned to four-on-the-floor rather than joining
+    // the union, with off-grid kicks pulled out as the party rises. Half of that is genre
+    // (a rave kick is on the floor, and the union of four kick patterns is just mud), and
+    // half is the photosensitivity guardrail: the field flashes on every kick the
+    // sequencer books, and the union would have put that over three flashes a second.
+    const rl = rave.lit;
+    const lv = (key) => {
+      const a = has(A[key], st);
+      const b = has(B[key], st);
+      const base = a && b ? 1 : a ? wA : b ? wB : 0;
+      if (rl < 0.01) return base;
+      if (key === 'kick') {
+        return has(RAVE_KICK, st) ? Math.max(base, rl) : base * (1 - rl);
+      }
+      // Borrowed hits come in a little under the settled groove's own, so the letter you
+      // are actually on stays accented through the wall. Bringing them in at full level
+      // made all four grooves identical at the redline, and moving between letters stopped
+      // changing anything at all — the party ate the thing the letters were for.
+      return GROOVES.some((g) => has(g[key], st)) ? Math.max(base, rl * 0.8) : base;
+    };
+
+    // A riser every second bar while lit, so the party keeps building instead of sitting
+    // at one level. Reusing the transition riser rather than inventing a voice for it.
+    if (st === 0 && rl > 0.5 && Math.floor(i / 16) % 2 === 1) riser(t, s16 * 15);
+
+    const kl = lv('kick');
+    if (kl > 0.04) kick(t, kl * pu);
+    const cl = lv('clap');
+    if (cl > 0.04) clap(t, cl * 0.42 * pu);
+    const op = lv('open');
+    const hl = lv('hat');
+    if (hl > 0.04) hat(t, hl * 0.13 * pu, op > 0.3);
+    else if (op > 0.04) hat(t, op * 0.14 * pu, true);
+    const gh = lv('hatGhost');
+    if (gh > 0.04) hat(t, gh * 0.045 * pu, false);
+    const sh = lv('shake');
+    if (sh > 0.04) shaker(t, sh * 0.075 * pu);
+    const rd = lv('ride');
+    if (rd > 0.04) ride(t, rd * 0.05 * pu);
+
+    // The tuned parts take their rhythm from whichever groove asked for it but their
+    // harmony always from the incoming one, so two roots are never sounding at once.
+    // The chord does land on the latch rather than crossfading, which is what a chord
+    // change is; the riser and the cymbal are sitting on that exact beat to carry it.
+    [[A, wA], [B, wB]].forEach(([gr, wt]) => {
+      if (wt < 0.04) return;
+      // The bed level is the incoming groove's, not the pattern's owner, so a
+      // breakdown's sub doesn't arrive at the previous groove's weight.
+      const bed = wt * (B.tuned === undefined ? 1 : B.tuned);
+      const ti = gr.tom.indexOf(st);
+      if (ti >= 0) tom(t, gr.chord.root - 12 + TOM_WALK[ti % 6], wt * 0.5 * pu);
+      gr.sub.forEach(([sst, semis, len]) => {
+        if (sst === st) sub(t, B.chord.root - 24 + semis, s16 * len, bed);
+      });
+      if (has(gr.stab, st)) stab(t, B.chord, s16 * gr.stabLen, bed);
+    });
+
+    blend = Math.min(1, blend + 1 / BLEND_STEPS);
+  }
+
+  function tick() {
+    const s16 = 60 / (P.tempo || 115) / 4;
+    // The clock only runs while you are engaged and parks at the top of the bar when
+    // you leave, so re-entry lands on a downbeat while a slide between letters —
+    // which never drops engagement to zero — keeps the take going.
+    if (!running) {
+      if (level < 0.02) return;
+      running = true;
+      step = 0;
+      nextTime = ctx.currentTime + 0.05;
+      prevIdx = targetGroove;
+      curIdx = targetGroove;
+      blend = 1;
+      latchAt = -1;
+    } else if (level < 0.01) {
+      // Below this the gain is under a thousandth and the filter is nearly shut, so
+      // there is nothing left to hear and no reason to keep scheduling into it.
+      running = false;
+      return;
+    }
+    const ahead = ctx.currentTime + 0.14;
+    while (nextTime < ahead) {
+      scheduleStep(step, nextTime, s16);
+      step += 1;
+      nextTime += s16;
+    }
+  }
+
+  return {
+    get enabled() { return enabled; },
+    async toggle() {
+      enabled = !enabled;
+      if (enabled) {
+        await ctx.resume();
+        dly.delayTime.value = (60 / (P.tempo || 115)) * 0.75;
+        if (!timer) timer = setInterval(tick, 25);
+      } else {
+        if (timer) { clearInterval(timer); timer = null; }
+        running = false;
+        level = 0;
+        lastAt = 0;
+        outGain.gain.cancelScheduledValues(ctx.currentTime);
+        outGain.gain.setTargetAtTime(0, ctx.currentTime, 0.05);
+        setTimeout(() => { if (!enabled) ctx.suspend(); }, 500);
+      }
+      return enabled;
+    },
+    setGrit,
+    setTempo(bpm) { dly.delayTime.setTargetAtTime((60 / bpm) * 0.75, ctx.currentTime, 0.1); },
+    update(gate, focusIdx, nx) {
+      engagement = enabled ? gate : 0;
+      if (!enabled) return;
+      const now = ctx.currentTime;
+      const dt = lastAt ? Math.min(0.12, now - lastAt) : 1 / 60;
+      lastAt = now;
+      // Fast up, slow down. At this time constant the fade is roughly 30 dB down by
+      // ten seconds, which is where it stops being something you're listening to.
+      const tau = engagement > level ? 0.09 : 3;
+      level += (engagement - level) * (1 - Math.exp(-dt / tau));
+      outGain.gain.setTargetAtTime(level * P.volume * 0.8, now, 0.05);
+      // Brightness rides the same level, the groove's own bias, and where you are
+      // across the word — so the A genuinely opens up, the R genuinely goes dark, and
+      // walking away sinks the mix rather than only turning it down.
+      const [wa, wb] = weights(blend);
+      const bias = (GROOVES[prevIdx].bright * wa + GROOVES[curIdx].bright * wb) / (wa + wb);
+      // The filter swings wide open at the redline — roughly three octaves up, which is
+      // what turns the same drums from a club mix into something shrieking. The soft clip
+      // sits after this filter, so opening it also drives the distortion harder.
+      const cut = 380 * Math.pow(2, level * 4.1 + bias * 1.5 + nx * 0.7 + rave.lit * 1.6);
+      lp.frequency.setTargetAtTime(Math.min(cut, 14000), now, 0.12);
+      lfoAmt.gain.setTargetAtTime(level * 700, now, 0.25);
+      if (focusIdx >= 0) targetGroove = focusIdx;
+    },
+    // The mix split four ways for the visualiser, the kick, and how much music there
+    // is. Null when the sound is off, which is what returns the field to its
+    // unreactive look.
+    //
+    // Raw here — just the bin average over 0..1. Rescaling it to a useful range is
+    // the caller's job, because the right window differs per band by a lot and has to
+    // be found live; see the auto-gain in the frame loop.
+    readBands() {
+      if (!enabled) return null;
+      spectrum.getByteFrequencyData(specData);
+      const out = SPEC_BANDS.map(([a, z]) => {
+        let s = 0;
+        for (let i = a; i <= z; i += 1) s += specData[i];
+        return s / (z - a + 1) / 255;
+      });
+      return { lo: out[0], mid: out[1], hi: out[2], top: out[3], kick: kickEnv(), level };
+    },
+    // What the sequencer is doing right now, for the HUD to read. The step is
+    // corrected back by however far ahead the scheduler has run, so the playhead
+    // shows the sixteenth you are hearing rather than the one being written.
+    musicState() {
+      if (!enabled || !running) return null;
+      const s16 = 60 / (P.tempo || 115) / 4;
+      // Where the music actually is, in fractional sixteenths: the scheduler's step
+      // counter minus however far ahead of the speakers it has written. The HUD draws
+      // its beat off this rather than off the frame clock, so the picture is locked to
+      // what you're hearing and can't drift as the tempo changes.
+      const pos = step - (nextTime - ctx.currentTime) / s16;
+      const [wA, wB] = weights(blend);
+      const weight = { kick: 1, clap: 0.7, tom: 0.6, open: 0.5, stab: 0.45,
+                       hat: 0.4, ride: 0.3, shake: 0.25, hatGhost: 0.2 };
+      const density = [];
+      for (let k = 0; k < 16; k += 1) {
+        let d = 0;
+        [[GROOVES[prevIdx], wA], [GROOVES[curIdx], wB]].forEach(([gr, wt]) => {
+          Object.keys(weight).forEach((key) => {
+            if (has(gr[key], k)) d += weight[key] * wt;
+          });
+          gr.sub.forEach(([sst]) => { if (sst === k) d += 0.4 * wt; });
+        });
+        density.push(Math.min(1, d / 2.3));
+      }
+      return {
+        step: Math.floor((((pos % 16) + 16) % 16)),
+        beat: ((((pos / 4) % 1) + 1) % 1),
+        blend,
+        from: GROOVES[prevIdx],
+        to: GROOVES[curIdx],
+        bpm: Math.round(P.tempo || 115),
+        density,
+      };
+    },
+  };
+}
+
+const audio = createAudio();
+const soundBtn = document.getElementById('soundToggle');
+if (!audio) {
+  soundBtn.disabled = true;
+  soundBtn.textContent = 'No audio';
+} else {
+  soundBtn.addEventListener('click', async () => {
+    const on = await audio.toggle();
+    soundBtn.textContent = on ? 'Sound on' : 'Sound off';
+    soundBtn.setAttribute('aria-pressed', String(on));
+  });
+}
+
+// ── boot ───────────────────────────────────────────────────────────────────
+function showFallback(detail) {
+  document.getElementById('fallback').classList.add('show');
+  document.getElementById('fallback-detail').textContent = detail;
+  dialsEl.style.display = 'none';
+  document.getElementById('panelToggle').style.display = 'none';
+}
+
+async function start() {
+  if (!navigator.gpu) {
+    showFallback('navigator.gpu is undefined — no WebGPU in this browser.');
+    return;
+  }
+
+  let gpu;
+  try {
+    gpu = await init();
+  } catch (err) {
+    showFallback(String(err && err.message ? err.message : err));
+    return;
+  }
+
+  const glCanvas = document.getElementById('gl');
+  const view = surface(gpu, glCanvas, { dpr: [1, 2] });
+  const linear = sampler(gpu, {
+    minFilter: 'linear', magFilter: 'linear',
+    addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge',
+  });
+
+  const half = ([w, h]) => [Math.max(1, Math.floor(w / 2)), Math.max(1, Math.floor(h / 2))];
+
+  const hdr = target(gpu, { size: view.size, format: 'rgba16float' });
+  const bloomA = target(gpu, { size: half(view.size), format: 'rgba16float' });
+  const bloomB = target(gpu, { size: half(view.size), format: 'rgba16float' });
+
+  const field = effect(gpu, FIELD_WGSL, {
+    label: 'field',
+    set: {
+      p: {
+        resX: hdr.size[0], resY: hdr.size[1],
+        time: 0,
+        cols: P.cols, barWidth: P.barWidth, gapNoise: P.gapNoise,
+        logoScale: P.logoScale, threshold: P.threshold, edgeJitter: P.edgeJitter,
+        blobWarp: P.blobWarp, warpSpeed: P.warpSpeed,
+        hue: P.hue, sat: P.sat, shimmer: P.shimmer, coreGlow: P.coreGlow,
+        mouseX: 0.5, mouseY: 0.5,
+        offX: 0,
+        flow: P.flow,
+        agit: 1 - P.restCalm,
+        pad0: 0,
+      },
+      L: {
+        o: [0, 0, 1, 1], m: [0, 0, 1, 1], a: [0, 0, 1, 1], r: [0, 0, 1, 1],
+        rot: [0, 0, 0, 0], hover: [0, 0, 0, 0], zs: [0, 0, 0, 0],
+      },
+    },
+  });
+
+  const bright = effect(gpu, BRIGHT_WGSL, {
+    label: 'bright',
+    set: { src: hdr, samp: linear, b: { threshold: P.bloomThreshold, pad0: 0, pad1: 0, pad2: 0 } },
+  });
+
+  const blurH = effect(gpu, BLUR_WGSL, {
+    label: 'blurH',
+    set: { src: bloomA, samp: linear, bl: { dirX: 1, dirY: 0, radius: P.bloomRadius, pad: 0 } },
+  });
+  const blurV = effect(gpu, BLUR_WGSL, {
+    label: 'blurV',
+    set: { src: bloomB, samp: linear, bl: { dirX: 0, dirY: 1, radius: P.bloomRadius, pad: 0 } },
+  });
+
+  const composite = effect(gpu, COMPOSITE_WGSL, {
+    label: 'composite',
+    set: {
+      scene: hdr, bloomTex: bloomA, samp: linear,
+      c: { amount: P.bloomAmount, exposure: P.exposure, rave: 0, pad1: 0 },
+    },
+  });
+
+  // Dial changes only touch the uniforms they own — no per-frame writes for
+  // values that aren't animating.
+  onDialChange = (id) => {
+    // Force the rave layer to be re-applied over the new value, or moving a bloom dial
+    // mid-party would leave the plain P value in place until the envelope next moved.
+    if (id === 'bloomThreshold' || id === 'bloomAmount' || id === 'exposure') raveApplied = -1;
+    if (id === 'bloomThreshold') bright.set({ b: { threshold: P.bloomThreshold } });
+    if (id === 'bloomRadius') {
+      blurH.set({ bl: { radius: P.bloomRadius } });
+      blurV.set({ bl: { radius: P.bloomRadius } });
+    }
+    if (id === 'bloomAmount') composite.set({ c: { amount: P.bloomAmount } });
+    if (id === 'exposure') composite.set({ c: { exposure: P.exposure } });
+    if (id === 'grit' && audio) audio.setGrit(P.grit);
+    if (id === 'tempo' && audio) audio.setTempo(P.tempo);
+  };
+
+  view.onResize(({ width, height }) => {
+    hdr.resize([width, height]);
+    const [hw, hh] = half([width, height]);
+    bloomA.resize([hw, hh]);
+    bloomB.resize([hw, hh]);
+    field.set({ p: { resX: width, resY: height } });
+  });
+
+  gpu.onError((err) => console.error('[vgpu]', err.code ?? '', err.message ?? err));
+
+  const time = clock(gpu);
+  let animatedTime = 0;
+  let fpsLast = performance.now();
+  let fpsFrames = 0;
+  const fpsEl = document.getElementById('fps');
+
+  frameLoop(gpu, (frame) => {
+    // Real dt drives interaction easing; animatedTime drives the idle drift so
+    // the Animate switch freezes the motion without freezing the interaction.
+    const dt = Math.min(time.deltaTime, 1 / 20);
+    if (P.animate) animatedTime += dt;
+    // Beats, not seconds — so dragging the tempo up genuinely quickens the jitter
+    // rather than just changing what you hear. Frozen by the same switch as the idle
+    // drift, since that switch means "stop moving".
+    if (P.animate) mtime += dt * ((P.tempo || 115) / 60);
+    const raw = audio ? audio.readBands() : null;
+    // Symmetric, unlike the kick below. A fast rise and slow fall on a signed value
+    // would quietly bias it positive and put back the brightness lift the centring
+    // just took out; the snap belongs to the pulse, which is what a transient is for.
+    const env = (cur, tgt) => approach(cur, tgt, 0.045, dt);
+    vis.lo = env(vis.lo, raw ? autoGain(0, raw.lo, dt) : 0);
+    vis.mid = env(vis.mid, raw ? autoGain(1, raw.mid, dt) : 0);
+    vis.hi = env(vis.hi, raw ? autoGain(2, raw.hi, dt) : 0);
+    vis.top = env(vis.top, raw ? autoGain(3, raw.top, dt) : 0);
+    // Straight from the sequencer's own kicks, so it can't be late and can't be
+    // missed. Only smoothed on the way down, and only a little.
+    vis.pulse = Math.max(raw ? raw.kick : 0, approach(vis.pulse, 0, 0.055, dt));
+    vis.mus = approach(vis.mus, raw ? raw.level : 0, 0.2, dt);
+
+    // ── the redline ──────────────────────────────────────────────────────────
+    // Pegged means pegged — the dial's own maximum, not "nearly". Charge builds while you
+    // hold it there and drains quickly when you don't, and ignition is a threshold on the
+    // charge rather than the charge itself, so holding is a build in which nothing happens
+    // and then it goes, rather than a slow fade up.
+    const pegged = P.tempo >= RAVE_MAX - 1e-6;
+    rave.charge = clamp(rave.charge + (pegged ? dt / RAVE_HOLD : -dt / 0.4), 0, 1);
+    const wantLit = rave.charge >= 1 ? 1 : 0;
+    // In fast, out slow. A drop lands rather than easing in; but cutting it dead the
+    // instant the tempo dips would read as a bug, so coming down takes a second or two.
+    rave.lit = approach(rave.lit, wantLit, wantLit > rave.lit ? 0.16 : 0.55, dt);
+    const rv = rave.lit;
+
+    // The badge is the deadpan tell. It keeps its own type and its own dim grey the rest of
+    // the time and simply changes what it is reporting, which is why it had to stop saying
+    // "redline" as a permanent subtitle — naming the easter egg in the corner of the screen
+    // gives the whole thing away before anyone finds it.
+    const modeNow = rv > 0.5 ? 'redline' : 'z-space';
+    if (modeEl.textContent !== modeNow) modeEl.textContent = modeNow;
+    modeEl.style.color = rv > 0.5 ? '#ff5a3c' : '';
+
+    updateLetters(animatedTime, dt);
+
+    const toDevice = hdr.size[0] / Math.max(1, window.innerWidth);
+    const packed = states.map((st) => [st.offX * toDevice, st.offY * toDevice, st.scale, st.dim]);
+
+    field.set({
+      p: {
+        time: animatedTime,
+        cols: P.cols, barWidth: P.barWidth,
+        logoScale: P.logoScale, threshold: P.threshold,
+        // Everything the party turns up is multiplied on the way into the uniform, never
+        // written back into P. Igniting it would otherwise stomp the dial values and Copy
+        // dials would start reporting numbers that were never set — so the sliders keep
+        // saying what you set them to, and letting go restores it exactly.
+        // Restrained on purpose, and this is the one place "turn everything up" had to be
+        // argued with. Taken literally it deletes the logo: the first pass added 0.30 of gap
+        // noise, doubled the edge jitter and forced full agitation, and the result was
+        // confetti with no readable OMAR anywhere in it. What the party is allowed to do is
+        // move faster and burn brighter; what it is not allowed to do is chew up the
+        // letterforms, so the terms that change *shape* get a fraction of the ones that
+        // change *speed*.
+        gapNoise: P.gapNoise + rv * 0.03,
+        edgeJitter: P.edgeJitter * (1 + rv * 0.18),
+        blobWarp: P.blobWarp * (1 + rv * 0.18),
+        warpSpeed: P.warpSpeed * (1 + rv * 1.40),
+        shimmer: P.shimmer * (1 + rv * 0.55),
+        hue: P.hue, sat: P.sat,
+        // The one thing the party turns *down*, and further than feels natural. The core is
+        // white, and white is the enemy here — it is what the reinhard bleaches the hue into.
+        coreGlow: P.coreGlow * (1 - rv * 0.45),
+        mouseX: pointer.nx, mouseY: pointer.ny,
+        offX: markOffsetCss() * toDevice,
+        flow: P.flow * (1 + rv * 1.30),
+        // Agitated while lit whatever the pointer is doing, so at the redline the whole word
+        // is alive rather than only whichever letter you happen to be holding — but capped
+        // well below 1, because full agitation is what made the letters unreadable.
+        agit: Math.max((1 - P.restCalm) + P.restCalm * activity, rv * 0.3),
+        mtime, mus: vis.mus, pulse: vis.pulse,
+        bandLo: vis.lo, bandMid: vis.mid, bandHi: vis.hi, bandTop: vis.top,
+        tempoN: clamp(((P.tempo || 115) - 90) / 50, 0, 1),
+        // The calming of unclaimed letters is partly lifted, so at the redline the whole word
+        // joins in rather than only the claimed letter. Only partly: lifting it all the way
+        // put every letter at full deformation at once, which is where the confetti came from.
+        spaceWave: P.spaceWave + rv * 0.5 * (1 - P.spaceWave),
+        rave: rv,
+      },
+      L: {
+        o: packed[0], m: packed[1], a: packed[2], r: packed[3],
+        rot: states.map((st) => st.rot),
+        hover: states.map((st) => st.hover),
+        zs: states.map((st) => st.z),
+      },
+    });
+
+    // The bloom passes aren't rewritten every frame normally, so they're refreshed only
+    // when the envelope has actually moved. Threshold drops so far more of the field
+    // blooms and amount climbs — while exposure comes *down*, which is the counterintuitive
+    // half: the composite tonemaps per channel, so pushing exposure up at full saturation
+    // drives every channel to 1.0 and turns the rainbow into a white blob. Dialling
+    // everything up naively is precisely how you lose the colour.
+    if (Math.abs(rv - raveApplied) > 0.002) {
+      // Only mildly lowered. Dropping the threshold hard put the whole field into the bloom
+      // and the glow closed up the O and A counters and filled in the M's valley — the mark
+      // went illegible from light rather than from geometry, which took a while to spot.
+      bright.set({ b: { threshold: P.bloomThreshold * (1 - rv * 0.15) } });
+      // Exposure still comes down, but only a little. Pulling it 42% — enough to fully
+      // protect the saturation — measured out as a murky, dim picture: technically colourful
+      // and not remotely a party. Most of the hue is defended by taking white out of the
+      // core instead, which costs no brightness.
+      composite.set({ c: { amount: P.bloomAmount * (1 + rv * 0.35),
+                           exposure: P.exposure * (1 - rv * 0.06), rave: rv } });
+      raveApplied = rv;
+    }
+
+    frame.pass(hdr, field);
+    frame.pass(bloomA, bright);
+    frame.pass(bloomB, blurH);
+    frame.pass(bloomA, blurV);
+    frame.pass(view, composite);
+
+    const now = performance.now();
+    drawHud(now, hudUp);
+    drawTagline(now, dt);
+    // Sound reads the same engagement number the HUD does, so the music can't get
+    // out of step with what you're looking at.
+    if (audio) audio.update(hudUp, focusIdx, pointer.nx);
+
+    fpsFrames++;
+    if (now - fpsLast >= 500) {
+      fpsEl.textContent = `${Math.round((fpsFrames * 1000) / (now - fpsLast))} fps`;
+      fpsFrames = 0;
+      fpsLast = now;
+    }
+  });
+}
+
+start();
+</script>
+</body>
+</html>

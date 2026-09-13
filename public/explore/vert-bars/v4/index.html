@@ -1,0 +1,1389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>vert-bars v4 — OMAR letters in Z space (vgpu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #140c16;
+    color: #f4f0f5;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+  .stage { position: fixed; inset: 0; }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #gl { z-index: 1; }
+  #hud { z-index: 2; pointer-events: none; }
+
+  .badge {
+    position: fixed; left: 20px; bottom: 20px; z-index: 3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+  .badge .fps { color: rgba(255,210,120,0.85); }
+
+  .fallback {
+    position: fixed; inset: 0; z-index: 10;
+    display: none; place-content: center;
+    padding: 40px; text-align: center;
+  }
+  .fallback.show { display: grid; }
+  .fallback .inner { max-width: 46ch; margin: 0 auto; }
+  .fallback h2 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+  .fallback p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.6); }
+  .fallback code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: rgba(255,210,120,0.9);
+  }
+  .fallback a { color: #ff7ac8; }
+
+  /* ── Dial panel ── */
+  .panel-toggle {
+    position: fixed; right: 16px; bottom: 16px; z-index: 5;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.72);
+  }
+  .panel-toggle:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+
+  .dials {
+    position: fixed; top: 16px; right: 16px; z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .dials h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,210,120,0.9);
+    margin-bottom: 4px;
+  }
+  .dials .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+  .group { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .group .title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 6px 10px; align-items: center; margin-bottom: 8px;
+  }
+  .row label { font-size: 12px; color: rgba(255,255,255,0.78); }
+  .row .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255,210,120,0.95);
+    min-width: 3.4ch; text-align: right;
+  }
+  .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: #ff7ac8; }
+  .toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px;
+  }
+  .toggle input { accent-color: #ff7ac8; width: 16px; height: 16px; }
+  .reset {
+    margin-top: 12px; width: 100%;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.75);
+  }
+  .reset:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+
+  body.panel-closed .dials {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="gl"></canvas>
+    <canvas id="hud"></canvas>
+  </div>
+
+  <div class="badge">explore / vert-bars / v4 · z-space · <span class="fps" id="fps">—</span></div>
+
+  <div class="fallback" id="fallback">
+    <div class="inner">
+      <h2>This one needs WebGPU</h2>
+      <p>
+        v4 runs on <a href="https://vgpu.sh/">vgpu</a>, so it needs a browser with WebGPU
+        (Chrome/Edge 113+, Safari 18+). The canvas version still runs everywhere —
+        try <a href="../v2/">v2</a>.
+      </p>
+      <p style="margin-top:12px"><code id="fallback-detail"></code></p>
+    </div>
+  </div>
+
+  <button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true">Hide dials</button>
+
+  <aside class="dials" id="dials">
+    <h1>Bar field dials</h1>
+    <div class="sub">crisp at rest · alive on contact</div>
+
+    <div class="group">
+      <div class="title">Depth</div>
+      <div class="row">
+        <label for="zSpread">Z spread</label><span class="val" data-for="zSpread"></span>
+        <input id="zSpread" type="range" min="0" max="1.5" step="0.01" value="0.78" />
+      </div>
+      <div class="row">
+        <label for="parallax">Parallax</label><span class="val" data-for="parallax"></span>
+        <input id="parallax" type="range" min="0" max="1.5" step="0.01" value="0.62" />
+      </div>
+      <div class="row">
+        <label for="driftSpeed">Drift speed</label><span class="val" data-for="driftSpeed"></span>
+        <input id="driftSpeed" type="range" min="0" max="2" step="0.01" value="0.55" />
+      </div>
+      <div class="row">
+        <label for="depthFade">Depth fade</label><span class="val" data-for="depthFade"></span>
+        <input id="depthFade" type="range" min="0" max="1" step="0.01" value="0.46" />
+      </div>
+      <div class="row">
+        <label for="idleLife">Idle life</label><span class="val" data-for="idleLife"></span>
+        <input id="idleLife" type="range" min="0" max="1" step="0.01" value="0.08" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Focus</div>
+      <div class="row">
+        <label for="focusScale">Focus scale</label><span class="val" data-for="focusScale"></span>
+        <input id="focusScale" type="range" min="1" max="3" step="0.01" value="1.45" />
+      </div>
+      <div class="row">
+        <label for="orbitScale">Orbit scale</label><span class="val" data-for="orbitScale"></span>
+        <input id="orbitScale" type="range" min="0.2" max="1" step="0.01" value="0.60" />
+      </div>
+      <div class="row">
+        <label for="orbitSpread">Orbit spread</label><span class="val" data-for="orbitSpread"></span>
+        <input id="orbitSpread" type="range" min="0.2" max="1.4" step="0.01" value="0.82" />
+      </div>
+      <div class="row">
+        <label for="orbitSpeed">Orbit speed</label><span class="val" data-for="orbitSpeed"></span>
+        <input id="orbitSpeed" type="range" min="0" max="2" step="0.01" value="0.55" />
+      </div>
+      <div class="row">
+        <label for="orbitDepth">Orbit depth</label><span class="val" data-for="orbitDepth"></span>
+        <input id="orbitDepth" type="range" min="0" max="0.7" step="0.01" value="0.34" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Motion</div>
+      <div class="row">
+        <label for="shimmer">Stroke shimmer</label><span class="val" data-for="shimmer"></span>
+        <input id="shimmer" type="range" min="0" max="1.5" step="0.01" value="0.80" />
+      </div>
+      <div class="row">
+        <label for="flow">Flow speed</label><span class="val" data-for="flow"></span>
+        <input id="flow" type="range" min="0" max="3" step="0.01" value="1.10" />
+      </div>
+      <div class="row">
+        <label for="restCalm">Rest calm</label><span class="val" data-for="restCalm"></span>
+        <input id="restCalm" type="range" min="0" max="1" step="0.01" value="0.85" />
+      </div>
+      <div class="row">
+        <label for="snap">Snap back</label><span class="val" data-for="snap"></span>
+        <input id="snap" type="range" min="0" max="1" step="0.01" value="0.88" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Density</div>
+      <div class="row">
+        <label for="cols">Columns</label><span class="val" data-for="cols"></span>
+        <input id="cols" type="range" min="40" max="480" step="2" value="310" />
+      </div>
+      <div class="row">
+        <label for="barWidth">Bar width</label><span class="val" data-for="barWidth"></span>
+        <input id="barWidth" type="range" min="0.15" max="0.95" step="0.01" value="0.50" />
+      </div>
+      <div class="row">
+        <label for="gapNoise">Gap noise</label><span class="val" data-for="gapNoise"></span>
+        <input id="gapNoise" type="range" min="0" max="1" step="0.01" value="0.12" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Bloom</div>
+      <div class="row">
+        <label for="bloomThreshold">Threshold</label><span class="val" data-for="bloomThreshold"></span>
+        <input id="bloomThreshold" type="range" min="0" max="1.2" step="0.01" value="0.34" />
+      </div>
+      <div class="row">
+        <label for="bloomRadius">Radius</label><span class="val" data-for="bloomRadius"></span>
+        <input id="bloomRadius" type="range" min="0" max="10" step="0.05" value="3.20" />
+      </div>
+      <div class="row">
+        <label for="bloomAmount">Amount</label><span class="val" data-for="bloomAmount"></span>
+        <input id="bloomAmount" type="range" min="0" max="4" step="0.01" value="1.15" />
+      </div>
+      <div class="row">
+        <label for="exposure">Exposure</label><span class="val" data-for="exposure"></span>
+        <input id="exposure" type="range" min="0.4" max="3" step="0.01" value="1.35" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Shape</div>
+      <div class="row">
+        <label for="logoScale">Logo scale</label><span class="val" data-for="logoScale"></span>
+        <input id="logoScale" type="range" min="0.3" max="1.5" step="0.01" value="0.68" />
+      </div>
+      <div class="row">
+        <label for="threshold">Threshold</label><span class="val" data-for="threshold"></span>
+        <input id="threshold" type="range" min="0.05" max="0.95" step="0.01" value="0.50" />
+      </div>
+      <div class="row">
+        <label for="edgeJitter">Edge jitter</label><span class="val" data-for="edgeJitter"></span>
+        <input id="edgeJitter" type="range" min="0" max="60" step="0.5" value="16" />
+      </div>
+      <div class="row">
+        <label for="blobWarp">Blob warp</label><span class="val" data-for="blobWarp"></span>
+        <input id="blobWarp" type="range" min="0" max="1" step="0.01" value="0.30" />
+      </div>
+      <div class="row">
+        <label for="warpSpeed">Warp speed</label><span class="val" data-for="warpSpeed"></span>
+        <input id="warpSpeed" type="range" min="0" max="2" step="0.01" value="0.45" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Color / HUD</div>
+      <div class="row">
+        <label for="hue">Hue</label><span class="val" data-for="hue"></span>
+        <input id="hue" type="range" min="240" max="400" step="1" value="322" />
+      </div>
+      <div class="row">
+        <label for="sat">Saturation</label><span class="val" data-for="sat"></span>
+        <input id="sat" type="range" min="0" max="100" step="1" value="88" />
+      </div>
+      <div class="row">
+        <label for="coreGlow">White core</label><span class="val" data-for="coreGlow"></span>
+        <input id="coreGlow" type="range" min="0" max="2" step="0.01" value="0.90" />
+      </div>
+      <div class="toggle">
+        <label for="hudOn">Hover HUD</label>
+        <input id="hudOn" type="checkbox" checked />
+      </div>
+      <div class="toggle">
+        <label for="animate">Animate</label>
+        <input id="animate" type="checkbox" checked />
+      </div>
+    </div>
+
+    <button class="reset" id="reset" type="button">Reset dials</button>
+  </aside>
+
+<script type="module">
+/* ─────────────────────────────────────────────────────────
+ * vert-bars v4 — the four letters get their own depth.
+ *
+ * v3 rendered OMAR as one signed-distance field. Here it's split into four
+ * independent letters, each with its own z, drift, rotation and brightness.
+ * At rest they converge on the exact logotype — the presentation layer. The
+ * moment you move the pointer they separate into depth, and the letter under
+ * the cursor is pulled forward, agitates, and shows its detection frame.
+ *
+ * TWO STATES, ONE NUMBER
+ *
+ * `activity` runs 0 → 1 and separates what the field does at rest from what it
+ * does under the pointer. At rest the word has to read as OMAR, so everything
+ * that moves the *silhouette* — edge jitter, punched gaps, the fbm warp — is
+ * scaled down to almost nothing by `agit`. The life at rest lives entirely
+ * *inside* the strokes: energy travelling up each bar, modulating brightness and
+ * the white core while the bar's ends stay exactly where the SDF put them.
+ * Under the pointer `agit` opens up, the letters spread into depth, and the HUD
+ * frames link into one structure. Both directions are fast, and engagement is
+ * keyed to whether the pointer is actually on a letter rather than to a "moved
+ * recently" timer — hold still over a letter and it stays claimed, slide off and
+ * the whole thing snaps back to the logotype inside half a second.
+ *
+ * ONE LETTER TAKES THE STAGE
+ *
+ * Hovering doesn't just brighten a letter, it breaks the word apart: the claimed
+ * letter grows and travels to the middle while the other three shrink and scatter
+ * onto an orbit around it, linked back to it by lines radiating from its centre.
+ * Only the claimed letter carries a readout — the orbiters are there to describe
+ * the space, not to be read.
+ *
+ * The orbit is a tilted plane, not a flat ring. Top of the ellipse is the far side
+ * and bottom is the near side, so each letter swings through depth once per
+ * revolution, getting larger and further off centre as it comes round the front.
+ * On the far side its clearance from the claimed letter relaxes to nearly nothing
+ * so it genuinely passes behind — which is why the layers are composited in depth
+ * order rather than summed. Summing made an overlap read as "brighter", the exact
+ * opposite of "behind", and it was invisible as a bug only while the letters sat
+ * side by side and never met.
+ *
+ * The pointer tests against `restRect`, each letter's slot in the *settled* word,
+ * never against where it currently is. Hit-testing the live box would mean
+ * claiming a letter moves it out from under the cursor, which drops the hover,
+ * which springs it back — an oscillation with no stable state. So the intact
+ * wordmark is the control surface and the scatter is purely the response.
+ *
+ * WHERE DEPTH LIVES
+ *
+ * The CPU owns it. Every frame it computes each letter's { z, scale, offset,
+ * rotation, dim, hover } and hands those to the shader as uniforms. The HUD
+ * reads the *same* numbers, so the boxes track the letters exactly instead of
+ * re-deriving a transform that could drift out of sync.
+ *
+ * Parallax flips sign across the focal plane: letters in front of it slide one
+ * way with the pointer, letters behind it the other. That opposition is what
+ * sells the Z more than scale alone.
+ *
+ * Splitting one SDF into four is close to free — each letter only evaluates its
+ * own blocks, so the total primitive count is unchanged from v3.
+ *
+ * PASS CHAIN (one command buffer per frame)
+ *
+ *   field    → hdr      rgba16float, full res   four letter layers, additive
+ *   bright   → bloomA   half res                luminance threshold
+ *   blurH    → bloomB   half res                separable gaussian, x
+ *   blurV    → bloomA   half res                separable gaussian, y
+ *   composite→ surface                          hdr + bloom, tone mapped
+ *
+ * vgpu.js is a vendored esbuild bundle of the npm `vgpu` package, so this
+ * folder stays self-contained like every other explore sketch:
+ *
+ *   npx esbuild node_modules/vgpu/dist/index.js \
+ *     --bundle --format=esm --minify --outfile=public/explore/vert-bars/v4/vgpu.js
+ * ───────────────────────────────────────────────────────── */
+
+import { init, effect, frameLoop, sampler, surface, target, clock } from './vgpu.js';
+
+// ── shared WGSL: noise, SDF primitives ─────────────────────────────────────
+const COMMON = /* wgsl */`
+fn hash11(n: f32) -> f32 { return fract(sin(n * 127.1) * 43758.5453); }
+fn hash21(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
+
+fn vnoise(p: vec2f) -> f32 {
+  let i = floor(p);
+  let f = fract(p);
+  let u = f * f * (3.0 - 2.0 * f);
+  let a = hash21(i);
+  let b = hash21(i + vec2f(1.0, 0.0));
+  let c = hash21(i + vec2f(0.0, 1.0));
+  let d = hash21(i + vec2f(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+fn fbm(p: vec2f) -> f32 {
+  var v = 0.0;
+  var amp = 0.5;
+  var q = p;
+  for (var i = 0; i < 4; i = i + 1) {
+    v = v + amp * vnoise(q);
+    q = q * 2.03;
+    amp = amp * 0.5;
+  }
+  return v;
+}
+
+fn sdBox(p: vec2f, c: vec2f, h: vec2f) -> f32 {
+  let d = abs(p - c) - h;
+  return length(max(d, vec2f(0.0))) + min(max(d.x, d.y), 0.0);
+}
+
+// Signed distance to a convex quad, winding-based (iq's polygon SDF, N = 4).
+fn sdQuad(p: vec2f, v0: vec2f, v1: vec2f, v2: vec2f, v3: vec2f) -> f32 {
+  var v = array<vec2f, 4>(v0, v1, v2, v3);
+  var d = dot(p - v0, p - v0);
+  var s = 1.0;
+  var j = 3;
+  for (var i = 0; i < 4; i = i + 1) {
+    let e = v[j] - v[i];
+    let w = p - v[i];
+    let b = w - e * clamp(dot(w, e) / dot(e, e), 0.0, 1.0);
+    d = min(d, dot(b, b));
+    let c1 = p.y >= v[i].y;
+    let c2 = p.y < v[j].y;
+    let c3 = e.x * w.y > e.y * w.x;
+    if ((c1 && c2 && c3) || (!c1 && !c2 && !c3)) { s = -s; }
+    j = i;
+  }
+  return s * sqrt(d);
+}
+
+// The A bowl: a box whose top-right corner is a 60u arc centred at (1246, 691).
+fn sdABowl(q: vec2f) -> f32 {
+  let lo = vec2f(1186.0, 631.0);
+  let hi = vec2f(1306.0, 864.0);
+  var d = sdBox(q, (lo + hi) * 0.5, (hi - lo) * 0.5);
+  let c = vec2f(1246.0, 691.0);
+  if (q.x > c.x && q.y < c.y) { d = length(q - c) - 60.0; }
+  return d;
+}
+
+// ── the logotype, one function per letter, in viewBox units (403 624 1232 281)
+fn sdO(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(577.0, 747.5), vec2f(127.0, 116.5));
+  return max(d, -(length(q - vec2f(574.0, 747.0)) - 24.0));
+}
+
+fn sdM(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(765.5, 747.5), vec2f(51.5, 116.5));
+  d = min(d, sdBox(q, vec2f(966.5, 747.5), vec2f(51.5, 116.5)));
+  d = min(d, sdQuad(q, vec2f(817.0, 631.0), vec2f(866.0, 690.744),
+                       vec2f(866.0, 864.0), vec2f(817.0, 804.256)));
+  d = min(d, sdQuad(q, vec2f(915.0, 631.0), vec2f(866.0, 690.744),
+                       vec2f(866.0, 864.0), vec2f(915.0, 804.256)));
+  return d;
+}
+
+// The full-height bar at x 1031..1153 is the A's left stroke, even though the
+// source SVG classes it as an M block — grouping it with the M made the M's
+// frame reach into the A, and the two boxes overlap by 19 units.
+fn sdA(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(1092.0, 747.5), vec2f(61.0, 116.5));
+  d = min(d, sdBox(q, vec2f(1254.5, 747.5), vec2f(51.5, 116.5)));
+  d = min(d, sdBox(q, vec2f(1168.5, 676.0), vec2f(34.5, 45.0)));
+  d = min(d, sdBox(q, vec2f(1168.5, 751.5), vec2f(34.5, 42.5)));
+  d = min(d, sdABowl(q));
+  return max(d, -(length(q - vec2f(1169.0, 734.0)) - 24.0));
+}
+
+fn sdR(q: vec2f) -> f32 {
+  var d = sdBox(q, vec2f(1370.5, 747.5), vec2f(51.5, 116.5));
+  d = min(d, sdBox(q, vec2f(1525.5, 712.5), vec2f(34.5, 81.5)));
+  d = min(d, sdBox(q, vec2f(1456.5, 676.0), vec2f(34.5, 45.0)));
+  d = min(d, sdBox(q, vec2f(1456.5, 757.5), vec2f(34.5, 36.5)));
+  d = min(d, sdQuad(q, vec2f(1421.0, 792.0), vec2f(1516.0, 792.0),
+                       vec2f(1560.0, 864.0), vec2f(1471.0, 864.0)));
+  return max(d, -(length(q - vec2f(1469.0, 734.0)) - 24.0));
+}
+
+fn hsl2rgb(h: f32, s: f32, l: f32) -> vec3f {
+  let hp = fract(h / 360.0) * 6.0;
+  let c = (1.0 - abs(2.0 * l - 1.0)) * s;
+  let x = c * (1.0 - abs(hp - 2.0 * floor(hp / 2.0) - 1.0));
+  var rgb = vec3f(0.0);
+  if (hp < 1.0) { rgb = vec3f(c, x, 0.0); }
+  else if (hp < 2.0) { rgb = vec3f(x, c, 0.0); }
+  else if (hp < 3.0) { rgb = vec3f(0.0, c, x); }
+  else if (hp < 4.0) { rgb = vec3f(0.0, x, c); }
+  else if (hp < 5.0) { rgb = vec3f(x, 0.0, c); }
+  else { rgb = vec3f(c, 0.0, x); }
+  return rgb + (l - c * 0.5);
+}
+`;
+
+// ── pass 1: the bar field, four letter layers ──────────────────────────────
+const FIELD_WGSL = /* wgsl */`
+struct P {
+  resX: f32, resY: f32,
+  time: f32,
+  cols: f32,
+  barWidth: f32,
+  gapNoise: f32,
+  logoScale: f32,
+  threshold: f32,
+  edgeJitter: f32,
+  blobWarp: f32,
+  warpSpeed: f32,
+  hue: f32,
+  sat: f32,
+  shimmer: f32,
+  coreGlow: f32,
+  mouseX: f32,
+  mouseY: f32,
+  offX: f32,
+  flow: f32,
+  // How much the silhouette is allowed to deform right now: near 0 while the
+  // field is at rest (crisp letterforms), 1 while you're interacting with it.
+  agit: f32,
+  pad0: f32,
+}
+@group(0) @binding(0) var<uniform> p: P;
+
+// Per-letter transforms, computed on the CPU so the HUD can use the same
+// numbers. xy = screen offset in device px, z = scale, w = brightness.
+struct Letters {
+  o: vec4f,
+  m: vec4f,
+  a: vec4f,
+  r: vec4f,
+  rot: vec4f,
+  hover: vec4f,
+  // Signed depth per letter, used only to order the layers.
+  zs: vec4f,
+}
+@group(0) @binding(1) var<uniform> L: Letters;
+
+${COMMON}
+
+const VB_W: f32 = 1232.0;
+const VB_CX: f32 = 1019.0;
+const VB_CY: f32 = 764.5;
+
+// Screen point → one letter's local viewBox space.
+//
+// The scale is applied about the *composition* centre, not each letter's own
+// centre. That's the difference between a perspective projection and four
+// independently resized letters: a nearer letter grows AND is pushed further
+// out from the middle, so the word still reads as one word. Scaling each letter
+// in place instead just breaks the logotype's alignment.
+fn toLocal(samplePt: vec2f, centre: vec2f, s: f32, lp: vec4f, rot: f32, lc: vec2f) -> vec2f {
+  // Inverse of the forward transform the CPU projects the HUD rects with:
+  //   screen = centre + ((lc - VB_C) + (v - lc) * scale) * s + offset
+  // Each letter scales about its *own* centre and then translates freely, which
+  // is what lets one letter grow and take the middle while the rest scatter. The
+  // earlier version scaled about the composition centre, so growing a letter also
+  // flung it outward — fine for shallow perspective, useless for this.
+  let base = vec2f(lc.x - VB_CX, lc.y - VB_CY);
+  var q = lc + ((samplePt - centre - vec2f(lp.x, lp.y)) / s - base) / lp.z;
+  // Then a little roll about the letter's own centre, for character.
+  let ca = cos(rot);
+  let sa = sin(rot);
+  let d = q - lc;
+  return lc + vec2f(ca * d.x + sa * d.y, -sa * d.x + ca * d.y);
+}
+
+// Threshold, per-column end jitter and punched gaps — everything that moves the
+// silhouette. All of it scales with agit, so at rest the letterforms are crisp
+// and only come apart once you interact. Hovering a letter adds a fast extra
+// flicker on top, so it reads as agitated rather than just brighter.
+// lsc is the letter's on-screen scale, and every deformation is multiplied by
+// it. The amounts are all in screen pixels, so without this a letter shrunk to
+// half size takes twice the proportional damage and falls apart into clumps while
+// the big one beside it looks fine. Scaling by lsc means each letter is distorted
+// by the same fraction of itself — and the claimed letter, being larger than 1,
+// gets correspondingly more agitated, which is what you want anyway.
+fn perturb(dRaw: f32, col: f32, px: vec2f, res: vec2f, hov: f32, lsc: f32) -> f32 {
+  var d = dRaw - (0.5 - p.threshold) * res.y * 0.07;
+  d = d + (hash11(col * 1.7 + 3.1) - 0.5) * p.edgeJitter * p.agit * lsc;
+  if (hov > 0.01) {
+    let f = hash11(col * 2.3 + floor(p.time * 20.0) * 0.37) - 0.5;
+    d = d + f * hov * p.edgeJitter * 1.4 * lsc;
+  }
+  if (p.gapNoise > 0.0) {
+    let g = vnoise(vec2f(col * 0.6, px.y / res.y * 26.0 + p.time * 0.6));
+    d = d + (1.0 - g) * p.gapNoise * res.y * 0.04 * p.agit * lsc;
+  }
+  return d;
+}
+
+// Returns premultiplied colour in rgb and the layer's coverage in a, so the
+// caller can composite the layers in depth order instead of just summing them.
+fn shadeLayer(dShape: f32, lp: vec4f, hov: f32, col: f32, colW: f32,
+              px: vec2f, cxpx: f32, res: vec2f) -> vec4f {
+  // Bar profile: rounded-box combine of the horizontal and shape distances,
+  // which is what gives the capsule ends.
+  let dx = abs(px.x - cxpx) - colW * 0.5 * p.barWidth;
+  let q2 = vec2f(dx, dShape);
+  let d = min(max(dx, dShape), 0.0) + length(max(q2, vec2f(0.0)));
+  let mask = 1.0 - smoothstep(-1.2, 1.2, d);
+  if (mask <= 0.002) { return vec4f(0.0); }
+
+  let depth = clamp(-dShape / (res.y * 0.06), 0.0, 1.0);
+  let colRand = hash11(col * 5.3 + 1.7);
+  let vgrad = clamp((px.y / res.y - 0.30) / 0.44, 0.0, 1.0);
+
+  // Energy travelling along the stroke. This is where the life lives now: it
+  // modulates brightness only, so the bar's ends stay exactly where the SDF put
+  // them and the letterform stays legible while its insides keep moving. Each
+  // column carries its own phase so neighbours don't pulse in lockstep.
+  let phase = colRand * 6.2832;
+  let t = p.time * p.flow;
+  let wave = sin(px.y / res.y * 10.0 - t * 2.2 + phase) * 0.5 + 0.5;
+  let grain = vnoise(vec2f(col * 0.4, px.y / res.y * 6.0 - t * 1.1));
+  let energy = mix(wave, grain, 0.55);
+  let lift = (0.60 + colRand * 0.46 + vgrad * 0.30) * (1.0 + (energy - 0.5) * p.shimmer * 1.4);
+
+  // Letters further back lose saturation as well as brightness — atmosphere.
+  let sat = p.sat / 100.0 * (0.55 + 0.45 * clamp(lp.w, 0.0, 1.0));
+  let base = hsl2rgb(p.hue + hov * 16.0, sat, 0.50 + colRand * 0.12);
+  var outc = base * mask * max(lift, 0.0) * lp.w * (1.0 + hov * 0.5);
+
+  // The white core rides the same energy, so the bloom pulses along the strokes
+  // instead of sitting still.
+  let core = 1.0 - smoothstep(0.0, max(0.6, colW * 0.26 * p.barWidth), abs(px.x - cxpx));
+  outc = outc + vec3f(1.0) * core * mask * p.coreGlow * (0.45 + energy * 0.9)
+              * (0.35 + depth * 0.65) * lp.w * (1.0 + hov * 0.9);
+  return vec4f(outc, mask);
+}
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let res = vec2f(p.resX, p.resY);
+  let px = uv * res;
+
+  // Quantise x to a column — this alone is what turns a silhouette into bars.
+  // The grid stays fixed to the screen while the letters move behind it, which
+  // is what makes it read as a scanner rather than as striped artwork.
+  let cols = max(8.0, floor(p.cols));
+  let colW = res.x / cols;
+  let col = floor(px.x / colW);
+  let cxpx = (col + 0.5) * colW;
+
+  let s = (res.x * p.logoScale) / VB_W;
+
+  // Warp the sample point, not the geometry: the letters stay analytic.
+  var samplePt = vec2f(cxpx, px.y);
+  let warp = p.blobWarp * p.agit;
+  if (warp > 0.001) {
+    let t = p.time * p.warpSpeed;
+    let n1 = fbm(vec2f(cxpx / res.x * 3.2, px.y / res.y * 2.4) + vec2f(t, t * 0.7));
+    let n2 = fbm(vec2f(cxpx / res.x * 2.8 + 8.0, px.y / res.y * 3.1) + vec2f(t * 0.8, t));
+    samplePt = samplePt + vec2f(n1 - 0.5, n2 - 0.5) * warp * res.y * 0.24;
+  }
+
+  // Centre of the *visible* area, so the dial panel doesn't crop the mark.
+  let centre = vec2f(res.x * 0.5 + p.offX, res.y * 0.5);
+
+  let dO = perturb(sdO(toLocal(samplePt, centre, s, L.o, L.rot.x, vec2f( 577.0, 747.5))) * s * L.o.z, col, px, res, L.hover.x, L.o.z);
+  let dM = perturb(sdM(toLocal(samplePt, centre, s, L.m, L.rot.y, vec2f( 866.0, 747.5))) * s * L.m.z, col, px, res, L.hover.y, L.m.z);
+  let dA = perturb(sdA(toLocal(samplePt, centre, s, L.a, L.rot.z, vec2f(1168.5, 747.5))) * s * L.a.z, col, px, res, L.hover.z, L.a.z);
+  let dR = perturb(sdR(toLocal(samplePt, centre, s, L.r, L.rot.w, vec2f(1439.5, 747.5))) * s * L.r.z, col, px, res, L.hover.w, L.r.z);
+
+  var lay = array<vec4f, 4>(
+    shadeLayer(dO, L.o, L.hover.x, col, colW, px, cxpx, res),
+    shadeLayer(dM, L.m, L.hover.y, col, colW, px, cxpx, res),
+    shadeLayer(dA, L.a, L.hover.z, col, colW, px, cxpx, res),
+    shadeLayer(dR, L.r, L.hover.w, col, colW, px, cxpx, res),
+  );
+  // var, not let: WGSL only allows a runtime index into addressable memory.
+  var zv = array<f32, 4>(L.zs.x, L.zs.y, L.zs.z, L.zs.w);
+
+  // Painter's order, furthest first. Summing the layers was fine while the
+  // letters sat side by side and never met, but once they orbit through each
+  // other in depth an overlap has to read as "behind", and adding makes it read
+  // as "brighter" — the exact opposite. Insertion sort on four elements.
+  var idx = array<i32, 4>(0, 1, 2, 3);
+  for (var i = 1; i < 4; i = i + 1) {
+    let cur = idx[i];
+    var j = i;
+    loop {
+      if (j == 0) { break; }
+      if (zv[idx[j - 1]] >= zv[cur]) { break; }
+      idx[j] = idx[j - 1];
+      j = j - 1;
+    }
+    idx[j] = cur;
+  }
+
+  var outc = vec3f(0.0);
+  for (var i = 0; i < 4; i = i + 1) {
+    let src = lay[idx[i]];
+    outc = outc * (1.0 - src.a) + src.rgb;
+  }
+
+  return vec4f(outc, 1.0);
+}
+`;
+
+// ── pass 2: luminance threshold ────────────────────────────────────────────
+const BRIGHT_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct B { threshold: f32, pad0: f32, pad1: f32, pad2: f32 }
+@group(0) @binding(2) var<uniform> b: B;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let c = textureSampleLevel(src, samp, uv, 0.0).rgb;
+  let lum = dot(c, vec3f(0.2126, 0.7152, 0.0722));
+  let k = max(0.0, lum - b.threshold) / max(lum, 1.0e-4);
+  return vec4f(c * k, 1.0);
+}
+`;
+
+// ── passes 3 & 4: separable gaussian ───────────────────────────────────────
+const BLUR_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct BL { dirX: f32, dirY: f32, radius: f32, pad: f32 }
+@group(0) @binding(2) var<uniform> bl: BL;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let dims = vec2f(textureDimensions(src, 0));
+  let stepUv = vec2f(bl.dirX, bl.dirY) / dims * bl.radius;
+  var sum = vec3f(0.0);
+  var wsum = 0.0;
+  for (var i = -8; i <= 8; i = i + 1) {
+    let fi = f32(i);
+    let w = exp(-0.5 * fi * fi / 12.0);
+    sum = sum + textureSampleLevel(src, samp, uv + stepUv * fi, 0.0).rgb * w;
+    wsum = wsum + w;
+  }
+  return vec4f(sum / wsum, 1.0);
+}
+`;
+
+// ── pass 5: composite + tone map ───────────────────────────────────────────
+const COMPOSITE_WGSL = /* wgsl */`
+@group(0) @binding(0) var scene: texture_2d<f32>;
+@group(0) @binding(1) var bloomTex: texture_2d<f32>;
+@group(0) @binding(2) var samp: sampler;
+struct C { amount: f32, exposure: f32, pad0: f32, pad1: f32 }
+@group(0) @binding(3) var<uniform> c: C;
+
+const BG: vec3f = vec3f(0.078, 0.047, 0.086);
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let s = textureSampleLevel(scene, samp, uv, 0.0).rgb;
+  let b = textureSampleLevel(bloomTex, samp, uv, 0.0).rgb;
+  var col = (s + b * c.amount) * c.exposure;
+  col = col / (col + vec3f(1.0));      // reinhard
+  col = pow(col, vec3f(1.0 / 1.05));
+  return vec4f(BG + col, 1.0);
+}
+`;
+
+// ── dials ──────────────────────────────────────────────────────────────────
+const dialsEl = document.getElementById('dials');
+const P = {};
+const defaults = {};
+let onDialChange = () => {};
+
+function bindDials() {
+  dialsEl.querySelectorAll('input[type="range"]').forEach((input) => {
+    const valEl = dialsEl.querySelector(`.val[data-for="${input.id}"]`);
+    defaults[input.id] = input.value;
+    const sync = () => {
+      const n = Number(input.value);
+      P[input.id] = n;
+      if (valEl) valEl.textContent = input.step === '1' || input.step === '2' ? String(Math.round(n)) : n.toFixed(2);
+      onDialChange(input.id);
+    };
+    input.addEventListener('input', sync);
+    sync();
+  });
+  dialsEl.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    defaults[input.id] = input.checked;
+    const sync = () => { P[input.id] = input.checked; onDialChange(input.id); };
+    input.addEventListener('change', sync);
+    sync();
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    for (const [id, v] of Object.entries(defaults)) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      if (el.type === 'checkbox') el.checked = v; else el.value = v;
+      el.dispatchEvent(new Event(el.type === 'checkbox' ? 'change' : 'input'));
+    }
+  });
+}
+bindDials();
+
+// The panel covers the right edge, so the mark is centred in the area that's
+// actually visible rather than in the viewport.
+const panelToggle = document.getElementById('panelToggle');
+panelToggle.addEventListener('click', () => {
+  const closed = document.body.classList.toggle('panel-closed');
+  panelToggle.textContent = closed ? 'Show dials' : 'Hide dials';
+  panelToggle.setAttribute('aria-expanded', String(!closed));
+});
+
+function markOffsetCss() {
+  if (document.body.classList.contains('panel-closed')) return 0;
+  const covered = Math.max(0, window.innerWidth - dialsEl.getBoundingClientRect().left);
+  return -covered / 2;
+}
+
+// ── pointer ────────────────────────────────────────────────────────────────
+const pointer = { x: 0, y: 0, nx: 0.5, ny: 0.5, seen: false, lastMove: -1e9 };
+window.addEventListener('pointermove', (e) => {
+  pointer.x = e.clientX;
+  pointer.y = e.clientY;
+  pointer.nx = e.clientX / window.innerWidth;
+  pointer.ny = e.clientY / window.innerHeight;
+  pointer.seen = true;
+  pointer.lastMove = performance.now();
+});
+window.addEventListener('pointerleave', () => { pointer.seen = false; });
+
+// ── the four letters ───────────────────────────────────────────────────────
+// cx/cy are each letter's centre in viewBox units; x0..x1 its horizontal
+// extent. zBase puts it in front of (negative) or behind (positive) the
+// presentation plane once the field spreads.
+const VB_CY = 747.5;
+const LETTERS = [
+  { name: 'O', cx:  577.0, x0:  450, x1:  704, zBase: -0.62, rate: 0.29, phase: 0.4 },
+  { name: 'M', cx:  866.0, x0:  714, x1: 1018, zBase:  0.34, rate: 0.22, phase: 2.1 },
+  { name: 'A', cx: 1168.5, x0: 1031, x1: 1306, zBase: -0.18, rate: 0.26, phase: 3.7 },
+  { name: 'R', cx: 1439.5, x0: 1319, x1: 1560, zBase:  0.58, rate: 0.19, phase: 5.3 },
+];
+const states = LETTERS.map(() => ({
+  z: 0, scale: 1, offX: 0, offY: 0, dim: 1, rot: 0, hover: 0,
+  rect: { x: 0, y: 0, w: 0, h: 0 },
+  restRect: { x: 0, y: 0, w: 0, h: 0 },
+}));
+
+const TAU = Math.PI * 2;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+// Frame-rate independent easing: fraction of the remaining gap to close in dt.
+const approach = (cur, target, tau, dt) => cur + (target - cur) * (1 - Math.exp(-dt / tau));
+
+let activity = 0;
+let hudUp = 0;
+let lastHit = -1;
+let lastHitAt = -1e9;
+let focusIdx = -1;
+
+function updateLetters(t, dt) {
+  // Together at rest, separated while you're interacting. `idleLife` keeps a
+  // little breathing in the field so it never looks switched off. Both directions
+  // are quick — the snap back to the logotype is as much of the gesture as the
+  // coming apart, so it shouldn't be something you wait for.
+  // Engagement means the pointer is on a specific letter — nothing else. Moving
+  // the mouse anywhere near the mark used to count, which meant the word visibly
+  // stirred as you approached it and gave away the effect before you'd chosen
+  // anything. The grace window is only there to bridge the few pixels between
+  // adjacent letters, so sliding along the word doesn't stutter.
+  const now = performance.now();
+  if (lastHit >= 0) lastHitAt = now;
+  const engaged = pointer.seen && (lastHit >= 0 || now - lastHitAt < 130);
+  const target = engaged ? 1 : P.idleLife;
+  const fall = 0.42 - P.snap * 0.36;
+  activity = approach(activity, target, target > activity ? 0.07 : fall, dt);
+  // The HUD is chrome, not atmosphere: it goes to nothing at rest rather than
+  // idling at a whisper, so the resting state is only the letters.
+  hudUp = approach(hudUp, engaged ? 1 : 0, engaged ? 0.06 : fall * 0.7, dt);
+  const spread = activity * P.zSpread;
+
+  // Which letter is claimed, and how completely. Read from last frame's hover, so
+  // it lags by one frame — invisible at 60fps and it keeps the ordering simple.
+  focusIdx = -1;
+  let focus = 0;
+  states.forEach((st, i) => { if (st.hover > focus) { focus = st.hover; focusIdx = i; } });
+  const others = [];
+  LETTERS.forEach((_, i) => { if (i !== focusIdx) others.push(i); });
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const s = (w * P.logoScale) / 1232;
+  const originX = w / 2 + markOffsetCss();
+
+  // Where the claimed letter is headed, and the disc the rest orbit on. The
+  // ellipse is flatter than it is wide so the ring reads as a plane seen at an
+  // angle rather than a flat circle of letters.
+  const stageX = originX;
+  const stageY = h / 2;
+  const orbitPhase = t * P.orbitSpeed * 0.22;
+  const rBase = P.orbitSpread * Math.min(w * 0.40, h * 0.46);
+
+  // The orbit has to clear the claimed letter, which is large and changing size,
+  // so clearance is derived from its live box (last frame's — a frame stale and
+  // imperceptible) rather than from a fixed radius that works at one focus scale
+  // and buries orbiters inside the letter at another.
+  const fRect = focusIdx >= 0 ? states[focusIdx].rect : null;
+  // Visible width excludes the dial panel, so orbiters never park behind it.
+  const visW = originX * 2;
+
+  LETTERS.forEach((l, i) => {
+    const st = states[i];
+    const drift = Math.sin(t * l.rate * TAU * P.driftSpeed + l.phase);
+    const sway = Math.sin(t * l.rate * TAU * P.driftSpeed * 0.63 + l.phase * 1.7);
+
+    // Settled position: where this letter sits in the intact logotype.
+    const natX = originX + (l.cx - 1019) * s;
+    const natY = h / 2 + (VB_CY - 764.5) * s;
+
+    const isFocus = i === focusIdx;
+    const hov = st.hover;
+
+    // Claimed letter grows and takes the middle; everything else shrinks and
+    // scatters onto the orbit. Both are scaled by focus, so at rest every term
+    // collapses to zero and the word reassembles exactly.
+    let sc = 1;
+    let tx = natX;
+    let tY = natY;
+    // −1 nearest, +1 furthest. Only meaningful for orbiters.
+    let orbDepth = 0;
+    if (isFocus) {
+      sc = 1 + hov * (P.focusScale - 1);
+      tx = natX + (stageX - natX) * hov;
+      tY = natY + (stageY - natY) * hov;
+    } else if (focus > 0.001) {
+      // Fan the orbiters evenly so they can't stack, then let each one wander a
+      // little around its slot — an even ring reads as a diagram, a loose one
+      // reads as floating.
+      const k = others.indexOf(i);
+      const a = orbitPhase + (k / others.length) * TAU + Math.sin(t * 0.31 + l.phase) * 0.16;
+      const wob = 1 + 0.16 * Math.sin(t * 0.43 + l.phase * 1.3);
+
+      // A tilted orbital plane rather than a flat ring: the top of the ellipse is
+      // the far side of the orbit and the bottom is the near side, so each letter
+      // swings once through depth per revolution.
+      orbDepth = -Math.sin(a);
+      // One perspective factor drives size *and* how far off centre it sits.
+      // Both cues together are what makes the ring read as a plane going away
+      // from you; size alone just looks like a letter that grows and shrinks.
+      const persp = 1 / (1 + orbDepth * P.orbitDepth);
+      sc = 1 + focus * (P.orbitScale * persp - 1);
+
+      const halfW = (l.x1 - l.x0) * s * sc * 0.5 + 18;
+      const halfH = 233 * s * sc * 0.5 + 18;
+
+      // Squash the direction rather than the radius, so clearance can be solved
+      // as a distance along one ray.
+      const ca = Math.cos(a);
+      const sa = Math.sin(a) * 0.62;
+      const dl = Math.hypot(ca, sa) || 1;
+      const ux = ca / dl;
+      const uy = sa / dl;
+
+      // How far along this ray the orbiter's box first escapes the claimed
+      // letter's box. Two boxes are clear the moment they separate on *either*
+      // axis, hence the min. Solving this per-ray matters: a plain elliptical
+      // radius leaves diagonal orbiters overlapping, because at 45° the radius
+      // only buys 0.7 of itself horizontally.
+      //
+      // On the far side of the orbit the requirement is relaxed almost to nothing,
+      // which is the whole point: the letter is *meant* to pass behind the claimed
+      // one there, and the depth sort now draws it behind rather than through. Near
+      // side keeps full clearance so nothing ever covers the star of the show.
+      const relax = 1 - Math.max(0, orbDepth) * 0.92;
+      const needX = fRect ? (fRect.w * 0.5 + halfW + 26) * relax : 0;
+      const needY = fRect ? (fRect.h * 0.5 + halfH + 22) * relax : 0;
+      const clear = Math.min(
+        Math.abs(ux) > 1e-3 ? needX / Math.abs(ux) : Infinity,
+        Math.abs(uy) > 1e-3 ? needY / Math.abs(uy) : Infinity,
+      );
+      const dist = Math.max(rBase * wob * persp, Number.isFinite(clear) ? clear : 0);
+
+      // Keep the whole letter on screen — an orbiter clipped by an edge reads as
+      // a bug, not as depth.
+      const ox = clamp(stageX + ux * dist, halfW, Math.max(halfW, visW - halfW));
+      const oy = clamp(stageY + uy * dist, halfH, Math.max(halfH, h - halfH));
+      tx = natX + (ox - natX) * focus;
+      tY = natY + (oy - natY) * focus;
+    }
+
+    // Claimed letter comes forward, orbiters fall back — the depth split is what
+    // keeps the big letter from just looking like a zoom.
+    // The claimed letter stays the nearest thing on screen by a clear margin, so
+    // even an orbiter at its closest passes behind it rather than over it.
+    const z = spread * (l.zBase + drift * 0.28)
+            + (isFocus ? -hov * 1.05 : focus * (0.45 + orbDepth * 0.85));
+    st.z = z;
+    st.scale = sc / (1 + z * 0.08);
+    // Upper bound matters: let the claimed letter go much past this and the bars
+    // blow out to flat white and the letterform stops reading.
+    st.dim = clamp(1 - z * P.depthFade, 0.22, 1.24);
+    st.rot = spread * sway * 0.020 + hov * 0.022
+           + (isFocus ? 0 : focus * Math.sin(t * 0.37 + l.phase) * 0.05);
+
+    // Parallax reverses across the focal plane, so near and far letters slide
+    // in opposite directions as the pointer moves. The claimed letter opts out of
+    // it: it's come a long way to sit in the middle, and it being dragged around
+    // by the same pointer that selected it both pulls it off centre and shoves it
+    // into whatever is orbiting on that side.
+    const paDamp = isFocus ? 1 - hov * 0.88 : 1;
+    const reach = z * P.parallax * 130 * paDamp;
+    const paX = -(pointer.nx - 0.5) * 2 * reach;
+    const paY = -(pointer.ny - 0.5) * 2 * reach * 0.55 + sway * spread * 14 * paDamp;
+    st.offX = (tx - natX) + paX;
+    st.offY = (tY - natY) + paY;
+
+    // Two rects. `rect` is where the letter actually is, for the HUD. `restRect`
+    // is its slot in the settled word, and that's what the pointer tests against
+    // — hit-testing the live rect would mean claiming the O moves it out from
+    // under the cursor, dropping the hover, springing it back, forever.
+    const proj = (vx, vy) => [
+      originX + ((l.cx - 1019) + (vx - l.cx) * st.scale) * s + st.offX,
+      h / 2 + ((VB_CY - 764.5) + (vy - VB_CY) * st.scale) * s + st.offY,
+    ];
+    const pad = 10;
+    const box = (fn) => {
+      const [x0, y0] = fn(l.x0, 631);
+      const [x1, y1] = fn(l.x1, 864);
+      return { x: x0 - pad, y: y0 - pad, w: x1 - x0 + pad * 2, h: y1 - y0 + pad * 2 };
+    };
+    st.rect = box(proj);
+    st.restRect = box((vx, vy) => [originX + (vx - 1019) * s, h / 2 + (vy - 764.5) * s]);
+  });
+
+  // Hover resolves to a single letter: the pointer is over the settled wordmark,
+  // so the slots never overlap and no tie-break is needed.
+  let hit = -1;
+  if (pointer.seen) {
+    states.forEach((st, i) => {
+      const r = st.restRect;
+      if (pointer.x >= r.x && pointer.x <= r.x + r.w
+       && pointer.y >= r.y && pointer.y <= r.y + r.h) hit = i;
+    });
+  }
+  lastHit = hit;
+  states.forEach((st, i) => {
+    st.hover = approach(st.hover, i === hit ? 1 : 0, i === hit ? 0.045 : 0.09, dt);
+  });
+}
+
+// ── detection HUD ──────────────────────────────────────────────────────────
+// Vector chrome on a 2D overlay, not part of the shaded image. At rest it draws
+// nothing at all — the resting state is only the letters. Contact brings up all
+// four frames plus the links between them; hovering takes one frame to a solid
+// box with a standoff frame, a jitter, and a live position/depth readout.
+const hudCanvas = document.getElementById('hud');
+const hctx = hudCanvas.getContext('2d');
+const pseudo = (n) => { const v = Math.sin(n * 127.1) * 43758.5453; return v - Math.floor(v); };
+
+let jitterSeed = 0;
+let jitterAt = 0;
+
+function brackets(w, h, ax, ay) {
+  hctx.beginPath();
+  hctx.moveTo(0, ay);         hctx.lineTo(0, 0);         hctx.lineTo(ax, 0);
+  hctx.moveTo(w - ax, 0);     hctx.lineTo(w, 0);         hctx.lineTo(w, ay);
+  hctx.moveTo(w, h - ay);     hctx.lineTo(w, h);         hctx.lineTo(w - ax, h);
+  hctx.moveTo(ax, h);         hctx.lineTo(0, h);         hctx.lineTo(0, h - ay);
+  hctx.stroke();
+}
+
+// Interacting links the frames into a chain. Because the letters sit at
+// different depths and move in parallax, the ties skew and stretch as they
+// drift — the connection is what makes them read as one tracked object.
+function drawConnectors(presence) {
+  if (presence <= 0.04) return;
+
+  const xs = states.flatMap((st) => [st.rect.x, st.rect.x + st.rect.w]);
+  const ys = states.flatMap((st) => [st.rect.y, st.rect.y + st.rect.h]);
+  const bx0 = Math.min(...xs) - 16;
+  const bx1 = Math.max(...xs) + 16;
+  const by0 = Math.min(...ys) - 16;
+  const by1 = Math.max(...ys) + 16;
+
+  hctx.save();
+  hctx.strokeStyle = '#f0d24a';
+  hctx.fillStyle = '#f0d24a';
+  hctx.lineWidth = 1;
+
+  const centre = (st) => [st.rect.x + st.rect.w / 2, st.rect.y + st.rect.h / 2];
+  const focus = focusIdx >= 0 ? states[focusIdx].hover : 0;
+
+  // Everything radiates from the claimed letter. A star, not a chain: the point
+  // is that the others hang off *this* one, so every line has to start here.
+  if (focus > 0.04) {
+    const [fx, fy] = centre(states[focusIdx]);
+    states.forEach((st, i) => {
+      if (i === focusIdx) return;
+      const [cx, cy] = centre(st);
+      // Stop the line short of the node so it doesn't bury the dot.
+      const dx = cx - fx;
+      const dy = cy - fy;
+      const len = Math.hypot(dx, dy) || 1;
+      hctx.globalAlpha = focus * 0.45;
+      hctx.beginPath();
+      hctx.moveTo(fx + (dx / len) * 12, fy + (dy / len) * 12);
+      hctx.lineTo(cx - (dx / len) * 7, cy - (dy / len) * 7);
+      hctx.stroke();
+      hctx.globalAlpha = focus * 0.7;
+      hctx.beginPath();
+      hctx.arc(cx, cy, 2.5, 0, TAU);
+      hctx.fill();
+    });
+
+    // The hub.
+    hctx.globalAlpha = focus * 0.95;
+    hctx.beginPath();
+    hctx.arc(fx, fy, 3.5, 0, TAU);
+    hctx.fill();
+    hctx.globalAlpha = focus * 0.5;
+    hctx.beginPath();
+    hctx.arc(fx, fy, 9, 0, TAU);
+    hctx.stroke();
+  }
+
+  // Corner brackets around the group, but only while nothing is claimed — once a
+  // letter takes the stage the others are scattered across the viewport and a box
+  // around the lot of them is just a border.
+  const hold = presence * (1 - focus);
+  if (hold > 0.03) {
+    hctx.globalAlpha = hold * 0.4;
+    hctx.save();
+    hctx.translate(bx0, by0);
+    brackets(bx1 - bx0, by1 - by0,
+             Math.min(34, (bx1 - bx0) * 0.12), Math.min(26, (by1 - by0) * 0.2));
+    hctx.restore();
+  }
+  hctx.restore();
+}
+
+function drawHud(now, presence) {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (hudCanvas.width !== Math.floor(w * dpr) || hudCanvas.height !== Math.floor(h * dpr)) {
+    hudCanvas.width = Math.floor(w * dpr);
+    hudCanvas.height = Math.floor(h * dpr);
+  }
+  hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  hctx.clearRect(0, 0, w, h);
+  if (!P.hudOn) return;
+
+  // Re-roll the jitter a few times a second rather than every frame, so it
+  // reads as a scanner re-acquiring rather than as noise.
+  if (now - jitterAt > 70) { jitterSeed = now; jitterAt = now; }
+
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+
+  drawConnectors(presence);
+
+  states.forEach((st, i) => {
+    const l = LETTERS[i];
+    const r = st.rect;
+    const hov = st.hover;
+    // Interacting raises every frame; hovering takes one of them to full. No
+    // floor term, so at rest this resolves to nothing at all.
+    const alpha = presence * 0.30 + hov * 0.70;
+    if (alpha <= 0.004) return;
+
+    // Flicker only while the frame is arriving; solid once it's locked on.
+    const flicker = hov > 0.03 && hov < 0.88
+      ? (pseudo(jitterSeed * 0.013 + i * 9.7) > 0.34 ? 1 : 0.22)
+      : 1;
+    const jx = hov * (pseudo(jitterSeed * 0.017 + i * 7.1) - 0.5) * 7;
+    const jy = hov * (pseudo(jitterSeed * 0.019 + i * 3.3) - 0.5) * 7;
+
+    hctx.save();
+    hctx.globalAlpha = alpha * flicker;
+    hctx.strokeStyle = '#f0d24a';
+    hctx.lineWidth = 1 + hov * 1.1;
+    hctx.translate(r.x + jx, r.y + jy);
+
+    brackets(r.w, r.h, Math.min(r.w * 0.3, 12 + hov * 32), Math.min(r.h * 0.3, 12 + hov * 32));
+
+    // Solid box the moment it locks on — this is the letter being claimed, so it
+    // wants to be unambiguous rather than tentative.
+    if (hov > 0.12) {
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * clamp((hov - 0.12) / 0.3, 0, 1) * 0.7;
+      hctx.strokeRect(0, 0, r.w, r.h);
+      hctx.restore();
+    }
+    // Second frame standing off the first, opening outward as it settles.
+    if (hov > 0.25) {
+      const g = 5 + hov * 9;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * (hov - 0.25) / 0.75 * 0.4;
+      hctx.setLineDash([3, 5]);
+      hctx.strokeRect(-g, -g, r.w + g * 2, r.h + g * 2);
+      hctx.restore();
+    }
+    if (hov > 0.2) {
+      const sy = ((now / 1500) % 1) * r.h;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker * 0.45;
+      hctx.beginPath();
+      hctx.moveTo(0, sy);
+      hctx.lineTo(r.w, sy);
+      hctx.stroke();
+      hctx.restore();
+    }
+
+    // Label chip with live coordinates and depth, nudged to stay on screen
+    // when its letter sits near an edge.
+    if (hov > 0.06) {
+      const zs = `${st.z >= 0 ? '+' : '−'}${Math.abs(st.z).toFixed(2)}`;
+      const label = `${l.name} ${Math.round(r.x)},${Math.round(r.y)} Z${zs}`;
+      const tw = hctx.measureText(label).width + 10;
+      const absX = r.x + jx;
+      const absY = r.y + jy;
+      let dx = 0;
+      if (absX < 4) dx = 4 - absX;
+      else if (absX + tw > w - 4) dx = w - 4 - (absX + tw);
+      const dy = absY < 20 ? r.h + 30 : 0;
+      hctx.save();
+      hctx.globalAlpha = alpha * flicker;
+      hctx.fillStyle = '#f0d24a';
+      hctx.fillRect(dx, dy - 16, tw, 14);
+      hctx.fillStyle = '#111';
+      hctx.fillText(label, dx + 5, dy - 5);
+      hctx.restore();
+    }
+
+    hctx.restore();
+  });
+}
+
+// ── boot ───────────────────────────────────────────────────────────────────
+function showFallback(detail) {
+  document.getElementById('fallback').classList.add('show');
+  document.getElementById('fallback-detail').textContent = detail;
+  dialsEl.style.display = 'none';
+  document.getElementById('panelToggle').style.display = 'none';
+}
+
+async function start() {
+  if (!navigator.gpu) {
+    showFallback('navigator.gpu is undefined — no WebGPU in this browser.');
+    return;
+  }
+
+  let gpu;
+  try {
+    gpu = await init();
+  } catch (err) {
+    showFallback(String(err && err.message ? err.message : err));
+    return;
+  }
+
+  const glCanvas = document.getElementById('gl');
+  const view = surface(gpu, glCanvas, { dpr: [1, 2] });
+  const linear = sampler(gpu, {
+    minFilter: 'linear', magFilter: 'linear',
+    addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge',
+  });
+
+  const half = ([w, h]) => [Math.max(1, Math.floor(w / 2)), Math.max(1, Math.floor(h / 2))];
+
+  const hdr = target(gpu, { size: view.size, format: 'rgba16float' });
+  const bloomA = target(gpu, { size: half(view.size), format: 'rgba16float' });
+  const bloomB = target(gpu, { size: half(view.size), format: 'rgba16float' });
+
+  const field = effect(gpu, FIELD_WGSL, {
+    label: 'field',
+    set: {
+      p: {
+        resX: hdr.size[0], resY: hdr.size[1],
+        time: 0,
+        cols: P.cols, barWidth: P.barWidth, gapNoise: P.gapNoise,
+        logoScale: P.logoScale, threshold: P.threshold, edgeJitter: P.edgeJitter,
+        blobWarp: P.blobWarp, warpSpeed: P.warpSpeed,
+        hue: P.hue, sat: P.sat, shimmer: P.shimmer, coreGlow: P.coreGlow,
+        mouseX: 0.5, mouseY: 0.5,
+        offX: 0,
+        flow: P.flow,
+        agit: 1 - P.restCalm,
+        pad0: 0,
+      },
+      L: {
+        o: [0, 0, 1, 1], m: [0, 0, 1, 1], a: [0, 0, 1, 1], r: [0, 0, 1, 1],
+        rot: [0, 0, 0, 0], hover: [0, 0, 0, 0], zs: [0, 0, 0, 0],
+      },
+    },
+  });
+
+  const bright = effect(gpu, BRIGHT_WGSL, {
+    label: 'bright',
+    set: { src: hdr, samp: linear, b: { threshold: P.bloomThreshold, pad0: 0, pad1: 0, pad2: 0 } },
+  });
+
+  const blurH = effect(gpu, BLUR_WGSL, {
+    label: 'blurH',
+    set: { src: bloomA, samp: linear, bl: { dirX: 1, dirY: 0, radius: P.bloomRadius, pad: 0 } },
+  });
+  const blurV = effect(gpu, BLUR_WGSL, {
+    label: 'blurV',
+    set: { src: bloomB, samp: linear, bl: { dirX: 0, dirY: 1, radius: P.bloomRadius, pad: 0 } },
+  });
+
+  const composite = effect(gpu, COMPOSITE_WGSL, {
+    label: 'composite',
+    set: {
+      scene: hdr, bloomTex: bloomA, samp: linear,
+      c: { amount: P.bloomAmount, exposure: P.exposure, pad0: 0, pad1: 0 },
+    },
+  });
+
+  // Dial changes only touch the uniforms they own — no per-frame writes for
+  // values that aren't animating.
+  onDialChange = (id) => {
+    if (id === 'bloomThreshold') bright.set({ b: { threshold: P.bloomThreshold } });
+    if (id === 'bloomRadius') {
+      blurH.set({ bl: { radius: P.bloomRadius } });
+      blurV.set({ bl: { radius: P.bloomRadius } });
+    }
+    if (id === 'bloomAmount') composite.set({ c: { amount: P.bloomAmount } });
+    if (id === 'exposure') composite.set({ c: { exposure: P.exposure } });
+  };
+
+  view.onResize(({ width, height }) => {
+    hdr.resize([width, height]);
+    const [hw, hh] = half([width, height]);
+    bloomA.resize([hw, hh]);
+    bloomB.resize([hw, hh]);
+    field.set({ p: { resX: width, resY: height } });
+  });
+
+  gpu.onError((err) => console.error('[vgpu]', err.code ?? '', err.message ?? err));
+
+  const time = clock(gpu);
+  let animatedTime = 0;
+  let fpsLast = performance.now();
+  let fpsFrames = 0;
+  const fpsEl = document.getElementById('fps');
+
+  frameLoop(gpu, (frame) => {
+    // Real dt drives interaction easing; animatedTime drives the idle drift so
+    // the Animate switch freezes the motion without freezing the interaction.
+    const dt = Math.min(time.deltaTime, 1 / 20);
+    if (P.animate) animatedTime += dt;
+    updateLetters(animatedTime, dt);
+
+    const toDevice = hdr.size[0] / Math.max(1, window.innerWidth);
+    const packed = states.map((st) => [st.offX * toDevice, st.offY * toDevice, st.scale, st.dim]);
+
+    field.set({
+      p: {
+        time: animatedTime,
+        cols: P.cols, barWidth: P.barWidth, gapNoise: P.gapNoise,
+        logoScale: P.logoScale, threshold: P.threshold, edgeJitter: P.edgeJitter,
+        blobWarp: P.blobWarp, warpSpeed: P.warpSpeed,
+        hue: P.hue, sat: P.sat, shimmer: P.shimmer, coreGlow: P.coreGlow,
+        mouseX: pointer.nx, mouseY: pointer.ny,
+        offX: markOffsetCss() * toDevice,
+        flow: P.flow,
+        agit: (1 - P.restCalm) + P.restCalm * activity,
+      },
+      L: {
+        o: packed[0], m: packed[1], a: packed[2], r: packed[3],
+        rot: states.map((st) => st.rot),
+        hover: states.map((st) => st.hover),
+        zs: states.map((st) => st.z),
+      },
+    });
+
+    frame.pass(hdr, field);
+    frame.pass(bloomA, bright);
+    frame.pass(bloomB, blurH);
+    frame.pass(bloomA, blurV);
+    frame.pass(view, composite);
+
+    const now = performance.now();
+    drawHud(now, hudUp);
+
+    fpsFrames++;
+    if (now - fpsLast >= 500) {
+      fpsEl.textContent = `${Math.round((fpsFrames * 1000) / (now - fpsLast))} fps`;
+      fpsFrames = 0;
+      fpsLast = now;
+    }
+  });
+}
+
+start();
+</script>
+</body>
+</html>
