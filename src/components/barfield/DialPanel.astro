@@ -1,0 +1,296 @@
+---
+/*
+  The dial panel — dev only, never built.
+
+  In the sketch these inputs *were* the state: `P` was read out of the DOM and the
+  letter-drag gesture worked by writing an input's value and dispatching an event. That
+  made the panel load-bearing, so removing it would have taken the drag gesture, the sound
+  controls and the redline with it.
+
+  Now it's a view. The markup is generated from DIAL_GROUPS, an input writes through
+  `setDial`, and a change from anywhere else — dragging a letter, hitting reset — comes
+  back through the subscription. Nothing here is required for the field to run.
+*/
+import { DIAL_GROUPS } from './dials';
+---
+
+<button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true">Hide dials</button>
+
+<aside class="dials" id="dials">
+  <h1>Bar field dials</h1>
+  <div class="sub">crisp at rest · alive on contact</div>
+
+  {/* What the field is doing right now, as opposed to what it is set to. It reads out of
+      the frame loop via `refs.mode` / `refs.fps`, which tolerate both being absent — so
+      this being inside a dev-only panel is the whole of its production story. */}
+  <div class="readout">
+    <span id="mode">z-space</span>
+    <span class="fps" id="fps">—</span>
+  </div>
+
+  {
+    DIAL_GROUPS.map((group) => (
+      <div class="group">
+        <div class="title">{group.title}</div>
+        {group.dials.map((dial) =>
+          dial.kind === 'range' ? (
+            <div class="row">
+              <label for={dial.id}>{dial.label}</label>
+              <span class="val" data-for={dial.id} />
+              <input
+                id={dial.id}
+                type="range"
+                min={dial.min}
+                max={dial.max}
+                step={dial.stepText}
+                value={dial.value}
+              />
+            </div>
+          ) : (
+            <div class="toggle">
+              <label for={dial.id}>{dial.label}</label>
+              <input id={dial.id} type="checkbox" checked={dial.value} />
+            </div>
+          ),
+        )}
+      </div>
+    ))
+  }
+
+  <div class="actions">
+    <button class="reset" id="copyDials" type="button">Copy dials</button>
+    <button class="reset" id="reset" type="button">Reset dials</button>
+  </div>
+</aside>
+
+<style>
+  .panel-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 5;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .panel-toggle:hover {
+    border-color: rgba(255, 210, 120, 0.6);
+    color: #ffd36a;
+  }
+
+  .dials {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    transition:
+      transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 200ms ease;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+  .dials h1 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 210, 120, 0.9);
+    margin-bottom: 4px;
+  }
+  .dials .sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 12px;
+  }
+  /* Measured state, so it sits apart from the dials below it: ruled off, and the two values
+     pushed to opposite ends rather than run together with separators. */
+  .dials .readout {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding: 7px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .dials .readout .fps {
+    color: rgba(255, 210, 120, 0.85);
+  }
+  .group {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .group .title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .row label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .row .val {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 210, 120, 0.95);
+    min-width: 3.4ch;
+    text-align: right;
+  }
+  .row input[type='range'] {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: #ff7ac8;
+  }
+  .toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .toggle input {
+    accent-color: #ff7ac8;
+    width: 16px;
+    height: 16px;
+  }
+  .reset {
+    margin-top: 12px;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .reset:hover {
+    border-color: rgba(255, 210, 120, 0.6);
+    color: #ffd36a;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .actions .reset {
+    margin-top: 0;
+    flex: 1;
+    width: auto;
+  }
+
+  :global(body.panel-closed) .dials {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import {
+    P, SPECS, dialText, format, onDialChange, resetDials, setDial,
+    type BooleanDialId, type DialId, type NumericDialId,
+  } from './dials';
+
+  const panel = document.getElementById('dials')!;
+
+  const inputs = new Map<DialId, HTMLInputElement>();
+  panel.querySelectorAll<HTMLInputElement>('input').forEach((el) => {
+    inputs.set(el.id as DialId, el);
+  });
+
+  function paint(id: DialId) {
+    const el = inputs.get(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = P[id as BooleanDialId];
+    else el.value = String(P[id as NumericDialId]);
+    const val = panel.querySelector(`.val[data-for="${id}"]`);
+    if (val) val.textContent = format(id);
+  }
+
+  // Both directions. An input writes through to the dial; a change from anywhere else —
+  // dragging a letter, hitting reset — comes back here. Without the return path the
+  // sliders would silently disagree with the field the first time you dragged the O.
+  inputs.forEach((el, id) => {
+    const write = () => {
+      if (el.type === 'checkbox') setDial(id as BooleanDialId, el.checked);
+      else setDial(id as NumericDialId, Number(el.value));
+      // Repaint from `P` rather than from the input, so the readout shows the snapped
+      // value the field is actually using.
+      paint(id);
+    };
+    el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', write);
+  });
+
+  onDialChange(paint);
+  for (const id of Object.keys(SPECS) as DialId[]) paint(id);
+
+  document.getElementById('reset')?.addEventListener('click', resetDials);
+
+  const copyBtn = document.getElementById('copyDials') as HTMLButtonElement | null;
+  copyBtn?.addEventListener('click', async () => {
+    const text = dialText();
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // The clipboard API refuses when the document isn't focused, which happens often
+      // enough while poking at a panel. The old selection-based path has no such rule.
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    copyBtn.textContent = 'Copied';
+    window.setTimeout(() => { copyBtn.textContent = 'Copy dials'; }, 1300);
+  });
+
+  // The panel covers the right edge, so the mark is centred in the area that's actually
+  // visible rather than in the viewport — see measureViewport in field.ts.
+  const toggle = document.getElementById('panelToggle');
+  toggle?.addEventListener('click', () => {
+    const closed = document.body.classList.toggle('panel-closed');
+    toggle.textContent = closed ? 'Show dials' : 'Hide dials';
+    toggle.setAttribute('aria-expanded', String(!closed));
+  });
+</script>

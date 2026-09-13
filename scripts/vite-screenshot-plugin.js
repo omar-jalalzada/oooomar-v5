@@ -42,7 +42,12 @@ export function screenshotPlugin() {
 
         let browser;
         try {
-          browser = await chromium.launch({ channel: 'chrome' });
+          browser = await chromium.launch({
+            channel: 'chrome',
+            // Headless Chrome hides navigator.gpu by default, which makes
+            // WebGPU prototypes capture as their no-support fallback.
+            args: ['--enable-unsafe-webgpu', '--ignore-gpu-blocklist'],
+          });
           const ctx = await browser.newContext({
             viewport: { width: w, height: h },
             deviceScaleFactor: 2,

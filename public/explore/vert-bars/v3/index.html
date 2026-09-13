@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>vert-bars v3 — OMAR bar field on WebGPU (vgpu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #140c16;
+    color: #f4f0f5;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+  .stage { position: fixed; inset: 0; }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #gl { z-index: 1; }
+  #hud { z-index: 2; pointer-events: none; }
+
+  .badge {
+    position: fixed; left: 20px; bottom: 20px; z-index: 3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+  .badge .fps { color: rgba(255,210,120,0.85); }
+
+  .fallback {
+    position: fixed; inset: 0; z-index: 10;
+    display: none; place-content: center;
+    padding: 40px; text-align: center;
+  }
+  .fallback.show { display: grid; }
+  .fallback .inner { max-width: 46ch; margin: 0 auto; }
+  .fallback h2 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+  .fallback p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.6); }
+  .fallback code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: rgba(255,210,120,0.9);
+  }
+  .fallback a { color: #ff7ac8; }
+
+  /* ── Dial panel ── */
+  .panel-toggle {
+    position: fixed; right: 16px; bottom: 16px; z-index: 5;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.72);
+  }
+  .panel-toggle:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+
+  .dials {
+    position: fixed; top: 16px; right: 16px; z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .dials h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,210,120,0.9);
+    margin-bottom: 4px;
+  }
+  .dials .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+  .group { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .group .title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 6px 10px; align-items: center; margin-bottom: 8px;
+  }
+  .row label { font-size: 12px; color: rgba(255,255,255,0.78); }
+  .row .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255,210,120,0.95);
+    min-width: 3.4ch; text-align: right;
+  }
+  .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: #ff7ac8; }
+  .toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px;
+  }
+  .toggle input { accent-color: #ff7ac8; width: 16px; height: 16px; }
+  .reset {
+    margin-top: 12px; width: 100%;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.75);
+  }
+  .reset:hover { border-color: rgba(255,210,120,0.6); color: #ffd36a; }
+
+  body.panel-closed .dials {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="gl"></canvas>
+    <canvas id="hud"></canvas>
+  </div>
+
+  <div class="badge">explore / vert-bars / v3 · webgpu · <span class="fps" id="fps">—</span></div>
+
+  <div class="fallback" id="fallback">
+    <div class="inner">
+      <h2>This one needs WebGPU</h2>
+      <p>
+        v3 is a GPU rebuild on <a href="https://vgpu.sh/">vgpu</a>, so it needs a browser with
+        WebGPU (Chrome/Edge 113+, Safari 18+). The canvas version still runs everywhere —
+        try <a href="../v2/">v2</a>.
+      </p>
+      <p style="margin-top:12px"><code id="fallback-detail"></code></p>
+    </div>
+  </div>
+
+  <button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true">Hide dials</button>
+
+  <aside class="dials" id="dials">
+    <h1>Bar field dials</h1>
+    <div class="sub">wgsl · sdf · multi-pass bloom</div>
+
+    <div class="group">
+      <div class="title">Density</div>
+      <div class="row">
+        <label for="cols">Columns</label><span class="val" data-for="cols"></span>
+        <input id="cols" type="range" min="40" max="360" step="2" value="190" />
+      </div>
+      <div class="row">
+        <label for="barWidth">Bar width</label><span class="val" data-for="barWidth"></span>
+        <input id="barWidth" type="range" min="0.15" max="0.95" step="0.01" value="0.58" />
+      </div>
+      <div class="row">
+        <label for="gapNoise">Gap noise</label><span class="val" data-for="gapNoise"></span>
+        <input id="gapNoise" type="range" min="0" max="1" step="0.01" value="0.20" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Bloom</div>
+      <div class="row">
+        <label for="bloomThreshold">Threshold</label><span class="val" data-for="bloomThreshold"></span>
+        <input id="bloomThreshold" type="range" min="0" max="1.2" step="0.01" value="0.34" />
+      </div>
+      <div class="row">
+        <label for="bloomRadius">Radius</label><span class="val" data-for="bloomRadius"></span>
+        <input id="bloomRadius" type="range" min="0" max="10" step="0.05" value="3.20" />
+      </div>
+      <div class="row">
+        <label for="bloomAmount">Amount</label><span class="val" data-for="bloomAmount"></span>
+        <input id="bloomAmount" type="range" min="0" max="4" step="0.01" value="1.15" />
+      </div>
+      <div class="row">
+        <label for="exposure">Exposure</label><span class="val" data-for="exposure"></span>
+        <input id="exposure" type="range" min="0.4" max="3" step="0.01" value="1.35" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Shape</div>
+      <div class="row">
+        <label for="logoScale">Logo scale</label><span class="val" data-for="logoScale"></span>
+        <input id="logoScale" type="range" min="0.3" max="1.5" step="0.01" value="0.74" />
+      </div>
+      <div class="row">
+        <label for="threshold">Threshold</label><span class="val" data-for="threshold"></span>
+        <input id="threshold" type="range" min="0.05" max="0.95" step="0.01" value="0.50" />
+      </div>
+      <div class="row">
+        <label for="edgeJitter">Edge jitter</label><span class="val" data-for="edgeJitter"></span>
+        <input id="edgeJitter" type="range" min="0" max="60" step="0.5" value="18" />
+      </div>
+      <div class="row">
+        <label for="blobWarp">Blob warp</label><span class="val" data-for="blobWarp"></span>
+        <input id="blobWarp" type="range" min="0" max="1" step="0.01" value="0.30" />
+      </div>
+      <div class="row">
+        <label for="warpSpeed">Warp speed</label><span class="val" data-for="warpSpeed"></span>
+        <input id="warpSpeed" type="range" min="0" max="2" step="0.01" value="0.45" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Color / HUD</div>
+      <div class="row">
+        <label for="hue">Hue</label><span class="val" data-for="hue"></span>
+        <input id="hue" type="range" min="240" max="400" step="1" value="322" />
+      </div>
+      <div class="row">
+        <label for="sat">Saturation</label><span class="val" data-for="sat"></span>
+        <input id="sat" type="range" min="0" max="100" step="1" value="88" />
+      </div>
+      <div class="row">
+        <label for="coreGlow">White core</label><span class="val" data-for="coreGlow"></span>
+        <input id="coreGlow" type="range" min="0" max="2" step="0.01" value="0.90" />
+      </div>
+      <div class="row">
+        <label for="chatter">Chatter</label><span class="val" data-for="chatter"></span>
+        <input id="chatter" type="range" min="0" max="1" step="0.01" value="0.16" />
+      </div>
+      <div class="toggle">
+        <label for="hudOn">Detection HUD</label>
+        <input id="hudOn" type="checkbox" checked />
+      </div>
+      <div class="toggle">
+        <label for="animate">Animate warp</label>
+        <input id="animate" type="checkbox" checked />
+      </div>
+    </div>
+
+    <button class="reset" id="reset" type="button">Reset dials</button>
+  </aside>
+
+<script type="module">
+/* ─────────────────────────────────────────────────────────
+ * vert-bars v3 — the bar field rebuilt on WebGPU via vgpu.
+ *
+ * The v2 canvas version faked bloom with ctx.filter and rebuilt a bitmap mask
+ * of the logotype every resize. Here both problems go away:
+ *
+ *   - the OMAR mark is an analytic SDF in WGSL (crisp at any scale, warpable)
+ *   - bloom is a real target chain, not a blur filter
+ *
+ * PASS CHAIN (one command buffer per frame)
+ *
+ *   field    → hdr      rgba16float, full res   the bars themselves
+ *   bright   → bloomA   half res                luminance threshold
+ *   blurH    → bloomB   half res                separable gaussian, x
+ *   blurV    → bloomA   half res                separable gaussian, y
+ *   composite→ surface                          hdr + bloom, tone mapped
+ *
+ * vgpu.js is a vendored esbuild bundle of the npm `vgpu` package, so this
+ * folder stays self-contained like every other explore sketch:
+ *
+ *   npx esbuild node_modules/vgpu/dist/index.js \
+ *     --bundle --format=esm --minify --outfile=public/explore/vert-bars/v3/vgpu.js
+ * ───────────────────────────────────────────────────────── */
+
+import { init, effect, frameLoop, sampler, surface, target, clock } from './vgpu.js';
+
+// ── shared WGSL: noise, SDF primitives, the OMAR mark ──────────────────────
+const COMMON = /* wgsl */`
+fn hash11(n: f32) -> f32 { return fract(sin(n * 127.1) * 43758.5453); }
+fn hash21(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
+
+fn vnoise(p: vec2f) -> f32 {
+  let i = floor(p);
+  let f = fract(p);
+  let u = f * f * (3.0 - 2.0 * f);
+  let a = hash21(i);
+  let b = hash21(i + vec2f(1.0, 0.0));
+  let c = hash21(i + vec2f(0.0, 1.0));
+  let d = hash21(i + vec2f(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+fn fbm(p: vec2f) -> f32 {
+  var v = 0.0;
+  var amp = 0.5;
+  var q = p;
+  for (var i = 0; i < 4; i = i + 1) {
+    v = v + amp * vnoise(q);
+    q = q * 2.03;
+    amp = amp * 0.5;
+  }
+  return v;
+}
+
+fn sdBox(p: vec2f, c: vec2f, h: vec2f) -> f32 {
+  let d = abs(p - c) - h;
+  return length(max(d, vec2f(0.0))) + min(max(d.x, d.y), 0.0);
+}
+
+// Signed distance to a convex quad, winding-based (iq's polygon SDF, N = 4).
+fn sdQuad(p: vec2f, v0: vec2f, v1: vec2f, v2: vec2f, v3: vec2f) -> f32 {
+  var v = array<vec2f, 4>(v0, v1, v2, v3);
+  var d = dot(p - v0, p - v0);
+  var s = 1.0;
+  var j = 3;
+  for (var i = 0; i < 4; i = i + 1) {
+    let e = v[j] - v[i];
+    let w = p - v[i];
+    let b = w - e * clamp(dot(w, e) / dot(e, e), 0.0, 1.0);
+    d = min(d, dot(b, b));
+    let c1 = p.y >= v[i].y;
+    let c2 = p.y < v[j].y;
+    let c3 = e.x * w.y > e.y * w.x;
+    if ((c1 && c2 && c3) || (!c1 && !c2 && !c3)) { s = -s; }
+    j = i;
+  }
+  return s * sqrt(d);
+}
+
+// The A bowl: a box whose top-right corner is a 60u arc centred at (1246, 691).
+fn sdABowl(q: vec2f) -> f32 {
+  let lo = vec2f(1186.0, 631.0);
+  let hi = vec2f(1306.0, 864.0);
+  var d = sdBox(q, (lo + hi) * 0.5, (hi - lo) * 0.5);
+  let c = vec2f(1246.0, 691.0);
+  if (q.x > c.x && q.y < c.y) { d = length(q - c) - 60.0; }
+  return d;
+}
+
+// The OMAR logotype, in its native viewBox units (403 624 1232 281).
+// Solid modular blocks, minus the three circular counters.
+fn sdOmar(q: vec2f) -> f32 {
+  var d = 1.0e9;
+
+  d = min(d, sdBox(q, vec2f( 577.0, 747.5), vec2f(127.0, 116.5))); // O
+  d = min(d, sdBox(q, vec2f( 765.5, 747.5), vec2f( 51.5, 116.5))); // M left stem
+  d = min(d, sdBox(q, vec2f( 966.5, 747.5), vec2f( 51.5, 116.5))); // M right stem
+  d = min(d, sdBox(q, vec2f(1092.0, 747.5), vec2f( 61.0, 116.5))); // M tail
+  d = min(d, sdBox(q, vec2f(1254.5, 747.5), vec2f( 51.5, 116.5))); // A stem
+  d = min(d, sdBox(q, vec2f(1168.5, 676.0), vec2f( 34.5,  45.0))); // A upper left
+  d = min(d, sdBox(q, vec2f(1168.5, 751.5), vec2f( 34.5,  42.5))); // A lower left
+  d = min(d, sdBox(q, vec2f(1370.5, 747.5), vec2f( 51.5, 116.5))); // R stem
+  d = min(d, sdBox(q, vec2f(1525.5, 712.5), vec2f( 34.5,  81.5))); // R shoulder
+  d = min(d, sdBox(q, vec2f(1456.5, 676.0), vec2f( 34.5,  45.0))); // R upper
+  d = min(d, sdBox(q, vec2f(1456.5, 757.5), vec2f( 34.5,  36.5))); // R lower
+
+  d = min(d, sdQuad(q, vec2f(817.0, 631.0), vec2f(866.0, 690.744),
+                       vec2f(866.0, 864.0), vec2f(817.0, 804.256))); // M chevron L
+  d = min(d, sdQuad(q, vec2f(915.0, 631.0), vec2f(866.0, 690.744),
+                       vec2f(866.0, 864.0), vec2f(915.0, 804.256))); // M chevron R
+  d = min(d, sdABowl(q));
+  d = min(d, sdQuad(q, vec2f(1421.0, 792.0), vec2f(1516.0, 792.0),
+                       vec2f(1560.0, 864.0), vec2f(1471.0, 864.0))); // R leg
+
+  d = max(d, -(length(q - vec2f( 574.0, 747.0)) - 24.0));
+  d = max(d, -(length(q - vec2f(1169.0, 734.0)) - 24.0));
+  d = max(d, -(length(q - vec2f(1469.0, 734.0)) - 24.0));
+  return d;
+}
+
+fn hsl2rgb(h: f32, s: f32, l: f32) -> vec3f {
+  let hp = fract(h / 360.0) * 6.0;
+  let c = (1.0 - abs(2.0 * l - 1.0)) * s;
+  let x = c * (1.0 - abs(hp - 2.0 * floor(hp / 2.0) - 1.0));
+  var rgb = vec3f(0.0);
+  if (hp < 1.0) { rgb = vec3f(c, x, 0.0); }
+  else if (hp < 2.0) { rgb = vec3f(x, c, 0.0); }
+  else if (hp < 3.0) { rgb = vec3f(0.0, c, x); }
+  else if (hp < 4.0) { rgb = vec3f(0.0, x, c); }
+  else if (hp < 5.0) { rgb = vec3f(x, 0.0, c); }
+  else { rgb = vec3f(c, 0.0, x); }
+  return rgb + (l - c * 0.5);
+}
+`;
+
+// ── pass 1: the bar field ──────────────────────────────────────────────────
+const FIELD_WGSL = /* wgsl */`
+struct P {
+  resX: f32, resY: f32,
+  time: f32,
+  cols: f32,
+  barWidth: f32,
+  gapNoise: f32,
+  logoScale: f32,
+  threshold: f32,
+  edgeJitter: f32,
+  blobWarp: f32,
+  warpSpeed: f32,
+  hue: f32,
+  sat: f32,
+  chatter: f32,
+  coreGlow: f32,
+  mouseX: f32,
+  mouseY: f32,
+  offX: f32,
+  pad0: f32, pad1: f32,
+}
+@group(0) @binding(0) var<uniform> p: P;
+
+${COMMON}
+
+const VB_W: f32 = 1232.0;
+const VB_CX: f32 = 1019.0;
+const VB_CY: f32 = 764.5;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let res = vec2f(p.resX, p.resY);
+  let px = uv * res;
+
+  // Quantise x to a column — this alone is what turns the silhouette into bars.
+  let cols = max(8.0, floor(p.cols));
+  let colW = res.x / cols;
+  let col = floor(px.x / colW);
+  let cxpx = (col + 0.5) * colW;
+
+  // viewBox units → pixels
+  let s = (res.x * p.logoScale) / VB_W;
+
+  // Warp the sample point, not the geometry: the mark stays analytic.
+  var samplePt = vec2f(cxpx, px.y);
+  if (p.blobWarp > 0.0) {
+    let t = p.time * p.warpSpeed;
+    let n1 = fbm(vec2f(cxpx / res.x * 3.2, px.y / res.y * 2.4) + vec2f(t, t * 0.7));
+    let n2 = fbm(vec2f(cxpx / res.x * 2.8 + 8.0, px.y / res.y * 3.1) + vec2f(t * 0.8, t));
+    samplePt = samplePt + vec2f(n1 - 0.5, n2 - 0.5) * p.blobWarp * res.y * 0.24;
+    samplePt = samplePt + (vec2f(p.mouseX, p.mouseY) - 0.5) * p.blobWarp * res.y * 0.09;
+  }
+
+  // Centre of the *visible* area, so the dial panel doesn't crop the mark.
+  let centre = vec2f(res.x * 0.5 + p.offX, res.y * 0.5);
+  let markQ = (samplePt - centre) / s + vec2f(VB_CX, VB_CY);
+  var dShape = sdOmar(markQ) * s;
+
+  // Threshold dilates / erodes the silhouette.
+  dShape = dShape - (0.5 - p.threshold) * res.y * 0.07;
+
+  // Per-column end jitter, and gaps punched along y.
+  dShape = dShape + (hash11(col * 1.7 + 3.1) - 0.5) * p.edgeJitter;
+  if (p.gapNoise > 0.0) {
+    let g = vnoise(vec2f(col * 0.6, px.y / res.y * 26.0 + p.time * 0.6));
+    dShape = dShape + (1.0 - g) * p.gapNoise * res.y * 0.04;
+  }
+
+  // Bar profile: rounded-box combine of the horizontal and shape distances,
+  // which is what gives the capsule ends.
+  let dx = abs(px.x - cxpx) - colW * 0.5 * p.barWidth;
+  let q2 = vec2f(dx, dShape);
+  let d = min(max(dx, dShape), 0.0) + length(max(q2, vec2f(0.0)));
+
+  let mask = 1.0 - smoothstep(-1.2, 1.2, d);
+  let depth = clamp(-dShape / (res.y * 0.06), 0.0, 1.0);
+
+  // Brightness varies per column and drifts down the frame. Driving it from
+  // the SDF depth instead would peak at each letter's vertical centre, which
+  // reads as one bright horizontal band across the whole mark.
+  let colRand = hash11(col * 5.3 + 1.7);
+  let vgrad = clamp((px.y / res.y - 0.30) / 0.44, 0.0, 1.0);
+  let lift = 0.60 + colRand * 0.46 + vgrad * 0.30;
+
+  let base = hsl2rgb(p.hue, p.sat / 100.0, 0.50 + colRand * 0.12);
+  var out = base * mask * lift;
+
+  // A hot white core down the middle of each bar — this is what the bloom
+  // threshold picks up, so the glow tracks the bars rather than flooding.
+  let core = 1.0 - smoothstep(0.0, max(0.6, colW * 0.26 * p.barWidth), abs(px.x - cxpx));
+  out = out + vec3f(1.0) * core * mask * p.coreGlow * (0.35 + depth * 0.65);
+
+  // Loose bars flickering just outside the mark — detection noise, not
+  // full-screen confetti, so it fades out with distance from the silhouette.
+  if (p.chatter > 0.0) {
+    let near = 1.0 - smoothstep(0.0, res.y * 0.15, dShape);
+    if (near > 0.0) {
+      let seed = vec2f(col * 3.1, floor(px.y / 16.0) + floor(p.time * 3.0));
+      if (vnoise(seed) > 1.0 - p.chatter * 0.24) {
+        let cm = 1.0 - smoothstep(0.0, colW * 0.30, abs(px.x - cxpx));
+        out = out + base * cm * near * 0.55;
+      }
+    }
+  }
+
+  return vec4f(out, 1.0);
+}
+`;
+
+// ── pass 2: luminance threshold ────────────────────────────────────────────
+const BRIGHT_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct B { threshold: f32, pad0: f32, pad1: f32, pad2: f32 }
+@group(0) @binding(2) var<uniform> b: B;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let c = textureSampleLevel(src, samp, uv, 0.0).rgb;
+  let lum = dot(c, vec3f(0.2126, 0.7152, 0.0722));
+  let k = max(0.0, lum - b.threshold) / max(lum, 1.0e-4);
+  return vec4f(c * k, 1.0);
+}
+`;
+
+// ── passes 3 & 4: separable gaussian ───────────────────────────────────────
+const BLUR_WGSL = /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var samp: sampler;
+struct BL { dirX: f32, dirY: f32, radius: f32, pad: f32 }
+@group(0) @binding(2) var<uniform> bl: BL;
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let dims = vec2f(textureDimensions(src, 0));
+  let stepUv = vec2f(bl.dirX, bl.dirY) / dims * bl.radius;
+  var sum = vec3f(0.0);
+  var wsum = 0.0;
+  for (var i = -8; i <= 8; i = i + 1) {
+    let fi = f32(i);
+    let w = exp(-0.5 * fi * fi / 12.0);
+    sum = sum + textureSampleLevel(src, samp, uv + stepUv * fi, 0.0).rgb * w;
+    wsum = wsum + w;
+  }
+  return vec4f(sum / wsum, 1.0);
+}
+`;
+
+// ── pass 5: composite + tone map ───────────────────────────────────────────
+const COMPOSITE_WGSL = /* wgsl */`
+@group(0) @binding(0) var scene: texture_2d<f32>;
+@group(0) @binding(1) var bloomTex: texture_2d<f32>;
+@group(0) @binding(2) var samp: sampler;
+struct C { amount: f32, exposure: f32, pad0: f32, pad1: f32 }
+@group(0) @binding(3) var<uniform> c: C;
+
+const BG: vec3f = vec3f(0.078, 0.047, 0.086);
+
+@fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
+  let s = textureSampleLevel(scene, samp, uv, 0.0).rgb;
+  let b = textureSampleLevel(bloomTex, samp, uv, 0.0).rgb;
+  var col = (s + b * c.amount) * c.exposure;
+  col = col / (col + vec3f(1.0));      // reinhard
+  col = pow(col, vec3f(1.0 / 1.05));
+  return vec4f(BG + col, 1.0);
+}
+`;
+
+// ── dials ──────────────────────────────────────────────────────────────────
+const dialsEl = document.getElementById('dials');
+const P = {};
+const defaults = {};
+let onDialChange = () => {};
+
+function bindDials() {
+  dialsEl.querySelectorAll('input[type="range"]').forEach((input) => {
+    const valEl = dialsEl.querySelector(`.val[data-for="${input.id}"]`);
+    defaults[input.id] = input.value;
+    const sync = () => {
+      const n = Number(input.value);
+      P[input.id] = n;
+      if (valEl) valEl.textContent = input.step === '1' || input.step === '2' ? String(Math.round(n)) : n.toFixed(2);
+      onDialChange(input.id);
+    };
+    input.addEventListener('input', sync);
+    sync();
+  });
+  dialsEl.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    defaults[input.id] = input.checked;
+    const sync = () => { P[input.id] = input.checked; onDialChange(input.id); };
+    input.addEventListener('change', sync);
+    sync();
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    for (const [id, v] of Object.entries(defaults)) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      if (el.type === 'checkbox') el.checked = v; else el.value = v;
+      el.dispatchEvent(new Event(el.type === 'checkbox' ? 'change' : 'input'));
+    }
+  });
+}
+bindDials();
+
+// The panel covers the right edge, so the mark is centred in the area that's
+// actually visible rather than in the viewport. One source of truth, read by
+// both the shader (device px) and the HUD (CSS px).
+const panelToggle = document.getElementById('panelToggle');
+panelToggle.addEventListener('click', () => {
+  const closed = document.body.classList.toggle('panel-closed');
+  panelToggle.textContent = closed ? 'Show dials' : 'Hide dials';
+  panelToggle.setAttribute('aria-expanded', String(!closed));
+});
+
+function markOffsetCss() {
+  if (document.body.classList.contains('panel-closed')) return 0;
+  const covered = Math.max(0, window.innerWidth - dialsEl.getBoundingClientRect().left);
+  return -covered / 2;
+}
+
+const mouse = { x: 0.5, y: 0.5 };
+window.addEventListener('pointermove', (e) => {
+  mouse.x = e.clientX / window.innerWidth;
+  mouse.y = e.clientY / window.innerHeight;
+});
+
+// ── detection HUD: the four letter groups, projected from viewBox space ────
+// Drawn as vector UI on a 2D overlay rather than in the shader — it's chrome,
+// not part of the image.
+const LETTERS = [
+  { name: 'O', x0:  450, y0: 631, x1:  704, y1: 864 },
+  { name: 'M', x0:  714, y0: 631, x1: 1153, y1: 864 },
+  { name: 'A', x0: 1134, y0: 631, x1: 1306, y1: 864 },
+  { name: 'R', x0: 1319, y0: 631, x1: 1560, y1: 864 },
+];
+const hudCanvas = document.getElementById('hud');
+const hctx = hudCanvas.getContext('2d');
+
+function drawHud() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (hudCanvas.width !== Math.floor(w * dpr) || hudCanvas.height !== Math.floor(h * dpr)) {
+    hudCanvas.width = Math.floor(w * dpr);
+    hudCanvas.height = Math.floor(h * dpr);
+  }
+  hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  hctx.clearRect(0, 0, w, h);
+  if (!P.hudOn) return;
+
+  const s = (w * P.logoScale) / 1232;
+  const cx = w / 2 + markOffsetCss();
+  const toScreen = (vx, vy) => [cx + (vx - 1019) * s, h / 2 + (vy - 764.5) * s];
+
+  const boxes = LETTERS.map((l) => {
+    const [x0, y0] = toScreen(l.x0, l.y0);
+    const [x1, y1] = toScreen(l.x1, l.y1);
+    const pad = 8;
+    return { name: l.name, x: x0 - pad, y: y0 - pad, w: x1 - x0 + pad * 2, h: y1 - y0 + pad * 2 };
+  });
+
+  hctx.lineWidth = 1.1;
+  hctx.strokeStyle = '#f0d24a';
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+
+  // Leader rail above the mark, ticking down into each box. Running it along
+  // the top keeps the line off the artwork.
+  const railY = Math.max(10, Math.min(...boxes.map((b) => b.y)) - 28);
+  const lastBox = boxes[boxes.length - 1];
+  hctx.beginPath();
+  hctx.moveTo(boxes[0].x, railY);
+  hctx.lineTo(lastBox.x + lastBox.w, railY);
+  boxes.forEach((b) => {
+    hctx.moveTo(b.x + 6, railY);
+    hctx.lineTo(b.x + 6, b.y - 16);
+  });
+  hctx.stroke();
+
+  // outer frame around the whole mark
+  const first = boxes[0], last = boxes[boxes.length - 1];
+  hctx.save();
+  hctx.setLineDash([4, 4]);
+  hctx.globalAlpha = 0.5;
+  hctx.strokeRect(first.x - 10, first.y - 10, last.x + last.w - first.x + 20, first.h + 20);
+  hctx.restore();
+
+  boxes.forEach((b) => {
+    hctx.strokeRect(b.x, b.y, b.w, b.h);
+    const label = `${b.name} ${Math.round(b.x)},${Math.round(b.y)}`;
+    const tw = hctx.measureText(label).width + 10;
+    const ly = Math.max(14, b.y - 4);
+    hctx.fillStyle = '#f0d24a';
+    hctx.fillRect(b.x, ly - 12, tw, 14);
+    hctx.fillStyle = '#111';
+    hctx.fillText(label, b.x + 5, ly - 1);
+  });
+}
+
+// ── boot ───────────────────────────────────────────────────────────────────
+function showFallback(detail) {
+  document.getElementById('fallback').classList.add('show');
+  document.getElementById('fallback-detail').textContent = detail;
+  dialsEl.style.display = 'none';
+}
+
+async function start() {
+  if (!navigator.gpu) {
+    showFallback('navigator.gpu is undefined — no WebGPU in this browser.');
+    return;
+  }
+
+  let gpu;
+  try {
+    gpu = await init();
+  } catch (err) {
+    showFallback(String(err && err.message ? err.message : err));
+    return;
+  }
+
+  const glCanvas = document.getElementById('gl');
+  const view = surface(gpu, glCanvas, { dpr: [1, 2] });
+  const linear = sampler(gpu, {
+    minFilter: 'linear', magFilter: 'linear',
+    addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge',
+  });
+
+  const half = ([w, h]) => [Math.max(1, Math.floor(w / 2)), Math.max(1, Math.floor(h / 2))];
+
+  const hdr = target(gpu, { size: view.size, format: 'rgba16float' });
+  const bloomA = target(gpu, { size: half(view.size), format: 'rgba16float' });
+  const bloomB = target(gpu, { size: half(view.size), format: 'rgba16float' });
+
+  const fieldParams = () => ({
+    resX: hdr.size[0], resY: hdr.size[1],
+    time: 0,
+    cols: P.cols, barWidth: P.barWidth, gapNoise: P.gapNoise,
+    logoScale: P.logoScale, threshold: P.threshold, edgeJitter: P.edgeJitter,
+    blobWarp: P.blobWarp, warpSpeed: P.warpSpeed,
+    hue: P.hue, sat: P.sat, chatter: P.chatter, coreGlow: P.coreGlow,
+    mouseX: mouse.x, mouseY: mouse.y,
+    offX: 0,
+    pad0: 0, pad1: 0,
+  });
+
+  const field = effect(gpu, FIELD_WGSL, { label: 'field', set: { p: fieldParams() } });
+
+  const bright = effect(gpu, BRIGHT_WGSL, {
+    label: 'bright',
+    set: { src: hdr, samp: linear, b: { threshold: P.bloomThreshold, pad0: 0, pad1: 0, pad2: 0 } },
+  });
+
+  const blurH = effect(gpu, BLUR_WGSL, {
+    label: 'blurH',
+    set: { src: bloomA, samp: linear, bl: { dirX: 1, dirY: 0, radius: P.bloomRadius, pad: 0 } },
+  });
+  const blurV = effect(gpu, BLUR_WGSL, {
+    label: 'blurV',
+    set: { src: bloomB, samp: linear, bl: { dirX: 0, dirY: 1, radius: P.bloomRadius, pad: 0 } },
+  });
+
+  const composite = effect(gpu, COMPOSITE_WGSL, {
+    label: 'composite',
+    set: {
+      scene: hdr, bloomTex: bloomA, samp: linear,
+      c: { amount: P.bloomAmount, exposure: P.exposure, pad0: 0, pad1: 0 },
+    },
+  });
+
+  // Dial changes only touch the uniforms they own — no per-frame writes for
+  // values that aren't animating.
+  onDialChange = (id) => {
+    if (id === 'bloomThreshold') bright.set({ b: { threshold: P.bloomThreshold } });
+    if (id === 'bloomRadius') {
+      blurH.set({ bl: { radius: P.bloomRadius } });
+      blurV.set({ bl: { radius: P.bloomRadius } });
+    }
+    if (id === 'bloomAmount') composite.set({ c: { amount: P.bloomAmount } });
+    if (id === 'exposure') composite.set({ c: { exposure: P.exposure } });
+  };
+
+  view.onResize(({ width, height }) => {
+    hdr.resize([width, height]);
+    const [hw, hh] = half([width, height]);
+    bloomA.resize([hw, hh]);
+    bloomB.resize([hw, hh]);
+    field.set({ p: { resX: width, resY: height } });
+  });
+
+  gpu.onError((err) => console.error('[vgpu]', err.code ?? '', err.message ?? err));
+
+  const time = clock(gpu);
+  let animatedTime = 0;
+  let fpsLast = performance.now();
+  let fpsFrames = 0;
+  const fpsEl = document.getElementById('fps');
+
+  frameLoop(gpu, (frame) => {
+    if (P.animate) animatedTime += time.deltaTime;
+
+    field.set({
+      p: {
+        time: animatedTime,
+        cols: P.cols, barWidth: P.barWidth, gapNoise: P.gapNoise,
+        logoScale: P.logoScale, threshold: P.threshold, edgeJitter: P.edgeJitter,
+        blobWarp: P.blobWarp, warpSpeed: P.warpSpeed,
+        hue: P.hue, sat: P.sat, chatter: P.chatter, coreGlow: P.coreGlow,
+        mouseX: mouse.x, mouseY: mouse.y,
+        offX: markOffsetCss() * (hdr.size[0] / Math.max(1, window.innerWidth)),
+      },
+    });
+
+    frame.pass(hdr, field);
+    frame.pass(bloomA, bright);
+    frame.pass(bloomB, blurH);
+    frame.pass(bloomA, blurV);
+    frame.pass(view, composite);
+
+    drawHud();
+
+    fpsFrames++;
+    const now = performance.now();
+    if (now - fpsLast >= 500) {
+      fpsEl.textContent = `${Math.round((fpsFrames * 1000) / (now - fpsLast))} fps`;
+      fpsFrames = 0;
+      fpsLast = now;
+    }
+  });
+}
+
+start();
+</script>
+</body>
+</html>

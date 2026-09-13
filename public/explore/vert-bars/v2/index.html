@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>vert-bars v2 — OMAR bar-field + dials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #140c16;
+    color: #f4f0f5;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+  canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; }
+
+  .badge {
+    position: fixed; left: 20px; bottom: 20px; z-index: 3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+
+  /* ── Dial panel ── */
+  .dials {
+    position: fixed; top: 16px; right: 16px; z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .dials h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,210,120,0.9);
+    margin-bottom: 12px;
+  }
+  .group {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .group:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
+  .group .title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .row label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.78);
+  }
+  .row .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,210,120,0.95);
+    min-width: 3.2ch;
+    text-align: right;
+  }
+  .row input[type="range"] {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: #ff7ac8;
+  }
+  .toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; font-size: 12px;
+  }
+  .toggle input { accent-color: #ff7ac8; width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div class="badge">explore / vert-bars / v2 · OMAR · blob</div>
+
+  <aside class="dials" id="dials">
+    <h1>Bar field dials</h1>
+
+    <div class="group">
+      <div class="title">Density</div>
+      <div class="row">
+        <label for="cols">Columns</label><span class="val" data-for="cols"></span>
+        <input id="cols" type="range" min="60" max="280" step="2" value="160" />
+      </div>
+      <div class="row">
+        <label for="barWidth">Bar width</label><span class="val" data-for="barWidth"></span>
+        <input id="barWidth" type="range" min="0.2" max="0.95" step="0.01" value="0.62" />
+      </div>
+      <div class="row">
+        <label for="gapNoise">Gap noise</label><span class="val" data-for="gapNoise"></span>
+        <input id="gapNoise" type="range" min="0" max="1" step="0.01" value="0.22" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Bloom</div>
+      <div class="row">
+        <label for="bloomBlur">Blur</label><span class="val" data-for="bloomBlur"></span>
+        <input id="bloomBlur" type="range" min="0" max="48" step="1" value="22" />
+      </div>
+      <div class="row">
+        <label for="bloomAmount">Amount</label><span class="val" data-for="bloomAmount"></span>
+        <input id="bloomAmount" type="range" min="0" max="1.5" step="0.01" value="0.95" />
+      </div>
+      <div class="row">
+        <label for="coreGlow">White core</label><span class="val" data-for="coreGlow"></span>
+        <input id="coreGlow" type="range" min="0" max="1" step="0.01" value="0.55" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Shape</div>
+      <div class="row">
+        <label for="logoScale">Logo scale</label><span class="val" data-for="logoScale"></span>
+        <input id="logoScale" type="range" min="0.35" max="1.4" step="0.01" value="0.78" />
+      </div>
+      <div class="row">
+        <label for="threshold">Threshold</label><span class="val" data-for="threshold"></span>
+        <input id="threshold" type="range" min="0.05" max="0.9" step="0.01" value="0.28" />
+      </div>
+      <div class="row">
+        <label for="edgeJitter">Edge jitter</label><span class="val" data-for="edgeJitter"></span>
+        <input id="edgeJitter" type="range" min="0" max="24" step="0.5" value="7" />
+      </div>
+      <div class="row">
+        <label for="blobWarp">Blob warp</label><span class="val" data-for="blobWarp"></span>
+        <input id="blobWarp" type="range" min="0" max="1" step="0.01" value="0.35" />
+      </div>
+      <div class="row">
+        <label for="warpSpeed">Warp speed</label><span class="val" data-for="warpSpeed"></span>
+        <input id="warpSpeed" type="range" min="0" max="2" step="0.01" value="0.55" />
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="title">Color / HUD</div>
+      <div class="row">
+        <label for="hue">Hue</label><span class="val" data-for="hue"></span>
+        <input id="hue" type="range" min="280" max="360" step="1" value="320" />
+      </div>
+      <div class="row">
+        <label for="sat">Saturation</label><span class="val" data-for="sat"></span>
+        <input id="sat" type="range" min="40" max="100" step="1" value="85" />
+      </div>
+      <div class="row">
+        <label for="chatter">Background chatter</label><span class="val" data-for="chatter"></span>
+        <input id="chatter" type="range" min="0" max="1" step="0.01" value="0.18" />
+      </div>
+      <div class="toggle">
+        <label for="hud">Detection HUD</label>
+        <input id="hud" type="checkbox" checked />
+      </div>
+      <div class="toggle">
+        <label for="animate">Animate warp</label>
+        <input id="animate" type="checkbox" checked />
+      </div>
+    </div>
+  </aside>
+
+  <!-- Official OMAR mark geometry (viewBox 403 624 1232 281) -->
+  <svg id="omar-src" viewBox="403 624 1232 281" width="0" height="0" aria-hidden="true" style="position:absolute">
+    <g id="omar-blocks" fill="#fff">
+      <rect x="1491" y="631" width="69" height="163"/>
+      <rect x="450" y="631" width="254" height="233"/>
+      <rect x="714" y="631" width="103" height="233"/>
+      <path d="M817 631L866 690.744V864L817 804.256 817 631Z"/>
+      <path d="M915 631L866 690.744V864L915 804.256 915 631Z"/>
+      <rect x="915" y="631" width="103" height="233"/>
+      <rect x="1031" y="631" width="122" height="233"/>
+      <rect x="1319" y="631" width="103" height="233"/>
+      <rect x="1203" y="631" width="103" height="233"/>
+      <path d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"/>
+      <rect x="1134" y="631" width="69" height="90"/>
+      <rect x="1422" y="631" width="69" height="90"/>
+      <rect x="1134" y="709" width="69" height="85"/>
+      <rect x="1422" y="721" width="69" height="73"/>
+      <path d="M1421 792H1516L1560 864H1471L1421 792Z"/>
+    </g>
+    <g id="omar-eyes" fill="#000">
+      <circle cx="574" cy="747" r="24"/>
+      <circle cx="1169" cy="734" r="24"/>
+      <circle cx="1469" cy="734" r="24"/>
+    </g>
+  </svg>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+ * ANIMATION STORYBOARD
+ *
+ *    boot
+ *      bake OMAR mark into an offscreen alpha mask
+ *    every frame
+ *      1. sample mask columns (with optional blob warp)
+ *      2. draw dense rounded capsules + white cores
+ *      3. bloom composite (blur pass + sharp pass)
+ *      4. optional detection HUD
+ * ───────────────────────────────────────────────────────── */
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const layer = document.createElement('canvas');
+const lctx = layer.getContext('2d');
+const maskCanvas = document.createElement('canvas');
+const mctx = maskCanvas.getContext('2d', { willReadFrequently: true });
+
+const P = {};
+const dials = document.getElementById('dials');
+
+function bindDials() {
+  dials.querySelectorAll('input[type="range"]').forEach((input) => {
+    const valEl = dials.querySelector(`.val[data-for="${input.id}"]`);
+    const sync = () => {
+      const n = Number(input.value);
+      P[input.id] = n;
+      if (valEl) {
+        valEl.textContent = Number.isInteger(n) || input.step === '1'
+          ? String(Math.round(n))
+          : n.toFixed(2);
+      }
+      if (input.id === 'logoScale') bakeMask();
+    };
+    input.addEventListener('input', sync);
+    sync();
+  });
+  dials.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+    const sync = () => { P[input.id] = input.checked; };
+    input.addEventListener('change', sync);
+    sync();
+  });
+}
+
+let W = 0, H = 0, dpr = 1;
+let maskW = 0, maskH = 0, maskData = null;
+let mouse = { x: 0.5, y: 0.5 };
+const t0 = performance.now();
+
+window.addEventListener('pointermove', (e) => {
+  mouse.x = e.clientX / W;
+  mouse.y = e.clientY / H;
+});
+
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  for (const c of [canvas, layer]) {
+    c.width = Math.floor(W * dpr);
+    c.height = Math.floor(H * dpr);
+  }
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  bakeMask();
+}
+window.addEventListener('resize', resize);
+
+function bakeMask() {
+  // Rasterize the OMAR mark directly onto an offscreen mask (no SVG→Image —
+  // that path was baking empty because the source SVG was 0×0).
+  if (!W || !H) return;
+
+  const scale = P.logoScale ?? 0.78;
+  const vb = { x: 403, y: 624, w: 1232, h: 281 };
+  const targetW = Math.max(8, W * 0.92 * scale);
+  const targetH = targetW * (vb.h / vb.w);
+
+  maskW = Math.max(64, Math.floor(W));
+  maskH = Math.max(64, Math.floor(H));
+  maskCanvas.width = maskW;
+  maskCanvas.height = maskH;
+  mctx.setTransform(1, 0, 0, 1, 0, 0);
+  mctx.fillStyle = '#000';
+  mctx.fillRect(0, 0, maskW, maskH);
+
+  const ox = (maskW - targetW) / 2;
+  const oy = (maskH - targetH) / 2;
+  const sx = targetW / vb.w;
+  const sy = targetH / vb.h;
+
+  mctx.save();
+  mctx.translate(ox, oy);
+  mctx.scale(sx, sy);
+  mctx.translate(-vb.x, -vb.y);
+
+  // Solid letterforms
+  mctx.fillStyle = '#fff';
+  const rects = [
+    [1491, 631, 69, 163],
+    [450, 631, 254, 233],
+    [714, 631, 103, 233],
+    [915, 631, 103, 233],
+    [1031, 631, 122, 233],
+    [1319, 631, 103, 233],
+    [1203, 631, 103, 233],
+    [1134, 631, 69, 90],
+    [1422, 631, 69, 90],
+    [1134, 709, 69, 85],
+    [1422, 721, 69, 73],
+  ];
+  for (const [x, y, w, h] of rects) mctx.fillRect(x, y, w, h);
+
+  // Exact path pieces from the OMAR mark
+  for (const d of [
+    'M817 631L866 690.744V864L817 804.256 817 631Z',
+    'M915 631L866 690.744V864L915 804.256 915 631Z',
+    'M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z',
+    'M1421 792H1516L1560 864H1471L1421 792Z',
+  ]) {
+    mctx.fill(new Path2D(d));
+  }
+
+  // Counter “eyes”
+  mctx.fillStyle = '#000';
+  mctx.beginPath(); mctx.arc(574, 747, 24, 0, Math.PI * 2); mctx.fill();
+  mctx.beginPath(); mctx.arc(1169, 734, 24, 0, Math.PI * 2); mctx.fill();
+  mctx.beginPath(); mctx.arc(1469, 734, 24, 0, Math.PI * 2); mctx.fill();
+  mctx.restore();
+
+  maskData = mctx.getImageData(0, 0, maskW, maskH).data;
+}
+
+function hash(n) {
+  const x = Math.sin(n * 127.1) * 43758.5453;
+  return x - Math.floor(x);
+}
+function noise1(x, seed = 0) {
+  const i = Math.floor(x);
+  const f = x - i;
+  const u = f * f * (3 - 2 * f);
+  return hash(i + seed) * (1 - u) + hash(i + 1 + seed) * u;
+}
+function fbm(x, y, t) {
+  let v = 0, a = 0.5;
+  let fx = x, fy = y;
+  for (let i = 0; i < 4; i++) {
+    v += a * noise1(fx + t * (0.4 + i * 0.15) + i * 19, i * 13 + fy * 0.01);
+    fx *= 2.05; fy *= 2.05; a *= 0.5;
+  }
+  return v;
+}
+
+function sampleAlpha(px, py) {
+  if (!maskData) return 0;
+  const x = Math.max(0, Math.min(maskW - 1, px | 0));
+  const y = Math.max(0, Math.min(maskH - 1, py | 0));
+  return maskData[(y * maskW + x) * 4] / 255; // R channel (white mark)
+}
+
+function columnIntervals(colIndex, cols, time) {
+  const intervals = [];
+  const samples = Math.max(80, Math.floor(H / 3));
+  let inside = false;
+  let start = 0;
+  const nx = (colIndex + 0.5) / cols;
+
+  for (let i = 0; i <= samples; i++) {
+    const ny = i / samples;
+    let sx = nx * maskW;
+    let sy = ny * maskH;
+
+    // Blob warp — displace sample coords with soft noise so the mark feels organic
+    if (P.blobWarp > 0) {
+      const t = P.animate ? time * P.warpSpeed : 0;
+      const wx = (fbm(nx * 3.2, ny * 2.4, t) - 0.5) * P.blobWarp * maskW * 0.12;
+      const wy = (fbm(nx * 2.8 + 8, ny * 3.1, t + 2) - 0.5) * P.blobWarp * maskH * 0.18;
+      // slight mouse influence
+      const mx = (mouse.x - 0.5) * P.blobWarp * maskW * 0.04;
+      const my = (mouse.y - 0.5) * P.blobWarp * maskH * 0.04;
+      sx += wx + mx;
+      sy += wy + my;
+    }
+
+    const a = sampleAlpha(sx, sy);
+    const n = (noise1(colIndex * 0.35 + ny * 8 + time * 0.2, 4) - 0.5) * P.gapNoise * 0.35;
+    const nowInside = a > (P.threshold + n);
+
+    // Gap noise can punch holes inside filled regions for that broken-bar look
+    const punch = P.gapNoise > 0.01 && noise1(colIndex * 1.7 + ny * 14 + time, 9) < P.gapNoise * 0.2;
+
+    if (nowInside && !punch && !inside) { inside = true; start = ny; }
+    if ((!nowInside || punch) && inside) {
+      inside = false;
+      intervals.push([start, ny]);
+    }
+  }
+  if (inside) intervals.push([start, 1]);
+  return intervals;
+}
+
+function roundBar(c, cx, cy, w, h) {
+  const x = cx - w / 2;
+  const y = cy - h / 2;
+  const r = Math.min(w / 2, h / 2);
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+  c.fill();
+}
+
+function hsl(h, s, l, a = 1) {
+  return `hsla(${h} ${s}% ${l}% / ${a})`;
+}
+
+function drawBars(time) {
+  const cols = Math.round(P.cols);
+  const colW = W / cols;
+  const barW = Math.max(1, colW * P.barWidth);
+
+  lctx.clearRect(0, 0, W, H);
+  lctx.fillStyle = '#140c16';
+  lctx.fillRect(0, 0, W, H);
+
+  // Background chatter
+  if (P.chatter > 0) {
+    for (let i = 0; i < cols; i++) {
+      if (hash(i * 17.3 + Math.floor(time)) > 1 - P.chatter * 0.25) {
+        const h = 3 + hash(i * 9.1) * 16;
+        const y = hash(i * 3.7 + Math.floor(time * 2)) * H;
+        lctx.fillStyle = hsl(P.hue, P.sat, 55, 0.1 + P.chatter * 0.15);
+        roundBar(lctx, (i + 0.5) * colW, y, barW * 0.65, h);
+      }
+    }
+  }
+
+  for (let i = 0; i < cols; i++) {
+    const intervals = columnIntervals(i, cols, time);
+    const cx = (i + 0.5) * colW;
+
+    for (const [y0, y1] of intervals) {
+      const j0 = (noise1(i * 0.6 + time * 0.3, 1) - 0.5) * P.edgeJitter;
+      const j1 = (noise1(i * 0.6 + time * 0.3, 2) - 0.5) * P.edgeJitter;
+      const top = y0 * H + j0;
+      const bot = y1 * H + j1;
+      const h = Math.max(2, bot - top);
+      const midY = (top + bot) / 2;
+      const strength = Math.min(1, h / (H * 0.12));
+
+      lctx.fillStyle = hsl(P.hue, P.sat, 58 + strength * 18, 0.45 + strength * 0.5);
+      roundBar(lctx, cx, midY, barW, h);
+
+      if (P.coreGlow > 0 && strength > 0.25) {
+        lctx.fillStyle = `rgba(255,255,255,${P.coreGlow * strength * 0.55})`;
+        roundBar(lctx, cx, midY, barW * 0.42, h * 0.72);
+      }
+    }
+  }
+}
+
+function compositeBloom() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#140c16';
+  ctx.fillRect(0, 0, W, H);
+
+  // Soft bloom pass
+  if (P.bloomBlur > 0 && P.bloomAmount > 0) {
+    ctx.save();
+    ctx.filter = `blur(${P.bloomBlur}px)`;
+    ctx.globalAlpha = P.bloomAmount;
+    ctx.drawImage(layer, 0, 0, W, H);
+    // second tighter bloom for denser glow
+    ctx.filter = `blur(${Math.max(2, P.bloomBlur * 0.35)}px)`;
+    ctx.globalAlpha = P.bloomAmount * 0.55;
+    ctx.drawImage(layer, 0, 0, W, H);
+    ctx.restore();
+  }
+
+  // Sharp bars on top
+  ctx.globalAlpha = 1;
+  ctx.drawImage(layer, 0, 0, W, H);
+}
+
+function findClusters(time) {
+  if (!P.hud || !maskData) return [];
+  const cols = 28, rows = 16;
+  const visited = new Set();
+  const cellOn = (cx, cy) => {
+    const nx = (cx + 0.5) / cols;
+    const ny = (cy + 0.5) / rows;
+    let sx = nx * maskW, sy = ny * maskH;
+    if (P.blobWarp > 0) {
+      const t = P.animate ? time * P.warpSpeed : 0;
+      sx += (fbm(nx * 3.2, ny * 2.4, t) - 0.5) * P.blobWarp * maskW * 0.12;
+      sy += (fbm(nx * 2.8 + 8, ny * 3.1, t + 2) - 0.5) * P.blobWarp * maskH * 0.18;
+    }
+    return sampleAlpha(sx, sy) > P.threshold;
+  };
+
+  const clusters = [];
+  for (let cy = 0; cy < rows; cy++) {
+    for (let cx = 0; cx < cols; cx++) {
+      const key = cx + ',' + cy;
+      if (visited.has(key) || !cellOn(cx, cy)) continue;
+      const stack = [[cx, cy]];
+      visited.add(key);
+      let minX = cx, maxX = cx, minY = cy, maxY = cy, n = 0;
+      while (stack.length) {
+        const [x, y] = stack.pop();
+        n++;
+        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+        for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+          const nx = x + dx, ny = y + dy;
+          const k = nx + ',' + ny;
+          if (nx < 0 || ny < 0 || nx >= cols || ny >= rows || visited.has(k)) continue;
+          if (!cellOn(nx, ny)) continue;
+          visited.add(k);
+          stack.push([nx, ny]);
+        }
+      }
+      if (n < 4) continue;
+      const pad = 10;
+      clusters.push({
+        x: (minX / cols) * W - pad,
+        y: (minY / rows) * H - pad,
+        w: ((maxX - minX + 1) / cols) * W + pad * 2,
+        h: ((maxY - minY + 1) / rows) * H + pad * 2,
+      });
+    }
+  }
+  clusters.sort((a, b) => b.w * b.h - a.w * a.h);
+  return clusters.slice(0, 8);
+}
+
+function drawHUD(clusters) {
+  if (!clusters.length) return;
+  ctx.save();
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#f0d24a';
+  ctx.font = '500 11px "JetBrains Mono", monospace';
+
+  if (clusters.length > 1) {
+    ctx.beginPath();
+    clusters.forEach((c, i) => {
+      const cx = c.x + c.w / 2, cy = c.y + c.h / 2;
+      if (i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+    });
+    ctx.stroke();
+  }
+
+  clusters.forEach((c) => {
+    ctx.strokeRect(c.x, c.y, c.w, c.h);
+    const label = `${Math.round(c.x)}, ${Math.round(c.y)}`;
+    const tw = ctx.measureText(label).width + 10;
+    const lx = c.x;
+    const ly = Math.max(14, c.y - 4);
+    ctx.fillStyle = '#f0d24a';
+    ctx.fillRect(lx, ly - 12, tw, 14);
+    ctx.fillStyle = '#111';
+    ctx.fillText(label, lx + 5, ly - 1);
+  });
+  ctx.restore();
+}
+
+function frame(now) {
+  const time = (now - t0) / 1000;
+  drawBars(time);
+  compositeBloom();
+  if (P.hud) drawHUD(findClusters(time));
+  requestAnimationFrame(frame);
+}
+
+bindDials();
+resize();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

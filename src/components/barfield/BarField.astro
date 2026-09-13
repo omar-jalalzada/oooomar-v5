@@ -1,0 +1,288 @@
+---
+/*
+  The homepage: OMAR drawn as a field of vertical bars, in WebGPU.
+
+  Promoted out of `public/explore/vert-bars/v6/` — the sketch stays there as the archive.
+  What changed on the way in: the dial panel is no longer the source of truth for the
+  sketch's state (see dials.ts), the sound engine is fetched on demand rather than on
+  load, and the SVG logotype stands in where there's no WebGPU.
+
+  The palette is the component's own. Everything else on the site is light, and this is a
+  lit object in a dark room — a deliberate contrast, not an inconsistency. The tokens are
+  declared on the stage so they can't leak into the pages that follow.
+*/
+import Logotype from '../constellation/Logotype.astro';
+import DialPanel from './DialPanel.astro';
+
+// The dial panel is how this thing gets designed, and it has no business shipping. Same
+// arrangement as `design-system.astro` and the screenshot plugin: present while you're
+// working, gone from the build — no panel markup and no panel JS on any built page.
+//
+// Astro decides what client JS to bundle by scanning the component graph rather than by
+// what actually renders, so the panel's ~1.3KB script is still emitted into dist/_astro/
+// as an orphan chunk. No page references it, so nobody ever downloads it. Making the
+// import itself conditional doesn't help: a dynamic import is part of the same graph.
+const dev = import.meta.env.DEV;
+---
+
+<div class="stage" id="stage">
+  <canvas id="gl"></canvas>
+  <canvas id="hud"></canvas>
+  {/* Real type, not bars: at 246 columns a lowercase letter would get two or three of
+      them. The field is the mark and this is the voice beside it. Its placement comes
+      from the same projection that positions the letters. Hidden from assistive tech
+      because the page's own heading already says it. */}
+  <div class="tagline" id="tagline" aria-hidden="true">
+    <i class="rule"></i><span class="txt">pixels to beats</span><i class="rule"></i>
+  </div>
+  {/* Part of the composition rather than chrome in a corner: it sits under the tagline and
+      is positioned from the same mark box, so the three read as one lockup. The tagline says
+      what the thing does and the control offers the doing, which is why this is phrased as
+      the next action rather than as the current state. */}
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+    turn on sound
+  </button>
+</div>
+
+{/* No WebGPU, or a device that refused one: show the wordmark and say nothing about it.
+    A homepage should never explain a browser to its visitor. Deliberately static rather
+    than using Logotype's entrance — the reveal measures each bar with getBBox(), which
+    returns zeroes while this container is display:none, so the animation it would play is
+    one whose timings had all been computed from NaN. */}
+<div class="fallback" id="fallback" aria-hidden="true">
+  <div class="markwrap"><Logotype /></div>
+</div>
+
+{/* The mode and fps readout lives at the top of this panel, not in the corner of the
+    window — see DialPanel.astro. Both are dev-only for the same reason. */}
+{dev && <DialPanel />}
+
+<style>
+  .stage {
+    /* The field's own palette. Scoped here rather than added to tokens.css: the site is
+       light and stays light, and these three exist only for the one dark page. */
+    --field-bg: #140c16;
+    --field-hud: #f0d24a;
+    --field-hot: #ff5a3c;
+    --field-mark: #ff7ac8;
+
+    position: fixed;
+    inset: 0;
+    /* A vertical drag on a letter sets that letter's dial. Without this the browser
+       claims the gesture as a scroll before the first pointermove even arrives, and on
+       iOS it starts the rubber-band overscroll instead. */
+    touch-action: none;
+  }
+  .stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* A claimed letter is a handle, so say so. On the stage rather than the body, so the
+     dial panel keeps its own cursors. */
+  .stage.grabbable {
+    cursor: grab;
+  }
+  .stage.grabbing {
+    cursor: grabbing;
+  }
+  #gl {
+    z-index: 1;
+  }
+  #hud {
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .tagline {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 1.15em;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    white-space: nowrap;
+    /* The instrument's own yellow rather than a neutral white. Plain white read as
+       browser default text laid over a designed thing; this is the same colour as the
+       detection frames and the gauges, so the tagline belongs to the same machine. */
+    color: var(--field-hud);
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  /* Tracking is applied after the last letter too, so the text box is one space wider
+     than its ink and the two flanking rules would come out unequal. The cancelling
+     negative margin is set from JS next to the tracking itself, because the tracking is
+     no longer a constant — it opens on the kick. */
+  .tagline .txt {
+    flex: 0 0 auto;
+  }
+  /* A dimension line rather than an underline: it spans the wordmark's exact width and is
+     ticked at each end, so it measures the mark instead of merely sitting beneath it. */
+  .tagline .rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: currentColor;
+    position: relative;
+  }
+  .tagline .rule::before {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    width: 1px;
+    height: 10px;
+    background: currentColor;
+  }
+  .tagline .rule:first-child::before {
+    left: 0;
+  }
+  .tagline .rule:last-child::before {
+    right: 0;
+  }
+
+  .fallback {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    place-content: center;
+    padding: var(--space-8);
+  }
+  .fallback.show {
+    display: grid;
+  }
+  .fallback .markwrap {
+    width: min(460px, 72vw);
+  }
+  /* The mark ships as accent blue on white everywhere else; here it belongs to the field,
+     and the counters punch through to the dark ground rather than to paper. */
+  .fallback :global(.blocks) {
+    fill: var(--field-mark);
+    stroke: var(--field-mark);
+  }
+  .fallback :global(.eye) {
+    fill: var(--field-bg);
+  }
+
+  /* Placed by the frame loop from the same mark box as the tagline (see hud.ts), so it holds
+     its position under the line in both layouts. Absolute, not fixed: it belongs to the
+     composition now, not to the window. */
+  .sound-toggle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .sound-toggle:hover {
+    border-color: rgba(255, 210, 120, 0.6);
+    color: #ffd36a;
+  }
+  .sound-toggle[aria-pressed='true'] {
+    border-color: rgba(255, 122, 200, 0.55);
+    color: #ff9bd6;
+  }
+  .sound-toggle[disabled] {
+    cursor: default;
+    opacity: 0.5;
+  }
+</style>
+
+{/* Global, because the dark ground belongs to the document rather than to this element —
+    and scoped to body.immersive so it cannot reach the light pages. */}
+<style is:global>
+  body.immersive {
+    color-scheme: dark;
+    background: #140c16;
+    color: #f4f0f5;
+    overflow: hidden;
+    height: 100%;
+  }
+  html:has(body.immersive) {
+    height: 100%;
+    background: #140c16;
+  }
+</style>
+
+<script>
+  import { P } from './dials';
+  import { startField } from './field';
+  import { sound, type AudioEngine } from './state';
+
+  const stage = document.getElementById('stage');
+  const gl = document.getElementById('gl') as HTMLCanvasElement | null;
+  const hud = document.getElementById('hud') as HTMLCanvasElement | null;
+  const tagline = document.getElementById('tagline');
+  const soundBtn = document.getElementById('soundToggle') as HTMLButtonElement | null;
+
+  if (stage && gl && hud && tagline) {
+    const ok = await startField({
+      stage,
+      gl,
+      hud,
+      tagline,
+      pill: soundBtn,
+      // All three are dev-only and absent from the build, which is why every reader of
+      // them is guarded rather than asserted.
+      panel: document.getElementById('dials'),
+      mode: document.getElementById('mode'),
+      fps: document.getElementById('fps'),
+    });
+
+    if (!ok) {
+      document.getElementById('fallback')?.classList.add('show');
+      stage.style.display = 'none';
+      soundBtn?.remove();
+      document.getElementById('dials')?.remove();
+      document.getElementById('panelToggle')?.remove();
+    }
+  }
+
+  // ── sound ────────────────────────────────────────────────────────────────
+  // A browser will not resume an AudioContext without a genuine user gesture, and
+  // pointermove is explicitly not one, so hovering can never be enough to begin. That is
+  // why there's a pill to click — and it's also why the engine is imported here rather
+  // than at the top: it's the largest module in the field and not one byte of it is
+  // needed to draw a frame, so it isn't fetched until someone asks for sound.
+  let engine: AudioEngine | null = null;
+
+  soundBtn?.addEventListener('click', async () => {
+    soundBtn.disabled = true;
+    try {
+      if (!engine) {
+        const { createAudio } = await import('./audio');
+        engine = createAudio();
+        if (!engine) {
+          soundBtn.textContent = 'no audio here';
+          return;
+        }
+        // Built inside the click handler, so the context is created under a live user
+        // activation rather than resumed after the fact.
+        sound.engine = engine;
+        engine.setTempo(P.tempo);
+      }
+      const on = await engine.toggle();
+      // Always the next action, never the current state — the label is what pressing it
+      // will do. `aria-pressed` is what carries the state, which is its job.
+      soundBtn.textContent = on ? 'turn off sound' : 'turn on sound';
+      soundBtn.setAttribute('aria-pressed', String(on));
+    } finally {
+      // Left disabled only on the No audio path, where there's nothing to press for.
+      if (engine) soundBtn.disabled = false;
+    }
+  });
+</script>
