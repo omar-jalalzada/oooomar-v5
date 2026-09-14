@@ -27,3 +27,10 @@ When one graduates, it becomes a plan in `docs/plans/`.
   both 404 under `astro dev` (farsh, girih, all of them), so the iframe on every experiment detail
   page shows Astro's 404 while `…/index.html` loads fine. Production is unaffected. Wants a small
   dev-only rewrite of `/dir/` → `/dir/index.html` alongside the screenshot plugin.
+- Web Analytics 404s on omar.build — the Vercel adapter is configured with
+  `webAnalytics: { enabled: true }`, so every page requests `/_vercel/insights/script.js` and gets
+  a 404 back: the flag turns on the *script tag*, but Analytics still has to be enabled on the
+  Vercel project itself. Nothing depends on the script, so the only cost is that no traffic is
+  being recorded — which matters more now the homepage is the thing worth measuring. Fixed with a
+  dashboard toggle rather than a code change, or by dropping the flag if the numbers aren't wanted.
+  Pre-existing; spotted while verifying the bar-field deploy.
