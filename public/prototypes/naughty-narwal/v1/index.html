@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Naughty Narwal v1 — point-field branding tool</title>
+  <!--
+    p5 is vendored once at ../p5.module.js so every version shares it:
+      npm i -D p5
+      cp node_modules/p5/lib/p5.esm.min.js public/prototypes/naughty-narwal/p5.module.js
+    Outfit 700 sits beside it (the Type face):
+      npm i -D @fontsource/outfit
+      cp node_modules/@fontsource/outfit/files/outfit-latin-700-normal.woff2 \
+         public/prototypes/naughty-narwal/outfit-latin-700.woff2
+
+    URL params (used by the dev screenshot API):
+      ?shape=jelly|cell|spine|blob|type   which drawing loads
+      ?word=Omar                          Type's committed word
+      ?inked=fill|outline                 Type's stamp mode
+      ?bare=1                             hide both panels, stage only
+  -->
+  <style>
+    :root {
+      --page: #f4f4f5;
+      --panel: #ffffff;
+      --line: #e4e4e7;
+      --ink: #18181b;
+      --dim: #71717a;
+      --faint: #a1a1aa;
+      --accent: #195cff;
+      --well: #0a0a0b;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--page);
+      color: var(--ink);
+      font: 12px/1.45 var(--mono);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 196px minmax(0, 1fr) 268px;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    body.bare { grid-template-columns: minmax(0, 1fr); }
+    body.bare .panel { display: none; }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+    }
+
+    .panel > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: none;
+      padding: 11px 12px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel > header h1 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .panel > header .meta {
+      color: var(--faint);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .scroll {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      min-height: 0;
+      padding: 8px;
+    }
+
+    /* ── left: the shape library ─────────────────────────────────────────── */
+
+    .item {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      margin-bottom: 4px;
+      padding: 6px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: none;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .item:hover { background: #fafafa; border-color: var(--line); }
+
+    .item[aria-current='true'] {
+      border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+      background: color-mix(in srgb, var(--accent) 6%, transparent);
+    }
+
+    .item canvas {
+      display: block;
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      background: var(--well);
+    }
+
+    .item b { display: block; font-weight: 600; }
+    .item span { display: block; color: var(--faint); font-size: 10px; }
+
+    .soon {
+      margin: 8px 6px 2px;
+      padding-top: 9px;
+      border-top: 1px dashed var(--line);
+      color: var(--faint);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── centre: the stage ───────────────────────────────────────────────── */
+
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    #well {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 10px;
+      background: var(--well);
+      box-shadow: 0 1px 2px rgba(9, 9, 11, 0.07), 0 12px 32px -18px rgba(9, 9, 11, 0.4);
+    }
+
+    #well canvas { display: block; }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: none;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+    }
+
+    .bar button {
+      padding: 4px 12px;
+      border: none;
+      border-radius: 999px;
+      background: #f4f4f5;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .bar button:hover { background: #e9e9ec; }
+
+    .bar .read {
+      padding-right: 8px;
+      color: var(--faint);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      text-transform: uppercase;
+    }
+
+    /* ── right: the dials ────────────────────────────────────────────────── */
+
+    #live {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--dim);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #live::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    body.paused #live::before { background: var(--faint); }
+
+    .group + .group { margin-top: 6px; border-top: 1px solid var(--line); }
+
+    .group > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 6px 7px;
+      color: var(--dim);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .group > summary::-webkit-details-marker { display: none; }
+    .group > summary::after { content: '−'; color: var(--faint); }
+    .group:not([open]) > summary::after { content: '+'; }
+
+    .dial { padding: 4px 6px 8px; }
+
+    .dial .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .dial label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .dial input[type='number'] {
+      width: 68px;
+      flex: none;
+      padding: 2px 6px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--panel);
+      color: inherit;
+      font: inherit;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    .dial input[type='number']::-webkit-outer-spin-button,
+    .dial input[type='number']::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .dial input[type='number']:focus-visible {
+      outline: 1px solid var(--accent);
+      border-color: var(--accent);
+    }
+
+    .dial input[type='range'] {
+      width: 100%;
+      height: 14px;
+      margin: 0;
+      accent-color: var(--accent);
+      cursor: ew-resize;
+    }
+
+    .word {
+      display: flex;
+      gap: 6px;
+    }
+
+    .word input[type='text'] {
+      flex: 1;
+      min-width: 0;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: inherit;
+      font: inherit;
+    }
+
+    .word input[type='text']:focus-visible {
+      outline: 1px solid var(--accent);
+      border-color: var(--accent);
+    }
+
+    .word button {
+      flex: none;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f4f4f5;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .word button:hover { background: #e9e9ec; }
+
+    .switch {
+      display: flex;
+      padding: 2px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #f4f4f5;
+    }
+
+    .switch button {
+      flex: 1;
+      padding: 4px 0;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--dim);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .switch button[aria-pressed='true'] {
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: 0 1px 2px rgba(9, 9, 11, 0.08);
+    }
+
+    .acts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex: none;
+      padding: 9px;
+      border-top: 1px solid var(--line);
+    }
+
+    .acts button {
+      flex: 1 0 auto;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--dim);
+      font: inherit;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .acts button:hover { background: #fafafa; color: var(--ink); }
+
+    @media (max-width: 1000px) {
+      body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+      .panel:first-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="panel">
+    <header>
+      <h1>Shapes</h1>
+      <span class="meta" id="shapeCount"></span>
+    </header>
+    <div class="scroll" id="library"></div>
+    <p class="soon">Custom SVG lands here later — an asset is a silhouette the field is allowed to occupy, not a stamp.</p>
+  </aside>
+
+  <main class="stage">
+    <div id="well"></div>
+    <div class="bar">
+      <button id="playBtn" type="button">Pause</button>
+      <span class="read" id="readout">—</span>
+    </div>
+  </main>
+
+  <aside class="panel">
+    <header>
+      <h1 id="dialTitle">Jelly</h1>
+      <span id="live">live</span>
+    </header>
+    <div class="scroll" id="dials"></div>
+    <div class="acts">
+      <button id="resetShape" type="button">Reset shape</button>
+      <button id="resetField" type="button">Reset field</button>
+      <button id="copyDials" type="button">Copy</button>
+    </div>
+  </aside>
+
+  <script type="module">
+    import p5 from '../p5.module.js';
+
+    const { sin, cos, hypot, pow, floor, round, min, max, PI } = Math;
+    const TAU = PI * 2;
+
+    // Every drawing works in the 400x400 space the reference sketches use, centred
+    // on (200,200), and the canvas is scaled to it — so borrowed constants keep
+    // their meaning at any stage size.
+    const SPACE = 400;
+
+    // The references tie form to point count (`y = i/99`), so turning density up
+    // grows the animal. Here the walk is normalised and `span` is a dial instead:
+    // density then decides how many strands there are, not how big the body is.
+    // Raw `i` still drives the rib and filament phases — that's where the texture
+    // comes from, and it wants to be an integer.
+
+    // ── the drawings ──────────────────────────────────────────────────────────
+    // `rate` is each shape's natural time step as a multiple of PI/240, so one
+    // Speed dial reads the same across all of them. `prep` hoists everything that
+    // is constant for the frame out of a loop that runs 20,000 times.
+
+    const SHAPES = [
+      {
+        id: 'jelly',
+        label: 'Jelly',
+        note: 'bell + tentacles',
+        rate: 4,
+        fill: 0.84,
+        dials: [
+          { id: 'school', label: 'School', min: 1, max: 4, step: 1, value: 2 },
+          { id: 'span', label: 'Body length', min: 90, max: 300, step: 1, value: 202 },
+          { id: 'cut', label: 'Bell / hair', min: 8, max: 150, step: 1, value: 59 },
+          { id: 'bell', label: 'Bell width', min: 2, max: 16, step: 0.1, value: 8 },
+          { id: 'ribs', label: 'Bell ribs', min: 3, max: 24, step: 1, value: 9 },
+          { id: 'fila', label: 'Filament twist', min: 0.5, max: 12, step: 0.1, value: 4 },
+          { id: 'volume', label: 'Volume', min: 20, max: 140, step: 1, value: 70 },
+          { id: 'orbit', label: 'Orbit', min: 0, max: 0.4, step: 0.005, value: 0.083 },
+        ],
+        prep(n, t, d) {
+          const school = max(1, d.school | 0);
+          return {
+            step: d.span / (n - 1),
+            ribs: max(1, d.ribs | 0),
+            school,
+            gap: TAU / school,
+            spin: t * d.orbit,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          const y = i * k.step;
+          // Two materials off one branch: below the cut only `ribs` values of k, so
+          // the points wrap a dense bell; above it the phase runs fast and the same
+          // maths thins into hair.
+          const w = d.bell * cos(y < d.cut ? i % k.ribs : i * d.fila);
+          const e = y / 7 - 16;
+          const dd = (w * w + e * e) / 89 + 1.1;
+          const q = (w / dd) * 3 - e * sin(w)
+            + (w / dd / 3) * (9 - dd * 4 * sin(dd * dd - t + sin(e) / 2))
+            + d.volume;
+          // The copies are one population split by index, not several animals.
+          const c = dd / 1.5 - k.spin + (i % k.school) * k.gap;
+          out[0] = q * sin(c) + 200;
+          out[1] = q * cos(c) + e + 200;
+        },
+      },
+
+      {
+        id: 'cell',
+        label: 'Cell',
+        note: 'ring + scribble',
+        rate: 1.4,
+        fill: 0.8,
+        dials: [
+          { id: 'cells', label: 'Count', min: 1, max: 6, step: 1, value: 4 },
+          { id: 'spread', label: 'Spread', min: 0, max: 130, step: 1, value: 74 },
+          { id: 'drift', label: 'Drift', min: 0, max: 0.3, step: 0.005, value: 0.05 },
+          { id: 'size', label: 'Membrane', min: 14, max: 90, step: 1, value: 36 },
+          { id: 'rings', label: 'Rings', min: 1, max: 6, step: 1, value: 3 },
+          { id: 'dots', label: 'Dot spacing', min: 8, max: 120, step: 1, value: 64 },
+          { id: 'lobes', label: 'Lobes', min: 1, max: 9, step: 1, value: 5 },
+          { id: 'wob', label: 'Lumpiness', min: 0, max: 0.4, step: 0.005, value: 0.08 },
+          { id: 'core', label: 'Core size', min: 2, max: 40, step: 0.5, value: 17 },
+          { id: 'tangle', label: 'Tangle', min: 1, max: 60, step: 0.5, value: 21 },
+        ],
+        prep(n, t, d) {
+          const cells = max(1, d.cells | 0);
+          const rings = max(1, d.rings | 0);
+          const m = max(1, floor(n / cells));
+          // Each cell gets its own phase, otherwise the set reads as one pose
+          // stamped four times instead of four of the same creature.
+          const at = [];
+          for (let c = 0; c < cells; c++) {
+            const a0 = c * (TAU / cells) + t * d.drift;
+            at.push({
+              x: 200 + cos(a0) * d.spread,
+              y: 200 + sin(a0) * d.spread,
+              ph: c * 1.7,
+            });
+          }
+          const dots = max(1, d.dots | 0);
+          return {
+            cells, rings, at, m, dots,
+            invM: 1 / m,
+            invDots: 1 / dots,
+            ringSpan: rings > 1 ? 0.2 / (rings - 1) : 0,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          const ci = i % k.cells;            // which cell this point belongs to
+          const j = (i - ci) / k.cells;      // its index within that cell
+          const cell = k.at[ci];
+          const u = (j % k.m) * k.invM;
+
+          if (j % 3) {
+            // Membrane: concentric dotted rings. The beading is regular spacing,
+            // not jitter — that evenness is what makes it read as a cell wall.
+            const ring = floor(u * k.rings);
+            const a = (j % k.dots) * k.invDots * TAU + ring * 0.7 + t * 0.2 + cell.ph;
+            const lump = 1 + d.wob * sin(a * d.lobes + t * 1.1 + cell.ph);
+            const r = d.size * lump * (0.8 + ring * k.ringSpan);
+            out[0] = cell.x + cos(a) * r;
+            out[1] = cell.y + sin(a) * r * 0.92;
+          } else {
+            const s = u * d.tangle;
+            out[0] = cell.x + d.core * (sin(s * 3.1 + t + cell.ph) + 0.6 * sin(s * 7.3 - t * 1.4));
+            out[1] = cell.y + d.core * (cos(s * 2.7 - t * 1.2 + cell.ph) + 0.6 * cos(s * 5.9 + t));
+          }
+        },
+      },
+
+      {
+        id: 'spine',
+        label: 'Spine',
+        note: 'ribbed swimmer',
+        rate: 1,
+        fill: 0.82,
+        dials: [
+          { id: 'span', label: 'Body length', min: 18, max: 80, step: 0.2, value: 39.4 },
+          { id: 'amp', label: 'Wriggle', min: 1, max: 14, step: 0.1, value: 5 },
+          { id: 'ribs', label: 'Rib frequency', min: 2, max: 24, step: 0.1, value: 9 },
+          { id: 'tail', label: 'Tail', min: 10, max: 60, step: 0.5, value: 35 },
+          { id: 'fat', label: 'Girth', min: 0, max: 3, step: 0.02, value: 1 },
+          { id: 'shimmer', label: 'Shimmer', min: 0, max: 20, step: 0.1, value: 9 },
+        ],
+        prep(n, t, d) {
+          return {
+            step: d.span / (n - 1),
+            wob: sin(t) / 0.216,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          const y = i * k.step;
+          const w = d.amp * cos(y * d.ribs);
+          const e = y - d.tail;
+          // 7/dd blows up where the body pinches, so the distance gets a floor.
+          const dd = max(0.35, hypot(w, e) / 2.5);
+          const c = dd / 3 - t;
+          out[0] = (79 + w * w * d.fat + dd * 4) * sin(c) + 200;
+          out[1] = 89 * sin(c / 2)
+            + (7 / dd) * sin(w * 2)
+            + (y / 44) * w * e
+            + dd * 3 * sin(t * d.shimmer - dd * 2 + k.wob)
+            + 200;
+        },
+      },
+
+      {
+        id: 'blob',
+        label: 'Blob',
+        note: 'one soft body',
+        rate: 1.2,
+        // Sits small in the well on purpose: a body reads as a body when there's
+        // room around it, and this one has no limbs to carry the composition.
+        fill: 0.56,
+        dials: [
+          { id: 'size', label: 'Size', min: 20, max: 170, step: 1, value: 110 },
+          { id: 'edge', label: 'Rim bias', min: 0.3, max: 6, step: 0.05, value: 1.15 },
+          { id: 'lobes', label: 'Lobes', min: 1, max: 12, step: 1, value: 3 },
+          { id: 'wobble', label: 'Wobble', min: 0, max: 0.5, step: 0.005, value: 0.14 },
+          { id: 'swirl', label: 'Swirl', min: -6, max: 6, step: 0.05, value: 0.8 },
+          { id: 'breathe', label: 'Breathe', min: 0, max: 0.4, step: 0.005, value: 0.08 },
+        ],
+        prep(n, t, d) {
+          return {
+            invN: 1 / (n - 1),
+            // Radius as u^(0.5/edge): at edge 1 that's an evenly filled disc, and
+            // above it the points crowd the rim. The obvious u^edge does the
+            // opposite — it piles everything on the centre and burns a hot spot.
+            pw: 0.5 / d.edge,
+            breathe: 1 + d.breathe * sin(t * 0.8),
+            drift: t * 0.1,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          // Phyllotaxis fills the disc without any randomness, so the body holds
+          // still and only the wobble moves.
+          const a = i * 2.39996323;
+          const rr = pow(i * k.invN, k.pw);
+          const wob = 1
+            + d.wobble * sin(a * d.lobes + t)
+            + d.wobble * 0.5 * sin(a * 3 - t * 1.3);
+          const r = d.size * rr * wob * k.breathe;
+          const ang = a + d.swirl * rr + k.drift;
+          out[0] = 200 + cos(ang) * r;
+          out[1] = 200 + sin(ang) * r;
+        },
+      },
+
+      {
+        id: 'type',
+        label: 'Type',
+        note: 'a word as silhouette',
+        rate: 1.1,
+        // Wide words need more of the well than a blob; the fit pass still
+        // recentres, this just says how much of the square they may occupy.
+        fill: 0.88,
+        dials: [
+          { id: 'word', kind: 'text', label: 'Word', value: 'Omar', max: 24 },
+          {
+            id: 'inked',
+            kind: 'switch',
+            label: 'Inked',
+            value: 'fill',
+            options: [
+              { id: 'fill', label: 'Fill' },
+              { id: 'outline', label: 'Outline' },
+            ],
+          },
+          { id: 'escape', label: 'Escape', min: 0, max: 48, step: 0.5, value: 0 },
+        ],
+        prep(n, t, d) {
+          return {
+            count: max(1, typeHomes.length),
+            leave: d.escape,
+            pulse: t * 1.6,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          // Homes are collected in scanline order, so `i % count` would park the
+          // first twenty thousand points on the top of the first letter and the
+          // fit pass would zoom into that sliver. Walk the homes by how far we
+          // are through the field instead, so a short word and a long one both
+          // get even coverage.
+          const h = typeHomes[floor((i / n) * k.count) % k.count];
+          const ang = i * 2.39996323 + k.pulse;
+          const hair = (i % 9 === 0) ? 2.4 : 1;
+          const r = 0.35 * sin(t * 1.4 + i * 0.13)
+            + k.leave * hair * (0.4 + 0.6 * (0.5 + 0.5 * sin(i * 0.21 + t)));
+          out[0] = h[0] + cos(ang) * r;
+          out[1] = h[1] + sin(ang) * r * 0.88;
+        },
+      },
+    ];
+
+    // Shared across every drawing, so a treatment travels when you switch shapes.
+    const FIELD = [
+      { id: 'points', label: 'Points', min: 2000, max: 40000, step: 500, value: 20000 },
+      { id: 'ink', label: 'Ink', min: 8, max: 255, step: 1, value: 96 },
+      { id: 'weight', label: 'Weight', min: 0.4, max: 3, step: 0.05, value: 1 },
+      { id: 'speed', label: 'Speed', min: 0.05, max: 4, step: 0.05, value: 1 },
+      { id: 'zoom', label: 'Zoom', min: 0.4, max: 1.8, step: 0.01, value: 1 },
+      { id: 'trail', label: 'Trail', min: 0, max: 0.96, step: 0.01, value: 0 },
+      { id: 'glow', label: 'Glow', min: 0, max: 20, step: 0.5, value: 4 },
+    ];
+
+    // ── state ─────────────────────────────────────────────────────────────────
+    // Keyed by group — field dials and each shape's dials keep their own map, so
+    // two groups can both own a name like `size` without fusing into one value.
+
+    const KEY = 'narwal-v1-dials';
+    const byId = new Map(SHAPES.map((s) => [s.id, s]));
+    const defaults = (dials) => Object.fromEntries(dials.map((d) => [d.id, d.value]));
+
+    const state = {
+      shape: SHAPES[0].id,
+      field: defaults(FIELD),
+      shapes: Object.fromEntries(SHAPES.map((s) => [s.id, defaults(s.dials)])),
+    };
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (saved) {
+        // Merged over the defaults rather than replacing them, so adding a dial
+        // later doesn't leave old saved state short a value.
+        if (byId.has(saved.shape)) state.shape = saved.shape;
+        Object.assign(state.field, saved.field || {});
+        for (const s of SHAPES) Object.assign(state.shapes[s.id], (saved.shapes || {})[s.id] || {});
+      }
+    } catch {}
+
+    const params = new URLSearchParams(location.search);
+    if (byId.has(params.get('shape'))) state.shape = params.get('shape');
+    if (params.get('bare') === '1') document.body.classList.add('bare');
+    // Any field dial can also come in by name (?glow=0&points=30000), which is how
+    // a particular look gets shared or captured without dragging anything.
+    for (const d of FIELD) {
+      const raw = Number(params.get(d.id));
+      if (Number.isFinite(raw) && params.has(d.id)) state.field[d.id] = min(d.max, max(d.min, raw));
+    }
+    if (params.has('word')) {
+      const w = params.get('word').slice(0, 24);
+      if (w.trim()) state.shapes.type.word = w;
+    }
+    if (params.get('inked') === 'fill' || params.get('inked') === 'outline') {
+      state.shapes.type.inked = params.get('inked');
+    }
+    // Numeric shape dials on the current drawing, same idea as the field ones
+    // (?escape=18 on Type, ?school=4 on Jelly).
+    for (const d of byId.get(state.shape).dials) {
+      if (d.kind) continue;
+      const raw = Number(params.get(d.id));
+      if (Number.isFinite(raw) && params.has(d.id)) {
+        state.shapes[state.shape][d.id] = min(d.max, max(d.min, raw));
+      }
+    }
+
+    const save = () => {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    };
+
+    const current = () => byId.get(state.shape);
+
+    // ── Type: stamp a word, sample the ink, those pixels become homes ─────────
+    // The word is drawn once on a hidden canvas. Fill keeps every lit pixel
+    // (counters in O, A, R stay empty because they were never ink). Outline keeps
+    // only the edge — a lit pixel with at least one empty neighbour, so the
+    // inside of an O is a hole with a rim, not a plug. Homes are then mapped
+    // into the 400×400 space the other drawings already live in.
+
+    const TYPE_STACK = '"NarwalSans", "Avenir Next", Futura, "Century Gothic", system-ui, sans-serif';
+    const TYPE_MAX = 24;
+    let typeHomes = [[200, 200]];
+
+    function stampType() {
+      const raw = String(state.shapes.type.word ?? 'Omar');
+      const word = raw.slice(0, TYPE_MAX);
+      if (!word.trim()) return;
+
+      const W = 1400;
+      const H = 420;
+      const pad = 48;
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      let size = 260;
+      ctx.font = `700 ${size}px ${TYPE_STACK}`;
+      while (size > 28 && ctx.measureText(word).width > W - pad * 2) {
+        size -= 6;
+        ctx.font = `700 ${size}px ${TYPE_STACK}`;
+      }
+      ctx.fillText(word, W / 2, H / 2);
+
+      const { data } = ctx.getImageData(0, 0, W, H);
+      const outline = state.shapes.type.inked === 'outline';
+      const lit = (x, y) => {
+        if (x < 0 || y < 0 || x >= W || y >= H) return false;
+        return data[(y * W + x) * 4 + 3] > 120;
+      };
+
+      const hits = [];
+      // Fill of a short word at this size is tens of thousands of pixels. A
+      // stride of 2 keeps the homes in the same range as the default point
+      // count, so each home gets about one dot rather than a pile.
+      const stride = outline ? 1 : 2;
+      for (let y = 1; y < H - 1; y += stride) {
+        for (let x = 1; x < W - 1; x += stride) {
+          if (!lit(x, y)) continue;
+          if (outline && lit(x - 1, y) && lit(x + 1, y) && lit(x, y - 1) && lit(x, y + 1)) continue;
+          hits.push(x, y);
+        }
+      }
+      if (hits.length < 2) return;
+
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (let i = 0; i < hits.length; i += 2) {
+        if (hits[i] < x0) x0 = hits[i];
+        if (hits[i] > x1) x1 = hits[i];
+        if (hits[i + 1] < y0) y0 = hits[i + 1];
+        if (hits[i + 1] > y1) y1 = hits[i + 1];
+      }
+      const bw = max(1, x1 - x0);
+      const bh = max(1, y1 - y0);
+      const s = min((SPACE - 48) / bw, (SPACE - 48) / bh);
+      const cx = (x0 + x1) / 2;
+      const cy = (y0 + y1) / 2;
+      const homes = [];
+      for (let i = 0; i < hits.length; i += 2) {
+        homes.push([
+          200 + (hits[i] - cx) * s,
+          200 + (hits[i + 1] - cy) * s,
+        ]);
+      }
+      typeHomes = homes;
+    }
+
+    stampType();
+    new FontFace('NarwalSans', 'url(../outfit-latin-700.woff2)').load().then((face) => {
+      document.fonts.add(face);
+      stampType();
+      const type = byId.get('type');
+      const thumb = library?.querySelector('[data-id="type"] canvas');
+      if (type && thumb) drawThumb(type, thumb);
+      if (state.shape === 'type') refit();
+    }).catch(() => {});
+
+    // ── framing ───────────────────────────────────────────────────────────────
+    // Several of these drawings swim well outside their own centre, and the maths
+    // has no idea how big it is. So the box is measured rather than guessed: a few
+    // thousand points at a spread of times, which gives a frame the mark stays
+    // inside for the whole swim instead of one that fits a single instant.
+
+    const frame = { cx: 200, cy: 200, s: 1 };
+
+    function refit() {
+      const shape = current();
+      const d = state.shapes[shape.id];
+      const n = 1400;
+      const out = [0, 0];
+      const xs = [];
+      const ys = [];
+
+      for (let pass = 0; pass < 8; pass++) {
+        const tt = pass * 2.1;
+        const k = shape.prep ? shape.prep(n, tt, d) : null;
+        for (let i = n; i--;) {
+          shape.point(i, n, tt, d, out, k);
+          if (Number.isFinite(out[0]) && Number.isFinite(out[1])) {
+            xs.push(out[0]);
+            ys.push(out[1]);
+          }
+        }
+      }
+      if (xs.length < 32) return;
+
+      xs.sort((a, b) => a - b);
+      ys.sort((a, b) => a - b);
+      // Percentiles, not min/max: a handful of points fly off where the maths
+      // divides by almost nothing, and framing to those shrinks the mark to a dot.
+      const q = (arr, p) => arr[min(arr.length - 1, max(0, round(p * (arr.length - 1))))];
+      const x0 = q(xs, 0.01);
+      const x1 = q(xs, 0.99);
+      const y0 = q(ys, 0.01);
+      const y1 = q(ys, 0.99);
+
+      frame.cx = (x0 + x1) / 2;
+      frame.cy = (y0 + y1) / 2;
+      frame.s = (SPACE * (shape.fill || 0.8)) / max(24, max(x1 - x0, y1 - y0));
+    }
+
+    let refitTimer = 0;
+    const scheduleRefit = () => {
+      clearTimeout(refitTimer);
+      refitTimer = setTimeout(refit, 90);
+    };
+
+    // ── the library ───────────────────────────────────────────────────────────
+
+    const library = document.getElementById('library');
+    document.getElementById('shapeCount').textContent = `${SHAPES.length} in set`;
+
+    // Thumbnails draw from each shape's *defaults*, not the live dials: the rail is
+    // an identity parade, not a second view of the panel.
+    function drawThumb(shape, canvas) {
+      const ctx = canvas.getContext('2d');
+      const S = canvas.width;
+      ctx.fillStyle = '#0a0a0b';
+      ctx.fillRect(0, 0, S, S);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+
+      // Type's identity *is* the committed word, so its thumb uses the live
+      // store. The others stay on defaults: the rail is a parade, not a
+      // second view of the panel.
+      const d = shape.id === 'type' ? state.shapes.type : defaults(shape.dials);
+      const out = [0, 0];
+      const n = 3000;
+      const t = 1.2;
+      const k = shape.prep ? shape.prep(n, t, d) : null;
+
+      // Its own little fit pass, so a shape that swims off-centre still shows up
+      // in the middle of its 40px square.
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      const pts = new Float64Array(n * 2);
+      for (let i = n; i--;) {
+        shape.point(i, n, t, d, out, k);
+        pts[i * 2] = out[0];
+        pts[i * 2 + 1] = out[1];
+        if (Number.isFinite(out[0]) && Number.isFinite(out[1])) {
+          if (out[0] < x0) x0 = out[0];
+          if (out[0] > x1) x1 = out[0];
+          if (out[1] < y0) y0 = out[1];
+          if (out[1] > y1) y1 = out[1];
+        }
+      }
+      const s = (S * 0.82) / max(24, max(x1 - x0, y1 - y0));
+      const cx = (x0 + x1) / 2;
+      const cy = (y0 + y1) / 2;
+      for (let i = n; i--;) {
+        const x = S / 2 + (pts[i * 2] - cx) * s;
+        const y = S / 2 + (pts[i * 2 + 1] - cy) * s;
+        if (Number.isFinite(x) && Number.isFinite(y)) ctx.fillRect(x, y, 0.9, 0.9);
+      }
+    }
+
+    for (const shape of SHAPES) {
+      const btn = document.createElement('button');
+      btn.className = 'item';
+      btn.type = 'button';
+      btn.dataset.id = shape.id;
+
+      const thumb = document.createElement('canvas');
+      thumb.width = thumb.height = 80;
+
+      const text = document.createElement('div');
+      const name = document.createElement('b');
+      name.textContent = shape.label;
+      const note = document.createElement('span');
+      note.textContent = shape.note;
+      text.append(name, note);
+
+      btn.append(thumb, text);
+      btn.addEventListener('click', () => select(shape.id));
+      library.append(btn);
+      drawThumb(shape, thumb);
+    }
+
+    function markLibrary() {
+      for (const el of library.querySelectorAll('.item')) {
+        el.setAttribute('aria-current', String(el.dataset.id === state.shape));
+      }
+    }
+
+    // ── the dial panel ────────────────────────────────────────────────────────
+
+    const dialsEl = document.getElementById('dials');
+    const dialTitle = document.getElementById('dialTitle');
+
+    function group(name, dials, store, onCommit) {
+      const det = document.createElement('details');
+      det.className = 'group';
+      det.open = true;
+      const sum = document.createElement('summary');
+      sum.textContent = name;
+      det.append(sum);
+
+      for (const d of dials) {
+        const row = document.createElement('div');
+        row.className = 'dial';
+        const uid = `${name}-${d.id}`.toLowerCase();
+
+        const top = document.createElement('div');
+        top.className = 'top';
+        const label = document.createElement('label');
+        label.htmlFor = uid;
+        label.textContent = d.label;
+
+        if (d.kind === 'text') {
+          const form = document.createElement('form');
+          form.className = 'word';
+          form.autocomplete = 'off';
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.id = uid;
+          input.maxLength = d.max || TYPE_MAX;
+          input.value = store[d.id];
+          input.spellcheck = false;
+          const go = document.createElement('button');
+          go.type = 'submit';
+          go.textContent = 'Submit';
+          form.append(input, go);
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const next = input.value.slice(0, d.max || TYPE_MAX);
+            if (!next.trim()) return;
+            store[d.id] = next;
+            input.value = next;
+            save();
+            stampType();
+            const thumb = library.querySelector('[data-id="type"] canvas');
+            if (thumb) drawThumb(byId.get('type'), thumb);
+            refit();
+          });
+          top.append(label);
+          row.append(top, form);
+          det.append(row);
+          continue;
+        }
+
+        if (d.kind === 'switch') {
+          const sw = document.createElement('div');
+          sw.className = 'switch';
+          sw.setAttribute('role', 'group');
+          for (const opt of d.options) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = opt.label;
+            btn.setAttribute('aria-pressed', String(store[d.id] === opt.id));
+            btn.addEventListener('click', () => {
+              if (store[d.id] === opt.id) return;
+              store[d.id] = opt.id;
+              for (const b of sw.querySelectorAll('button')) {
+                b.setAttribute('aria-pressed', String(b === btn));
+              }
+              save();
+              stampType();
+              const thumb = library.querySelector('[data-id="type"] canvas');
+              if (thumb) drawThumb(byId.get('type'), thumb);
+              refit();
+            });
+            sw.append(btn);
+          }
+          top.append(label);
+          row.append(top, sw);
+          det.append(row);
+          continue;
+        }
+
+        const num = document.createElement('input');
+        num.type = 'number';
+        const rng = document.createElement('input');
+        rng.type = 'range';
+        rng.id = uid;
+
+        for (const input of [num, rng]) {
+          input.min = d.min;
+          input.max = d.max;
+          input.step = d.step;
+          input.value = store[d.id];
+        }
+
+        const commit = (raw) => {
+          let v = Number(raw);
+          if (!Number.isFinite(v)) return;
+          v = min(d.max, max(d.min, v));
+          store[d.id] = v;
+          num.value = String(v);
+          rng.value = String(v);
+          save();
+          if (onCommit) onCommit();
+        };
+
+        rng.addEventListener('input', () => commit(rng.value));
+        num.addEventListener('change', () => commit(num.value));
+
+        top.append(label, num);
+        row.append(top, rng);
+        det.append(row);
+      }
+
+      return det;
+    }
+
+    function buildDials() {
+      const shape = current();
+      dialTitle.textContent = shape.label;
+      dialsEl.replaceChildren(
+        group('Shape', shape.dials, state.shapes[shape.id], scheduleRefit),
+        group('Field', FIELD, state.field, null),
+      );
+    }
+
+    function select(id) {
+      if (!byId.has(id) || id === state.shape) return;
+      state.shape = id;
+      save();
+      markLibrary();
+      buildDials();
+      refit();
+    }
+
+    markLibrary();
+    buildDials();
+    refit();
+
+    document.getElementById('resetShape').addEventListener('click', () => {
+      Object.assign(state.shapes[state.shape], defaults(current().dials));
+      save();
+      if (state.shape === 'type') {
+        stampType();
+        const thumb = library.querySelector('[data-id="type"] canvas');
+        if (thumb) drawThumb(byId.get('type'), thumb);
+      }
+      buildDials();
+      refit();
+    });
+
+    document.getElementById('resetField').addEventListener('click', () => {
+      Object.assign(state.field, defaults(FIELD));
+      save();
+      buildDials();
+    });
+
+    // Hand the whole panel over as text — in a sketch like this the dials are the
+    // finding, and a set worth keeping is easier to paste than to re-drag.
+    const copyBtn = document.getElementById('copyDials');
+    let copyTimer = 0;
+    copyBtn.addEventListener('click', async () => {
+      const shape = current();
+      const lines = [`# naughty-narwal v1 · ${shape.label}`, '[shape]'];
+      for (const d of shape.dials) lines.push(`${d.id} = ${state.shapes[shape.id][d.id]}`);
+      lines.push('[field]');
+      for (const d of FIELD) lines.push(`${d.id} = ${state.field[d.id]}`);
+      try {
+        await navigator.clipboard.writeText(lines.join('\n'));
+        copyBtn.textContent = 'Copied';
+      } catch {
+        copyBtn.textContent = 'Blocked';
+      }
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1300);
+    });
+
+    // ── the sketch ────────────────────────────────────────────────────────────
+
+    const wellEl = document.getElementById('well');
+    const readout = document.getElementById('readout');
+    const playBtn = document.getElementById('playBtn');
+    let playing = true;
+    let t = 0;
+
+    // A square well, because every drawing is composed around the centre of one.
+    function wellSize() {
+      const box = wellEl.parentElement.getBoundingClientRect();
+      const bar = document.querySelector('.bar').getBoundingClientRect();
+      return max(240, min(box.width - 20, box.height - bar.height - 32));
+    }
+
+    new p5((p) => {
+      const out = [0, 0];
+      // The field is drawn to its own layer, cleared every frame, and the visible
+      // canvas keeps the history. Glow then blurs *this* frame's field instead of
+      // the canvas it is about to join. Compositing the canvas onto itself is the
+      // obvious one-liner and it is a feedback loop: with Trail up, nothing ever
+      // clears, so each frame adds a blurred copy of the accumulation and the
+      // whole stage runs away to white in about a second.
+      let layer;
+
+      p.setup = () => {
+        const s = wellSize();
+        p.createCanvas(s, s).parent(wellEl);
+        layer = p.createGraphics(s, s);
+        layer.pixelDensity(1);
+        layer.noFill();
+        // Deliberately 1, not the display's 2: every dot is an arc the renderer
+        // has to fill, and at double density it fills four times the pixels for
+        // the same drawing — which is the difference between 60fps and 30 at
+        // 20,000 points. The reference sketches are a 400px canvas shown large
+        // anyway, so a softer dot is the house style rather than a compromise.
+        p.pixelDensity(1);
+        wellEl.style.width = wellEl.style.height = `${s}px`;
+      };
+
+      p.windowResized = () => {
+        const s = wellSize();
+        p.resizeCanvas(s, s);
+        layer.resizeCanvas(s, s);
+        wellEl.style.width = wellEl.style.height = `${s}px`;
+      };
+
+      p.draw = () => {
+        const shape = current();
+        const f = state.field;
+        const d = state.shapes[shape.id];
+
+        t += (PI / 240) * f.speed * shape.rate;
+
+        const n = f.points | 0;
+        const k = shape.prep ? shape.prep(n, t, d) : null;
+
+        layer.clear();
+        layer.stroke(255, f.ink);
+        layer.strokeWeight(f.weight);
+        layer.push();
+        layer.translate(layer.width / 2, layer.height / 2);
+        layer.scale((layer.width / SPACE) * frame.s * f.zoom);
+        layer.translate(-frame.cx, -frame.cy);
+
+        // Every dot goes through point() — one composite each, which is the thing
+        // that matters: where the field folds over itself the alpha piles up, and
+        // that accumulation is the whole reason these read as flesh rather than as
+        // a flat silhouette. Batching the lot into one path is far faster and
+        // throws exactly that away, since a union fills once however many dots
+        // overlap. Squares via fillRect keep the accumulation and are faster
+        // again, but at this scale you can see the corners.
+        for (let i = n; i--;) {
+          shape.point(i, n, t, d, out, k);
+          const x = out[0];
+          const y = out[1];
+          if (Number.isFinite(x) && Number.isFinite(y)) layer.point(x, y);
+        }
+        layer.pop();
+
+        // Trail is the background's own alpha: at 0 each frame is wiped, like the
+        // reference sketches; below that the field leaves an afterimage.
+        p.background(9, 255 - f.trail * 247);
+        p.image(layer, 0, 0);
+
+        // Bloom as one full-frame composite. A per-point shadow would be the
+        // obvious way and is unusable at 20,000 points.
+        if (f.glow > 0) {
+          const ctx = p.drawingContext;
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.globalAlpha = 0.55;
+          ctx.filter = `blur(${f.glow}px)`;
+          ctx.drawImage(layer.drawingContext.canvas, 0, 0);
+          ctx.restore();
+        }
+
+        if (p.frameCount % 15 === 0) {
+          readout.textContent = `${round(p.frameRate())} fps · ${(n / 1000).toFixed(1)}k pts`;
+        }
+      };
+
+      playBtn.addEventListener('click', () => {
+        playing = !playing;
+        playBtn.textContent = playing ? 'Pause' : 'Play';
+        document.body.classList.toggle('paused', !playing);
+        if (playing) p.loop(); else p.noLoop();
+      });
+
+      addEventListener('keydown', (e) => {
+        if (e.target.matches('input')) return;
+        if (e.code === 'Space') { e.preventDefault(); playBtn.click(); }
+        const n = Number(e.key);
+        if (n >= 1 && n <= SHAPES.length) select(SHAPES[n - 1].id);
+      });
+    }, wellEl);
+  </script>
+</body>
+</html>
