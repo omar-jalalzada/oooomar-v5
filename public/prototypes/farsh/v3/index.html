@@ -1,0 +1,1448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Farsh v3 — yarn</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #0b0908;
+    }
+    canvas { display: block; width: 100%; height: 100%; }
+
+    /* control panel */
+    #dials {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      width: 250px;
+      max-height: calc(100vh - 24px);
+      overflow-y: auto;
+      padding: 9px 11px 11px;
+      border: 1px solid rgba(231, 220, 195, 0.14);
+      border-radius: 8px;
+      background: rgba(16, 12, 11, 0.86);
+      backdrop-filter: blur(14px);
+      color: #e7dcc3;
+      font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+    #dials h1 {
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      cursor: pointer;
+    }
+    #dials.collapsed .body { display: none; }
+    #dials .group { margin-top: 11px; }
+    #dials .group > span {
+      display: block;
+      margin-bottom: 5px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      opacity: 0.38;
+    }
+    #dials .row {
+      display: grid;
+      grid-template-columns: 90px 1fr 34px;
+      align-items: center;
+      gap: 7px;
+      height: 19px;
+    }
+    #dials .row label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      opacity: 0.82;
+    }
+    #dials .row output {
+      text-align: right;
+      opacity: 0.55;
+      font-variant-numeric: tabular-nums;
+    }
+    #dials input[type='range'] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      border-radius: 2px;
+      background: rgba(231, 220, 195, 0.2);
+    }
+    #dials input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #e7dcc3;
+      cursor: ew-resize;
+    }
+    #dials .acts { display: flex; gap: 6px; margin-top: 12px; }
+    #dials button {
+      flex: 1;
+      padding: 4px;
+      border: 1px solid rgba(231, 220, 195, 0.18);
+      border-radius: 4px;
+      background: rgba(231, 220, 195, 0.08);
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+    #dials button:hover { background: rgba(231, 220, 195, 0.18); }
+    #dials .hint {
+      margin: 9px 0 0;
+      font-size: 10px;
+      line-height: 1.4;
+      opacity: 0.32;
+    }
+    #playbar {
+      position: fixed;
+      left: 50%;
+      bottom: 32px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #playbar > * {
+      border-radius: 999px;
+      background: rgba(11, 9, 8, 0.72);
+      backdrop-filter: blur(6px);
+      color: #e7dcc3;
+      font: 11px/1 ui-monospace, Menlo, monospace;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    /* Only rises once the rug is finished, so nothing competes with the weave
+       while it is being drawn — unless auto is on, where the finished moment is
+       too brief to catch the button in. */
+    #replay {
+      padding: 9px 18px;
+      border: 1px solid rgba(231, 220, 195, 0.22);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 520ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #replay.shown { opacity: 0.78; transform: translateY(0); pointer-events: auto; }
+    #replay.shown:hover { opacity: 1; border-color: rgba(231, 220, 195, 0.4); }
+    #auto {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 15px;
+      border: 1px solid rgba(231, 220, 195, 0.14);
+      opacity: 0.4;
+      user-select: none;
+      transition: opacity 260ms ease, border-color 260ms ease;
+    }
+    #auto:hover { opacity: 0.82; }
+    #auto:has(:checked) { opacity: 0.88; border-color: rgba(231, 220, 195, 0.34); }
+    #auto input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 9px;
+      height: 9px;
+      margin: 0;
+      border: 1px solid rgba(231, 220, 195, 0.45);
+      border-radius: 2px;
+      background: transparent;
+      cursor: pointer;
+      transition: background 200ms ease, border-color 200ms ease;
+    }
+    #auto input:checked { background: #e7dcc3; border-color: #e7dcc3; }
+    /* Pause and scrub are always up, unlike replay: they exist for tuning, and
+       a control you have to wait for the animation to finish to reach is no
+       use for tuning the middle of it. */
+    #pause {
+      padding: 9px 16px;
+      border: 1px solid rgba(231, 220, 195, 0.14);
+      opacity: 0.45;
+      min-width: 62px;
+      transition: opacity 260ms ease, border-color 260ms ease;
+    }
+    #pause:hover { opacity: 0.9; border-color: rgba(231, 220, 195, 0.34); }
+    #playbar.paused #pause { opacity: 0.9; border-color: rgba(231, 220, 195, 0.34); }
+    #scrub {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 168px;
+      height: 2px;
+      padding: 0;
+      border-radius: 2px;
+      background: rgba(231, 220, 195, 0.22);
+      backdrop-filter: none;
+      opacity: 0.5;
+      transition: opacity 260ms ease;
+    }
+    #scrub:hover, #playbar.paused #scrub { opacity: 0.9; }
+    #scrub::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #e7dcc3;
+      cursor: ew-resize;
+    }
+  </style>
+  <!-- three.js vendored so the folder stays self-contained and offline:
+       curl -sL https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js -o three.module.js -->
+  <script type="importmap">
+  { "imports": { "three": "../three.module.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    // ---------------------------------------------------------------------
+    // The rug is resolved in two independent layers:
+    //
+    //   1. A knot chart (~300 x 400 knots) built by rasterising the pattern.
+    //      Motifs are drawn by maths rather than hand-authored bitmaps, so the
+    //      chart can be re-resolved at any density without redrawing anything.
+    //
+    //   2. A pile of individual yarn tufts on the GPU — three per knot, each
+    //      jittered, rotated and tapered. Colour lives on the tufts, not on a
+    //      grid of squares, which is what stops it reading as pixel art. The
+    //      dark warp showing between tufts is what makes it read as fragments.
+    // ---------------------------------------------------------------------
+
+    const W = 301;   // knots across
+    const H = 397;   // knots down
+    const CX = (W - 1) / 2;
+    const CY = (H - 1) / 2;
+    const TUFTS_PER_KNOT = 4;
+
+    const PALETTE = {
+      r: 0xcc4f36, // madder field
+      R: 0xb43e2c, // deeper madder
+      o: 0xdb6342, // madder, lit
+      n: 0x2b2320, // charcoal ground
+      N: 0x161110, // charcoal, deep
+      c: 0xf0e6ce, // ivory
+      C: 0xdccba7, // ivory, shaded
+      m: 0x6d9077, // mint
+      M: 0x40685a, // pine
+      b: 0x829fb5, // sky
+      B: 0x4c6b84, // indigo
+      y: 0xc49a44, // saffron
+      p: 0xd2916a, // peach
+      w: 0xf2ecdc, // highlight ivory
+    };
+
+    const FOUNDATION = 0x120d0b; // warp/weft showing between tufts
+    const BACKDROP = 0x0b0908;   // the empty wall, before any wool arrives
+
+    // --- ground: concentric borders, then the field -----------------------
+    // Distance to the nearest edge gives mitred corners, which is how a woven
+    // border actually turns a corner.
+    const BANDS = [
+      [6, 'R'], [9, 'c'], [11, 'n'],
+      [41, 'c'],                       // wide ivory border
+      [43, 'n'], [48, 'R'], [50, 'n'],
+      [54, 'C'], [56, 'n'],
+    ];
+    const FIELD_START = 56;
+    const FIELD_HW = (W - FIELD_START * 2) / 2;
+    const FIELD_HH = (H - FIELD_START * 2) / 2;
+
+    function groundAt(x, y) {
+      const d = Math.min(x, W - 1 - x, y, H - 1 - y);
+      for (const [limit, ch] of BANDS) if (d < limit) return ch;
+      return fieldAt(x, y);
+    }
+
+    function fieldAt(x, y) {
+      const hx = Math.abs(x - CX);
+      const hy = Math.abs(y - CY);
+
+      // Central medallion: a stepped hexagon. The structural staircase is
+      // deliberately coarse — that bold step is a signature of the weave.
+      const STAIR = 7;
+      const sx = Math.floor(hx / STAIR) * STAIR;
+      const sy = Math.floor(hy / STAIR) * STAIR;
+
+      // flat vertical sides near the waist, then shoulders tapering to a point
+      const med = sx / 38 + Math.max(0, sy - 20) / 42;
+      if (med < 0.86) return 'c';
+      if (med < 0.93) return 'n';
+      if (med < 1.0) return 'C';
+      if (med < 1.07) return 'n';
+
+      // Corner spandrels: four dark triangles cut by a stepped diagonal, so
+      // the red field still reaches every mid-edge.
+      const diag = sx / FIELD_HW + sy / FIELD_HH;
+      if (diag > 1.34) return 'n';
+      if (diag > 1.27) return 'C';  // serrated teeth along the cut
+      if (diag > 1.23) return 'n';
+      return 'r';
+    }
+
+    const ground = new Uint8Array(W * H);
+    const grid = new Uint8Array(W * H);
+    const taken = new Uint8Array(W * H);
+
+    // Palette chars are packed to bytes so the chart stays compact.
+    const KEYS = Object.keys(PALETTE);
+    const KEY_INDEX = {};
+    KEYS.forEach((k, i) => { KEY_INDEX[k] = i; });
+    const PALETTE_RGB = KEYS.map((k) => new THREE.Color(PALETTE[k]));
+
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        const ch = KEY_INDEX[groundAt(x, y)];
+        ground[i] = ch;
+        grid[i] = ch;
+      }
+    }
+
+    // Fine dashes in the guard stripes, the tiny repeating ticks in a real rug.
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        const d = Math.min(x, W - 1 - x, y, H - 1 - y);
+        if (d >= 43 && d < 48 && (x + y) % 7 < 2) grid[i] = KEY_INDEX.C;
+        if (d >= 50 && d < 54 && (x + y) % 9 < 2) grid[i] = KEY_INDEX.n;
+        if (d >= 6 && d < 9 && (x + y) % 9 < 3) grid[i] = KEY_INDEX.R;
+      }
+    }
+
+    // --- procedural motifs ------------------------------------------------
+    // Each returns a palette key for a point in its own local coordinates, or
+    // null for "leave the ground showing". Because they're evaluated straight
+    // onto the knot grid, the staircase edges come for free at any density.
+
+    function star(R, points, colOuter, colInner) {
+      const inner = R * 0.3;
+      return (dx, dy) => {
+        const r = Math.hypot(dx, dy);
+        const a = Math.atan2(dy, dx);
+        const lobe = 0.5 + 0.5 * Math.cos(points * a);
+        const edge = inner + (R - inner) * lobe;
+        if (r > edge) return null;
+        return r < R * 0.3 ? colInner : colOuter;
+      };
+    }
+
+    function rosette(R, colPetal, colCentre) {
+      return (dx, dy) => {
+        const r = Math.hypot(dx, dy);
+        const a = Math.atan2(dy, dx);
+        const edge = R * (0.7 + 0.3 * Math.cos(8 * a));
+        if (r > edge) return null;
+        return r < R * 0.3 ? colCentre : colPetal;
+      };
+    }
+
+    function lozenge(rx, ry, colBody, colEdge) {
+      return (dx, dy) => {
+        const t = Math.abs(dx) / rx + Math.abs(dy) / ry;
+        if (t > 1) return null;
+        return t > 0.66 ? colEdge : colBody;
+      };
+    }
+
+    // Angular S / latch-hook — the "runes" scattered through a tribal field.
+    function hook(s, col) {
+      const t = s * 0.2;
+      return (dx, dy) => {
+        const bar = (cy, x0, x1) => Math.abs(dy - cy) <= t && dx >= x0 && dx <= x1;
+        const post = (cx, y0, y1) => Math.abs(dx - cx) <= t && dy >= y0 && dy <= y1;
+        if (bar(-s, -s, s * 0.4)) return col;
+        if (bar(0, -s * 0.4, s * 0.4)) return col;
+        if (bar(s, -s * 0.4, s)) return col;
+        if (post(-s * 0.6, -s, 0)) return col;
+        if (post(s * 0.6, 0, s)) return col;
+        return null;
+      };
+    }
+
+    // Boteh — the paisley teardrop, body plus a curling tip.
+    function boteh(s, colBody, colCore, colEdge) {
+      return (dx, dy) => {
+        const bx = dx / (s * 0.58);
+        const by = (dy + s * 0.22) / (s * 0.72);
+        const body = bx * bx + by * by;
+        const tx = (dx - s * 0.34) / (s * 0.28);
+        const ty = (dy - s * 0.7) / (s * 0.32);
+        const tip = tx * tx + ty * ty;
+        if (body > 1 && tip > 1) return null;
+        if (body > 0.82 || tip > 0.6) return colEdge;
+        if (body < 0.3) return colCore;
+        return colBody;
+      };
+    }
+
+    // Blossom on a stem with two leaves.
+    function blossom(s, colPetal, colCentre, colStem) {
+      return (dx, dy) => {
+        const fy = dy + s * 0.4;
+        const r = Math.hypot(dx, fy);
+        const a = Math.atan2(fy, dx);
+        const edge = s * 0.52 * (0.72 + 0.28 * Math.cos(6 * a));
+        if (r <= edge) return r < s * 0.18 ? colCentre : colPetal;
+        if (Math.abs(dx) <= s * 0.1 && dy >= -s && dy <= 0) return colStem;
+        if (Math.abs(Math.abs(dx) - s * 0.32) <= s * 0.1 && Math.abs(dy + s * 0.66) <= s * 0.2) return colStem;
+        return null;
+      };
+    }
+
+    // Stepped cypress — the little angular trees along a tribal field.
+    function cypress(s, colBody, colTrunk) {
+      return (dx, dy) => {
+        if (Math.abs(dx) <= s * 0.11 && dy >= s * 0.5 && dy <= s) return colTrunk;
+        const t = (s * 0.6 - dy) / (s * 1.5);
+        if (t < 0 || t > 1) return null;
+        const wide = s * 0.42 * t * (0.8 + 0.2 * Math.cos(dy * 1.1));
+        if (Math.abs(dx) > wide) return null;
+        return Math.abs(dx) > wide * 0.55 ? colTrunk : colBody;
+      };
+    }
+
+    // The X unit that repeats along the wide ivory border.
+    function borderX(s, colArm, colCore) {
+      const t = s * 0.2;
+      return (dx, dy) => {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) > s) return null;
+        const d1 = Math.abs(dx - dy) / Math.SQRT2;
+        const d2 = Math.abs(dx + dy) / Math.SQRT2;
+        if (d1 > t && d2 > t) return null;
+        return Math.min(d1, d2) < t * 0.4 ? colCore : colArm;
+      };
+    }
+
+    // The anchor/totem that sits at dead centre of the medallion.
+    function totem(s) {
+      const t = s * 0.07;
+      return (dx, dy) => {
+        const bar = (cy, half) => Math.abs(dy - cy) <= t * 1.4 && Math.abs(dx) <= half;
+        if (Math.abs(dx) <= t) return 'n';
+        if (bar(-s * 0.62, s * 0.5)) return 'n';
+        if (bar(s * 0.62, s * 0.5)) return 'n';
+        if (bar(-s * 0.9, s * 0.16)) return 'n';
+        if (bar(s * 0.9, s * 0.16)) return 'n';
+        if (Math.abs(Math.abs(dx) - s * 0.5) <= t && Math.abs(dy) <= s * 0.62) return 'n';
+        const hx = Math.abs(dx) - s * 0.3;
+        if (Math.abs(hx) <= t * 2.2 && Math.abs(dy) <= s * 0.22) return 'r';
+        return null;
+      };
+    }
+
+    // Rasterise a motif, but only where every painted knot sits on allowed
+    // ground and on a knot no other motif has claimed. Motifs therefore pack
+    // densely and never bleed across a border.
+    function place(cx, cy, hw, hh, fn, allowed) {
+      const allowedIdx = allowed ? allowed.split('').map((k) => KEY_INDEX[k]) : null;
+      const cells = [];
+      const x0 = Math.round(cx - hw);
+      const x1 = Math.round(cx + hw);
+      const y0 = Math.round(cy - hh);
+      const y1 = Math.round(cy + hh);
+      if (x0 < 0 || y0 < 0 || x1 >= W || y1 >= H) return false;
+
+      for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
+          const ch = fn(x - cx, y - cy);
+          if (!ch) continue;
+          const i = y * W + x;
+          if (taken[i]) return false;
+          if (allowedIdx && !allowedIdx.includes(ground[i])) return false;
+          cells.push(i, KEY_INDEX[ch]);
+        }
+      }
+      for (let k = 0; k < cells.length; k += 2) {
+        grid[cells[k]] = cells[k + 1];
+        taken[cells[k]] = 1;
+      }
+      return true;
+    }
+
+    // Mirror every placement into all four quadrants — the reference is
+    // symmetrical on both axes.
+    function sym(ox, oy, hw, hh, fn, allowed) {
+      const xs = ox === 0 ? [0] : [-ox, ox];
+      const ys = oy === 0 ? [0] : [-oy, oy];
+      for (const dx of xs) for (const dy of ys) {
+        place(CX + dx, CY + dy, hw, hh, fn, allowed);
+      }
+    }
+
+    // 1. medallion interior first, so nothing else claims those knots
+    place(CX, CY, 26, 34, totem(30), 'cn');
+    sym(0, 58, 9, 9, rosette(8, 'r', 'y'), 'c');
+    sym(24, 40, 9, 9, star(8, 8, 'n', 'r'), 'c');
+
+    // 2. a lozenge in each dark corner spandrel. It has to clear the serrated
+    // cut, so try progressively tighter placements until one fits.
+    for (const [ox, oy, r] of [[74, 122, 17], [76, 124, 14], [78, 127, 11]]) {
+      if (place(CX + ox, CY + oy, r + 1, r + 1, lozenge(r, r, 'c', 'C'), 'n')) {
+        sym(ox, oy, r + 1, r + 1, lozenge(r, r, 'c', 'C'), 'n');
+        sym(ox, oy, 7, 7, rosette(6, 'r', 'y'), 'c');
+        break;
+      }
+    }
+
+    // 3. everything else fills on one lattice. Which motif family gets used is
+    // decided by the ground under the lattice point, so the red field and the
+    // dark spandrels each get their own vocabulary without special-casing
+    // their geometry.
+    const ON_RED = [
+      () => boteh(13, 'n', 'y', 'c'),
+      () => hook(9, 'n'),
+      () => blossom(13, 'c', 'y', 'M'),
+      () => star(9, 8, 'c', 'n'),
+      () => cypress(13, 'M', 'c'),
+      () => rosette(8, 'm', 'c'),
+      () => boteh(13, 'c', 'r', 'n'),
+      () => star(8, 6, 'y', 'n'),
+      () => lozenge(8, 10, 'c', 'M'),
+    ];
+    const ON_DARK = [
+      () => star(9, 8, 'c', 'r'),
+      () => rosette(8, 'b', 'c'),
+      () => hook(9, 'c'),
+      () => star(8, 6, 'y', 'c'),
+      () => rosette(7, 'p', 'c'),
+      () => cypress(12, 'm', 'c'),
+      () => boteh(12, 'c', 'r', 'y'),
+      () => lozenge(8, 10, 'b', 'c'),
+    ];
+
+    const groundKey = (x, y) => KEYS[ground[y * W + x]];
+
+    function scatter(lat, halfStep) {
+      const off = halfStep ? lat / 2 : 0;
+      for (let iy = 0; CY + iy * lat + off < H; iy++) {
+        for (let ix = 0; CX + ix * lat + off < W; ix++) {
+          const ox = Math.round(ix * lat + off);
+          const oy = Math.round(iy * lat + off);
+          const g = groundKey(CX + ox, CY + oy);
+          const seed = ix * 3 + iy * 5 + (halfStep ? 4 : 0);
+          if (g === 'r') {
+            sym(ox, oy, 14, 14, ON_RED[seed % ON_RED.length](), 'r');
+          } else if (g === 'n') {
+            sym(ox, oy, 13, 13, ON_DARK[seed % ON_DARK.length](), 'n');
+          }
+        }
+      }
+    }
+
+    scatter(16, false);
+    scatter(16, true);
+    // a final pass of small rosettes closes the remaining gaps
+    for (let iy = 0; CY + iy * 8 < H; iy++) {
+      for (let ix = 0; CX + ix * 8 < W; ix++) {
+        const ox = ix * 8 + 4;
+        const oy = iy * 8 + 4;
+        const g = groundKey(CX + ox, CY + oy);
+        if (g === 'r') sym(ox, oy, 5, 5, rosette(4, 'c', 'y'), 'r');
+        else if (g === 'n') sym(ox, oy, 5, 5, rosette(4, 'c', 'r'), 'n');
+      }
+    }
+
+    // 4. wide ivory border: X unit repeating, a bud between each
+    const BM = 26;
+    const EDGES = [
+      (o) => [CX + o, BM],
+      (o) => [CX + o, H - 1 - BM],
+      (o) => [BM, CY + o],
+      (o) => [W - 1 - BM, CY + o],
+    ];
+    for (const edge of EDGES) {
+      for (let k = -12; k <= 12; k++) {
+        const [x, y] = edge(k * 34);
+        place(x, y, 13, 13, borderX(11, 'r', 'R'), 'c');
+      }
+      for (let k = -12; k <= 12; k++) {
+        const [x, y] = edge(k * 34 + 17);
+        place(x, y, 9, 9, rosette(8, 'b', 'M'), 'c');
+      }
+      for (let k = -24; k <= 24; k++) {
+        const [x, y] = edge(k * 17 + 8);
+        place(x, y, 4, 4, star(3.5, 4, 'y', 'r'), 'c');
+      }
+    }
+
+    // --- abrash: natural variation in dye depth ---------------------------
+    function hash(x, y) {
+      let h = Math.imul(x * 374761393 + y * 668265263, 1274126177);
+      h = (h ^ (h >>> 13)) >>> 0;
+      return h / 4294967296;
+    }
+    function smoothNoise(x, y) {
+      const xi = Math.floor(x), yi = Math.floor(y);
+      const xf = x - xi, yf = y - yi;
+      const u = xf * xf * (3 - 2 * xf);
+      const v = yf * yf * (3 - 2 * yf);
+      return hash(xi, yi) * (1 - u) * (1 - v)
+        + hash(xi + 1, yi) * u * (1 - v)
+        + hash(xi, yi + 1) * (1 - u) * v
+        + hash(xi + 1, yi + 1) * u * v;
+    }
+
+    // --- build the pile ---------------------------------------------------
+    // Every tuft on the rug is described the same way, but they are split
+    // across two meshes by the stride below. The wool that arrives as yarn has
+    // to be a ribbon of many segments to curve at all, and 478,000 ribbons is
+    // far too much geometry — so one tuft in every FLIGHT_STRIDE gets that
+    // treatment and the rest stay single quads.
+    //
+    // The split is only a level of detail. A strand is not a separate object
+    // that hands over to a tuft: it *is* its tuft, with the same place, lean,
+    // width, length and dye, drawn out long while the wool is still loose and
+    // shortening into exactly itself as the knot goes down. Nothing crossfades
+    // and nothing is drawn twice — a tuft belongs to one mesh or the other for
+    // the whole pass.
+    const FLIGHT_STRIDE = 24;
+    const TOTAL = W * H * TUFTS_PER_KNOT;
+    const FLY_COUNT = Math.ceil(TOTAL / FLIGHT_STRIDE);
+    const COUNT = TOTAL - FLY_COUNT;
+
+    const aOffset = new Float32Array(COUNT * 2);
+    const aScale = new Float32Array(COUNT * 2);
+    const aRot = new Float32Array(COUNT);
+    const aSeed = new Float32Array(COUNT);
+    const aColor = new Float32Array(COUNT * 3);
+
+    const fOffset = new Float32Array(FLY_COUNT * 2);
+    const fScale = new Float32Array(FLY_COUNT * 2);
+    const fRot = new Float32Array(FLY_COUNT);
+    const fSeed = new Float32Array(FLY_COUNT);
+    const fColor = new Float32Array(FLY_COUNT * 3);
+
+    const col = new THREE.Color();
+    let t = 0;
+    let pi = 0;
+    let fi = 0;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        const base = PALETTE_RGB[grid[i]];
+
+        // dye depth drifts in bands across the rug, as hand-dyed wool does
+        const band = smoothNoise(x * 0.022, y * 0.014) - 0.5;
+
+        for (let k = 0; k < TUFTS_PER_KNOT; k++) {
+          const r1 = hash(x * 7 + k * 131, y * 13 + k * 17);
+          const r2 = hash(x * 3 + k * 53, y * 29 + k * 91);
+          const r3 = hash(x * 19 + k * 7, y * 5 + k * 233);
+
+          const fly = t % FLIGHT_STRIDE === 0;
+          const arr = fly
+            ? { o: fOffset, s: fScale, r: fRot, d: fSeed, c: fColor, n: fi++ }
+            : { o: aOffset, s: aScale, r: aRot, d: aSeed, c: aColor, n: pi++ };
+          const n = arr.n;
+
+          // +y is up in the scene, so flip the row order
+          arr.o[n * 2] = x - CX + (r1 - 0.5) * 0.95;
+          arr.o[n * 2 + 1] = CY - y + (r2 - 0.5) * 0.95;
+
+          // tufts lean off-axis; that lean is what dissolves the square grid
+          arr.r[n] = (r3 - 0.5) * 1.5;
+          arr.s[n * 2] = 0.52 + r2 * 0.26;
+          arr.s[n * 2 + 1] = 0.95 + r1 * 0.8;
+          arr.d[n] = r3;
+
+          col.copy(base);
+          // per-tuft grain plus a sheen that depends on which way it leans
+          const sheen = 1 + Math.cos(arr.r[n] * 2) * 0.07;
+          col.multiplyScalar((1 + band * 0.13 + (r1 - 0.5) * 0.16) * sheen);
+          arr.c[n * 3] = col.r;
+          arr.c[n * 3 + 1] = col.g;
+          arr.c[n * 3 + 2] = col.b;
+          t++;
+        }
+      }
+    }
+
+    const quad = new Float32Array([
+      -0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0,
+      -0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0,
+    ]);
+
+    const geometry = new THREE.InstancedBufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(quad, 3));
+    geometry.setAttribute('aOffset', new THREE.InstancedBufferAttribute(aOffset, 2));
+    geometry.setAttribute('aScale', new THREE.InstancedBufferAttribute(aScale, 2));
+    geometry.setAttribute('aRot', new THREE.InstancedBufferAttribute(aRot, 1));
+    geometry.setAttribute('aSeed', new THREE.InstancedBufferAttribute(aSeed, 1));
+    geometry.setAttribute('aColor', new THREE.InstancedBufferAttribute(aColor, 3));
+    geometry.instanceCount = COUNT;
+
+    const VERTEX_SHADER = `
+        attribute vec2 aOffset;
+        attribute vec2 aScale;
+        attribute float aRot;
+        attribute float aSeed;
+        attribute vec3 aColor;
+        uniform float uTime;
+        uniform float uWaveY;    // where the crest is, in rug space
+        uniform float uBand;     // how deep the crest is
+        uniform float uSoft, uRagged;
+        uniform float uLife, uBreathSpeed;
+        uniform vec2 uLightA, uLightB;
+        uniform float uLightRadius, uIntensity, uAmbient, uSheen, uWarmth;
+        uniform vec2 uTuft;
+        varying vec3 vColor;
+        varying vec2 vQuad;
+
+        void main() {
+          // the pile never sits still — each tuft breathes on its own phase
+          float phase = aSeed * 6.2831853;
+          float wob = sin(uTime * uBreathSpeed + phase);
+
+          vec2 home = aOffset;
+
+          // --- the weaving edge ---
+          // Ahead of the crest the rug does not exist at all; behind it the
+          // knot is down. Nothing leaves its place any more: the loose wool is
+          // the yarn layer's job now, and the pile is only the rug arriving.
+          // Each tuft gets its own band depth, so the edge is ragged rather
+          // than one clean horizontal line.
+          float band = uBand * (1.0 - uRagged * 0.5 + aSeed * uRagged);
+          float t = (home.y - uWaveY) / max(band, 0.001);
+          float born = pow(smoothstep(-0.5, 0.5, t), uSoft);
+
+          float spun = aRot + wob * 0.24 * uLife;
+          vec2 tipDir = vec2(-sin(spun), cos(spun));   // its lean in the pile
+          // The quad's long side ends up perpendicular to the rotation basis,
+          // so the lean has to be reasoned about as a tip direction and turned
+          // into the basis, not the other way round.
+          vec2 dir = vec2(tipDir.y, -tipDir.x);
+
+          vec2 p = position.xy;
+          // taper toward the tip so a tuft reads as wool, not a rectangle
+          p.x *= 1.0 - 0.45 * abs(position.y * 2.0);
+          // Unborn wool collapses to nothing, which is what leaves the rug
+          // genuinely empty ahead of the crest rather than dimly present.
+          p *= aScale * uTuft * (1.0 + wob * 0.12 * uLife) * born;
+
+          vec2 rp = vec2(
+            p.x * dir.x - p.y * dir.y,
+            p.x * dir.y + p.y * dir.x
+          );
+          vQuad = position.xy;
+
+          // --- light ---
+          // Two gallery lamps above the rug, one to each side, the way a
+          // hanging would actually be lit: inverse-square from each lamp, plus
+          // a directional term because a tuft leaning toward a lamp catches
+          // more of it than its neighbour leaning away. That second term is
+          // the whole reason a real rug changes as you walk past it.
+          vec2 toA = uLightA - home;
+          vec2 toB = uLightB - home;
+          float lenA = max(length(toA), 0.001);
+          float lenB = max(length(toB), 0.001);
+          float da = lenA / uLightRadius;
+          float db = lenB / uLightRadius;
+          float la = 1.0 / (1.0 + da * da * 3.0);
+          float lb = 1.0 / (1.0 + db * db * 3.0);
+
+          vec2 tip = vec2(-dir.y, dir.x);
+          float spec = la * max(dot(tip, toA / lenA), 0.0)
+                     + lb * max(dot(tip, toB / lenB), 0.0);
+          spec *= spec;
+
+          vec3 tint = mix(vec3(1.0), vec3(1.0, 0.93, 0.82), uWarmth);
+          float key = (la + lb) * uIntensity + spec * uSheen;
+          vColor = aColor * (vec3(uAmbient) + key * tint)
+                 * (1.0 + wob * 0.09 * uLife);
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(home + rp, 0.0, 1.0);
+        }
+    `;
+
+    const FRAGMENT_SHADER = `
+      varying vec3 vColor;
+      varying vec2 vQuad;
+      void main() {
+        // soften the very corners so a tuft end is not a hard rectangle
+        if (length(vQuad) * 2.0 > 1.94) discard;
+        gl_FragColor = vec4(vColor, 1.0);
+      }
+    `;
+
+    // --- dials ------------------------------------------------------------
+    // [default, min, max, step]. Everything here is live: the panel is built
+    // from this object, and the frame loop pushes the values straight into the
+    // uniforms, so there is one place to add or rename a control.
+    const DIALS = {
+      // The band that wipes down the rug. It is only a reveal now — the wool
+      // no longer leaves its knot, so the dials that threw it around are gone.
+      reveal: {
+        speed:    [0.15, 0.02, 1.5, 0.01],
+        band:     [30, 3, 160, 1],     // how deep the weaving edge is, in knots
+        softness: [0.65, 0.3, 3, 0.05],
+        ragged:   [0.62, 0, 1.5, 0.01],  // per-tuft jitter in band depth
+        hold:     [1.2, 0, 6, 0.1],    // seconds on the finished rug, when auto is on
+        frame:    [1.34, 1, 2.6, 0.01],
+      },
+      // Every knot in the rug comes off one of these. They gather at the
+      // weaving edge, and the rug is what they leave behind.
+      // How the wool behaves while it is still yarn. Its width, dye and
+      // knotted length are not here: those belong to the tuft it becomes.
+      yarn: {
+        length:       [210, 10, 520, 1],
+        lengthSpread: [280, 0, 560, 1],
+        fan:          [0.45, 0, 3.14, 0.01], // near-vertical: warp, not a bush
+        amp:          [0.045, 0, 0.4, 0.005], // twirl swing, as a share of length
+        twirl:        [7, 0.2, 16, 0.1],     // turns along one strand
+        slither:      [0.5, 0, 4, 0.05],
+        thin:         [0.09, 0, 1, 0.01],    // share of the wool being worked at once
+        gather:       [70, 5, 260, 1],       // how far ahead of the edge wool is in the air
+        pull:         [0.4, 0.05, 1, 0.01],  // share of the reveal spent pulling into the knot
+        fade:         [0.04, 0.02, 1, 0.01], // how fast a strand dims away from the edge
+        lift:         [0.5, 0, 2, 0.01],
+      },
+      light: {
+        intensity: [0.68, 0, 2, 0.01],
+        spread:    [0.72, 0.15, 2, 0.01],
+        height:    [0.15, 0.02, 1.2, 0.01],
+        offset:    [0.8, 0, 1.6, 0.01],
+        ambient:   [0.42, 0, 1.2, 0.01],
+        sheen:     [0, 0, 2, 0.01],
+        warmth:    [0.56, 0, 1, 0.01],
+      },
+      weave: {
+        life:       [0.54, 0, 3, 0.01],
+        breath:     [1.14, 0, 3, 0.01],
+        tuftWidth:  [0.95, 0.3, 2.5, 0.01],
+        tuftLength: [1.78, 0.3, 2.5, 0.01],
+      },
+    };
+
+    // Nested by group on purpose: a flat map lets two groups that both want a
+    // sensible name like "spread" silently share one value.
+    const dial = {};
+    for (const [groupName, group] of Object.entries(DIALS)) {
+      dial[groupName] = {};
+      for (const [name, spec] of Object.entries(group)) dial[groupName][name] = spec[0];
+    }
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uWaveY: { value: 1e5 },
+        uBand: { value: 30 },
+        uSoft: { value: 1 },
+        uRagged: { value: 0 },
+        uLife: { value: 1 },
+        uBreathSpeed: { value: 0.8 },
+        uLightA: { value: new THREE.Vector2() },
+        uLightB: { value: new THREE.Vector2() },
+        uLightRadius: { value: H },
+        uIntensity: { value: 0.42 },
+        uAmbient: { value: 0.35 },
+        uSheen: { value: 0.45 },
+        uWarmth: { value: 0.14 },
+        uTuft: { value: new THREE.Vector2(1, 1) },
+      },
+      vertexShader: VERTEX_SHADER,
+      fragmentShader: FRAGMENT_SHADER,
+    });
+
+    const pile = new THREE.Mesh(geometry, material);
+    pile.frustumCulled = false;
+
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    renderer.setClearColor(BACKDROP, 1);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+
+    // The warp and weft showing between the tufts. It has to arrive with the
+    // wool, otherwise an empty rug-shaped rectangle sits there waiting for the
+    // crest and gives the whole reveal away.
+    const foundationMat = new THREE.ShaderMaterial({
+      transparent: true,
+      uniforms: {
+        uWaveY: { value: 1e5 },
+        uEdge: { value: 24 },
+        // A plain vec3, not a THREE.Color: colour management would linearise a
+        // Color uniform, and a raw ShaderMaterial writes gl_FragColor without
+        // the encode step back to sRGB, so the warp would come out near-black.
+        uWarp: { value: new THREE.Vector3(0x12 / 255, 0x0d / 255, 0x0b / 255) },
+      },
+      vertexShader: `
+        varying float vY;
+        void main() {
+          vY = position.y;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uWaveY, uEdge;
+        uniform vec3 uWarp;
+        varying float vY;
+        void main() {
+          // fades up from nothing rather than from a colour, so the empty
+          // state is the wall itself and not a rug-shaped rectangle of it
+          float a = smoothstep(-uEdge, uEdge, vY - uWaveY);
+          if (a <= 0.002) discard;
+          gl_FragColor = vec4(uWarp, a);
+        }
+      `,
+    });
+    const foundation = new THREE.Mesh(new THREE.PlaneGeometry(W, H), foundationMat);
+    foundation.position.z = -1;
+    scene.add(foundation);
+    scene.add(pile);
+
+    // --- wool still on the loom -------------------------------------------
+    // The same tufts as the pile, one in every FLIGHT_STRIDE, drawn as ribbons
+    // so they can curve. A strand runs from its own knot out into the unwoven
+    // space while the wool is loose, and shortens into exactly its own tuft —
+    // same width, same lean, same dye — as the knot goes down.
+    const SEG = 34;
+
+    const fAlong = new Float32Array((SEG + 1) * 2);
+    const fSide = new Float32Array((SEG + 1) * 2);
+    const fIndex = [];
+    for (let i = 0; i <= SEG; i++) {
+      fAlong[i * 2] = i / SEG; fSide[i * 2] = -1;
+      fAlong[i * 2 + 1] = i / SEG; fSide[i * 2 + 1] = 1;
+      if (i < SEG) {
+        const v = i * 2;
+        fIndex.push(v, v + 1, v + 2, v + 1, v + 3, v + 2);
+      }
+    }
+
+    const flightGeo = new THREE.InstancedBufferGeometry();
+    flightGeo.setAttribute('aAlong', new THREE.BufferAttribute(fAlong, 1));
+    flightGeo.setAttribute('aSide', new THREE.BufferAttribute(fSide, 1));
+    flightGeo.setIndex(fIndex);
+    flightGeo.setAttribute('aOffset', new THREE.InstancedBufferAttribute(fOffset, 2));
+    flightGeo.setAttribute('aScale', new THREE.InstancedBufferAttribute(fScale, 2));
+    flightGeo.setAttribute('aRot', new THREE.InstancedBufferAttribute(fRot, 1));
+    flightGeo.setAttribute('aSeed', new THREE.InstancedBufferAttribute(fSeed, 1));
+    flightGeo.setAttribute('aColor', new THREE.InstancedBufferAttribute(fColor, 3));
+    flightGeo.instanceCount = FLY_COUNT;
+
+    const FLIGHT_VERTEX_SHADER = `
+        attribute float aAlong;
+        attribute float aSide;
+        attribute vec2 aOffset;
+        attribute vec2 aScale;
+        attribute float aRot;
+        attribute float aSeed;
+        attribute vec3 aColor;
+        uniform float uTime, uWaveY, uBand, uSoft, uRagged;
+        uniform float uLength, uLengthSpread, uFan, uAmp, uTwirl, uSlither;
+        uniform float uFade, uPull, uLift, uGather, uThin;
+        uniform float uLife, uBreathSpeed;
+        uniform vec2 uLightA, uLightB;
+        uniform float uLightRadius, uIntensity, uAmbient, uSheen, uWarmth;
+        uniform vec2 uTuft;
+        varying vec3 vColor;
+        varying float vAlpha;
+
+        // Two turns at different rates rather than one clean sine: a single
+        // frequency reads as a plucked string, and a sum that never quite
+        // repeats is what makes a length of yarn look twirled instead of
+        // oscillated. The swing is pinned to nothing at the knot, so the end
+        // being worked holds still while the loose length moves.
+        vec2 pathAt(float u, float len, float swing, vec2 d, vec2 n, float ph) {
+          float wav = sin(u * uTwirl * 6.2831853 + ph) * 0.74
+                    + sin(u * uTwirl * 1.9 * 6.2831853 + ph * 1.37) * 0.26;
+          return d * (u * len) + n * wav * swing * smoothstep(0.0, 0.18, u);
+        }
+
+        void main() {
+          float phase = aSeed * 6.2831853;
+          float wob = sin(uTime * uBreathSpeed + phase);
+          vec2 home = aOffset;
+
+          // Exactly the pile's reveal ramp, so this tuft settles in step with
+          // its neighbours in the other mesh.
+          float band = uBand * (1.0 - uRagged * 0.5 + aSeed * uRagged);
+          float tb = (home.y - uWaveY) / max(band, 0.001);
+          float born = pow(smoothstep(-0.5, 0.5, tb), uSoft);
+          // How far ahead of the crest this knot is. Beyond the gather the
+          // loom is simply empty — the wool has not been brought to the work
+          // yet. Without this every unwoven row has a full length of yarn on
+          // it and each one smears its own dye hundreds of knots down the rug.
+          float ahead = (uWaveY - home.y) / max(uGather, 1.0);
+          float alive = 1.0 - smoothstep(0.6, 1.0, ahead);
+
+          // 1 while the wool is still yarn, 0 once it is a knot. It holds its
+          // full length until the knot is nearly down and then pulls in over
+          // the last uPull of the reveal, because a length that shortens
+          // steadily across the whole band spends most of the band as a medium
+          // streak — hundreds of those is a brush, not yarn.
+          // So a strand grows out of nothing as it is brought to the weaving
+          // edge, stays long while it is worked, and snaps into its own knot.
+          // Only some of the wool is being worked at any one moment; the rest
+          // is already where it belongs. A strand that is not being drawn out
+          // has draw = 0 throughout, so it simply behaves as its own tuft and
+          // is indistinguishable from one in the pile mesh. The open dark
+          // between threads is most of the picture, so this is the dial that
+          // decides whether it reads as yarn or as a brush.
+          float worked = step(fract(aSeed * 7.31), uThin);
+          float draw = (1.0 - smoothstep(1.0 - uPull, 1.0, born)) * alive * worked;
+
+          float sa = fract(aSeed * 91.73);
+
+          // The axis the strand runs along: its own lean in the pile once it is
+          // knotted, trailing off into the unwoven space while it is not.
+          // Both are taken pointing away from the crest, which keeps the blend
+          // inside a quarter turn — the two ends of a tuft are alike, so there
+          // is no reason to swing it through a half turn to get there.
+          float spun = aRot + wob * 0.24 * uLife;
+          float angKnot = spun - 1.5707963;
+          float angDraw = -1.5707963 + (sa - 0.5) * uFan;
+          float ang = mix(angKnot, angDraw, draw);
+          vec2 d = vec2(cos(ang), sin(ang));
+          vec2 n = vec2(-d.y, d.x);
+
+          // Its own knotted length at one end of the reveal, a long thread at
+          // the other. Width never changes: the yarn is exactly as thick as the
+          // tuft it becomes, which is the whole reason it reads as the same
+          // wool rather than something else arriving.
+          float tuftLen = aScale.y * uTuft.y;
+          float len = mix(tuftLen, uLength + sa * uLengthSpread, draw);
+          float swing = uAmp * len * draw;
+
+          float u = aAlong;
+          float ph = uTime * uSlither + phase;
+          float du = 0.035;
+          vec2 p0 = pathAt(max(u - du, 0.0), len, swing, d, n, ph);
+          vec2 p1 = pathAt(min(u + du, 1.0), len, swing, d, n, ph);
+          vec2 here = pathAt(u, len, swing, d, n, ph);
+          vec2 along = p1 - p0;
+          float alongLen = length(along);
+          vec2 tangent = alongLen > 0.0001 ? along / alongLen : d;
+          vec2 across = vec2(-tangent.y, tangent.x);
+
+          // Thin at both ends when it is a tuft, so it matches the pile's own
+          // taper; thin only at the loose tip when it is yarn, because a thread
+          // fat in the middle looks like a leaf.
+          float taperTuft = 1.0 - 0.45 * abs(u * 2.0 - 1.0);
+          float taperYarn = 1.0 - 0.4 * smoothstep(0.45, 1.0, u);
+          float halfW = aScale.x * uTuft.x * 0.5
+                     * mix(taperTuft, taperYarn, draw)
+                     * (1.0 + wob * 0.12 * uLife)
+                     // unborn wool collapses to nothing, the same as the pile
+                     * max(born, draw);
+
+          vec2 pos = home + here + across * aSide * halfW;
+
+          // --- light ---
+          // Measured at the knot, not along the strand, so a settled tuft here
+          // is lit identically to the same tuft in the pile mesh.
+          vec2 toA = uLightA - home;
+          vec2 toB = uLightB - home;
+          float lenA = max(length(toA), 0.001);
+          float lenB = max(length(toB), 0.001);
+          float da = lenA / uLightRadius;
+          float db = lenB / uLightRadius;
+          float la = 1.0 / (1.0 + da * da * 3.0);
+          float lb = 1.0 / (1.0 + db * db * 3.0);
+
+          float spec = la * max(dot(d, toA / lenA), 0.0)
+                     + lb * max(dot(d, toB / lenB), 0.0);
+          spec *= spec;
+
+          vec3 tint = mix(vec3(1.0), vec3(1.0, 0.93, 0.82), uWarmth);
+          float key = (la + lb) * uIntensity + spec * uSheen;
+          vColor = aColor * (vec3(uAmbient) + key * tint)
+                 * (1.0 + wob * 0.09 * uLife)
+                 // a little more light for being off the surface and in the air
+                 * (1.0 + uLift * draw);
+
+          // Dims away from the knot while the wool is loose, which is what puts
+          // the weight of the yarn at the weaving edge while the threads stay
+          // long. A knotted tuft is solid all the way along.
+          vAlpha = 1.0 - smoothstep(uFade, 1.0, u) * draw;
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 0.3, 1.0);
+        }
+    `;
+
+    const FLIGHT_FRAGMENT_SHADER = `
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        if (vAlpha <= 0.004) discard;
+        gl_FragColor = vec4(vColor, vAlpha);
+      }
+    `;
+
+    const flightMat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      // A twirled ribbon reverses its winding wherever the curve turns back on
+      // itself, so any fixed winding gets half the strand culled. (Straight
+      // down the page it was all of it: the strip runs top to bottom, which is
+      // clockwise on screen, and the whole layer drew nothing at all.)
+      side: THREE.DoubleSide,
+      uniforms: {
+        uTime: { value: 0 },
+        uWaveY: { value: 1e5 },
+        uBand: { value: 30 },
+        uSoft: { value: 1 },
+        uRagged: { value: 0 },
+        uLength: { value: 210 },
+        uLengthSpread: { value: 280 },
+        uFan: { value: 0.45 },
+        uAmp: { value: 0.045 },
+        uTwirl: { value: 7 },
+        uSlither: { value: 0.5 },
+        uFade: { value: 0.04 },
+        uPull: { value: 0.4 },
+        uThin: { value: 0.09 },
+        uGather: { value: 70 },
+        uLift: { value: 0.5 },
+        uLife: { value: 1 },
+        uBreathSpeed: { value: 0.8 },
+        uLightA: { value: new THREE.Vector2() },
+        uLightB: { value: new THREE.Vector2() },
+        uLightRadius: { value: H },
+        uIntensity: { value: 0.68 },
+        uAmbient: { value: 0.42 },
+        uSheen: { value: 0 },
+        uWarmth: { value: 0.56 },
+        uTuft: { value: new THREE.Vector2(1, 1) },
+      },
+      vertexShader: FLIGHT_VERTEX_SHADER,
+      fragmentShader: FLIGHT_FRAGMENT_SHADER,
+    });
+
+    const flight = new THREE.Mesh(flightGeo, flightMat);
+    flight.frustumCulled = false;
+    scene.add(flight);
+
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
+    camera.position.z = 10;
+
+    function resize() {
+      const vw = innerWidth, vh = innerHeight;
+      renderer.setSize(vw, vh, false);
+      // The spray leaves the rug now, so the frustum has to hold more than the
+      // rug itself or the wave gets clipped against the viewport edge.
+      const margin = dial.reveal.frame;
+      const aspect = vw / vh;
+      let halfH = (H * margin) / 2;
+      let halfW = halfH * aspect;
+      if (halfW < (W * margin) / 2) {
+        halfW = (W * margin) / 2;
+        halfH = halfW / aspect;
+      }
+      camera.left = -halfW;
+      camera.right = halfW;
+      camera.top = halfH;
+      camera.bottom = -halfH;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    addEventListener('resize', resize);
+
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- the panel --------------------------------------------------------
+    // Built from DIALS, so adding a control anywhere above is the only edit
+    // needed to get a slider for it.
+    // Bumped when the dial set changes shape: a saved value like contain=1
+     // from the previous layout would otherwise quietly undo a new default.
+    // Bumped with the dial layout: a set saved against the old wave/strings
+    // groups would quietly restore values into dials that no longer mean the
+    // same thing, and the new defaults would never be seen.
+    const STORE = 'farsh-v3-dials-r3';
+
+    const panel = document.createElement('div');
+    panel.id = 'dials';
+    panel.innerHTML = '<h1><span>farsh v3</span><span>h</span></h1><div class="body"></div>';
+    document.body.appendChild(panel);
+    const body = panel.querySelector('.body');
+    const inputs = {};
+
+    function fmt(v, step) {
+      return v.toFixed(step < 0.01 ? 3 : step < 1 ? 2 : 0);
+    }
+
+    for (const [groupName, group] of Object.entries(DIALS)) {
+      const section = document.createElement('div');
+      section.className = 'group';
+      section.innerHTML = `<span>${groupName}</span>`;
+
+      for (const [name, [def, min, max, step]] of Object.entries(group)) {
+        const id = `d-${groupName}-${name}`;
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML =
+          `<label for="${id}">${name}</label>`
+          + `<input id="${id}" type="range" min="${min}" max="${max}"`
+          + ` step="${step}" value="${dial[groupName][name]}">`
+          + `<output>${fmt(dial[groupName][name], step)}</output>`;
+
+        const input = row.querySelector('input');
+        const out = row.querySelector('output');
+        input.addEventListener('input', () => {
+          dial[groupName][name] = parseFloat(input.value);
+          out.textContent = fmt(dial[groupName][name], step);
+          save();
+        });
+
+        inputs[`${groupName}.${name}`] = { input, out, step, def, groupName, name };
+        section.appendChild(row);
+      }
+      body.appendChild(section);
+    }
+
+    const acts = document.createElement('div');
+    acts.className = 'acts';
+    acts.innerHTML =
+      '<button data-act="reset">reset</button><button data-act="copy">copy</button>';
+    body.appendChild(acts);
+
+    const hint = document.createElement('p');
+    hint.className = 'hint';
+    hint.textContent =
+      'h or the header collapses this · auto loops the weave while you tune, '
+      + 'resting reveal.hold seconds on each finished rug · copy puts the values '
+      + 'on your clipboard, paste them back to me to lock them in';
+    body.appendChild(hint);
+
+    // Takes the same nested shape the panel writes out, and skips anything it
+    // doesn't recognise, so a saved set from an older dial layout still loads.
+    function setAll(values) {
+      for (const entry of Object.values(inputs)) {
+        const v = values?.[entry.groupName]?.[entry.name];
+        if (typeof v !== 'number' || Number.isNaN(v)) continue;
+        dial[entry.groupName][entry.name] = v;
+        entry.input.value = v;
+        entry.out.textContent = fmt(v, entry.step);
+      }
+    }
+
+    function save() {
+      try { localStorage.setItem(STORE, JSON.stringify(dial)); } catch (e) { /* private mode */ }
+    }
+
+    acts.addEventListener('click', (e) => {
+      const act = e.target.dataset.act;
+      if (act === 'reset') {
+        const defaults = {};
+        for (const entry of Object.values(inputs)) {
+          (defaults[entry.groupName] ??= {})[entry.name] = entry.def;
+        }
+        setAll(defaults);
+        save();
+      }
+      if (act === 'copy') {
+        const text = '{\n' + Object.entries(DIALS).map(([g, group]) =>
+          `  ${g}: {\n`
+          + Object.keys(group).map((n) =>
+            `    ${n}: ${fmt(dial[g][n], inputs[`${g}.${n}`].step)},`).join('\n')
+          + '\n  },').join('\n') + '\n}';
+        navigator.clipboard?.writeText(text);
+        e.target.textContent = 'copied';
+        setTimeout(() => { e.target.textContent = 'copy'; }, 1200);
+      }
+    });
+
+    // pick up where the last session left off
+    try {
+      const saved = localStorage.getItem(STORE);
+      if (saved) setAll(JSON.parse(saved));
+    } catch (e) { /* ignore a stale or corrupt entry */ }
+
+    panel.querySelector('h1').addEventListener('click', () => {
+      panel.classList.toggle('collapsed');
+    });
+    addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'h') panel.classList.toggle('collapsed');
+    });
+
+    // --- the wave ---------------------------------------------------------
+    // One pass, then it holds on the finished rug. It runs on distance
+    // travelled rather than off the clock, so moving the speed dial mid-pass
+    // slows the crest from where it is instead of teleporting it. The crest
+    // starts clear of the top edge by the lead distance and ends clear of the
+    // bottom by the tail, so the rug is genuinely empty at one end of the pass
+    // and completely knotted at the other.
+    const clock = new THREE.Clock();
+    let waveT = 0;
+    let lastT = 0;
+    let done = false;
+    // Deliberately not seeded from the dial: resize() runs before the saved
+    // dial set is restored, so the first frame has to re-apply the frustum or a
+    // stored frame value never reaches the camera until the window is resized.
+    let framedAt = null;
+
+    let holdT = 0;
+
+    const playbar = document.createElement('div');
+    playbar.id = 'playbar';
+    playbar.innerHTML =
+      '<button id="pause" type="button">pause</button>'
+      + '<input id="scrub" type="range" min="0" max="1" step="0.001" value="0">'
+      + '<button id="replay" type="button">weave it again</button>'
+      + '<label id="auto"><input type="checkbox">auto</label>';
+    // Reduced motion gets the finished rug and no playback controls, rather
+    // than two controls that visibly do nothing.
+    if (!reduceMotion) document.body.appendChild(playbar);
+
+    const replay = playbar.querySelector('#replay');
+    const autoBox = playbar.querySelector('#auto input');
+    const pauseBtn = playbar.querySelector('#pause');
+    const scrub = playbar.querySelector('#scrub');
+
+    let paused = false;
+    // Set by the scrub and consumed by frame(), because the crest's position is
+    // a distance and the total distance depends on dials the scrub can't see.
+    let seek = null;
+
+    function restart() { waveT = 0; holdT = 0; done = false; }
+    function setPaused(v) {
+      paused = v;
+      pauseBtn.textContent = paused ? 'play' : 'pause';
+      playbar.classList.toggle('paused', paused);
+    }
+
+    // Replay means play it again, so it lets go of a pause rather than
+    // dropping you on a frozen first frame.
+    replay.addEventListener('click', () => { restart(); setPaused(false); });
+
+    pauseBtn.addEventListener('click', () => {
+      // Play on a finished rug starts the pass over; otherwise the button
+      // would say play and then do nothing at all.
+      if (paused && done) restart();
+      setPaused(!paused);
+    });
+
+    // Dragging the scrub is a request to look at one moment, so it holds there.
+    scrub.addEventListener('input', () => {
+      seek = Number(scrub.value);
+      done = false;
+      holdT = 0;
+      setPaused(true);
+    });
+
+    addEventListener('keydown', (e) => {
+      if (e.code !== 'Space') return;
+      // Space already means activate on a focused control, so leave those alone
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement) return;
+      e.preventDefault();
+      if (!reduceMotion) pauseBtn.click();
+    });
+
+    // Auto outlives a reload on purpose: it is a tuning mode, and losing it on
+    // every refresh is exactly the clicking it exists to avoid.
+    const AUTO_STORE = 'farsh-v3-auto';
+    try { autoBox.checked = localStorage.getItem(AUTO_STORE) === '1'; } catch (e) { /* private mode */ }
+    autoBox.addEventListener('change', () => {
+      try { localStorage.setItem(AUTO_STORE, autoBox.checked ? '1' : '0'); } catch (e) { /* private mode */ }
+      if (autoBox.checked && done) restart();
+    });
+
+    function frame() {
+      const { reveal: R, yarn: Y, light: L, weave } = dial;
+
+      const t = clock.getElapsedTime();
+      const dt = Math.min(t - lastT, 0.05);
+      lastT = t;
+
+      // The band straddles the crest, so the crest has to start half a band
+      // clear of the top edge and finish half a band past the bottom for the
+      // rug to be genuinely empty at one end and fully knotted at the other.
+      const top = (H - 1) / 2;
+      const travel = H + R.band;
+      if (seek !== null) { waveT = seek * travel; seek = null; }
+
+      if (reduceMotion) {
+        // no reveal at all — the finished rug, and nothing to replay
+      } else if (paused) {
+        // Only the crest is frozen. uTime keeps running, so the wool still
+        // breathes and the yarn still slithers — otherwise the dials that only
+        // show their work in motion would be the ones you couldn't judge.
+      } else if (!done) {
+        waveT = Math.min(waveT + dt * R.speed * H, travel);
+        if (waveT >= travel) done = true;
+      } else if (autoBox.checked) {
+        holdT += dt;
+        if (holdT >= R.hold) restart();
+      }
+      // Left alone while paused so it doesn't fight the drag that paused it.
+      if (!paused) scrub.value = travel > 0 ? waveT / travel : 0;
+      replay.classList.toggle('shown', !reduceMotion && (done || autoBox.checked));
+
+      const u = material.uniforms;
+      u.uTime.value = t;
+      // reduced motion gets the finished rug, no reveal
+      u.uWaveY.value = reduceMotion ? -1e5 : top + R.band * 0.5 - waveT;
+      foundationMat.uniforms.uWaveY.value = u.uWaveY.value;
+      foundationMat.uniforms.uEdge.value = R.band * 0.5;
+      u.uBand.value = R.band;
+      u.uSoft.value = R.softness;
+      u.uRagged.value = R.ragged;
+      u.uLife.value = reduceMotion ? 0 : weave.life;
+      u.uBreathSpeed.value = weave.breath;
+      u.uTuft.value.set(weave.tuftWidth, weave.tuftLength);
+
+      // the lamps hang above the top edge, one out to each side
+      const lampX = L.offset * ((W - 1) / 2);
+      const lampY = (H - 1) / 2 + L.height * H;
+      u.uLightA.value.set(-lampX, lampY);
+      u.uLightB.value.set(lampX, lampY);
+      u.uLightRadius.value = L.spread * H;
+      u.uIntensity.value = L.intensity;
+      u.uAmbient.value = L.ambient;
+      u.uSheen.value = L.sheen;
+      u.uWarmth.value = L.warmth;
+
+      // The flight mesh shares the pile's reveal and its light, so a tuft
+      // settling here lands identically to one in the pile mesh. Only the
+      // drawn-out state has dials of its own.
+      const f = flightMat.uniforms;
+      f.uTime.value = t;
+      f.uWaveY.value = u.uWaveY.value;
+      f.uBand.value = R.band;
+      f.uSoft.value = R.softness;
+      f.uRagged.value = R.ragged;
+      f.uLife.value = u.uLife.value;
+      f.uBreathSpeed.value = weave.breath;
+      f.uTuft.value.copy(u.uTuft.value);
+      f.uLength.value = Y.length;
+      f.uLengthSpread.value = Y.lengthSpread;
+      f.uFan.value = Y.fan;
+      f.uAmp.value = Y.amp;
+      f.uTwirl.value = Y.twirl;
+      f.uSlither.value = reduceMotion ? 0 : Y.slither;
+      f.uFade.value = Y.fade;
+      f.uPull.value = Y.pull;
+      f.uThin.value = Y.thin;
+      f.uGather.value = Y.gather;
+      f.uLift.value = Y.lift;
+      f.uLightA.value.copy(u.uLightA.value);
+      f.uLightB.value.copy(u.uLightB.value);
+      f.uLightRadius.value = u.uLightRadius.value;
+      f.uIntensity.value = L.intensity;
+      f.uAmbient.value = L.ambient;
+      f.uSheen.value = L.sheen;
+      f.uWarmth.value = L.warmth;
+
+      if (R.frame !== framedAt) { framedAt = R.frame; resize(); }
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
