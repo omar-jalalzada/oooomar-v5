@@ -18,12 +18,22 @@ let tagTxtEl: HTMLElement;
 let tagRules: HTMLElement[] = [];
 let pillEl: HTMLElement | null = null;
 
+/** One element per character of the tagline, so each can be brought up on its own. */
+let tagChars: HTMLElement[] = [];
+/** How lit each character is by the playhead passing over it. */
+let tagLit: number[] = [];
+/** The last opacity actually written to each, so a settled line stops touching the DOM. */
+let tagWrote: number[] = [];
+
 export function initHud(canvas: HTMLCanvasElement, tagline: HTMLElement, pill?: HTMLElement | null) {
   hudCanvas = canvas;
   hctx = canvas.getContext('2d')!;
   tagEl = tagline;
   tagTxtEl = tagline.querySelector('.txt')!;
   tagRules = [...tagline.querySelectorAll<HTMLElement>('.rule')];
+  tagChars = [...tagline.querySelectorAll<HTMLElement>('.ch')];
+  tagLit = tagChars.map(() => 0);
+  tagWrote = tagChars.map(() => -1);
   pillEl = pill ?? null;
 }
 
@@ -31,6 +41,24 @@ const pseudo = (n: number) => { const v = Math.sin(n * 127.1) * 43758.5453; retu
 
 let jitterSeed = 0;
 let jitterAt = 0;
+
+// ── the weight of a rule ───────────────────────────────────────────────────
+// Every frame, panel, tick and rule in the instrument is a hairline: half a CSS pixel,
+// which is exactly one device pixel on a 2x screen. The heavier strokes left in here are
+// not rules — the transfer curve is a plotted line and the grab ripple is a flash — and
+// they keep their own weights.
+const HAIR = 0.5;
+
+// A stroke this thin only stays crisp if the path lands on a device pixel boundary, and
+// where that falls depends on the ratio: at 2x it wants a quarter-pixel nudge, at 1x a
+// half. So the offset is computed rather than written as the flat `+ 0.5` that's correct
+// for a 1px line and subtly wrong for this one.
+//
+// Only worth applying in untransformed space. Most of the chrome is drawn inside a
+// translate to the letter's jittered position, which is fractional by design — there is no
+// alignment to be had there, and pretending otherwise would just be arithmetic.
+let hudDpr = 1;
+const hair = (v: number) => (Math.round(v * hudDpr) + 0.5) / hudDpr;
 
 function brackets(w: number, h: number, ax: number, ay: number) {
   hctx.beginPath();
@@ -57,7 +85,7 @@ function drawConnectors(presence: number) {
   hctx.save();
   hctx.strokeStyle = '#f0d24a';
   hctx.fillStyle = '#f0d24a';
-  hctx.lineWidth = 1;
+  hctx.lineWidth = HAIR;
 
   const centre = (st: LetterState) => [st.rect.x + st.rect.w / 2, st.rect.y + st.rect.h / 2];
   const focus = M.focusIdx >= 0 ? states[M.focusIdx].hover : 0;
@@ -168,8 +196,13 @@ export function drawTagline(now: number, dt: number) {
   tagEl.style.top = `${(baseline + 46 * s).toFixed(1)}px`;
   tagEl.style.transform = `translate(-50%, ${(back * 10 - (1 - M.tagIn) * 7
     - vis.pulse * 1.5 * vis.mus).toFixed(2)}px)`;
-  tagEl.style.opacity = (M.tagIn * (1 - back)
-    * (0.58 + vis.pulse * 0.16 * vis.mus)).toFixed(3);
+  // The resting alpha and its breathing used to be applied here, to the whole assembly.
+  // They've moved down onto the characters and the rules individually, because the
+  // playhead needs somewhere to go: a character already sitting at the container's ceiling
+  // has no room to brighten, and lighting one is the entire point. Both carry the same
+  // terms as before, so the settled line is unchanged — a regrouping, not a new look.
+  const lineA = 0.58 + vis.pulse * 0.16 * vis.mus;
+  tagEl.style.opacity = (M.tagIn * (1 - back)).toFixed(3);
   tagTxtEl.style.letterSpacing = `${track.toFixed(4)}em`;
   tagTxtEl.style.marginRight = `${(-track).toFixed(4)}em`;
 
@@ -187,20 +220,220 @@ export function drawTagline(now: number, dt: number) {
   // The bands arrive centred on zero, so this brightens and dims either side of its
   // resting value rather than only ever brightening.
   const ruleA = clamp(0.36 + vis.top * 0.30 * vis.mus, 0.08, 0.9);
-  tagRules.forEach((el) => { el.style.opacity = ruleA.toFixed(3); });
+  tagRules.forEach((el) => { el.style.opacity = (ruleA * lineA).toFixed(3); });
+
+  drawTagChars(now, dt, lineA);
 
   // ── the control, under the line ──────────────────────────────────────────
   // Centred on the same mark and standing off the tagline by a fraction of it, so the three
-  // hold together as one lockup at any size. It rides the entrance with the tagline but
-  // *not* its withdrawal: the line has no business being legible mid-gesture, whereas a
-  // control you can't see is a control you can't press. So `M.tagIn` and none of `back`.
-  if (pillEl) {
-    const gap = Math.max(10, 26 * s);
-    pillEl.style.left = `${mark.cx.toFixed(1)}px`;
-    pillEl.style.top = `${(baseline + 46 * s + fontPx * 1.2 + gap).toFixed(1)}px`;
-    pillEl.style.transform = `translate(-50%, ${(-(1 - M.tagIn) * 7).toFixed(2)}px)`;
-    pillEl.style.opacity = M.tagIn.toFixed(3);
+  // hold together as one lockup at any size.
+  //
+  // Drawn on the HUD canvas rather than dressed up as DOM chrome, so it's in the
+  // instrument's hand: square corners, a 1px rule, the same yellow and the same mono as
+  // every other readout. Safe to draw from here even though drawHud() owns the clear,
+  // because the frame calls drawHud() before this (see field.ts) — but it does mean the
+  // control survives `hudOn` being switched off, which is right. The rest of the chrome is
+  // a readout and can go; this is the only way to start the sound.
+  const gap = Math.max(10, 26 * s);
+  // Withdraws with the tagline, but only once the sound is on: by then it has done its job
+  // and the field should have the screen to itself. With the sound off it ignores `back`
+  // and holds, because a control you can't see is a control you can't press.
+  const on = sound.engine?.enabled === true;
+  drawSoundControl(
+    mark.cx,
+    baseline + 46 * s + fontPx * 1.2 + gap - (1 - M.tagIn) * 7,
+    M.tagIn * (on ? 1 - back : 1),
+    on,
+    lineA,
+  );
+}
+
+// ── the line arrives one character at a time ───────────────────────────────
+// The same acquisition the HUD performs on a letter of the mark: a few frames of flicker
+// while it resolves, then solid. It reuses `pseudo` and the same 0.03..0.88 band as the
+// letter frames, so this is literally that gesture rather than a lookalike — the tagline
+// reads as something the instrument found rather than as text that faded in.
+//
+// Character by character, and not a word or a line at a time, because the flicker is only
+// legible per glyph; in blocks it reads as the whole line strobing.
+
+/** Each character starts this long after the one before it, and takes this long to land. */
+const CH_STAGGER = 0.034;
+const CH_ACQUIRE = 0.18;
+/** The entrance holds for this long before the first character starts, as it always has. */
+const CH_DELAY = 0.38;
+
+function drawTagChars(now: number, dt: number, lineA: number) {
+  if (!tagChars.length) return;
+  // Null unless the sequencer is genuinely running, so with the sound off there is nothing
+  // to decay from and the line sits perfectly still.
+  const ms = sound.engine?.musicState() ?? null;
+  const since = (now - tagBootAt) / 1000 - CH_DELAY;
+  const n = tagChars.length;
+
+  tagChars.forEach((el, i) => {
+    let acq: number;
+    let flick = 1;
+    if (M.animate) {
+      acq = clamp((since - i * CH_STAGGER) / CH_ACQUIRE, 0, 1);
+      if (acq > 0.03 && acq < 0.88) {
+        flick = pseudo(jitterSeed * 0.013 + i * 9.7) > 0.34 ? 1 : 0.22;
+      }
+    } else {
+      // Motion isn't wanted: no stutter and no stagger, just the line coming up. The
+      // ramp is still here because an entrance is not the same thing as movement.
+      acq = clamp(since / CH_ACQUIRE, 0, 1);
+    }
+
+    // The playhead. Each character stands on one of the bar's sixteen steps, and lights as
+    // the sequencer crosses it — harder where more voices land, so a busy sixteenth reads
+    // brighter than a bare one and the line shows the shape of the bar rather than merely
+    // blinking along to it. It's the same `density` the music readout draws.
+    //
+    // Which lands in the one window where it can be seen: the tagline withdraws while
+    // you're holding a letter, and `hudUp` falls in a few hundred milliseconds where the
+    // track takes ten seconds to go. So this plays out over the tail, after you let go.
+    const step = Math.floor((i / n) * 16);
+    if (ms && ms.step === step) tagLit[i] = 0.35 + (ms.density[step] ?? 0) * 0.65;
+    else tagLit[i] = approach(tagLit[i], 0, 0.11, dt);
+
+    const a = acq * flick * clamp(lineA + tagLit[i] * 0.40, 0, 1);
+    // Settled, with the sound off, every character resolves to the same number on every
+    // frame — so only write when it has actually moved. Otherwise this is twenty-one
+    // elements restyled sixty times a second to say nothing.
+    const q = Math.round(a * 500) / 500;
+    if (q !== tagWrote[i]) {
+      tagWrote[i] = q;
+      el.style.opacity = q.toFixed(3);
+    }
+  });
+}
+
+// ── the sound control ──────────────────────────────────────────────────────
+// The pixels live here; the <button> in the document is only the hit target and the
+// accessible control, sized and placed to match the box this draws. Hover and focus have
+// to be relayed in from that element, because the overlay is `pointer-events: none` and
+// the canvas has no idea where the pointer is.
+
+const SND_H = 26;
+let sndHover = false;
+let sndFocus = false;
+let sndDead = false;
+
+/** Relayed from the button, which is the only thing that can know. */
+export function setSoundHover(v: boolean) { sndHover = v; }
+export function setSoundFocus(v: boolean) { sndFocus = v; }
+/** No AudioContext to be had: the control says so once and stops offering. */
+export function setSoundUnavailable() { sndDead = true; }
+
+// Straight edges only. The HUD's one curve is the node it draws on a claimed letter, so the
+// speaker is a block and a wedge, and the state reads as the same caret ticks the gauges
+// use rather than as arcs.
+function drawSpeaker(x: number, cy: number, on: boolean) {
+  hctx.beginPath();
+  hctx.moveTo(x, cy - 2.5);
+  hctx.lineTo(x + 2.5, cy - 2.5);
+  hctx.lineTo(x + 6, cy - 6);
+  hctx.lineTo(x + 6, cy + 6);
+  hctx.lineTo(x + 2.5, cy + 2.5);
+  hctx.lineTo(x, cy + 2.5);
+  hctx.closePath();
+  hctx.fill();
+
+  hctx.lineWidth = HAIR;
+  hctx.beginPath();
+  if (on) {
+    hctx.moveTo(x + 8.5, cy - 3);   hctx.lineTo(x + 8.5, cy + 3);
+    hctx.moveTo(x + 11, cy - 5.5);  hctx.lineTo(x + 11, cy + 5.5);
+  } else {
+    hctx.moveTo(x + 8, cy + 4.5);   hctx.lineTo(x + 12.5, cy - 4.5);
   }
+  hctx.stroke();
+}
+
+function drawSoundControl(cx: number, top: number, A: number, on: boolean, lineA: number) {
+  const label = sndDead ? 'NO AUDIO HERE' : on ? 'TURN OFF SOUND' : 'TURN ON SOUND';
+
+  hctx.save();
+  hctx.font = '500 11px "JetBrains Mono", monospace';
+  // Canvas letter-spacing is Chrome-only, and so is this whole page — it needs WebGPU to
+  // draw at all. Anywhere it's missing the assignment is ignored and the label just sets
+  // tighter, which is why it's not worth measuring a fallback for.
+  (hctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = '0.12em';
+
+  const padX = 10;
+  const iconW = 13;
+  const iconGap = 7;
+  // Rounded so the 1px rule and the type both land on whole pixels.
+  const w = Math.round(padX * 2 + iconW + iconGap + hctx.measureText(label).width);
+  const x = Math.round(cx - w / 2);
+  const y = Math.round(top);
+
+  // The hit target follows the drawn box exactly, every frame, because the box is measured
+  // from type and the mark and moves with both. Faded out counts as gone: an invisible
+  // control that still takes a press is worse than no control.
+  const off = A < 0.08 || sndDead;
+  if (pillEl) {
+    pillEl.style.left = `${x}px`;
+    pillEl.style.top = `${y}px`;
+    pillEl.style.width = `${w}px`;
+    pillEl.style.height = `${SND_H}px`;
+    pillEl.style.pointerEvents = off ? 'none' : '';
+  }
+  // Withdrawing under the cursor is the one case that can strand the hover: the element
+  // stops taking events while the pointer is still inside it, so drop it here rather than
+  // trust a pointerleave we may never be sent.
+  if (off) sndHover = false;
+
+  if (A <= 0.01) { hctx.restore(); return; }
+  const base = sndDead ? A * 0.45 : A;
+
+  // On is the HUD's locked-on idiom — solid yellow with dark type, the same treatment the
+  // coordinate chip gets over a claimed letter. Off is the outlined panel the music readout
+  // uses. So the two states are already words in the language rather than new ones.
+  //
+  // Off draws its ink at the tagline's own alpha, passed in rather than copied, so the line
+  // and the control below it are one weight and stay that way if the line is ever retuned.
+  // On stays at full: dimming a filled panel to that weight leaves dark type on muted olive
+  // and the label stops being readable, and this is the state that withdraws on hover
+  // anyway, so it isn't competing with the line for long.
+  if (on) {
+    hctx.globalAlpha = base;
+    hctx.fillStyle = '#f0d24a';
+    hctx.fillRect(x, y, w, SND_H);
+  } else {
+    // The backing scrim keeps its own weight — it's ground, not ink.
+    hctx.globalAlpha = base;
+    hctx.fillStyle = 'rgba(10, 6, 12, 0.82)';
+    hctx.fillRect(x, y, w, SND_H);
+    hctx.globalAlpha = base * lineA;
+    hctx.strokeStyle = '#f0d24a';
+    hctx.lineWidth = HAIR;
+    hctx.strokeRect(hair(x), hair(y), w - 1, SND_H - 1);
+  }
+
+  const ink = on ? '#140c16' : '#f0d24a';
+  hctx.fillStyle = ink;
+  hctx.strokeStyle = ink;
+  drawSpeaker(x + padX, y + SND_H / 2, on);
+
+  hctx.fillStyle = ink;
+  hctx.fillText(label, x + padX + iconW + iconGap, y + SND_H / 2 + 4);
+
+  // Contact brings up the same corner brackets the letters get, just outside the box. It's
+  // the HUD's existing way of saying "this one" and it works over either state, which a
+  // border change wouldn't. Focus lights them too, so the keyboard gets the affordance the
+  // suppressed UA ring would otherwise have provided.
+  if ((sndHover || sndFocus) && !sndDead) {
+    // Full strength rather than the resting weight — this is the acquisition frame, and the
+    // whole job of it is to answer the pointer.
+    hctx.globalAlpha = base;
+    hctx.strokeStyle = '#f0d24a';
+    hctx.lineWidth = HAIR;
+    hctx.translate(hair(x - 5), hair(y - 5));
+    brackets(w + 9, SND_H + 9, 10, 8);
+  }
+  hctx.restore();
 }
 
 // Each letter owns one dial in the mix, and this is the gauge for it, drawn in the
@@ -255,7 +488,7 @@ function drawDialGauge(idx: number, r: Rect, side: number, A: number, show: numb
   if (act > 0.03) {
     hctx.strokeStyle = '#f0d24a';
     hctx.globalAlpha = A * act * 0.45;
-    hctx.lineWidth = 1;
+    hctx.lineWidth = HAIR;
     hctx.strokeRect(px0 + 0.5, py0 + 0.5, 91, H + 69);
   }
 
@@ -272,7 +505,7 @@ function drawDialGauge(idx: number, r: Rect, side: number, A: number, show: numb
     hctx.fillRect(lx - 1.5, ly, 3, zoneH);
     // Hatched, so it reads as a marked-off region rather than as a coloured length of track.
     hctx.strokeStyle = HOT;
-    hctx.lineWidth = 1;
+    hctx.lineWidth = HAIR;
     hctx.globalAlpha = A * show * 0.42;
     for (let k = 0; k < 4; k += 1) {
       const yy = ly + 2 + k * (zoneH / 4);
@@ -299,7 +532,7 @@ function drawDialGauge(idx: number, r: Rect, side: number, A: number, show: numb
 
   // Ticks, eighths of the range with the quarters longer.
   hctx.globalAlpha = A * show * (0.22 + act * 0.42);
-  hctx.lineWidth = 1;
+  hctx.lineWidth = HAIR;
   for (let k = 0; k <= 8; k += 1) {
     const ty = ly + (H * k) / 8;
     hctx.beginPath();
@@ -418,17 +651,21 @@ export function drawHud(now: number, presence: number) {
   const w = window.innerWidth;
   const h = window.innerHeight;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  hudDpr = dpr;
   if (hudCanvas.width !== Math.floor(w * dpr) || hudCanvas.height !== Math.floor(h * dpr)) {
     hudCanvas.width = Math.floor(w * dpr);
     hudCanvas.height = Math.floor(h * dpr);
   }
   hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   hctx.clearRect(0, 0, w, h);
-  if (!P.hudOn) return;
 
   // Re-roll the jitter a few times a second rather than every frame, so it
-  // reads as a scanner re-acquiring rather than as noise.
+  // reads as a scanner re-acquiring rather than as noise. Above the `hudOn` gate because
+  // the tagline's entrance acquires on this same seed, and it is not HUD chrome — with the
+  // dial off it would otherwise stutter against a frozen seed and stall mid-flicker.
   if (now - jitterAt > 70) { jitterSeed = now; jitterAt = now; }
+
+  if (!P.hudOn) return;
 
   hctx.font = '500 11px "JetBrains Mono", monospace';
 
@@ -453,7 +690,7 @@ export function drawHud(now: number, presence: number) {
     hctx.save();
     hctx.globalAlpha = alpha * flicker;
     hctx.strokeStyle = '#f0d24a';
-    hctx.lineWidth = 1 + hov * 1.1;
+    hctx.lineWidth = HAIR + hov * 1.1;
     hctx.translate(r.x + jx, r.y + jy);
 
     brackets(r.w, r.h, Math.min(r.w * 0.3, 12 + hov * 32), Math.min(r.h * 0.3, 12 + hov * 32));
@@ -580,7 +817,7 @@ export function drawHud(now: number, presence: number) {
       hctx.fillStyle = 'rgba(10, 6, 12, 0.82)';
       hctx.fillRect(mx, my, cw, ch);
       hctx.strokeStyle = '#f0d24a';
-      hctx.lineWidth = 1;
+      hctx.lineWidth = HAIR;
       hctx.strokeRect(mx, my, cw, ch);
       hctx.fillStyle = '#f0d24a';
       hctx.fillText(txt, mx + 6, my + 12);

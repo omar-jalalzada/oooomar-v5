@@ -35,6 +35,14 @@ export const M = {
   lastHitAt: -1e9,
   /** Which letter is claimed, and the one the accordion spaces around. */
   focusIdx: -1,
+  /**
+   * Whether motion is wanted at all — the Animate switch and `prefers-reduced-motion`
+   * resolved into one answer. Owned by the frame loop, which is where both are read, and
+   * lives here so the chrome can honour it too: the tagline's entrance stutters its
+   * characters in, and a rapid opacity stutter is precisely what that preference is
+   * asking us not to do.
+   */
+  animate: true,
 };
 
 /**
@@ -116,9 +124,9 @@ export const states: LetterState[] = LETTERS.map(() => ({
 // Letter order is O, M, A, R. `fmt` is how the gauge prints the number, which differs
 // per dial because a percentage, a tempo and a weight aren't read the same way.
 export const LETTER_DIAL: LetterDial[] = [
-  { id: 'tempo' as NumericDialId,  label: 'BPM',  glyph: 'beat',  fmt: (v: number) => String(Math.round(v)) },
-  { id: 'grit' as NumericDialId,   label: 'GRIT', glyph: 'clip',  fmt: (v: number) => v.toFixed(2) },
   { id: 'punch' as NumericDialId,  label: 'DRUM', glyph: 'hit',   fmt: (v: number) => v.toFixed(2) },
+  { id: 'grit' as NumericDialId,   label: 'GRIT', glyph: 'clip',  fmt: (v: number) => v.toFixed(2) },
+  { id: 'tempo' as NumericDialId,  label: 'BPM',  glyph: 'beat',  fmt: (v: number) => String(Math.round(v)) },
   { id: 'volume' as NumericDialId, label: 'VOL',  glyph: 'meter', fmt: (v: number) => `${Math.round(v * 100)}%` },
 ];
 

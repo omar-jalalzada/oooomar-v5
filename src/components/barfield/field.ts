@@ -201,6 +201,7 @@ export async function startField(refs: FieldRefs): Promise<boolean> {
     // Animate switch freezes the motion without freezing the interaction.
     const dt = Math.min(time.deltaTime, 1 / 20);
     const animate = P.animate && !prefersReduced();
+    M.animate = animate;
     if (animate) animatedTime += dt;
     // Beats, not seconds — so dragging the tempo up genuinely quickens the jitter rather
     // than just changing what you hear. Frozen by the same switch as the idle drift,

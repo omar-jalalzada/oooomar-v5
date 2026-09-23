@@ -67,11 +67,11 @@ import { RAVE_KICK, rave, type AudioEngine } from './state';
 //
 // THE WORD IS THE DESK
 //
-// Each letter is a handle onto one control: press it and drag up or down. The O sets the
-// pace, the M the dirt, the A the weight of the drums, the R how loud any of it is — see
-// LETTER_DIAL by the pointer handling. One dial each rather than one dial reachable four
-// ways, because that gives the letters separate jobs instead of making them
-// interchangeable.
+// Each letter is a handle onto one control: press it and drag up or down. The O carries
+// the weight of the drums, the M the dirt, the A sets the pace, the R how loud any of it
+// is — see LETTER_DIAL by the pointer handling. One dial each rather than one dial
+// reachable four ways, because that gives the letters separate jobs instead of making
+// them interchangeable.
 //
 // Each has its own gauge in the HUD, in two states: dim on hover, which exists only to
 // say the letter can be pulled, and lit while you're pulling it. The frame is the same

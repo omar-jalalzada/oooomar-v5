@@ -44,6 +44,14 @@ comes later as its own phase.
   A vendored dep stays at `<slug>/` and the versions import it as `../three.module.js`, so it isn't
   duplicated per version. Give each version its own `localStorage` key so their dial sets don't
   overwrite each other (`farsh-v1-dials`, `farsh-v2-dials`).
+- **HUD rules are hairlines**: every frame, panel, tick and rule in the instrument strokes at
+ half a pixel — `HAIR` in `hud.ts` for the canvas, `--hud-hair` for the DOM ones. On a 2x
+ screen that's exactly one device pixel. A stroke that thin only stays crisp if the path
+ lands on a device pixel boundary, and the nudge that achieves it differs by ratio (a
+ quarter pixel at 2x, a half at 1x), so use `hair()` rather than the flat `+ 0.5` that's
+ right for a 1px line — and only in untransformed space, since most chrome draws inside a
+ deliberately fractional jitter translate. Genuinely heavier strokes are not rules and keep
+ their weights: the transfer curve is a plotted line, the grab ripple is a flash.
 - **Dial panels**: key the dial state by group (`dial.light.spread`), never one flat map. Two
   groups both wanting a name like `spread` is normal, and a flat map silently fuses them into one
   value and one duplicated DOM id.

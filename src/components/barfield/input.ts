@@ -39,8 +39,8 @@ function onChrome(target: EventTarget | null): boolean {
 //
 // One dial each rather than one dial with four ways in. It gives the four letters
 // separate jobs instead of making them interchangeable, and it means the word as a
-// whole is the mixing desk: the O sets the pace, the M the dirt, the A the weight of
-// the drums, the R how loud any of it is.
+// whole is the mixing desk: the O carries the weight of the drums, the M the dirt, the
+// A sets the pace, the R how loud any of it is.
 //
 // Sideways used to drive a second dial at the same time. Two axes on one grab was one
 // more thing than the gesture wanted, and the second one was hard to avoid nudging
