@@ -45,7 +45,7 @@ comes later as its own phase.
   duplicated per version. Give each version its own `localStorage` key so their dial sets don't
   overwrite each other (`farsh-v1-dials`, `farsh-v2-dials`).
 - **HUD rules are hairlines**: every frame, panel, tick and rule in the instrument strokes at
- half a pixel — `HAIR` in `hud.ts` for the canvas, `--hud-hair` for the DOM ones. On a 2x
+ half a pixel — `HAIR` in `hud.js` for the canvas, `--hud-hair` for the DOM ones. On a 2x
  screen that's exactly one device pixel. A stroke that thin only stays crisp if the path
  lands on a device pixel boundary, and the nudge that achieves it differs by ratio (a
  quarter pixel at 2x, a half at 1x), so use `hair()` rather than the flat `+ 0.5` that's
@@ -83,7 +83,7 @@ comes later as its own phase.
   the panel is load-bearing and can't just be deleted on the way in. Extract the dial spec to a
   module (`{ id, min, max, step, value }` as data) with `setDial()` doing the clamping and
   step-snapping the range input used to do for free, plus a change subscription. The panel then
-  becomes an optional dev-only *view* over that module. See `src/components/barfield/dials.ts`.
+  becomes an optional *view* over that module. See `public/prototypes/bar-field/dials.js`.
 - **Lift the sketch's source, don't retype it**: 2,000 lines of ported JS is too much to
   transcribe by hand. Slice the original by line range with a throwaway script, apply the
   renames as counted regex substitutions, and assert each one matched the number of times you
@@ -91,23 +91,39 @@ comes later as its own phase.
   Then diff the result back against the source to prove nothing drifted.
 - **A `let` can't be shared across modules**: an ES import is a live *read-only* view, so a
   value one module writes and another reads has to live on an exported object, not as a bare
-  `let`. Splitting a single-script sketch is mostly this. `state.ts`'s `M` is that object.
+  `let`. Splitting a single-script sketch is mostly this. `state.js`'s `M` is that object.
 - **Type the port even with no `astro check`**: TypeScript isn't installed and nothing type-checks
   in CI, so a broken reference ships silently. Running `npx -y -p typescript tsc --noEmit --strict`
   over the new modules caught a genuine one the browser would only have thrown on hover (`grab`
   and `grabIn` referenced but never imported). Worth doing once per port.
+- **Transpiling TS down to a prototype: use `tsc`, not esbuild.** esbuild drops every comment
+  that isn't a legal header, which silently threw away ~600 lines of the prose in these modules
+  — the thing most worth keeping when the output becomes the source. `npx -y -p typescript tsc
+  --ignoreConfig <files> --outDir <dir> --target es2022 --module es2022 --moduleResolution
+  bundler` keeps them. It costs 4-space indentation (tsc reprints from the AST and has no
+  option for it), which is not worth chasing: a blanket re-indent would mangle the WGSL inside
+  the template literals. Neither tool rewrites import specifiers, so `./x` → `./x.js` and the
+  bare package name → the vendored bundle are counted substitutions afterwards.
+- **A demotion is a real move, not a copy.** When something in `src/` becomes a prototype
+  instead, the prototype folder becomes the source and the `src/` copy goes — two copies of a
+  4,000-line sketch will drift within a week. Commit the `src/` state first so the port reads
+  as a move of reviewed code rather than a delete plus an unreviewed add. Anything the
+  component imported from elsewhere in `src/` has to be inlined (the bar field's WebGPU
+  fallback inlines `Logotype.astro`'s SVG, which stays in `src/` because Constellation uses it
+  too), and anything Astro was generating at build time has to be built at runtime instead —
+  the dial panel's markup now comes from `DIAL_GROUPS` in `panel.js`.
 - **Astro bundles a component's `<script>` if it's *imported*, not if it renders**: `{dev &&
   <DialPanel />}` keeps the markup out of the build but the panel's client JS is still emitted as
   an orphan chunk in `dist/_astro/`. No page references it so nobody downloads it, and making the
   import dynamic doesn't help — a dynamic import is in the same graph. Accept it, don't hack it.
-- **Homepage is dark, the rest of the site is light.** The bar field is a lit object in a dark
-  room and every other page is `#ffffff`. Deliberate contrast, not an inconsistency. The dark
-  ground is a `<style is:global>` scoped to `body.immersive`, which Astro only emits on pages
-  that use the component — verified: no other page loads it.
-- **A homepage never shows a browser-support notice.** No WebGPU means render
-  `<Logotype />` at the same coordinates and say nothing. Note it renders *static* there: the
-  entrance measures each bar with `getBBox()`, which returns zeroes inside a `display:none`
-  container, so an animated fallback computes all its delays from `NaN`.
+- **The whole site is light; the dark ground belongs to the bar field alone.** The field is a
+  lit object in a dark room, and it now lives in its own prototype page where that ground is
+  plain `body` CSS. Every page under `src/` is `#ffffff`, the landing page included — it is a
+  centred "work in progress" line and nothing else while soft presence is on.
+- **A page never shows a browser-support notice.** No WebGPU means render the logotype at the
+  same coordinates and say nothing. Note it renders *static* there: the entrance measures each
+  bar with `getBBox()`, which returns zeroes inside a `display:none` container, so an animated
+  fallback computes all its delays from `NaN`.
 - **`prefers-reduced-motion` maps onto the Animate switch** these sketches already have: idle
   drift and the musical clock stop, interaction still responds because that motion was asked for.
 - **Touch on a pointer-driven sketch**: `pointerdown` can't trust a hover index that only
@@ -142,8 +158,8 @@ comes later as its own phase.
   8px type. Floor the size and drop the flanking rules when they'd collapse — a 2px tick either
   side reads as a rendering fault, not as a dimension line. Measure that with a cached
   `offsetWidth`, since it's a synchronous reflow and this runs per frame.
-- **The stacking breakpoint is duplicated** in `field.ts` (`STACK_MAX_WIDTH`) and one media query
-  in `BarField.astro` that centres the sound pill under the column. Keep them in step.
+- **The stacking breakpoint is duplicated** in `field.js` (`STACK_MAX_WIDTH`) and one media query
+  in the bar field's `index.html` that centres the sound pill under the column. Keep them in step.
 - **Screenshot API needs the dev server outside the sandbox**: it launches Chrome, and a dev
   server started under sandboxing can't, failing with "Target page, context or browser has been
   closed". Also note `view=/explore/<c>/vN/` 404s in dev — pass `…/index.html` (see `docs/ideas.md`).
