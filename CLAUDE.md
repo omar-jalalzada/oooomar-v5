@@ -172,6 +172,16 @@ comes later as its own phase.
 - Production deploys from `main` on Vercel: https://omar.build (project URL: omar-neon.vercel.app)
 - Workflow: feature branch → push (Vercel builds a preview URL) → PR → Omar merges to `main` →
   production deploy. Never push directly to `main`.
+- **The repo has to stay public or Vercel stops deploying.** The project is on Vercel's Hobby
+  plan, which refuses to deploy a *private* repository under its "no collaboration" rule. The
+  repo was flipped to private in mid-September and every deploy from that moment on was
+  blocked — preview and production alike, including a merge commit GitHub itself authored.
+  The failure is easy to misread: Vercel says "the commit author did not have contributing
+  access", which sends you hunting through commit emails, GitHub account linkage and CI
+  identity, none of which are involved. Two tells point at the real cause — the deployment
+  shows `Duration —` because it was blocked *before* any build ran, so there are no logs, and
+  the break correlates with a repo setting rather than with anything in the diff. Making the
+  repo public again fixes it immediately, with no code change.
 
 ## Process rules
 
