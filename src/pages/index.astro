@@ -1,6 +1,13 @@
 ---
+/*
+  A holding page. The bar field that used to live here is now a lab —
+  `public/prototypes/bar-field/`, listed in Experiments.
+
+  `immersive` is what keeps this empty: it renders the slot with no floating nav and no
+  background layer. Nothing supplies a dark ground any more (those rules belonged to the
+  field's component and left with it), so this is the site's white like every other page.
+*/
 import Base from '../layouts/Base.astro';
-import BarField from '../components/barfield/BarField.astro';
 ---
 
 <Base
@@ -8,13 +15,19 @@ import BarField from '../components/barfield/BarField.astro';
   description="Omar Jalalzada — Head of Design at Sublime Security. work in progress."
   immersive
 >
-  <!-- Legible to search engines & screen readers; the visual identity is the field below,
-       which is a canvas and says nothing on its own. The tagline inside it is aria-hidden
-       so this is the single copy of both. -->
-  <header class="sr-only">
-    <h1>Omar Jalalzada</h1>
-    <p>work in progress.</p>
-  </header>
-
-  <BarField />
+  {/* The visible line is the whole page, and it isn't the site's heading — the name is,
+      so that stays as the one real heading for crawlers and screen readers. */}
+  <h1 class="sr-only">Omar Jalalzada</h1>
+  <p class="wip">work in progress</p>
 </Base>
+
+<style>
+  .wip {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+  }
+</style>

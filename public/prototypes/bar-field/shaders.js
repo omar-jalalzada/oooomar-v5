@@ -14,9 +14,8 @@
  * inside one of these, including in a comment: it terminates the string, and the only
  * symptom is a parse error naming a shader identifier.
  */
-
 // ── shared WGSL: noise, SDF primitives ─────────────────────────────────────
-const COMMON_WGSL = /* wgsl */`
+const COMMON_WGSL = /* wgsl */ `
 fn hash11(n: f32) -> f32 { return fract(sin(n * 127.1) * 43758.5453); }
 fn hash21(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
 
@@ -145,9 +144,8 @@ fn hsl2rgb(h: f32, s: f32, l: f32) -> vec3f {
   return rgb + (l - c * 0.5);
 }
 `;
-
 // ── pass 1: the bar field, four letter layers ──────────────────────────────
-export const FIELD_WGSL = /* wgsl */`
+export const FIELD_WGSL = /* wgsl */ `
 struct P {
   resX: f32, resY: f32,
   time: f32,
@@ -497,9 +495,8 @@ fn shadeLayer(dShape: f32, lp: vec4f, hov: f32, col: f32, colW: f32,
   return vec4f(outc, 1.0);
 }
 `;
-
 // ── pass 2: luminance threshold ────────────────────────────────────────────
-export const BRIGHT_WGSL = /* wgsl */`
+export const BRIGHT_WGSL = /* wgsl */ `
 @group(0) @binding(0) var src: texture_2d<f32>;
 @group(0) @binding(1) var samp: sampler;
 struct B { threshold: f32, pad0: f32, pad1: f32, pad2: f32 }
@@ -512,9 +509,8 @@ struct B { threshold: f32, pad0: f32, pad1: f32, pad2: f32 }
   return vec4f(c * k, 1.0);
 }
 `;
-
 // ── passes 3 & 4: separable gaussian ───────────────────────────────────────
-export const BLUR_WGSL = /* wgsl */`
+export const BLUR_WGSL = /* wgsl */ `
 @group(0) @binding(0) var src: texture_2d<f32>;
 @group(0) @binding(1) var samp: sampler;
 struct BL { dirX: f32, dirY: f32, radius: f32, pad: f32 }
@@ -534,9 +530,8 @@ struct BL { dirX: f32, dirY: f32, radius: f32, pad: f32 }
   return vec4f(sum / wsum, 1.0);
 }
 `;
-
 // ── pass 5: composite + tone map ───────────────────────────────────────────
-export const COMPOSITE_WGSL = /* wgsl */`
+export const COMPOSITE_WGSL = /* wgsl */ `
 @group(0) @binding(0) var scene: texture_2d<f32>;
 @group(0) @binding(1) var bloomTex: texture_2d<f32>;
 @group(0) @binding(2) var samp: sampler;

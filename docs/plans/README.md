@@ -5,6 +5,7 @@ kept for learning and future reference. Each entry is the plan verbatim as appro
 
 | Date | Plan | Outcome |
 | --- | --- | --- |
+| 2026-09-23 | [Bar field: homepage to lab](2026-09-23-barfield-to-lab.md) | Take the WebGPU field off the landing page and ship it as the tenth Experiment: port `src/components/barfield/` to a self-contained `public/prototypes/bar-field/`, reduce the homepage to centered "work in progress" text, and delete the component |
 | 2026-09-13 | [Bar field as the homepage](2026-09-13-barfield-homepage.md) | Promote the vert-bars v6 WebGPU sketch out of `explore/` into `src/components/barfield/`: extract the load-bearing dial state out of the DOM panel, split the 2,944-line sketch into modules, lazy-load the audio engine, and make it the whole homepage with the SVG logotype as its WebGPU fallback |
 | 2026-09-13 | [Naughty Narwal — a p5.js branding tool](2026-09-13-naughty-narwal.md) | First tool-shaped Lab: p5 point-field engine decoded from @yuruyurau tweet code, with a shape library (jelly, cell, spine, blob, type), a live stage, and grouped shape/field dials |
 | 2026-06-23 | [Atlas — Swarm check-ins world map](2026-06-23-atlas-swarm-map.md) | First data-driven Lab: self-contained world map of a decade of Foursquare/Swarm check-ins (city-level coarsened) with a time scrubber and stats layer; built on sample data, real export swapped in later |

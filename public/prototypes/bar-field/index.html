@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bar field — OMAR drawn in vertical bars (WebGPU)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<!--
+  OMAR as a field of vertical bars, in WebGPU.
+
+  This began as `public/explore/vert-bars/v6/`, was promoted into `src/components/barfield/`
+  when it was the homepage, and came back out to here when the homepage became a holding
+  page. The modules beside this file are that component's, transpiled from TypeScript with
+  comments intact — they are the source now, not a build artifact of anything.
+
+  vgpu.js is a vendored esbuild bundle of the npm `vgpu` package, so this folder stays
+  self-contained like every other prototype:
+
+    npx esbuild node_modules/vgpu/dist/index.js \
+      --bundle --format=esm --minify --outfile=public/prototypes/bar-field/vgpu.js
+-->
+<style>
+  :root {
+    color-scheme: dark;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #140c16;
+    color: #f4f0f5;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  .stage {
+    /* The field's own palette, declared here as it was on the component's stage. */
+    --field-bg: #140c16;
+    --field-hud: #f0d24a;
+    --field-hot: #ff5a3c;
+    --field-mark: #ff7ac8;
+    /* The weight of every rule in the instrument, here and on the canvas (HAIR in hud.js).
+       Half a pixel: one device pixel on a 2x screen. */
+    --hud-hair: 0.5px;
+
+    position: fixed;
+    inset: 0;
+    /* A vertical drag on a letter sets that letter's dial. Without this the browser
+       claims the gesture as a scroll before the first pointermove even arrives, and on
+       iOS it starts the rubber-band overscroll instead. */
+    touch-action: none;
+  }
+  .stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* A claimed letter is a handle, so say so. On the stage rather than the body, so the
+     dial panel keeps its own cursors. */
+  .stage.grabbable { cursor: grab; }
+  .stage.grabbing { cursor: grabbing; }
+  #gl { z-index: 1; }
+  #hud { z-index: 2; pointer-events: none; }
+
+  /* Real type, not bars: at 246 columns a lowercase letter would get two or three of
+     them. The field is the mark and this is the voice beside it. Its placement comes
+     from the same projection that positions the letters. */
+  .tagline {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 1.15em;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    white-space: nowrap;
+    /* The instrument's own yellow rather than a neutral white. Plain white read as
+       browser default text laid over a designed thing; this is the same colour as the
+       detection frames and the gauges, so the tagline belongs to the same machine. */
+    color: var(--field-hud);
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  /* Tracking is applied after the last letter too, so the text box is one space wider
+     than its ink and the two flanking rules would come out unequal. The cancelling
+     negative margin is set from JS next to the tracking itself, because the tracking is
+     no longer a constant — it opens on the kick. */
+  .tagline .txt { flex: 0 0 auto; }
+  /* A dimension line rather than an underline: it spans the wordmark's exact width and is
+     ticked at each end, so it measures the mark instead of merely sitting beneath it. */
+  .tagline .rule {
+    flex: 1 1 auto;
+    height: var(--hud-hair);
+    background: currentColor;
+    position: relative;
+  }
+  .tagline .rule::before {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    width: var(--hud-hair);
+    height: 10px;
+    background: currentColor;
+  }
+  .tagline .rule:first-child::before { left: 0; }
+  .tagline .rule:last-child::before { right: 0; }
+
+  /* No WebGPU, or a device that refused one: show the wordmark and say nothing about it.
+     Deliberately static — the logotype's entrance measures each bar with getBBox(), which
+     returns zeroes while this container is display:none. */
+  .fallback {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    place-content: center;
+    padding: 40px;
+  }
+  .fallback.show { display: grid; }
+  .fallback .markwrap { width: min(460px, 72vw); }
+  .omar-mark { display: block; width: 100%; height: auto; overflow: visible; }
+  /* The mark ships as accent blue on white elsewhere; here it belongs to the field, and
+     the counters punch through to the dark ground rather than to paper. */
+  .omar-mark .blocks {
+    fill: var(--field-mark, #ff7ac8);
+    stroke: var(--field-mark, #ff7ac8);
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+  }
+  .omar-mark .eye { fill: #140c16; }
+
+  /* The control is *drawn*, on the HUD canvas, in the instrument's own hand — see
+     drawSoundControl() in hud.js. This element paints nothing at all: it exists to be the
+     hit target and the accessible control, and the frame loop sizes and places it to match
+     the box that gets drawn. */
+  .sound-toggle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 6;
+    padding: 0;
+    border: 0;
+    background: none;
+    appearance: none;
+    cursor: pointer;
+  }
+  /* Read by assistive tech, which is the only thing that reads it — the visible label is
+     painted on the canvas. Clipped rather than display:none, which would take the control's
+     name out of the accessibility tree along with it. */
+  .sound-toggle .snd-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* The drawn control lights its own brackets on focus. */
+  .sound-toggle:focus-visible { outline: none; }
+
+  /* ── dial panel ─────────────────────────────────────────────────────────── */
+  .panel-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 5;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(12, 8, 14, 0.72);
+    backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .panel-toggle:hover { border-color: rgba(255, 210, 120, 0.6); color: #ffd36a; }
+
+  .dials {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 4;
+    width: min(300px, calc(100vw - 32px));
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: rgba(12, 8, 14, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+  .dials h1 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 210, 120, 0.9);
+    margin-bottom: 4px;
+  }
+  .dials .sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 12px;
+  }
+  /* Measured state, so it sits apart from the dials below it: ruled off, and the two values
+     pushed to opposite ends rather than run together with separators. */
+  .dials .readout {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding: 7px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .dials .readout .fps { color: rgba(255, 210, 120, 0.85); }
+  .group {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .group .title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .row label { font-size: 12px; color: rgba(255, 255, 255, 0.78); }
+  .row .val {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 210, 120, 0.95);
+    min-width: 3.4ch;
+    text-align: right;
+  }
+  .row input[type='range'] { grid-column: 1 / -1; width: 100%; accent-color: #ff7ac8; }
+  .toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .toggle input { accent-color: #ff7ac8; width: 16px; height: 16px; }
+  .reset {
+    margin-top: 12px;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .reset:hover { border-color: rgba(255, 210, 120, 0.6); color: #ffd36a; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; }
+  .actions .reset { margin-top: 0; flex: 1; width: auto; }
+
+  body.panel-closed .dials {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <canvas id="gl"></canvas>
+  <canvas id="hud"></canvas>
+  <!-- Split per character in the markup rather than in script, so the line ships already
+       divided and there's no frame where it exists as one block. Spaces are non-breaking:
+       between element boundaries a plain one is collapsible whitespace and the words
+       would close up. -->
+  <div class="tagline" id="tagline" aria-hidden="true">
+    <i class="rule"></i><span class="txt"><span class="ch">w</span><span class="ch">e</span><span class="ch">l</span><span class="ch">c</span><span class="ch">o</span><span class="ch">m</span><span class="ch">e</span><span class="ch">,</span><span class="ch">&nbsp;</span><span class="ch">l</span><span class="ch">e</span><span class="ch">t</span><span class="ch">&#39;</span><span class="ch">s</span><span class="ch">&nbsp;</span><span class="ch">d</span><span class="ch">a</span><span class="ch">n</span><span class="ch">c</span><span class="ch">e</span><span class="ch">!</span></span><i class="rule"></i>
+  </div>
+  <!-- Part of the composition rather than chrome in a corner: it sits under the tagline and
+       is positioned from the same mark box, so the three read as one lockup. The label is
+       the next action rather than the current state. -->
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+    <span class="snd-label">turn on sound</span>
+  </button>
+</div>
+
+<div class="fallback" id="fallback" aria-hidden="true">
+  <div class="markwrap">
+    <svg class="omar-mark" viewBox="403 624 1232 281" role="img" aria-label="OMAR" xmlns="http://www.w3.org/2000/svg">
+      <g class="blocks">
+        <rect class="blk r" x="1491" y="631" width="69" height="163"></rect>
+        <rect class="blk o" x="450" y="631" width="254" height="233"></rect>
+        <rect class="blk m" x="714" y="631" width="103" height="233"></rect>
+        <path class="blk m" d="M817 631L866 690.744V864L817 804.256 817 631Z"></path>
+        <path class="blk m" d="M915 631L866 690.744V864L915 804.256 915 631Z"></path>
+        <rect class="blk m" x="915" y="631" width="103" height="233"></rect>
+        <rect class="blk m" x="1031" y="631" width="122" height="233"></rect>
+        <rect class="blk r" x="1319" y="631" width="103" height="233"></rect>
+        <rect class="blk a" x="1203" y="631" width="103" height="233"></rect>
+        <path class="blk a" d="M1186 631H1246C1279.14 631 1306 657.863 1306 691V864H1186V631Z"></path>
+        <rect class="blk a" x="1134" y="631" width="69" height="90"></rect>
+        <rect class="blk r" x="1422" y="631" width="69" height="90"></rect>
+        <rect class="blk a" x="1134" y="709" width="69" height="85"></rect>
+        <rect class="blk r" x="1422" y="721" width="69" height="73"></rect>
+        <path class="blk r" d="M1421 792H1516L1560 864H1471L1421 792Z"></path>
+      </g>
+      <circle class="eye eye-o" cx="574" cy="747" r="24"></circle>
+      <circle class="eye eye-a" cx="1169" cy="734" r="24"></circle>
+      <circle class="eye eye-r" cx="1469" cy="734" r="24"></circle>
+    </svg>
+  </div>
+</div>
+
+<button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true">Hide dials</button>
+<aside class="dials" id="dials"></aside>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
