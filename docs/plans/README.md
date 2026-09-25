@@ -5,6 +5,7 @@ kept for learning and future reference. Each entry is the plan verbatim as appro
 
 | Date | Plan | Outcome |
 | --- | --- | --- |
+| 2026-09-24 | [Simplify the site to four pages](2026-09-24-simplify-site-pages.md) | Settle on a holding homepage plus Writing, Experiments and a single About page: fold the `about` card collection into `about.astro` and delete it, remove the dead Constellation canvas and duplicate Astro cards, drop Base's `immersive` mode so the homepage gets the nav, and hide the nav in production while soft presence is on |
 | 2026-09-23 | [Atlas as a COBE globe](2026-09-23-atlas-cobe.md) | Replace Atlas's flat canvas map with a vendored COBE WebGL globe: day-ordered travel arcs rebuilt from the raw Swarm export, scrubber-driven markers, photo stacks at chosen moments, and a local city + photo review list to decide the cleanup next |
 | 2026-09-23 | [Frontend-design skill audit](2026-09-23-frontend-design-audit.md) | Critique the full site (chrome + all prototypes) against Anthropic's `frontend-design` skill; deliver a Canvas findings report — evaluate only, no redesign |
 | 2026-09-23 | [Bar field: homepage to lab](2026-09-23-barfield-to-lab.md) | Take the WebGPU field off the landing page and ship it as the tenth Experiment: port `src/components/barfield/` to a self-contained `public/prototypes/bar-field/`, reduce the homepage to centered "work in progress" text, and delete the component |

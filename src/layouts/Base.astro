@@ -1,14 +1,13 @@
 ---
 import '../styles/global.css';
+import { SOFT_PRESENCE } from '../lib/soft-presence';
 
 interface Props {
   title: string;
   description: string;
-  /** Immersive pages (the Constellation home) render edge-to-edge with no chrome. */
-  immersive?: boolean;
 }
 
-const { title, description, immersive = false } = Astro.props;
+const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
 const nav = [
@@ -40,48 +39,46 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
       rel="stylesheet"
     />
   </head>
-  <body class={immersive ? 'immersive' : undefined}>
+  <body>
+    <div class="calm-bg" aria-hidden="true" />
+
+    <main class="container">
+      <slot />
+    </main>
+
+    {/* Hidden while soft presence is live: every section it links to redirects to `/` then.
+        SOFT_PRESENCE is false in dev, so the nav is always there while iterating. */}
     {
-      immersive ? (
-        <slot />
-      ) : (
-        <>
-          <div class="calm-bg" aria-hidden="true" />
-
-          <main class="container">
-            <slot />
-          </main>
-
-          <nav class="cnst-nav" aria-label="Site navigation">
-            <a href="/" class="navdot" aria-label="Home">
-              <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
-                <mask id="navdot-o">
-                  <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
-                  <circle cx="50" cy="50" r="14" fill="#000" />
-                </mask>
-                <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
-              </svg>
-            </a>
-            <span class="navlinks">
-              {nav.map((item) => (
-                <a
-                  href={item.href}
-                  class={isActive(item.href) ? 'active' : undefined}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </span>
-          </nav>
-        </>
+      !SOFT_PRESENCE && (
+        <nav class="site-nav" aria-label="Site navigation">
+          <a href="/" class="navdot" aria-label="Home">
+            <svg class="navdot-mark" viewBox="0 0 100 100" aria-hidden="true">
+              <mask id="navdot-o">
+                <rect x="8" y="8" width="84" height="84" rx="30" fill="#fff" />
+                <circle cx="50" cy="50" r="14" fill="#000" />
+              </mask>
+              <rect x="8" y="8" width="84" height="84" rx="30" fill="var(--color-accent)" mask="url(#navdot-o)" />
+            </svg>
+          </a>
+          <span class="navlinks">
+            {nav.map((item) => (
+              <a
+                href={item.href}
+                class={isActive(item.href) ? 'active' : undefined}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </span>
+        </nav>
       )
     }
   </body>
 </html>
 
 <style>
-  /* Plain white, behind content — matches the home canvas. */
+  /* Plain white, behind content. */
   .calm-bg {
     position: fixed;
     inset: 0;
@@ -96,8 +93,8 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
     padding-block: var(--space-12) 120px;
   }
 
-  /* Identical to Constellation's cnst-nav — copy/paste of the same CSS rules */
-  .cnst-nav {
+  /* Floating pill: the home dot, with the section links sliding out on hover. */
+  .site-nav {
     display: flex;
     align-items: center;
     gap: 0;
@@ -118,7 +115,7 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
     transition: gap 0.4s cubic-bezier(0.2, 0.75, 0.2, 1);
   }
 
-  .cnst-nav:hover {
+  .site-nav:hover {
     gap: 6px;
   }
 
@@ -152,7 +149,7 @@ const isActive = (href: string) => Astro.url.pathname.startsWith(href);
     transition: max-width 0.45s cubic-bezier(0.2, 0.75, 0.2, 1), opacity 0.35s ease;
   }
 
-  .cnst-nav:hover .navlinks {
+  .site-nav:hover .navlinks {
     max-width: 360px;
     opacity: 1;
     padding-left: 4px;

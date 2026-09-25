@@ -21,6 +21,14 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
       from 0 to Series D. Before that: founding a company (Kin), designing for a complex healthcare
       system (Alto), and making dense financial systems legible (Coatue).
     </p>
+    <p>
+      Afghan-American — born in Kabul, raised in Pakistan and California. Design is how I make
+      sense of things.
+    </p>
+
+    <h2>Now</h2>
+    <p>Building the security product that doesn't make experts feel stupid.</p>
+    <p class="updated">Updated June 2026</p>
 
     <h2>What I focus on</h2>
     <p>
@@ -52,6 +60,7 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
         ))
       }
     </ul>
+    <p class="resume"><a href="https://read.cv/omar">Full résumé on read.cv</a></p>
 
     <h2>Contact</h2>
     <p>
@@ -109,5 +118,11 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
   .role {
     font-size: var(--text-sm);
     color: var(--color-ink-secondary);
+  }
+
+  .updated,
+  .resume {
+    font-size: var(--text-sm);
+    color: var(--color-ink-tertiary);
   }
 </style>
