@@ -1,0 +1,11 @@
+{
+  "moments": [
+    {
+      "id": "buenos-aires-2017",
+      "date": "2017-05-10",
+      "city": "Buenos Aires",
+      "photos": ["photos/ba-2017-puro.jpg", "photos/ba-2017-malba.jpg"],
+      "caption": "Buenos Aires, May 2017"
+    }
+  ]
+}

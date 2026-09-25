@@ -1,13 +1,13 @@
 ---
 title: Atlas
-description: A decade of Foursquare/Swarm check-ins drawn onto the world — a self-contained map you can play through, year by year, to watch the places accumulate.
+description: Fifteen years of Foursquare/Swarm check-ins drawn onto a spinning globe — press play and follow the trips as they happen, with photos from the road along the way.
 tags: [data, map, travel]
 date: 2026-06-23
 status: draft
 prototype: atlas
 ---
 
-Ten years of check-ins, coarsened to city level and plotted on a quiet world map. Press play to
-watch the decade fill in — each glowing dot grows with how often a place was visited, while a
-running tally counts the cities and countries as they arrive. Currently running on sample data
-while the real export is prepared.
+Every check-in since 2011, coarsened to the city and set on a globe. Press play and the years run
+forward day by day, slowing down whenever a trip starts so each flight draws its arc where you can
+see it. The globe turns to follow, and at a few chosen moments a stack of photos from that trip
+deals in beside it. Drag to spin it yourself, or scrub to any point in time.
