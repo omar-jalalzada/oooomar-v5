@@ -2,10 +2,6 @@
 /*
   A holding page. The bar field that used to live here is now a lab —
   `public/prototypes/bar-field/`, listed in Experiments.
-
-  `immersive` is what keeps this empty: it renders the slot with no floating nav and no
-  background layer. Nothing supplies a dark ground any more (those rules belonged to the
-  field's component and left with it), so this is the site's white like every other page.
 */
 import Base from '../layouts/Base.astro';
 ---
@@ -13,7 +9,6 @@ import Base from '../layouts/Base.astro';
 <Base
   title="Omar Jalalzada"
   description="Omar Jalalzada — Head of Design at Sublime Security. work in progress."
-  immersive
 >
   {/* The visible line is the whole page, and it isn't the site's heading — the name is,
       so that stays as the one real heading for crawlers and screen readers. */}
@@ -22,8 +17,11 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <style>
+  /* Fixed to the viewport rather than laid out inside `main`, whose padding would pull it
+     off centre. The nav floats above it, so it stays clickable. */
   .wip {
-    min-height: 100dvh;
+    position: fixed;
+    inset: 0;
     display: grid;
     place-items: center;
     font-family: var(--font-mono);

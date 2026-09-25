@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-type CollectionName = 'writing' | 'experiments' | 'work' | 'about';
+type CollectionName = 'writing' | 'experiments' | 'work';
 
 // Drafts render in `npm run dev` so they can be previewed,
 // but are excluded from production builds.
