@@ -2,15 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <!-- Versions live in vN/ so a pass is never overwritten. This points at the
-       one that's settled, not the newest.
-         v1/ — the shelf: four point-field drawings, shape + field dials
-       p5.module.js is vendored once here and shared by all of them. -->
-  <meta http-equiv="refresh" content="0; url=v1/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--
+    One Naughty Narwal entry. Versions stay in vN/ so a pass is never overwritten —
+    this page is the shell that picks which one to load.
+      v1/ — the shelf: six point-field drawings, shape + field dials
+    p5.module.js and the Outfit face are vendored once here and shared by all of them.
+
+    Paths always end in index.html so the iframe works under Vite's public/
+    server (no directory indexes) as well as on Vercel.
+  -->
   <title>Naughty Narwal</title>
-  <link rel="canonical" href="v1/" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f4f4f5;
+      color: #18181b;
+      font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 40px;
+      padding: 0 14px;
+      background: rgba(244, 244, 245, 0.92);
+      border-bottom: 1px solid #e4e4e7;
+      backdrop-filter: blur(14px);
+    }
+    #bar .mark {
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    #bar label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    #version {
+      appearance: none;
+      -webkit-appearance: none;
+      margin: 0;
+      padding: 6px 28px 6px 10px;
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      background:
+        linear-gradient(45deg, transparent 50%, #18181b 50%) calc(100% - 14px) 50% / 5px 5px no-repeat,
+        linear-gradient(135deg, #18181b 50%, transparent 50%) calc(100% - 10px) 50% / 5px 5px no-repeat,
+        #ffffff;
+      color: #18181b;
+      font: inherit;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      max-width: min(420px, calc(100vw - 100px));
+    }
+    #version:hover,
+    #version:focus-visible {
+      border-color: #a1a1aa;
+      outline: none;
+    }
+    #version option {
+      background: #ffffff;
+      color: #18181b;
+    }
+
+    #stage {
+      position: absolute;
+      inset: 40px 0 0;
+      border: 0;
+      width: 100%;
+      height: calc(100% - 40px);
+      background: #f4f4f5;
+    }
+  </style>
 </head>
-<body style="margin:0;background:#f4f4f5;color:#18181b;font:13px/1.5 ui-monospace,Menlo,monospace">
-  <p style="padding:16px"><a href="v1/" style="color:inherit">Naughty Narwal v1</a></p>
+<body>
+  <div id="bar">
+    <span class="mark">Naughty Narwal</span>
+    <label for="version">Version</label>
+    <select id="version">
+      <option value="v1">v1 — the shelf</option>
+    </select>
+  </div>
+  <iframe id="stage" title="Naughty Narwal"></iframe>
+
+  <script>
+    const VERSIONS = {
+      v1: { src: 'v1/index.html', title: 'Naughty Narwal v1 — the shelf' },
+    };
+    const DEFAULT = 'v1';
+    const KEY = 'naughty-narwal-version';
+
+    const select = document.getElementById('version');
+    const stage = document.getElementById('stage');
+
+    function readInitial() {
+      const fromHash = location.hash.replace(/^#/, '');
+      if (VERSIONS[fromHash]) return fromHash;
+      try {
+        const stored = localStorage.getItem(KEY);
+        if (VERSIONS[stored]) return stored;
+      } catch (_) { /* private mode */ }
+      return DEFAULT;
+    }
+
+    function load(id) {
+      const v = VERSIONS[id] || VERSIONS[DEFAULT];
+      select.value = VERSIONS[id] ? id : DEFAULT;
+      stage.src = v.src;
+      document.title = v.title;
+      if (location.hash.replace(/^#/, '') !== select.value) {
+        history.replaceState(null, '', '#' + select.value);
+      }
+      try { localStorage.setItem(KEY, select.value); } catch (_) { /* private mode */ }
+    }
+
+    select.addEventListener('change', () => load(select.value));
+    window.addEventListener('hashchange', () => {
+      const id = location.hash.replace(/^#/, '');
+      if (VERSIONS[id] && id !== select.value) load(id);
+    });
+
+    load(readInitial());
+  </script>
 </body>
 </html>

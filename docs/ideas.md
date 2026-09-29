@@ -34,3 +34,7 @@ When one graduates, it becomes a plan in `docs/plans/`.
   being recorded — which matters more now the homepage is the thing worth measuring. Fixed with a
   dashboard toggle rather than a code change, or by dropping the flag if the numbers aren't wanted.
   Pre-existing; spotted while verifying the bar-field deploy.
+- About page: "What shaped me" (books, people, moments) and "On the road" (places that stuck) —
+  both existed as cards in the old `about` collection with only a one-line placeholder, so they
+  weren't carried into the single About page as empty sections. Add them once there's real
+  content.

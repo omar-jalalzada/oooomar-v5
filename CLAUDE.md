@@ -32,9 +32,11 @@ comes later as its own phase.
   Use `getVisible()` from `src/lib/content.ts` for all collection queries — never raw
   `getCollection()` in pages (the RSS feed is the one exception, it filters explicitly).
 - **Soft presence**: while `SOFT_PRESENCE_ENABLED` is true in `src/lib/soft-presence.ts`,
-  production builds (omar.build) show only the OMAR mark + tagline. `npm run dev` always shows
-  the full site so you can keep iterating. Reopen by setting the flag to `false` and publishing
-  the content you want live.
+  production builds (omar.build) show only the "work in progress" holding page: Writing,
+  Experiments and About redirect to `/`, and the site nav isn't rendered at all, since every
+  link in it would bounce home. `npm run dev` always shows the full site, nav included, so you
+  can keep iterating. Reopen by setting the flag to `false` and publishing the content you want
+  live — the nav comes back with it.
 - **Experiments**: an experiment = self-contained static folder `public/prototypes/<slug>/index.html`
   (no build step, no external deps) + a metadata entry `src/content/experiments/<slug>.md` whose
   `prototype` field names the folder.
@@ -109,8 +111,8 @@ comes later as its own phase.
   4,000-line sketch will drift within a week. Commit the `src/` state first so the port reads
   as a move of reviewed code rather than a delete plus an unreviewed add. Anything the
   component imported from elsewhere in `src/` has to be inlined (the bar field's WebGPU
-  fallback inlines `Logotype.astro`'s SVG, which stays in `src/` because Constellation uses it
-  too), and anything Astro was generating at build time has to be built at runtime instead —
+  fallback inlines the logotype SVG that used to live in `Logotype.astro`), and anything Astro
+  was generating at build time has to be built at runtime instead —
   the dial panel's markup now comes from `DIAL_GROUPS` in `panel.js`.
 - **Astro bundles a component's `<script>` if it's *imported*, not if it renders**: `{dev &&
   <DialPanel />}` keeps the markup out of the build but the panel's client JS is still emitted as
@@ -202,6 +204,11 @@ comes later as its own phase.
 
 ## Site direction (locked)
 
+- **Four pages, one layout.** A holding homepage, `/writing/`, `/experiments/` and a single
+  `/about/` — plus the Writing and Experiments detail pages. The big homepage canvas with cards
+  laid out across it was abandoned, and its code (Constellation, the `about` card collection,
+  Base's chrome-less `immersive` mode) is gone. Every page renders through the same `Base`
+  layout, homepage included, so the nav appears everywhere soft presence allows.
 - **Home leads with craft, not a statement.** No grandiose hero headline ("Design that makes…").
   The work — writing and experiments — comes first.
 - **Omar/bio content lives on the About page**, not the home.

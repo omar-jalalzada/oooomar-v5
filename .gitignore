@@ -12,3 +12,9 @@ node_modules/
 
 # os
 .DS_Store
+
+# local-only working files (raw exports, review artifacts)
+.context/
+
+# python
+__pycache__/

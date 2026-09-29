@@ -9,33 +9,30 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
 ---
 
 <Base
-  title="About — Omar Jalalzada"
-  description="Design leader focused on cybersecurity — scaling design teams, setting a high craft bar, and building as an AI-native creative."
+  title="About | Omar Jalalzada"
+  description="Design leader and maker. Head of Design at Sublime Security."
 >
   <article class="prose">
     <h1>About</h1>
 
     <p>
-      I'm Omar — a design leader currently heading design at
+      I'm Omar, a design leader and maker. I lead design at
       <a href="https://sublime.security">Sublime Security</a>, where I've helped take the company
-      from 0 to Series D. Before that: founding a company (Kin), designing for a complex healthcare
-      system (Alto), and making dense financial systems legible (Coatue).
+      from 0 to Series D.
     </p>
-
-    <h2>What I focus on</h2>
-    <p>
-      <strong>Design leadership.</strong> Amplifying ideas through people — identifying strong
-      talent, setting a high quality bar, and managing the work rather than the people. A
-      midfielder, not a coach yelling from the sideline.
-    </p>
-    <p>
-      <strong>Design in cybersecurity.</strong> Security products win or lose on whether complex
-      systems are made legible. I write about what that takes and advise early-stage security
-      startups on design.
-    </p>
-    <p>
-      <strong>AI-native creative work.</strong> Experimenting in the open — building with AI tools,
-      learning by doing, and sharing what I learn in <a href="/experiments/">Experiments</a>.
+    <p class="social">
+      <a href="https://www.linkedin.com/in/omarjalalzada/" rel="me" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45Z" />
+        </svg>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+      <a href="https://x.com/OmarJalalzada" rel="me" aria-label="X">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.24 2.25h3.31l-7.23 8.26 8.51 11.24h-6.66l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z" />
+        </svg>
+        <span class="sr-only">X</span>
+      </a>
     </p>
 
     <h2>Work</h2>
@@ -51,18 +48,6 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
           </li>
         ))
       }
-    </ul>
-
-    <h2>Contact</h2>
-    <p>
-      The fastest way to reach me is email:
-      <a href="mailto:omar@sublimesecurity.com">omar@sublimesecurity.com</a>
-    </p>
-    <p>I'm open to conversations about:</p>
-    <ul>
-      <li>Advising early-stage cybersecurity startups on design</li>
-      <li>Design leadership — talks, podcasts, writing</li>
-      <li>Working together, if you're a designer who wants to do your best work</li>
     </ul>
   </article>
 </Base>
@@ -109,5 +94,48 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
   .role {
     font-size: var(--text-sm);
     color: var(--color-ink-secondary);
+  }
+
+  .social {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .social a {
+    display: grid;
+    width: var(--space-12);
+    height: var(--space-12);
+    place-items: center;
+    color: var(--color-ink-secondary);
+    background: var(--color-surface);
+    border: thin solid var(--color-border);
+    border-radius: 50%;
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .social a:hover {
+    color: var(--color-accent);
+    background: var(--color-bg);
+    border-color: var(--color-accent);
+  }
+
+  .social a:active {
+    transform: scale(0.96);
+  }
+
+  .social a:focus-visible {
+    outline: auto;
+    outline-offset: var(--space-1);
+  }
+
+  .social svg {
+    width: var(--space-6);
+    height: var(--space-6);
+    fill: currentColor;
   }
 </style>
