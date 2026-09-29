@@ -24,7 +24,7 @@ const experiments = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    tags: z.array(z.string()).default([]),
+    technique: z.array(z.string()),
     date: z.coerce.date(),
     status,
     // folder name under public/prototypes/ containing the self-contained index.html

@@ -19,7 +19,7 @@ const { Content } = await render(post);
   <article class="detail">
     <header>
       <p class="meta">
-        <a href={`/writing/?topic=${post.data.topic}`}>{topicLabels[post.data.topic]}</a>
+        <span>{topicLabels[post.data.topic]}</span>
         · <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         {post.data.status === 'draft' && <span class="draft">Draft</span>}
       </p>

@@ -1,30 +1,21 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { FilterBar } from '../../components/ui/FilterBar';
+import { CardGrid } from '../../components/ui/ExperimentsGrid';
 import { getVisible, byDateDesc } from '../../lib/content';
-import { formatDate, topicLabels } from '../../lib/format';
+import { formatDate } from '../../lib/format';
 import { SOFT_PRESENCE } from '../../lib/soft-presence';
 
 if (SOFT_PRESENCE) return Astro.redirect('/');
 
 const posts = (await getVisible('writing')).sort(byDateDesc);
 
-const topics = [
-  { value: 'all', label: 'All' },
-  { value: 'design-leadership', label: 'Design Leadership' },
-  { value: 'reflections', label: 'Reflections' },
-];
-
 const cards = posts.map((post) => ({
   href: `/writing/${post.id}/`,
   title: post.data.title,
   description: post.data.description,
-  meta: `${topicLabels[post.data.topic]} · ${formatDate(post.data.date)}`,
+  meta: formatDate(post.data.date),
   draft: post.data.status === 'draft',
-  topic: post.data.topic,
 }));
-
-const initialTopic = Astro.url.searchParams.get('topic') ?? 'all';
 ---
 
 <Base
@@ -32,7 +23,7 @@ const initialTopic = Astro.url.searchParams.get('topic') ?? 'all';
   description="Writing on design leadership, cybersecurity, and systems for a calm life."
 >
   <h1>Writing</h1>
-  <FilterBar client:load {topics} {cards} {initialTopic} />
+  <CardGrid client:visible {cards} />
 </Base>
 
 <style>

@@ -14,7 +14,7 @@
          public/prototypes/naughty-narwal/outfit-latin-700.woff2
 
     URL params (used by the dev screenshot API):
-      ?shape=jelly|cell|spine|blob|type   which drawing loads
+      ?shape=jelly|cell|spine|blob|orbit|type   which drawing loads
       ?word=Omar                          Type's committed word
       ?inked=fill|outline                 Type's stamp mode
       ?bare=1                             hide both panels, stage only
@@ -611,6 +611,118 @@
           const ang = a + d.swirl * rr + k.drift;
           out[0] = 200 + cos(ang) * r;
           out[1] = 200 + sin(ang) * r;
+        },
+      },
+
+      {
+        id: 'orbit',
+        label: 'Orbit',
+        note: 'sun + worlds',
+        // A little slower than Blob so the year dial can read as drift rather
+        // than a spin cycle — Kepler already stretches the outer periods.
+        rate: 0.85,
+        fill: 0.9,
+        dials: [
+          { id: 'worlds', label: 'Worlds', min: 2, max: 9, step: 1, value: 5 },
+          { id: 'reach', label: 'Reach', min: 50, max: 170, step: 1, value: 118 },
+          { id: 'sun', label: 'Sun', min: 10, max: 48, step: 0.5, value: 24 },
+          { id: 'flare', label: 'Flare', min: 0, max: 1.5, step: 0.05, value: 0.7 },
+          { id: 'year', label: 'Year', min: 0.02, max: 0.5, step: 0.005, value: 0.11 },
+          { id: 'tilt', label: 'Tilt', min: 0, max: 0.6, step: 0.005, value: 0.22 },
+          { id: 'air', label: 'Atmospheres', min: 0.3, max: 2.5, step: 0.05, value: 1.15 },
+          { id: 'dust', label: 'Dust belt', min: 0, max: 1, step: 0.01, value: 0.4 },
+          { id: 'lilt', label: 'Lilt', min: 0, max: 0.35, step: 0.005, value: 0.09 },
+        ],
+        prep(n, t, d) {
+          const worlds = max(2, d.worlds | 0);
+          const planets = [];
+          for (let p = 0; p < worlds; p++) {
+            // Skip the sun's neighbourhood so the innermost world still clears
+            // the corona; (p+0.85)/(worlds+0.5) keeps the outermost near Reach.
+            const u = (p + 0.85) / (worlds + 0.5);
+            const orbit = d.reach * u;
+            // Kepler: period ~ a^(3/2). Divide year by that so outer worlds crawl.
+            const period = pow(u, 1.5);
+            const ang = p * 2.39996323 + t * d.year / max(0.12, period);
+            const ecc = 0.03 + (p % 3) * 0.025;
+            const px = cos(ang) * orbit * (1 + ecc * cos(ang));
+            const py = sin(ang) * orbit * (1 - ecc * 0.5) * (1 - d.tilt);
+            const size = d.sun * (0.22 + 0.28 * (1 - u));
+            planets.push({ x: 200 + px, y: 200 + py, size, ph: p * 1.7, u });
+          }
+          // Partition the field once per frame: sun core, flare filaments,
+          // planet bodies + atmospheres, then a thin dust belt.
+          const nDust = floor(n * 0.14 * d.dust);
+          const nFlare = floor(n * 0.12 * (0.35 + 0.65 * min(1, d.flare)));
+          const nSun = floor(n * 0.14);
+          const nPlanet = max(0, n - nDust - nFlare - nSun);
+          return {
+            worlds,
+            planets,
+            nSun,
+            nFlare,
+            nPlanet,
+            nDust,
+            breathe: 1 + 0.06 * sin(t * 0.9),
+            spin: t * 0.15,
+          };
+        },
+        point(i, n, t, d, out, k) {
+          if (i < k.nSun) {
+            // Dense phyllotaxis disc — the sun breathes so the system feels live
+            // even when Year is turned down.
+            const a = i * 2.39996323 + k.spin;
+            const rr = pow((i + 1) / k.nSun, 0.45);
+            const r = d.sun * rr * k.breathe
+              * (1 + d.lilt * 0.3 * sin(a * 3 + t));
+            out[0] = 200 + cos(a) * r;
+            out[1] = 200 + sin(a) * r * 0.96;
+            return;
+          }
+          if (i < k.nSun + k.nFlare) {
+            // Seven filament rays that lengthen with Flare and sway with Lilt.
+            const j = i - k.nSun;
+            const rays = 7;
+            const ray = j % rays;
+            const along = floor(j / rays) / max(1, floor(k.nFlare / rays));
+            const a = ray * (TAU / rays) + k.spin * 0.4 + 0.3 * sin(t + ray);
+            const r = d.sun * (1.05 + along * (1.2 + d.flare) * (d.sun / 24));
+            const w = d.lilt * 8 * sin(along * 9 + t * 2 + ray);
+            out[0] = 200 + cos(a) * r + cos(a + PI / 2) * w;
+            out[1] = 200 + sin(a) * r * (1 - d.tilt * 0.3) + sin(a + PI / 2) * w;
+            return;
+          }
+          if (i < k.nSun + k.nFlare + k.nPlanet) {
+            const j = i - k.nSun - k.nFlare;
+            const pi = j % k.worlds;
+            const m = floor(j / k.worlds);
+            const world = k.planets[pi];
+            const mMax = max(1, floor(k.nPlanet / k.worlds));
+            const uu = (m % mMax) / mMax;
+            if (m % 3) {
+              // Body: packed disc with a soft surface shimmer.
+              const a = m * 2.39996323;
+              const rr = pow(uu, 0.55);
+              const r = world.size * rr * (1 + d.lilt * sin(a * 2 + t + world.ph));
+              out[0] = world.x + cos(a) * r;
+              out[1] = world.y + sin(a) * r * 0.9;
+            } else {
+              // Atmosphere: a third of the points swirl outside the disc —
+              // that's what reads as weather rather than a hard marble.
+              const a = m * 0.7 + t * (1.2 + pi * 0.15) + world.ph;
+              const r = world.size * d.air * (0.55 + 0.55 * uu);
+              out[0] = world.x + cos(a) * r;
+              out[1] = world.y + sin(a) * r * 0.85;
+            }
+            return;
+          }
+          // Dust belt between mid and outer Reach, flattened by Tilt.
+          const j = i - k.nSun - k.nFlare - k.nPlanet;
+          const a = j * 2.39996323 * 0.17 + t * d.year * 0.35;
+          const band = 0.55 + 0.25 * ((j * 0.11) % 1);
+          const r = d.reach * band * (1 + 0.04 * sin(j * 0.3));
+          out[0] = 200 + cos(a) * r;
+          out[1] = 200 + sin(a) * r * (1 - d.tilt * 0.85);
         },
       },
 
