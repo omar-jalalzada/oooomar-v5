@@ -1,0 +1,74 @@
+---
+/**
+ * Experiment cards tiled into columns. The cards come in three heights (tall, portrait,
+ * landscape), so a plain grid leaves holes; instead each card, in the order given, goes
+ * into whichever column is shortest so far. That happens here at build time, from the
+ * formats alone, so the page needs no layout script.
+ *
+ * On narrow screens the columns dissolve into one, and `order` puts the cards back in the
+ * order they were given rather than column by column.
+ */
+import ExperimentCard from './ExperimentCard.astro';
+import { cardSpec } from '../../lib/experiment-card/looks.js';
+
+type CardProps = Parameters<typeof ExperimentCard>[0];
+
+interface Props {
+  cards: CardProps[];
+  columns?: number;
+}
+
+const { cards, columns = 3 } = Astro.props;
+
+const cols: { card: CardProps; order: number }[][] = Array.from({ length: columns }, () => []);
+const heights = new Array(columns).fill(0);
+cards.forEach((card, order) => {
+  const { format } = cardSpec(card.look, { index: '', title: '', month: '', year: '', techniques: [] });
+  const i = heights.indexOf(Math.min(...heights));
+  cols[i].push({ card, order });
+  heights[i] += format.h / format.w + 0.075;
+});
+---
+
+<div class="tile" style={`--columns: ${columns}`}>
+  {
+    cols.map((col) => (
+      <div class="col">
+        {col.map(({ card, order }) => (
+          <div class="slot" style={`order: ${order}`}>
+            <ExperimentCard {...card} />
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .tile {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 47.99rem) {
+    .tile {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 26rem;
+      margin-inline: auto;
+    }
+
+    .col {
+      display: contents;
+    }
+  }
+</style>

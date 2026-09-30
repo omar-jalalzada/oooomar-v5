@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--
+    Card Tricks v13 — the composite, with Flow State drawn as a Sankey. bench.html is the
+    workbench over these same modules, so a figure tuned there is the one tiled here. The three formats (tall 624, portrait 436, landscape 288 at a
+    320 width) pair into columns of near-equal height — tall + landscape, portrait +
+    portrait — so the tile closes without gaps. Narrower screens fall back to CSS columns.
+  -->
+  <title>Card Tricks v13 — the composite, Flow State as a Sankey</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #ffffff;
+      color: #18181b;
+      font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 64px 24px;
+    }
+
+    .grid {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 24px;
+      width: 100%;
+    }
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 320px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid { display: block; columns: 2 280px; column-gap: 24px; max-width: 664px; margin: 0 auto; }
+      .col { display: contents; }
+      [data-card] { break-inside: avoid; margin-bottom: 24px; }
+    }
+
+    [data-card] {
+      position: relative;
+      width: 100%;
+      border-radius: var(--r, 0);
+      cursor: pointer;
+      outline: none;
+      will-change: transform;
+      box-shadow: 0 1px 2px rgba(9, 9, 11, 0.06), 0 20px 40px -24px rgba(9, 9, 11, 0.45);
+    }
+    [data-card]:hover, [data-card]:focus-visible { z-index: 1; }
+    [data-card]:focus-visible { outline: 1px solid #18181b; outline-offset: 6px; }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: var(--r, 0);
+    }
+    .face canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .face > div {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    #readout {
+      position: fixed;
+      right: 16px;
+      bottom: 12px;
+      z-index: 2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.88);
+      color: #71717a;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="grid">
+      <div class="col">
+        <div data-card="atlas"></div>
+        <div data-card="bar-field"></div>
+      </div>
+      <div class="col">
+        <div data-card="farsh"></div>
+        <div data-card="naughty-narwal"></div>
+      </div>
+      <div class="col">
+        <div data-card="sankey"></div>
+        <div data-card="card-tricks"></div>
+      </div>
+    </div>
+  </main>
+  <div id="readout" aria-live="off"></div>
+  <script type="module" src="./composite.js"></script>
+</body>
+</html>

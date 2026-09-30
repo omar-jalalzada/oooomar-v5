@@ -2,8 +2,16 @@
 import Base from '../layouts/Base.astro';
 import { EasingDemo } from '../components/ui/EasingDemo';
 import { FilterBar } from '../components/ui/FilterBar';
+import ExperimentCard from '../components/experiments/ExperimentCard.astro';
+import { cardSpec } from '../lib/experiment-card/looks.js';
+import { experimentCards } from '../lib/content';
 
-if (!import.meta.env.DEV) return Astro.redirect('/');
+// One experiment card per format, so the three shapes the tile mixes sit side by side.
+const allCards = await experimentCards();
+const shapeOf = (look: string) => cardSpec(look, { index: '', title: '', month: '', year: '', techniques: [] }).bg.format.shape;
+const formatCards = ['tall', 'portrait', 'landscape']
+  .map((shape) => allCards.find((card) => shapeOf(card.look) === shape))
+  .filter((card) => card !== undefined);
 
 const demoTopics = [
   { value: 'all', label: 'All' },
@@ -242,6 +250,17 @@ const demoCards = [
 
       <h3 class="ds-subheading">Card + FilterBar</h3>
       <FilterBar client:load topics={demoTopics} cards={demoCards} />
+
+      <h3 class="ds-subheading ds-subheading-spaced">Experiment card</h3>
+      <p class="ds-desc">
+        The cover for an experiment: a painted ground, a line figure and the name, in three formats
+        (tall, portrait, landscape). Motion only on hover. The look is named in the experiment's
+        frontmatter (<code>card.look</code>); the words are its own. <code>ExperimentTile</code> packs
+        them into columns on the Experiments page.
+      </p>
+      <div class="ds-experiment-cards">
+        {formatCards.map((card) => <ExperimentCard {...card} />)}
+      </div>
     </section>
 
   </div>
@@ -294,6 +313,17 @@ const demoCards = [
     font-weight: 600;
     margin-bottom: var(--space-6);
     color: var(--color-ink-secondary);
+  }
+
+  .ds-subheading-spaced {
+    margin-top: var(--space-16);
+  }
+
+  .ds-experiment-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+    align-items: start;
   }
 
   /* ── Colors ── */

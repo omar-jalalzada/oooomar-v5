@@ -165,6 +165,40 @@ comes later as its own phase.
 - **Screenshot API needs the dev server outside the sandbox**: it launches Chrome, and a dev
   server started under sandboxing can't, failing with "Target page, context or browser has been
   closed". Also note `view=/explore/<c>/vN/` 404s in dev — pass `…/index.html` (see `docs/ideas.md`).
+- **Card Tricks is three layers, each its own module**: `background.js` (soft fields over a
+ ground, OKLab), `visuals.js` (line work), `type.js` (DOM type in card pixels at a 320px card
+ width). Cards are keyed by the experiment's prototype slug across all three. The line work is
+ one generator, never a new hand-written drawing: *a mark, repeated, with its properties swept,
+ around one pin, with one accent*. A new figure is a new entry in `FIGURES` — a preset of those
+ dials — and it belongs in the family only if it keeps one mark, one pin and one accent dot.
+ When a figure reads as noise, fix the pin first. Motion is the same rule: animate the sweep,
+ hold the pin.
+- **Experiment cards are Card Tricks promoted into `src/`.** The layer modules live in
+ `src/lib/experiment-card/` (copied from `public/prototypes/card-tricks/v13/`, and this copy
+ is now the source: a look tuned on the bench is carried over by hand). An experiment names
+ its look in frontmatter (`card.look`, validated against `LOOKS`, so a missing look fails the
+ build) plus one `card.stat`; the title, date and first three techniques come from its own
+ fields, and its number is its place oldest-first. A new experiment needs a new look: an
+ entry keyed by its slug in each layer's presets. `ExperimentCard.astro` renders the type and
+ a CSS-gradient poster of the ground on the server; `runtime.js` is one script for every card
+ on the page, sharing a single WebGL context. `ExperimentTile.astro` packs the three formats
+ into columns at build time, shortest column first.
+- **Role cards are drawn in Figma frame units.** Each card in `src/components/work/cards/` places
+ its layers in its Figma frame's own coordinates (1188 × 554) as unitless data, scaled by `--u`
+ (one unit's rendered width, from container query units). That's deliberate, not a breach of the
+ tokens-only rule: it's what keeps a card matching its frame at every width. The shared stage and
+ parallax live in `RoleCardStage.tsx` / `ParallaxLayer.tsx`; a card adds only assets, geometry and
+ a `DEPTH` table. Card assets load as plain `?url` imports with no image pipeline, so downsample
+ screenshots to 2× their largest rendered size: Figma exports them at source resolution.
+ Layers cut flat along the card's edges (Alto's illustrations) stay on the card plane; moving
+ them would lift the cut edge off the card.
+- **Export a mask and its artwork as separate layers when the artwork will move.** A flattened
+ Figma export bakes the mask in, so moving it drags the mask along and the cut edge slides off
+ whatever it was aligned to (Kin's hair against the hill in front of it). Export the mask and the
+ artwork nodes separately, apply the mask to a fixed wrapper, and move only the artwork inside.
+- **A rule that scales below 1px can't be a border.** Chrome rounds any border thinner than 1px up
+ to a full pixel, so a design-unit border scales down until it's suddenly several units thick.
+ Draw it with an inset `box-shadow` instead, or drop it if it's invisible on the white ground.
 - **Tools**: prefer well-known tools with deep community and AI training data (Astro, React)
  over niche ones.
 - `site` in `astro.config.mjs` is a placeholder until the real domain is connected in Vercel.
@@ -197,6 +231,9 @@ comes later as its own phase.
 - **Parking lot**: deferred "while I'm at it" ideas go to `docs/ideas.md`, not into the build.
 - The original project brief lives at `docs/brief.md` — read it before proposing structural
   changes.
+- **Communication style**: `docs/communication.md` is the canonical guide for everything written
+  for or as Omar, including site copy. It supersedes other voice notes when they conflict. Follow
+  its final voice pass before sharing copy.
 - **Identity & ethos**: `docs/omar.md` is the baseline reference for who Omar is, how he sees, and
   his aesthetic loyalties — read it before any brand/visual/copy direction so work stays rooted in
   him, not category clichés.
@@ -209,6 +246,37 @@ comes later as its own phase.
   laid out across it was abandoned, and its code (Constellation, the `about` card collection,
   Base's chrome-less `immersive` mode) is gone. Every page renders through the same `Base`
   layout, homepage included, so the nav appears everywhere soft presence allows.
+- **Case studies are the one addition to the four pages.** A role card on About opens its case
+ study at `/work/<id>/`, from the `caseStudies` collection (`src/content/case-studies/<id>.md`,
+ images beside it in `<id>/`). The id must match the work entry's, which supplies the company,
+ period and card; the build throws if it doesn't. Both pages opt into cross-document view
+ transitions and share `view-transition-name: role-card-<id>`, so the card morphs into the case
+ study's header. On About the card link is `aria-hidden` and out of the tab order: the text link
+ under it is the accessible one.
+- **A case study is visual, not a process write-up.** Omar is a design leader now, not proving
+ process: the page is the card, the title, one summary line and four facts (role, team,
+ platforms, outcome), then the body of work as a moving gallery (`CaseGallery.tsx`). The screens
+ live in the case study's `gallery` frontmatter as `image()` entries with a `kind`; the page
+ builds a tile and a lightbox size of each with `getImage`. The wall is `aria-hidden` (it repeats
+ every screen many times); the lanes reach each screen once and are the keyboard path.
+ IntersectionObserver never reports a hit for the wall's columns inside its 3D plane, so the
+ wall passes its own visibility down to them — a marquee that "just doesn't move" is that.
+ Each entry in `showcases` in the frontmatter puts full screens in a drawn device (`imac`,
+ `ipad` or `iphone`) in place of a lane's strip, and the wall at the bottom still carries every
+ screen. With `grid: true` the lane's other screens sit in a still masonry grid under the
+ device: anything already on its screen or behind a hotspot is left out (matched by source
+ image), so cherry-picking a screen onto the device moves it rather than listing it twice. The
+ grid takes the most columns (up to three) that still end within a quarter of each other. Several screens are switched by
+ tabs (on the iMac's chin, under a handheld) and slide like desktops; each screen carries its
+ own pulsing hotspots that reveal dialogs, and switching screens closes any open one. Screens
+ sharing a toolbar share hotspots through YAML anchors, one per hotspot (`&manage-hotspot`),
+ so a screen can add its own on top; a screen whose toolbar differs lists its own positions,
+ measured from its image. Place each reveal at the screen's own scale (its pixel width over the
+ screen's) so it lands the size it was designed. Style the screen image by class, not
+ `.screen > img`: the reveals are images in the same box and would be stretched to fill it.
+ The handhelds are drawn as the Mosaic era's (home button, 3:4 iPad, 16:9 iPhone), which is
+ what the exports are sized for; `SCREEN_RATIO` in `CaseGallery.tsx` is each device's screen
+ height over width.
 - **Home leads with craft, not a statement.** No grandiose hero headline ("Design that makes…").
   The work — writing and experiments — comes first.
 - **Omar/bio content lives on the About page**, not the home.
