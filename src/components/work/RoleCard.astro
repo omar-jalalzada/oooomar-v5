@@ -1,0 +1,29 @@
+---
+import '@fontsource/syne/700.css';
+import AltoCard from './cards/AltoCard';
+import CoatueCard from './cards/CoatueCard';
+import KinCard from './cards/KinCard';
+import MacysCard from './cards/MacysCard';
+
+interface Props {
+  variant: 'kin' | 'alto' | 'coatue' | 'macys';
+  statement: string;
+}
+
+const { variant, statement } = Astro.props;
+---
+
+{/* Each hydrates a little before it scrolls in, so the layers are already on their scroll
+    positions by the time the card is visible instead of jumping there. */}
+{variant === 'kin' && <KinCard client:visible={{ rootMargin: '200px' }} statement={statement} />}
+{variant === 'alto' && <AltoCard client:visible={{ rootMargin: '200px' }} statement={statement} />}
+{
+  variant === 'coatue' && (
+    <CoatueCard client:visible={{ rootMargin: '200px' }} statement={statement} />
+  )
+}
+{
+  variant === 'macys' && (
+    <MacysCard client:visible={{ rootMargin: '200px' }} statement={statement} />
+  )
+}

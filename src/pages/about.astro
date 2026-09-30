@@ -1,18 +1,46 @@
 ---
 import Base from '../layouts/Base.astro';
+import RoleCard from '../components/work/RoleCard.astro';
+import { render } from 'astro:content';
 import { getVisible } from '../lib/content';
 import { SOFT_PRESENCE } from '../lib/soft-presence';
 
 if (SOFT_PRESENCE) return Astro.redirect('/');
 
-const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.order);
+const workEntries = (await getVisible('work')).sort((a, b) => a.data.order - b.data.order);
+const caseStudies = new Map((await getVisible('caseStudies')).map((study) => [study.id, study]));
+const work = await Promise.all(
+  workEntries.map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+  })),
+);
+
+const pressMentions = [
+  {
+    publication: 'Fitt Insider',
+    title: 'Startup Q&A: Kin CEO Omar Jalalzada',
+    href: 'https://insider.fitt.co/startup-qa-kin-ceo-omar-jalalzada/',
+  },
+  {
+    publication: 'The Creative Factor',
+    title: 'Designing Kin to Help People Hold Themselves Accountable',
+    href: 'https://www.thecreativefactor.co/articles/how-we-built-kin-habits',
+  },
+  {
+    publication: 'Product Hunt',
+    title: "Why you're approaching your habits all wrong",
+    href:
+      'https://www.producthunt.com/stories/why-you-re-approaching-your-habits-all-wrong-a-look-at-justin-kan-s-latest-app',
+  },
+];
 ---
 
 <Base
   title="About | Omar Jalalzada"
   description="Design leader and maker. Head of Design at Sublime Security."
 >
-  <article class="prose">
+  <article class="prose about">
     <h1>About</h1>
 
     <p>
@@ -35,16 +63,74 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
       </a>
     </p>
 
+    <h2>Behind the site</h2>
+    <p>
+      The <a href="/design-system/">design system</a> documents the visual foundations and
+      reusable parts that hold this site together. <a href="/explore/index.html">Explore</a> is the
+      public sketchbook behind it—a record of the ideas, dead ends, and iterations along the way.
+    </p>
+
     <h2>Work</h2>
     <ul class="cv">
       {
-        work.map((entry) => (
-          <li>
+        work.map(({ entry, Content }) => {
+          const study = caseStudies.get(entry.id);
+          const href = `/work/${entry.id}/`;
+          return (
+          <li id={entry.id}>
             <div class="line">
               <span class="company">{entry.data.company}</span>
               {entry.data.period && <span class="period">{entry.data.period}</span>}
             </div>
             <p class="role">{entry.data.role}</p>
+            {entry.data.card && study && (
+              <>
+                {/* The text link below is the accessible one; the card repeats it for pointers. */}
+                <a
+                  class="cover cover-link"
+                  href={href}
+                  tabindex="-1"
+                  aria-hidden="true"
+                  style={`view-transition-name: role-card-${entry.id}`}
+                >
+                  <RoleCard {...entry.data.card} />
+                  <span class="cover-hint">View case study</span>
+                </a>
+                <a class="case-link" href={href}>
+                  Read the {study.data.title} case study <span aria-hidden="true">→</span>
+                </a>
+              </>
+            )}
+            {entry.data.card && !study && (
+              <div class="cover">
+                <RoleCard {...entry.data.card} />
+              </div>
+            )}
+            {entry.body?.trim() && (
+              <div class="work-context">
+                <Content />
+              </div>
+            )}
+          </li>
+          );
+        })
+      }
+    </ul>
+
+    <h2>Press mentions</h2>
+    <ul class="press">
+      {
+        pressMentions.map((mention) => (
+          <li>
+            <a href={mention.href}>
+              <span>
+                <strong>{mention.publication}</strong>
+                <span class="press-title">{mention.title}</span>
+              </span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" />
+              </svg>
+            </a>
           </li>
         ))
       }
@@ -52,7 +138,91 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
   </article>
 </Base>
 
+<style is:global>
+  /* Matches the opt-in on the case-study pages, so a role card morphs into its case study. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: var(--duration-slow);
+    animation-timing-function: var(--ease-in-out);
+  }
+</style>
+
 <style>
+  /* The role covers need the full site width; everything else keeps the reading measure. */
+  .about {
+    max-width: none;
+  }
+
+  .about > :not(.cv),
+  .line,
+  .role,
+  .work-context {
+    max-width: var(--measure);
+  }
+
+  .cover {
+    display: block;
+    margin-block: var(--space-6);
+  }
+
+  .cover-link {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .cover-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink);
+    background: var(--color-bg);
+    border-radius: 999px;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + var(--space-2)));
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-normal) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .cover-link:hover .cover-hint {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .case-link {
+    display: inline-block;
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .case-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .case-link:focus-visible {
+    outline: auto;
+    outline-offset: var(--space-1);
+  }
+
+  .cover + .case-link {
+    margin-top: calc(var(--space-2) * -1);
+  }
+
   h1 {
     font-size: var(--text-xl);
     letter-spacing: -0.02em;
@@ -94,6 +264,93 @@ const work = (await getVisible('work')).sort((a, b) => a.data.order - b.data.ord
   .role {
     font-size: var(--text-sm);
     color: var(--color-ink-secondary);
+  }
+
+  .work-context {
+    margin-top: var(--space-6);
+  }
+
+  .work-context :global(h2) {
+    margin-block: var(--space-8) var(--space-3);
+    font-size: var(--text-base);
+  }
+
+  .work-context :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .work-context :global(p) {
+    color: var(--color-ink-secondary);
+  }
+
+  .work-context :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .press {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: thin solid var(--color-border);
+  }
+
+  .press li {
+    margin: 0;
+    border-top: thin solid var(--color-border);
+  }
+
+  .press a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .press a:hover strong,
+  .press a:hover svg {
+    color: var(--color-accent);
+  }
+
+  .press strong,
+  .press-title {
+    display: block;
+  }
+
+  .press strong {
+    font-size: var(--text-base);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .press-title {
+    margin-top: var(--space-1);
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+  }
+
+  .press svg {
+    flex: 0 0 auto;
+    width: var(--space-6);
+    height: var(--space-6);
+    color: var(--color-ink-tertiary);
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .press a:hover svg {
+    transform: translate(var(--space-1), calc(var(--space-1) * -1));
+  }
+
+  .press a:focus-visible {
+    outline: auto;
+    outline-offset: var(--space-1);
   }
 
   .social {

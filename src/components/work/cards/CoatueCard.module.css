@@ -1,0 +1,66 @@
+/* Figma's translucent rim round the face is left out, as on Kin: it's invisible on white. */
+.face {
+  background: var(--coatue-face);
+  border-radius: var(--radius-card);
+}
+
+.gridClip {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.gridFade {
+  background: linear-gradient(-53.572deg, var(--coatue-face) 53.758%, transparent 76.335%);
+}
+
+.icon > img {
+  object-fit: cover;
+}
+
+.quarter > img {
+  transform: rotate(90deg);
+}
+
+.flipY > img {
+  transform: scaleY(-1);
+  object-position: bottom;
+}
+
+.ipadClip {
+  overflow: hidden;
+  border-radius: calc(var(--u) * 8);
+}
+
+.screen {
+  overflow: hidden;
+  border: var(--u) solid var(--coatue-screen-rim);
+}
+
+.screen > img {
+  object-fit: cover;
+}
+
+.ipad,
+.iphone {
+  border-radius: calc(var(--u) * 2);
+}
+
+.dashboard {
+  border-radius: calc(var(--u) * 3);
+}
+
+.logoTile {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--coatue-logo-rim);
+  border-radius: 10.31%;
+}
+
+.logoMark {
+  position: absolute;
+  left: 9.28%;
+  top: 16.49%;
+  width: 81.44%;
+  height: 67.01%;
+}
