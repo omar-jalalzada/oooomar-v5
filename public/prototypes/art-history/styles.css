@@ -267,6 +267,47 @@ a {
   border-bottom: 1px solid var(--ink);
 }
 
+.continuous-timeline {
+  display: grid;
+  grid-template-columns: minmax(156px, 0.24fr) minmax(0, 1fr);
+  border-top: 1px solid var(--ink);
+}
+
+.chapter-rail {
+  position: relative;
+  border-right: 1px solid var(--ink);
+}
+
+.chapter-band {
+  position: absolute;
+  top: var(--chapter-top);
+  left: 0;
+  width: 100%;
+  height: var(--chapter-height);
+  padding: 24px 24px 48px 0;
+}
+
+.chapter-band > div {
+  position: sticky;
+  top: 154px;
+}
+
+.chapter-band p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chapter-band h2 {
+  margin: 10px 0 14px;
+  max-width: 12ch;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
 .era {
   scroll-margin-top: 148px;
   display: grid;
@@ -789,6 +830,27 @@ noscript {
   .region-legend {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .continuous-timeline {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+
+  .chapter-band {
+    padding: 18px 10px 40px 0;
+  }
+
+  .chapter-band > div {
+    top: 16px;
+  }
+
+  .chapter-band h2 {
+    font-size: 15px;
+    line-height: 1.05;
+  }
+
+  .chapter-band p {
+    font-size: 9px;
   }
 
   .era {

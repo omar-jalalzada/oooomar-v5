@@ -121,48 +121,48 @@ function formatRange(start, end) {
   return `${formatYear(start)} – ${formatYear(end)}`;
 }
 
-function layoutVerticalTracks(items, era) {
-  const plotHeight = Math.max(700, Math.min(1120, items.length * 78));
-  const span = era.end - era.start;
+function layoutContinuousTimeline(items) {
+  let offset = 0;
+  const segments = ERA_ORDER.map((era) => {
+    const count = items.filter((movement) => movement.start <= era.end && movement.end >= era.start).length;
+    const height = Math.max(700, Math.min(1120, count * 72));
+    const segment = { ...era, top: offset, height };
+    offset += height;
+    return segment;
+  });
+  const totalHeight = offset;
+  const yFor = (year) => {
+    const segment =
+      segments.find((item) => year >= item.start && year <= item.end) ||
+      (year < segments[0].start ? segments[0] : segments[segments.length - 1]);
+    const clamped = Math.max(segment.start, Math.min(segment.end, year));
+    return segment.top + ((clamped - segment.start) / (segment.end - segment.start)) * segment.height;
+  };
+
   const placements = new Map();
-  const groups = [];
-  let laneOffset = 0;
+  const laneEnds = [];
+  const intervals = items
+    .map((movement) => {
+      const top = yFor(movement.start);
+      const naturalHeight = yFor(movement.end) - top;
+      const height = Math.max(70, naturalHeight);
+      return { movement, top: Math.min(totalHeight - Math.min(height, totalHeight), top), height };
+    })
+    .sort((a, b) => a.top - b.top || b.height - a.height);
 
-  for (const region of REGION_ORDER) {
-    const regional = items
-      .filter((movement) => movement.region === region)
-      .map((movement) => {
-        const start = Math.max(era.start, Math.min(era.end, movement.start));
-        const end = Math.max(start, Math.min(era.end, movement.end));
-        const top = ((start - era.start) / span) * plotHeight;
-        const proportionalHeight = ((end - start) / span) * plotHeight;
-        const height = Math.max(70, proportionalHeight);
-        return {
-          movement,
-          top: Math.min(plotHeight - Math.min(height, plotHeight), top),
-          height: Math.min(height, plotHeight),
-        };
-      })
-      .sort((a, b) => a.top - b.top || b.height - a.height);
-    if (!regional.length) continue;
-
-    const laneEnds = [];
-    for (const item of regional) {
-      let lane = laneEnds.findIndex((end) => item.top >= end + 8);
-      if (lane === -1) lane = laneEnds.length;
-      laneEnds[lane] = item.top + item.height;
-      placements.set(item.movement.id, { top: item.top, height: item.height, lane: laneOffset + lane });
-    }
-    groups.push({ region, lane: laneOffset, lanes: laneEnds.length });
-    laneOffset += laneEnds.length;
+  for (const item of intervals) {
+    let lane = laneEnds.findIndex((end) => item.top >= end + 8);
+    if (lane === -1) lane = laneEnds.length;
+    laneEnds[lane] = item.top + item.height;
+    placements.set(item.movement.id, { top: item.top, height: item.height, lane });
   }
 
   for (const placement of placements.values()) {
-    placement.left = (placement.lane / laneOffset) * 100;
-    placement.width = (1 / laneOffset) * 100;
+    placement.left = (placement.lane / laneEnds.length) * 100;
+    placement.width = (1 / laneEnds.length) * 100;
   }
 
-  return { placements, groups, lanes: laneOffset, plotHeight };
+  return { placements, segments, totalHeight, yFor };
 }
 
 function renderFilters() {
@@ -201,72 +201,82 @@ function renderLegend() {
 }
 
 function renderTimeline() {
-  timeline.innerHTML = ERA_ORDER.map((era, eraIndex) => {
-    const items = movements
-      .filter((movement) => movement.start <= era.end && movement.end >= era.start)
-      .sort((a, b) => Math.max(a.start, era.start) - Math.max(b.start, era.start));
-    const layout = layoutVerticalTracks(items, era);
-    const ticks = Array.from({ length: 6 }, (_, index) =>
-      Math.round(era.start + ((era.end - era.start) * index) / 5),
-    );
-    const tickMarks = ticks
-      .map(
-        (tick, index) => `
-          <span class="time-tick" style="--tick-top:${(index / (ticks.length - 1)) * 100}%">
-            <span>${esc(formatYear(tick))}</span>
-          </span>
-        `,
-      )
-      .join('');
-    const cards = items
-      .map((movement) => {
-        const place = layout.placements.get(movement.id);
-        const searchText = [
-          movement.title,
-          movement.region,
-          movement.summary,
-          ...movement.examples.map((example) => example.title),
-        ]
-          .join(' ')
-          .toLowerCase();
-        return `
-          <button
-            class="movement"
-            type="button"
-            data-movement="${esc(movement.id)}"
-            data-region="${esc(movement.region)}"
-            data-search="${esc(searchText)}"
-            style="--region-color:${REGION_COLORS[movement.region]};--card-top:${place.top}px;--card-height:${place.height}px;--card-left:${place.left}%;--card-width:${place.width}%"
-          >
-            <span class="movement__date">${esc(formatRange(movement.start, movement.end))}</span>
-            <span class="movement__body">
-              <span class="movement__title">${esc(movement.title)}</span>
-              <span class="movement__region">${esc(movement.region)}</span>
-            </span>
-          </button>
-        `;
-      })
-      .join('');
-
-    return `
-      <section class="era" id="era-${esc(era.id)}" aria-labelledby="heading-${esc(era.id)}">
-        <header class="era__rail">
-          <div class="era__rail-inner">
-            <p class="era__index">Chapter ${String(eraIndex + 1).padStart(2, '0')} · ${items.length} entries</p>
-            <h2 id="heading-${esc(era.id)}">${esc(era.title)}</h2>
-            <p class="era__dates">${esc(formatRange(era.start, era.end))}</p>
-            <p class="era__note">${esc(era.note)}</p>
-          </div>
-        </header>
-        <div class="era__chart-scroll" tabindex="0" aria-label="${esc(era.title)} parallel timeline tracks">
-          <div class="era__chart" style="--plot-height:${layout.plotHeight}px">
-            <div class="era__time-axis" aria-hidden="true">${tickMarks}</div>
-            <div class="era__plot">${cards}</div>
+  const layout = layoutContinuousTimeline(movements);
+  const chapterBands = layout.segments
+    .map(
+      (segment, index) => `
+        <div
+          class="chapter-band"
+          id="era-${esc(segment.id)}"
+          style="--chapter-top:${segment.top}px;--chapter-height:${segment.height}px"
+        >
+          <div>
+            <p>Chapter ${String(index + 1).padStart(2, '0')}</p>
+            <h2>${esc(segment.title)}</h2>
+            <p>${esc(formatRange(segment.start, segment.end))}</p>
           </div>
         </div>
-      </section>
-    `;
-  }).join('');
+      `,
+    )
+    .join('');
+  const ticks = layout.segments.flatMap((segment, segmentIndex) =>
+    Array.from({ length: 5 }, (_, index) => {
+      if (segmentIndex > 0 && index === 0) return null;
+      const year = Math.round(segment.start + ((segment.end - segment.start) * index) / 4);
+      return { year, top: layout.yFor(year) };
+    }).filter(Boolean),
+  );
+  ticks.push({ year: ERA_ORDER.at(-1).end, top: layout.totalHeight });
+  const tickMarks = ticks
+    .map(
+      (tick) => `
+        <span class="time-tick" style="--tick-top:${tick.top}px">
+          <span>${esc(formatYear(tick.year))}</span>
+        </span>
+      `,
+    )
+    .join('');
+  const cards = movements
+    .map((movement) => {
+      const place = layout.placements.get(movement.id);
+      const searchText = [
+        movement.title,
+        movement.region,
+        movement.summary,
+        ...movement.examples.map((example) => example.title),
+      ]
+        .join(' ')
+        .toLowerCase();
+      return `
+        <button
+          class="movement"
+          type="button"
+          data-movement="${esc(movement.id)}"
+          data-region="${esc(movement.region)}"
+          data-search="${esc(searchText)}"
+          style="--region-color:${REGION_COLORS[movement.region]};--card-top:${place.top}px;--card-height:${place.height}px;--card-left:${place.left}%;--card-width:${place.width}%"
+        >
+          <span class="movement__date">${esc(formatRange(movement.start, movement.end))}</span>
+          <span class="movement__body">
+            <span class="movement__title">${esc(movement.title)}</span>
+            <span class="movement__region">${esc(movement.region)}</span>
+          </span>
+        </button>
+      `;
+    })
+    .join('');
+
+  timeline.innerHTML = `
+    <section class="continuous-timeline" aria-label="Continuous art history timeline">
+      <aside class="chapter-rail">${chapterBands}</aside>
+      <div class="era__chart-scroll" tabindex="0" aria-label="Parallel movement tracks from 40,000 BCE to the present">
+        <div class="era__chart" style="--plot-height:${layout.totalHeight}px">
+          <div class="era__time-axis" aria-hidden="true">${tickMarks}</div>
+          <div class="era__plot">${cards}</div>
+        </div>
+      </div>
+    </section>
+  `;
 
   timeline.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-movement]');
