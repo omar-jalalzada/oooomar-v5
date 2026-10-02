@@ -226,6 +226,42 @@ a {
   font-variant-numeric: tabular-nums;
 }
 
+.region-legend {
+  padding: 18px var(--page-pad);
+  display: grid;
+  grid-template-columns: minmax(156px, 0.24fr) minmax(0, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+.region-legend h2 {
+  margin: 2px 0 0;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+#region-legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+.legend-item {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.legend-item i {
+  width: 20px;
+  height: 5px;
+  display: block;
+  background: var(--region-color);
+}
+
 .timeline {
   padding: 0 var(--page-pad);
   border-bottom: 1px solid var(--ink);
@@ -284,33 +320,13 @@ a {
 .era__chart {
   position: relative;
   min-width: 760px;
-  height: calc(var(--plot-height) + 44px);
+  height: var(--plot-height);
   background: var(--paper);
-}
-
-.era__track-labels {
-  position: absolute;
-  inset: 0 0 auto 76px;
-  height: 44px;
-  border-bottom: 1px solid var(--ink);
-}
-
-.track-label {
-  position: absolute;
-  left: var(--track-left);
-  width: var(--track-width);
-  height: 44px;
-  padding: 11px 8px 0;
-  overflow: hidden;
-  border-left: 3px solid var(--region-color);
-  color: var(--muted);
-  font-size: 10px;
-  white-space: nowrap;
 }
 
 .era__time-axis {
   position: absolute;
-  inset: 44px 0 0;
+  inset: 0;
   pointer-events: none;
 }
 
@@ -340,7 +356,7 @@ a {
 
 .era__plot {
   position: absolute;
-  top: 44px;
+  top: 0;
   right: 0;
   left: 76px;
   height: var(--plot-height);
@@ -768,6 +784,11 @@ noscript {
   .filter__items {
     margin-right: calc(var(--page-pad) * -1);
     padding-right: var(--page-pad);
+  }
+
+  .region-legend {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .era {

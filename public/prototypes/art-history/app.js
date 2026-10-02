@@ -3,55 +3,55 @@ const ERA_ORDER = [
     id: 'origins',
     title: 'Origins',
     start: -40000,
-    end: -500,
+    end: -1501,
     note: 'The scale opens wide here. Surviving objects are fragments of much longer living traditions.',
   },
   {
     id: 'antiquity',
     title: 'Antiquity',
-    start: -1600,
-    end: 600,
+    start: -1500,
+    end: 599,
     note: 'Cities, courts, trade routes, and ritual centers made images durable carriers of authority and memory.',
   },
   {
     id: 'sacred-courts',
     title: 'Sacred worlds and courts',
-    start: 300,
-    end: 1900,
+    start: 600,
+    end: 1399,
     note: 'Sacred practice and court patronage supported long, overlapping visual systems across regions.',
   },
   {
     id: 'early-modern',
     title: 'Early modern worlds',
-    start: 1200,
-    end: 1900,
+    start: 1400,
+    end: 1749,
     note: 'Workshops, print, maritime exchange, and expanding empires moved forms between distant centers.',
   },
   {
     id: 'revolutions',
     title: 'Revolutions of seeing',
     start: 1750,
-    end: 1920,
+    end: 1899,
     note: 'Industrial life, political upheaval, photography, and new publics changed what art could picture.',
   },
   {
     id: 'modern',
     title: 'Modernisms',
     start: 1900,
-    end: 1975,
+    end: 1939,
     note: 'Many modernisms developed at once. The familiar European sequence is only one lane through them.',
   },
   {
     id: 'postwar',
     title: 'After the war',
     start: 1940,
-    end: 2000,
+    end: 1979,
     note: 'Matter, action, media, site, identity, and language each became material for art.',
   },
   {
     id: 'contemporary',
     title: 'Contemporary currents',
-    start: 1960,
+    start: 1980,
     end: 2026,
     note: 'Public space, networks, code, and renewed Indigenous practice unsettle any single center.',
   },
@@ -86,6 +86,7 @@ const regionFilters = document.querySelector('#region-filters');
 const eraNav = document.querySelector('#era-nav');
 const search = document.querySelector('#search');
 const resultCount = document.querySelector('#result-count');
+const regionLegendItems = document.querySelector('#region-legend-items');
 const movementDialog = document.querySelector('#movement-dialog');
 const movementDialogContent = document.querySelector('#movement-modal-content');
 const viewer = document.querySelector('#viewer');
@@ -189,23 +190,25 @@ function renderEraNav() {
   ).join('');
 }
 
+function renderLegend() {
+  regionLegendItems.innerHTML = REGION_ORDER.map(
+    (region) => `
+      <span class="legend-item" style="--region-color:${REGION_COLORS[region]}">
+        <i aria-hidden="true"></i>${esc(region)}
+      </span>
+    `,
+  ).join('');
+}
+
 function renderTimeline() {
   timeline.innerHTML = ERA_ORDER.map((era, eraIndex) => {
-    const items = movements.filter((movement) => movement.era === era.id).sort((a, b) => a.start - b.start);
+    const items = movements
+      .filter((movement) => movement.start <= era.end && movement.end >= era.start)
+      .sort((a, b) => Math.max(a.start, era.start) - Math.max(b.start, era.start));
     const layout = layoutVerticalTracks(items, era);
     const ticks = Array.from({ length: 6 }, (_, index) =>
       Math.round(era.start + ((era.end - era.start) * index) / 5),
     );
-    const trackLabels = layout.groups
-      .map(
-        (group) => `
-          <span
-            class="track-label"
-            style="--track-left:${(group.lane / layout.lanes) * 100}%;--track-width:${(group.lanes / layout.lanes) * 100}%;--region-color:${REGION_COLORS[group.region]}"
-          >${esc(group.region)}</span>
-        `,
-      )
-      .join('');
     const tickMarks = ticks
       .map(
         (tick, index) => `
@@ -257,7 +260,6 @@ function renderTimeline() {
         </header>
         <div class="era__chart-scroll" tabindex="0" aria-label="${esc(era.title)} parallel timeline tracks">
           <div class="era__chart" style="--plot-height:${layout.plotHeight}px">
-            <div class="era__track-labels" aria-hidden="true">${trackLabels}</div>
             <div class="era__time-axis" aria-hidden="true">${tickMarks}</div>
             <div class="era__plot">${cards}</div>
           </div>
@@ -329,14 +331,14 @@ function openMovement(id) {
 
 function applyFilters() {
   const query = search.value.trim().toLowerCase();
-  let count = 0;
+  const visibleIds = new Set();
   for (const button of document.querySelectorAll('.movement')) {
     const regionMatch = activeRegion === 'All' || button.dataset.region === activeRegion;
     const searchMatch = !query || button.dataset.search.includes(query);
     button.hidden = !(regionMatch && searchMatch);
-    if (!button.hidden) count++;
+    if (!button.hidden) visibleIds.add(button.dataset.movement);
   }
-  resultCount.textContent = `${count} of ${movements.length} movements and traditions shown`;
+  resultCount.textContent = `${visibleIds.size} of ${movements.length} movements and traditions shown`;
 }
 
 function renderViewer() {
@@ -401,6 +403,7 @@ async function init() {
     movements = await response.json();
     renderFilters();
     renderEraNav();
+    renderLegend();
     renderTimeline();
     applyFilters();
   } catch (error) {
