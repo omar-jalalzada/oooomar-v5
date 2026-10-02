@@ -86,6 +86,8 @@ const regionFilters = document.querySelector('#region-filters');
 const eraNav = document.querySelector('#era-nav');
 const search = document.querySelector('#search');
 const resultCount = document.querySelector('#result-count');
+const movementDialog = document.querySelector('#movement-dialog');
+const movementDialogContent = document.querySelector('#movement-modal-content');
 const viewer = document.querySelector('#viewer');
 const viewerImage = document.querySelector('#viewer-image');
 const viewerNoImage = document.querySelector('#viewer-no-image');
@@ -94,11 +96,9 @@ const viewerPosition = document.querySelector('#viewer-position');
 const viewerMeta = document.querySelector('#viewer-meta');
 const viewerSource = document.querySelector('#viewer-source');
 const viewerRights = document.querySelector('#viewer-rights');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 let movements = [];
 let activeRegion = 'All';
-let openMovementId = null;
 let viewerMovement = null;
 let viewerIndex = 0;
 
@@ -118,45 +118,6 @@ function formatYear(year) {
 
 function formatRange(start, end) {
   return `${formatYear(start)} – ${formatYear(end)}`;
-}
-
-function positionFor(movement, era) {
-  const span = era.end - era.start;
-  const left = ((Math.max(era.start, Math.min(era.end, movement.start)) - era.start) / span) * 100;
-  const rightDate = Math.max(movement.start, Math.min(era.end, movement.end));
-  const rawWidth = ((rightDate - Math.max(era.start, movement.start)) / span) * 100;
-  return {
-    left: Math.max(0, Math.min(94, left)),
-    width: Math.max(10.5, Math.min(38, rawWidth || 10.5)),
-  };
-}
-
-function layoutEra(items, era) {
-  const placements = new Map();
-  const bands = [];
-  let top = 44;
-
-  for (const region of REGION_ORDER) {
-    const regional = items
-      .filter((movement) => movement.region === region)
-      .map((movement) => ({ movement, ...positionFor(movement, era) }))
-      .sort((a, b) => a.left - b.left || b.width - a.width);
-    if (!regional.length) continue;
-
-    const rowEnds = [];
-    for (const item of regional) {
-      let row = rowEnds.findIndex((right) => item.left >= right + 0.75);
-      if (row === -1) row = rowEnds.length;
-      rowEnds[row] = Math.min(100, item.left + item.width);
-      placements.set(item.movement.id, { ...item, top: top + 30 + row * 86 });
-    }
-
-    const height = 30 + rowEnds.length * 86 + 8;
-    bands.push({ region, top, height });
-    top += height;
-  }
-
-  return { placements, bands, height: top };
 }
 
 function renderFilters() {
@@ -187,19 +148,8 @@ function renderEraNav() {
 function renderTimeline() {
   timeline.innerHTML = ERA_ORDER.map((era, eraIndex) => {
     const items = movements.filter((movement) => movement.era === era.id).sort((a, b) => a.start - b.start);
-    const layout = layoutEra(items, era);
-    const ticks = Array.from({ length: 5 }, (_, index) =>
-      Math.round(era.start + ((era.end - era.start) * index) / 4),
-    );
-    const lanes = layout.bands
-      .map(
-        (band) =>
-          `<div class="lane" style="--lane-top:${band.top}px;--lane-height:${band.height}px"><span>${esc(band.region)}</span></div>`,
-      )
-      .join('');
     const cards = items
       .map((movement) => {
-        const place = layout.placements.get(movement.id);
         const searchText = [
           movement.title,
           movement.region,
@@ -215,12 +165,14 @@ function renderTimeline() {
             data-movement="${esc(movement.id)}"
             data-region="${esc(movement.region)}"
             data-search="${esc(searchText)}"
-            aria-expanded="false"
-            aria-controls="panel-${esc(era.id)}"
-            style="--left:${place.left}%;--width:${place.width}%;--top:${place.top}px;--region-color:${REGION_COLORS[movement.region]}"
+            style="--region-color:${REGION_COLORS[movement.region]}"
           >
             <span class="movement__date">${esc(formatRange(movement.start, movement.end))}</span>
-            <span class="movement__title">${esc(movement.title)}</span>
+            <span class="movement__body">
+              <span class="movement__title">${esc(movement.title)}</span>
+              <span class="movement__region">${esc(movement.region)}</span>
+            </span>
+            <span class="movement__open" aria-hidden="true">Open</span>
           </button>
         `;
       })
@@ -228,21 +180,15 @@ function renderTimeline() {
 
     return `
       <section class="era" id="era-${esc(era.id)}" aria-labelledby="heading-${esc(era.id)}">
-        <header class="era__heading">
-          <p class="era__index">Chapter ${String(eraIndex + 1).padStart(2, '0')} · ${items.length} entries</p>
-          <h2 id="heading-${esc(era.id)}">${esc(era.title)}</h2>
-          <p>${esc(era.note)}</p>
-        </header>
-        <div class="era__viewport" tabindex="0" aria-label="${esc(era.title)} timeline, scroll horizontally">
-          <div class="era__canvas" style="--canvas-height:${layout.height}px">
-            <div class="era__axis" aria-hidden="true">
-              ${ticks.map((tick) => `<span>${esc(formatYear(tick))}</span>`).join('')}
-            </div>
-            ${lanes}
-            <div class="movement-layer">${cards}</div>
+        <header class="era__rail">
+          <div class="era__rail-inner">
+            <p class="era__index">Chapter ${String(eraIndex + 1).padStart(2, '0')} · ${items.length} entries</p>
+            <h2 id="heading-${esc(era.id)}">${esc(era.title)}</h2>
+            <p class="era__dates">${esc(formatRange(era.start, era.end))}</p>
+            <p class="era__note">${esc(era.note)}</p>
           </div>
-        </div>
-        <div id="panel-${esc(era.id)}" class="movement-panel" hidden></div>
+        </header>
+        <div class="era__track">${cards}</div>
       </section>
     `;
   }).join('');
@@ -284,47 +230,28 @@ function exampleMarkup(example, index, movement) {
 function openMovement(id) {
   const movement = movements.find((item) => item.id === id);
   if (!movement) return;
-  const era = ERA_ORDER.find((item) => item.id === movement.era);
-  const panel = document.querySelector(`#panel-${era.id}`);
-  const wasOpen = openMovementId === id;
-
-  for (const button of document.querySelectorAll('.movement[aria-expanded="true"]')) {
-    button.setAttribute('aria-expanded', 'false');
-  }
-  for (const item of document.querySelectorAll('.movement-panel')) item.hidden = true;
-
-  if (wasOpen) {
-    openMovementId = null;
-    return;
-  }
-
-  openMovementId = id;
-  document.querySelector(`[data-movement="${CSS.escape(id)}"]`)?.setAttribute('aria-expanded', 'true');
-  panel.style.setProperty('--region-color', REGION_COLORS[movement.region]);
-  panel.innerHTML = `
-    <div class="movement-panel__head">
+  movementDialog.style.setProperty('--region-color', REGION_COLORS[movement.region]);
+  movementDialogContent.innerHTML = `
+    <div class="movement-modal__head">
       <div>
-        <p class="movement-panel__kicker">${esc(movement.region)} · six examples</p>
-        <h3>${esc(movement.title)}</h3>
-        <p class="movement-panel__date">${esc(formatRange(movement.start, movement.end))}</p>
+        <p class="movement-modal__kicker">${esc(movement.region)} · six examples</p>
+        <h2 id="movement-modal-title">${esc(movement.title)}</h2>
+        <p class="movement-modal__date">${esc(formatRange(movement.start, movement.end))}</p>
       </div>
       <div>
-        <p class="movement-panel__summary">${esc(movement.summary)}</p>
-        <a class="movement-panel__source" href="${esc(movement.source)}" target="_blank" rel="noreferrer">
+        <p class="movement-modal__summary">${esc(movement.summary)}</p>
+        <a class="movement-modal__source" href="${esc(movement.source)}" target="_blank" rel="noreferrer">
           Read the source overview
         </a>
       </div>
     </div>
     <ol class="examples">${movement.examples.map((example, index) => exampleMarkup(example, index, movement)).join('')}</ol>
   `;
-  panel.hidden = false;
-  panel.querySelector('.examples')?.addEventListener('click', (event) => {
+  movementDialogContent.querySelector('.examples')?.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-example]');
     if (button) openViewer(movement, Number(button.dataset.example));
   });
-  if (innerWidth <= 720) {
-    panel.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
-  }
+  movementDialog.showModal();
 }
 
 function applyFilters() {
@@ -337,13 +264,6 @@ function applyFilters() {
     if (!button.hidden) count++;
   }
   resultCount.textContent = `${count} of ${movements.length} movements and traditions shown`;
-  if (openMovementId) {
-    const current = document.querySelector(`[data-movement="${CSS.escape(openMovementId)}"]`);
-    if (current?.hidden) {
-      document.querySelector(`#panel-${movements.find((item) => item.id === openMovementId)?.era}`)?.setAttribute('hidden', '');
-      openMovementId = null;
-    }
-  }
 }
 
 function renderViewer() {
@@ -393,6 +313,10 @@ viewer.addEventListener('click', (event) => {
 viewer.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft') stepViewer(-1);
   if (event.key === 'ArrowRight') stepViewer(1);
+});
+movementDialog.querySelector('.movement-modal__close').addEventListener('click', () => movementDialog.close());
+movementDialog.addEventListener('click', (event) => {
+  if (event.target === movementDialog) movementDialog.close();
 });
 
 search.addEventListener('input', applyFilters);
