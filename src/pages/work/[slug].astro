@@ -3,7 +3,13 @@ import { getEntry, render } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import RoleCard from '../../components/work/RoleCard.astro';
-import CaseGallery, { type GalleryItem, type Showcase } from '../../components/work/CaseGallery';
+import CaseGallery, {
+  type GalleryItem,
+  type Handhelds,
+  type HandheldScreen,
+  type Showcase,
+} from '../../components/work/CaseGallery';
+import PhoneShowcase, { type PhoneScreen } from '../../components/work/PhoneShowcase';
 import { getVisible } from '../../lib/content';
 import { SOFT_PRESENCE } from '../../lib/soft-presence';
 
@@ -21,11 +27,6 @@ export async function getStaticPaths() {
 
 const { study, work } = Astro.props;
 const { Content } = await render(study);
-const onScreen = new Set(
-  study.data.showcases.flatMap(({ screens }) =>
-    screens.flatMap((screen) => [screen.src.src, ...screen.hotspots.flatMap((h) => h.reveals.map((r) => r.src.src))]),
-  ),
-);
 
 // Two sizes per screen: tiles never render wider than ~550px, the lightbox fills the window.
 const gallery: GalleryItem[] = await Promise.all(
@@ -41,7 +42,6 @@ const gallery: GalleryItem[] = await Promise.all(
       h: src.height,
       alt,
       kind,
-      onScreen: onScreen.has(src.src),
     };
   }),
 );
@@ -72,6 +72,58 @@ const showcases: Showcase[] = await Promise.all(
     ),
   })),
 );
+
+type HandheldSource = NonNullable<NonNullable<typeof study.data.handhelds>['chapters'][number]['ipad']>;
+
+// A screen at the gallery's lightbox size, so clicking it opens that same entry.
+const handheldScreen = async (screen?: HandheldSource): Promise<HandheldScreen | undefined> =>
+  screen && {
+    src: await webp(screen.src, 2400),
+    alt: screen.alt,
+    overlay: screen.overlay && {
+      src: await webp(screen.overlay.src, 1800),
+      alt: screen.overlay.alt,
+      w: screen.overlay.w,
+      ratio: screen.overlay.src.height / screen.overlay.src.width,
+    },
+  };
+
+const handhelds: Handhelds | undefined = study.data.handhelds && {
+  label: study.data.handhelds.label,
+  chapters: await Promise.all(
+    study.data.handhelds.chapters.map(async ({ label, ipad, iphone }) => ({
+      label,
+      ipad: await handheldScreen(ipad),
+      iphone: await handheldScreen(iphone),
+    })),
+  ),
+};
+
+type PhoneSource = NonNullable<typeof study.data.phone>['keyScreens'][number];
+
+// The phone never renders wider than ~360px; thumbs fill the flow strip and the ring.
+const phoneScreen = async ({ src, label, alt }: PhoneSource): Promise<PhoneScreen> => ({
+  screen: await webp(src, 750),
+  thumb: await webp(src, 300),
+  full: await webp(src, 1400),
+  ratio: src.height / src.width,
+  label,
+  alt,
+});
+
+const phone = study.data.phone && {
+  logo: study.data.phone.logo && (await webp(study.data.phone.logo, 480)),
+  headline: study.data.phone.headline,
+  keyScreens: await Promise.all(study.data.phone.keyScreens.map(phoneScreen)),
+  flows: await Promise.all(
+    study.data.phone.flows.map(async ({ screens, ...flow }) => ({
+      ...flow,
+      screens: await Promise.all(screens.map(phoneScreen)),
+    })),
+  ),
+};
+
+const hasGallery = gallery.length > 0 || showcases.length > 0 || handhelds;
 ---
 
 <Base title={`${study.data.title} — ${work.data.company} — Omar Jalalzada`} description={study.data.summary}>
@@ -106,12 +158,19 @@ const showcases: Showcase[] = await Promise.all(
       }
     </dl>
 
-    <CaseGallery
-      client:visible={{ rootMargin: '400px' }}
-      items={gallery}
-      laneLabels={study.data.laneLabels}
-      showcases={showcases}
-    />
+    {phone && <PhoneShowcase client:visible={{ rootMargin: '400px' }} {...phone} />}
+
+    {
+      hasGallery && (
+        <CaseGallery
+          client:visible={{ rootMargin: '400px' }}
+          items={gallery}
+          laneLabels={study.data.laneLabels}
+          showcases={showcases}
+          handhelds={handhelds}
+        />
+      )
+    }
 
     {
       study.body?.trim() && (

@@ -8,6 +8,7 @@ import {
   useScroll,
   useTransform,
   useVelocity,
+  type Variants,
 } from 'motion/react';
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import styles from './CaseGallery.module.css';
@@ -21,8 +22,6 @@ export interface GalleryItem {
   h: number;
   alt: string;
   kind: GalleryKind;
-  /** Already shown on a device's screen, so the grid under it leaves it out. */
-  onScreen?: boolean;
 }
 
 export type LaneId = 'web' | 'ipad' | 'iphone' | 'system';
@@ -43,16 +42,26 @@ export interface ShowcaseScreen {
 
 export interface Showcase {
   lane: LaneId;
-  device: Device;
-  grid: boolean;
+  device: 'imac';
   screens: ShowcaseScreen[];
 }
 
-const LANES: { id: LaneId; label: string; kinds: GalleryKind[]; size: 'wide' | 'tall' | 'small'; speed: number }[] = [
+export interface HandheldScreen {
+  src: string;
+  alt: string;
+  /** A cropped dialog centred over the screen; `w` is a percent of the screen's width. */
+  overlay?: { src: string; alt: string; w: number; ratio: number };
+}
+
+export interface Handhelds {
+  label: string;
+  chapters: { label: string; ipad?: HandheldScreen; iphone?: HandheldScreen }[];
+}
+
+const LANES: { id: LaneId; label: string; kinds: GalleryKind[]; size: 'wide' | 'tall'; speed: number }[] = [
   { id: 'web', label: 'Web', kinds: ['web'], size: 'wide', speed: 38 },
   { id: 'ipad', label: 'iPad', kinds: ['ipad'], size: 'tall', speed: -30 },
   { id: 'iphone', label: 'iPhone', kinds: ['iphone'], size: 'tall', speed: 30 },
-  { id: 'system', label: 'Design system and process', kinds: ['system', 'process'], size: 'small', speed: 44 },
 ];
 
 /* Each device's screen height over its width: a 16:9 iMac, a 3:4 iPad held upright, and the
@@ -182,63 +191,6 @@ function wallColumns(items: GalleryItem[]): GalleryItem[][] {
   return columns.map((column) => fill(column, 8));
 }
 
-/* Deals the screens into columns tallest first, each to the shortest column so far, then puts each
-   column back in gallery order. Relative heights are enough, since every column is the same width.
-   Takes the most columns that still end within a quarter of each other: three screens where one
-   is twice as tall as the others sit better as two columns than as one tower beside two stubs. */
-const GRID_COLUMNS = 3;
-const GRID_GAP = 0.06;
-const GRID_TOLERANCE = 0.25;
-
-function dealColumns(items: GalleryItem[], count: number) {
-  const columns = Array.from({ length: count }, () => ({ height: 0, items: [] as GalleryItem[] }));
-  const byHeight = [...items].sort((a, b) => b.h / b.w - a.h / a.w);
-  for (const item of byHeight) {
-    const shortest = columns.reduce((min, column) => (column.height < min.height ? column : min));
-    shortest.height += item.h / item.w + GRID_GAP;
-    shortest.items.push(item);
-  }
-  return columns;
-}
-
-function gridColumns(items: GalleryItem[]): GalleryItem[][] {
-  const most = Math.min(GRID_COLUMNS, items.length);
-  let columns = dealColumns(items, most);
-  for (let count = most; count >= 2; count--) {
-    const dealt = dealColumns(items, count);
-    const heights = dealt.map((column) => column.height);
-    if ((Math.max(...heights) - Math.min(...heights)) / Math.max(...heights) <= GRID_TOLERANCE) {
-      columns = dealt;
-      break;
-    }
-  }
-  return columns.map((column) => column.items.sort((a, b) => items.indexOf(a) - items.indexOf(b)));
-}
-
-function ScreenGrid({
-  items,
-  device,
-  onOpen,
-}: {
-  items: GalleryItem[];
-  device: Device;
-  onOpen: (item: GalleryItem) => void;
-}) {
-  const columns = gridColumns(items.filter((item) => !item.onScreen));
-  if (!columns.length) return null;
-  return (
-    <div className={styles.grid} data-device={device} style={{ '--columns': columns.length } as CSSProperties}>
-      {columns.map((column, c) => (
-        <div key={c} className={styles.gridColumn}>
-          {column.map((item) => (
-            <Tile key={item.full} item={item} copy={0} onOpen={() => onOpen(item)} />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function Lightbox({ items, index, onChange }: { items: GalleryItem[]; index: number | null; onChange: (i: number | null) => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const item = index === null ? null : items[index];
@@ -287,10 +239,9 @@ function Lightbox({ items, index, onChange }: { items: GalleryItem[]; index: num
   );
 }
 
-/* Full screens in a drawn device, sliding across like desktops when a tab switches them: the
-   iMac carries its tabs on its chin, the handhelds under them. A screen's pulsing hotspots open
-   the dialogs behind its controls, at the screen's own scale. One hotspot is open at a time;
-   clicking the screen, the same hotspot or Escape closes it. */
+/* Full screens in a drawn iMac, sliding across like desktops when a tab on its chin switches
+   them. A screen's pulsing hotspots open the dialogs behind its controls, at the screen's own
+   scale. One hotspot is open at a time; clicking the screen, the same hotspot or Escape closes it. */
 function DeviceShowcase({ showcase }: { showcase: Showcase }) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -447,31 +398,277 @@ function DeviceShowcase({ showcase }: { showcase: Showcase }) {
     </div>
   );
 
-  if (device === 'imac') {
-    return (
-      <div className={styles.showcase}>
-        <div className={styles.imac}>
-          <div className={styles.bezel}>{display}</div>
-          {/* The tabs sit on the chin, where the Apple logo would be. */}
-          <div className={styles.chin}>{screenTabs}</div>
-          <div className={styles.neck} />
-          <div className={styles.foot} />
-        </div>
-      </div>
-    );
-  }
-
-  // The handhelds are drawn as the Mosaic era's: a front camera above the screen, a home button below.
   return (
     <div className={styles.showcase}>
-      <div className={styles.handheld} data-device={device}>
-        <div className={styles.handheldBody}>
-          <span className={styles.camera} />
-          {display}
-          <span className={styles.homeButton} />
+      <div className={styles.imac}>
+        <div className={styles.bezel}>{display}</div>
+        {/* The tabs sit on the chin, where the Apple logo would be. */}
+        <div className={styles.chin}>{screenTabs}</div>
+        <div className={styles.neck} />
+        <div className={styles.foot} />
+      </div>
+    </div>
+  );
+}
+
+/* UIKit's navigation push, the transition these apps were built on: the next screen slides in
+   over the last, which falls back a third of the way and dims. Going back runs it in reverse. */
+const PUSH: Variants = {
+  enter: (dir: number) =>
+    dir > 0 ? { x: '100%', zIndex: 2, filter: 'brightness(1)' } : { x: '-30%', zIndex: 1, filter: 'brightness(0.55)' },
+  center: { x: '0%', filter: 'brightness(1)' },
+  exit: (dir: number) =>
+    dir > 0 ? { x: '-30%', zIndex: 1, filter: 'brightness(0.55)' } : { x: '100%', zIndex: 2, filter: 'brightness(1)' },
+};
+const FADE: Variants = { enter: { opacity: 0 }, center: { opacity: 1 }, exit: { opacity: 0 } };
+const PUSH_EASE = [0.32, 0.72, 0, 1] as const;
+
+const HANDHELD_DEVICES = ['ipad', 'iphone'] as const;
+type Handheld = (typeof HANDHELD_DEVICES)[number];
+
+/* Seconds a chapter holds, and how far the iPhone trails the iPad: enough that the push reads
+   as handed from one device to the other, not as two screens changing at once. */
+const DWELL = 3.6;
+const HANDOFF = 0.16;
+
+/* The screen a device shows in a chapter: its own, or if the chapter leaves it out, the last one
+   it had. The overlay belongs to its chapter only, so a held screen comes without it. */
+function screenAt(chapters: Handhelds['chapters'], index: number, device: Handheld) {
+  for (let back = 0; back < chapters.length; back++) {
+    const screen = chapters[(index - back + chapters.length) % chapters.length][device];
+    if (screen) return back === 0 ? screen : { ...screen, overlay: undefined };
+  }
+  return undefined;
+}
+
+// Drawn as the Mosaic era's: a front camera above the screen, a home button below.
+function HandheldDevice({
+  device,
+  screen,
+  chapter,
+  direction,
+  delay,
+  onOpen,
+}: {
+  device: Handheld;
+  screen: HandheldScreen;
+  chapter: number;
+  direction: number;
+  delay: number;
+  onOpen: (src: string) => void;
+}) {
+  const reduced = useReducedMotion();
+  const screenRatio = SCREEN_RATIO[device];
+  const { overlay } = screen;
+  const overlayHeight = overlay ? (overlay.w * overlay.ratio) / screenRatio : 0;
+
+  return (
+    <div className={styles.handheld} data-device={device}>
+      <div className={styles.handheldBody}>
+        <span className={styles.camera} />
+        <button
+          type="button"
+          className={`${styles.screen} ${styles.handheldScreen}`}
+          style={{ aspectRatio: `1 / ${screenRatio}` }}
+          onClick={() => onOpen(screen.src)}
+          aria-label={`Open: ${screen.alt}`}
+        >
+          <span className={styles.screenTrack}>
+            {/* Keyed by image, so a chapter that keeps a device's screen doesn't push it again. */}
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.img
+                key={screen.src}
+                src={screen.src}
+                alt=""
+                className={`${styles.screenImage} ${styles.pushImage}`}
+                decoding="async"
+                custom={direction}
+                variants={reduced ? FADE : PUSH}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={reduced ? { duration: 0.2 } : { duration: 0.6, ease: PUSH_EASE, delay }}
+              />
+            </AnimatePresence>
+          </span>
+          <AnimatePresence>
+            {overlay && (
+              <motion.span
+                key={`scrim-${chapter}`}
+                className={styles.overlayScrim}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduced ? 0 : 0.3, delay: reduced ? 0 : delay + 0.45 }}
+              />
+            )}
+            {overlay && (
+              <motion.img
+                key={`overlay-${chapter}`}
+                src={overlay.src}
+                alt=""
+                className={styles.overlay}
+                style={{
+                  left: `${(100 - overlay.w) / 2}%`,
+                  top: `${(100 - overlayHeight) / 2}%`,
+                  width: `${overlay.w}%`,
+                }}
+                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.9, y: '4%' }}
+                animate={{ opacity: 1, scale: 1, y: '0%' }}
+                exit={{ opacity: 0, scale: reduced ? 1 : 0.96, transition: { duration: 0.15 } }}
+                transition={
+                  reduced ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 26, delay: delay + 0.5 }
+                }
+              />
+            )}
+          </AnimatePresence>
+        </button>
+        <span className={styles.homeButton} />
+      </div>
+    </div>
+  );
+}
+
+/* The iPad and the iPhone side by side, telling one story in chapters: each chapter shows the
+   same feature on both, pushed in on the iPad and then handed across to the iPhone. A segmented
+   rail under them fills while a chapter plays, and its end advances to the next, so pausing the
+   fill pauses the story. It holds while it's off screen, under the pointer or keyboard focus, or
+   paused by its own button; with reduced motion it doesn't play at all and the rail steps it. */
+function HandheldPair({ handhelds, onOpen }: { handhelds: Handhelds; onOpen: (src: string) => void }) {
+  const { chapters } = handhelds;
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const [held, setHeld] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const segments = useRef<(HTMLButtonElement | null)[]>([]);
+  const inView = useInView(root, { amount: 0.4 });
+  const reduced = useReducedMotion();
+  const playing = !reduced && !paused && !held && inView;
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  // Every screen is drawn before its push begins rather than loading mid-slide.
+  useEffect(() => {
+    for (const chapter of chapters)
+      for (const device of HANDHELD_DEVICES) {
+        const screen = chapter[device];
+        if (screen) new Image().src = screen.src;
+        if (screen?.overlay) new Image().src = screen.overlay.src;
+      }
+  }, [chapters]);
+
+  const go = (next: number, dir: number, focus = false) => {
+    const index = (next + chapters.length) % chapters.length;
+    if (index === current) return;
+    setDirection(dir);
+    setCurrent(index);
+    if (focus) segments.current[index]?.focus();
+  };
+
+  return (
+    <div
+      ref={root}
+      className={styles.pair}
+      onFocus={(event) => event.target.matches(':focus-visible') && setHeld(true)}
+      onBlur={(event) => !root.current?.contains(event.relatedTarget) && setHeld(false)}
+    >
+      {/* Only the devices hold it under the pointer: over the rail, the play button has to work. */}
+      <div
+        className={styles.pairDevices}
+        onPointerEnter={(event) => event.pointerType === 'mouse' && setHeld(true)}
+        onPointerLeave={() => setHeld(false)}
+      >
+        {HANDHELD_DEVICES.map((device, d) => {
+          const screen = screenAt(chapters, current, device);
+          return (
+            screen && (
+              <HandheldDevice
+                key={device}
+                device={device}
+                screen={screen}
+                chapter={current}
+                direction={direction}
+                delay={d * HANDOFF}
+                onOpen={onOpen}
+              />
+            )
+          );
+        })}
+      </div>
+
+      <div className={styles.chapters}>
+        <p className={styles.chapterCaption}>
+          <span className={styles.chapterCount}>
+            {pad(current + 1)} / {pad(chapters.length)}
+          </span>
+          <span className={styles.chapterLabel}>
+            <AnimatePresence initial={false} mode="popLayout" custom={direction}>
+              <motion.span
+                key={current}
+                custom={direction}
+                variants={{
+                  enter: (dir: number) => ({ opacity: 0, y: reduced ? 0 : `${dir * 60}%` }),
+                  center: { opacity: 1, y: '0%' },
+                  exit: (dir: number) => ({ opacity: 0, y: reduced ? 0 : `${dir * -60}%` }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: reduced ? 0 : 0.35, ease: PUSH_EASE }}
+              >
+                {chapters[current].label}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </p>
+
+        <div className={styles.chapterControls}>
+          <div
+            className={styles.segments}
+            role="tablist"
+            aria-label="Chapters"
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowRight') go(current + 1, 1, true);
+              if (event.key === 'ArrowLeft') go(current - 1, -1, true);
+            }}
+          >
+            {chapters.map((chapter, i) => (
+              <button
+                key={chapter.label}
+                ref={(el) => {
+                  segments.current[i] = el;
+                }}
+                type="button"
+                role="tab"
+                className={styles.segment}
+                aria-selected={i === current}
+                aria-label={chapter.label}
+                tabIndex={i === current ? 0 : -1}
+                onClick={() => go(i, i > current ? 1 : -1)}
+              >
+                <span
+                  key={i === current ? `playing-${current}` : 'idle'}
+                  className={styles.segmentFill}
+                  data-state={i < current ? 'done' : i === current ? 'current' : undefined}
+                  style={{ '--dwell': `${DWELL}s`, animationPlayState: playing ? 'running' : 'paused' } as CSSProperties}
+                  onAnimationEnd={i === current ? () => go(current + 1, 1) : undefined}
+                />
+              </button>
+            ))}
+          </div>
+          {!reduced && (
+            <button
+              type="button"
+              className={styles.playToggle}
+              aria-label={paused ? 'Play' : 'Pause'}
+              aria-pressed={paused}
+              onClick={() => setPaused(!paused)}
+            >
+              <span aria-hidden="true" data-icon={paused ? 'play' : 'pause'} />
+            </button>
+          )}
         </div>
       </div>
-      {screenTabs && <div className={styles.tabsBelow}>{screenTabs}</div>}
     </div>
   );
 }
@@ -480,10 +677,12 @@ export default function CaseGallery({
   items,
   laneLabels,
   showcases = [],
+  handhelds,
 }: {
   items: GalleryItem[];
   laneLabels?: Partial<Record<LaneId, string>>;
   showcases?: Showcase[];
+  handhelds?: Handhelds;
 }) {
   const [open, setOpen] = useState<number | null>(null);
   const wall = useRef<HTMLElement>(null);
@@ -496,11 +695,29 @@ export default function CaseGallery({
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], reduced ? [1.1, 1.1, 1.1] : [1.3, 1.12, 1]);
 
   const indexOf = new Map(items.map((item, i) => [item, i]));
+  // A device's screen is the gallery entry's lightbox image, so the URLs match.
+  const openSrc = (src: string) => {
+    const index = items.findIndex((item) => item.full === src);
+    if (index >= 0) setOpen(index);
+  };
   const columns = wallColumns(items);
 
   return (
     <div className={styles.gallery}>
       {LANES.map((lane) => {
+        // The paired handhelds take the iPad lane's place and stand in for the iPhone's too.
+        if (handhelds && (lane.id === 'ipad' || lane.id === 'iphone')) {
+          return (
+            lane.id === 'ipad' && (
+              <section key="handhelds" className={styles.lane} aria-label={handhelds.label}>
+                <header className={styles.laneHeader}>
+                  <h2>{handhelds.label}</h2>
+                </header>
+                <HandheldPair handhelds={handhelds} onOpen={openSrc} />
+              </section>
+            )
+          );
+        }
         const showcase = showcases.find((s) => s.lane === lane.id);
         const laneItems = items.filter((item) => lane.kinds.includes(item.kind));
         if (!laneItems.length && !showcase) return null;
@@ -511,13 +728,9 @@ export default function CaseGallery({
               <h2>{label}</h2>
               {!showcase && <span>{laneItems.length} screens</span>}
             </header>
-            {/* A lane with a device shows the work in it, plus a still grid of the lane's other
-                screens if it asks for one; the wall below still carries every screen. */}
+            {/* A lane with a device shows the work in it; the wall below still carries every screen. */}
             {showcase ? (
-              <>
-                <DeviceShowcase showcase={showcase} />
-                {showcase.grid && <ScreenGrid items={laneItems} device={showcase.device} onOpen={(item) => setOpen(indexOf.get(item)!)} />}
-              </>
+              <DeviceShowcase showcase={showcase} />
             ) : (
               <Marquee
                 axis="x"

@@ -76,6 +76,10 @@
   --kin-grid: #f09a13;
   --kin-ink: #4d3f29;
   --kin-screen-rim: #5d4a2c;
+  /* the app's own palette, sampled from its screens, for the case study's phone showcase */
+  --kin-cream: #edebde;
+  --kin-sage: #357a67;
+  --kin-shadow: rgb(77 63 41 / 0.28);
 
   --alto-face: #f9f2f8;
   --alto-grid: #ffd3f6;

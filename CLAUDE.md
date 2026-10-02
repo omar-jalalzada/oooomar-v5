@@ -261,22 +261,37 @@ comes later as its own phase.
  every screen many times); the lanes reach each screen once and are the keyboard path.
  IntersectionObserver never reports a hit for the wall's columns inside its 3D plane, so the
  wall passes its own visibility down to them — a marquee that "just doesn't move" is that.
- Each entry in `showcases` in the frontmatter puts full screens in a drawn device (`imac`,
- `ipad` or `iphone`) in place of a lane's strip, and the wall at the bottom still carries every
- screen. With `grid: true` the lane's other screens sit in a still masonry grid under the
- device: anything already on its screen or behind a hotspot is left out (matched by source
- image), so cherry-picking a screen onto the device moves it rather than listing it twice. The
- grid takes the most columns (up to three) that still end within a quarter of each other. Several screens are switched by
- tabs (on the iMac's chin, under a handheld) and slide like desktops; each screen carries its
+ Each entry in `showcases` in the frontmatter puts full screens in a drawn iMac in place of a
+ lane's strip, and the wall at the bottom still carries every screen. Several screens are
+ switched by tabs on the iMac's chin and slide like desktops; each screen carries its
  own pulsing hotspots that reveal dialogs, and switching screens closes any open one. Screens
  sharing a toolbar share hotspots through YAML anchors, one per hotspot (`&manage-hotspot`),
  so a screen can add its own on top; a screen whose toolbar differs lists its own positions,
  measured from its image. Place each reveal at the screen's own scale (its pixel width over the
  screen's) so it lands the size it was designed. Style the screen image by class, not
  `.screen > img`: the reveals are images in the same box and would be stretched to fill it.
+ `handhelds` puts an iPad and an iPhone side by side in place of both their lanes, playing
+ one story in chapters: each chapter names a screen per device, the same feature on both, and
+ they change by UIKit's push (the iPhone a beat behind, so it reads as handed across). A
+ device a chapter leaves out holds its last screen; a chapter that repeats a screen doesn't
+ push it again (the images are keyed by source), which is how a cropped dialog gets its own
+ chapter — as an `overlay` popped up over the screen it came from. The segmented rail's fill
+ is a CSS animation whose `animationend` advances the chapter, so pausing the fill (hover on
+ the devices, keyboard focus, off screen, the pause button) pauses the story with no timer to
+ keep in step. Only *keyboard* focus may hold it: a click focuses the play button too, and
+ holding on that makes Play do nothing. Clicking a screen opens it in the lightbox by matching
+ its URL to a gallery entry's, so a chapter screen must also be in `gallery`.
  The handhelds are drawn as the Mosaic era's (home button, 3:4 iPad, 16:9 iPhone), which is
  what the exports are sized for; `SCREEN_RATIO` in `CaseGallery.tsx` is each device's screen
  height over width.
+- **A phone-first product uses `phone` instead of `gallery`.** Kin's case study sets `phone` in
+ its frontmatter (`keyScreens` plus `flows`, each screen with a short `label` and a full
+ `alt`), and the page renders `PhoneShowcase.tsx` in place of `CaseGallery`: the key screens
+ fan out of a stack, each flow autoplays through a drawn notched iPhone with a UIKit-style push
+ while it's in view (hover pauses, the step strip jumps), and every screen spins on two 3D
+ rings at the end. The exports are iPhone X screens (1125 × 2436, notch drawn in); a much
+ taller export scrolls inside the phone during its step, a much shorter one is a card set on
+ `--kin-cream`. The frame is sized in container units, so set `--phone-w` and nothing else.
 - **Home leads with craft, not a statement.** No grandiose hero headline ("Design that makes…").
   The work — writing and experiments — comes first.
 - **Omar/bio content lives on the About page**, not the home.

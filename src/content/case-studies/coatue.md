@@ -13,8 +13,6 @@ facts:
 status: draft
 laneLabels:
   web: Mosaic Web
-  ipad: Mosaic iPad
-  iphone: Mosaic iPhone
 # The overlays are placed at the dashboard's own scale: each width is its pixel width over the
 # dashboard's 4000px, so the dialogs sit on the screen at the size they were designed.
 showcases:
@@ -82,20 +80,40 @@ showcases:
             y: 8
             reveals:
               - { src: ./coatue/web-smartlist-details.png, alt: "Editing a Smartlist: its template, conditional filters and manually added names", x: 78.5, y: 11, w: 20, surface: true }
-  - lane: ipad
-    device: ipad
-    grid: true
-    screens:
-      - label: Search
-        src: ./coatue/ipad-search.png
-        alt: "Mosaic for iPad: searching research and notes by type, ticker and hashtag"
-  - lane: iphone
-    device: iphone
-    grid: true
-    screens:
-      - label: Channels
-        src: ./coatue/iphone-channels.png
-        alt: "Mosaic for iPhone: a channel of research, notes and meeting files"
+# The same feature on both devices, chapter by chapter. The iPad's cropped dialogs pop up over
+# the screen they were taken from, so their chapter repeats that screen rather than pushing.
+handhelds:
+  label: Mosaic iPad and iPhone
+  chapters:
+    - label: Channels
+      ipad: { src: ./coatue/ipad-channel-feed.png, alt: "iPad: a channel's feed of research and notes, with channels as tabs" }
+      iphone: { src: ./coatue/iphone-channels.png, alt: "iPhone: a channel of research, notes and meeting files" }
+    - label: Navigation
+      ipad: { src: ./coatue/ipad-navigation.jpg, alt: "iPad: the menu of channels, meetings and bookmarked research" }
+      iphone: { src: ./coatue/iphone-navigation.png, alt: "iPhone: the menu of channels" }
+    - label: Search
+      ipad: { src: ./coatue/ipad-search.png, alt: "iPad: searching research and notes by type, ticker and hashtag" }
+      iphone: { src: ./coatue/iphone-search-start.jpg, alt: "iPhone: starting a search from content types and stock filters" }
+    - label: Filters and suggestions
+      ipad: { src: ./coatue/ipad-search-filter.png, alt: "iPad: search with a saved research filter applied" }
+      iphone: { src: ./coatue/iphone-search-autocomplete.jpg, alt: "iPhone: search suggestions across research, notes, hashtags, tickers and Smartlists" }
+    - label: Results
+      ipad: { src: ./coatue/ipad-search-results.png, alt: "iPad: search results narrowed by a filter, a hashtag and a ticker" }
+      iphone: { src: ./coatue/iphone-search-results.jpg, alt: "iPhone: search results filtered to top firms' upgrades and downgrades" }
+    - label: Reading research
+      ipad: { src: ./coatue/ipad-research.jpg, alt: "iPad: reading an equity research report" }
+      iphone: { src: ./coatue/iphone-research.png, alt: "iPhone: reading a research report" }
+    - label: Inside a document
+      ipad: { src: ./coatue/ipad-note.png, alt: "iPad: reading an analyst's note with its attachments" }
+      iphone: { src: ./coatue/iphone-find-in-document.jpg, alt: "iPhone: finding a keyword inside a research report" }
+    - label: Sharing and alerts
+      ipad:
+        src: ./coatue/ipad-note.png
+        alt: "iPad: an analyst's note"
+        overlay: { src: ./coatue/ipad-slack.png, alt: "iPad: sharing research to a Slack channel", w: 56 }
+      iphone: { src: ./coatue/iphone-alerts.png, alt: "iPhone: alerts on channels and positions" }
+    - label: A stock at a glance
+      iphone: { src: ./coatue/iphone-stock-detail.jpg, alt: "iPhone: stock detail with company info, chart and news" }
 gallery:
   - { src: ./coatue/web-dashboard-performance.png, kind: web, alt: "Performance dashboard: exposure, exposure history, P&L by industry, longs and shorts" }
   - { src: ./coatue/web-dashboard-analyst.png, kind: web, alt: "Analyst dashboard: agenda, research, tasks and charts" }
@@ -117,10 +135,22 @@ gallery:
   - { src: ./coatue/ipad-slack.png, kind: ipad, alt: "iPad: sharing research to Slack" }
   - { src: ./coatue/ipad-offline.png, kind: ipad, alt: "iPad: downloading a channel for offline reading" }
   - { src: ./coatue/ipad-channel-properties.png, kind: ipad, alt: "iPad: channel properties and filters" }
+  - { src: ./coatue/ipad-navigation.jpg, kind: ipad, alt: "iPad: the menu of channels, meetings and bookmarked research" }
+  - { src: ./coatue/ipad-channel-feed.png, kind: ipad, alt: "iPad: a channel's feed of research and notes, with channels as tabs" }
+  - { src: ./coatue/ipad-search-filter.png, kind: ipad, alt: "iPad: search with a saved research filter applied" }
+  - { src: ./coatue/ipad-search-results.png, kind: ipad, alt: "iPad: search results narrowed by a filter, a hashtag and a ticker" }
+  - { src: ./coatue/ipad-note.png, kind: ipad, alt: "iPad: reading an analyst's note with its attachments" }
+  - { src: ./coatue/ipad-research.jpg, kind: ipad, alt: "iPad: reading an equity research report" }
   - { src: ./coatue/iphone-channels.png, kind: iphone, alt: "iPhone: the main channel view" }
   - { src: ./coatue/iphone-navigation.png, kind: iphone, alt: "iPhone: navigation" }
   - { src: ./coatue/iphone-alerts.png, kind: iphone, alt: "iPhone: alerts and notifications" }
   - { src: ./coatue/iphone-research.png, kind: iphone, alt: "iPhone: reading research" }
+  - { src: ./coatue/iphone-search-start.jpg, kind: iphone, alt: "iPhone: starting a search from content types and stock filters" }
+  - { src: ./coatue/iphone-search-autocomplete.jpg, kind: iphone, alt: "iPhone: search suggestions across research, notes, hashtags, tickers and Smartlists" }
+  - { src: ./coatue/iphone-search-results.jpg, kind: iphone, alt: "iPhone: search results filtered to top firms' upgrades and downgrades" }
+  - { src: ./coatue/iphone-find-in-document.jpg, kind: iphone, alt: "iPhone: finding a keyword inside a research report" }
+  - { src: ./coatue/iphone-stock-detail.jpg, kind: iphone, alt: "iPhone: stock detail with company info, chart and news" }
+  - { src: ./coatue/iphone-settings.jpg, kind: iphone, alt: "iPhone: settings for read items, offline documents, alerts and excluded research" }
   - { src: ./coatue/system-color.png, kind: system, alt: "Design system: primary and secondary colors" }
   - { src: ./coatue/system-forms.png, kind: system, alt: "Design system: form elements" }
   - { src: ./coatue/system-icons.png, kind: system, alt: "Design system: custom, pixel-fitted icons" }

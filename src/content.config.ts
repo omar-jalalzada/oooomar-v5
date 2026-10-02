@@ -64,8 +64,15 @@ const work = defineCollection({
 // page takes the company, period and card from there.
 const caseStudies = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/case-studies' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: ({ image }) => {
+    const handheldScreen = z.object({
+      src: image(),
+      alt: z.string(),
+      overlay: z.object({ src: image(), alt: z.string(), w: z.number() }).optional(),
+    });
+    // `label` is the short caption shown under the phone, `alt` the full description
+    const phoneScreen = z.object({ src: image(), label: z.string(), alt: z.string() });
+    return z.object({
       title: z.string(),
       summary: z.string(),
       facts: z.array(z.object({ label: z.string(), value: z.string() })),
@@ -76,22 +83,20 @@ const caseStudies = defineCollection({
           alt: z.string(),
           kind: z.enum(['web', 'ipad', 'iphone', 'system', 'process']),
         }),
-      ),
+      ).default([]),
       // renames a gallery lane for this product, e.g. { web: "Mosaic Web" }
       laneLabels: z
         .object({ web: z.string(), ipad: z.string(), iphone: z.string(), system: z.string() })
         .partial()
         .optional(),
-      // full screens shown in a drawn device in place of a lane's strip, switched by tabs; a
+      // full screens shown in a drawn iMac in place of a lane's strip, switched by tabs; a
       // screen's hotspots reveal the dialogs behind its controls, every position and width a
       // percent of the screen
       showcases: z
         .array(
           z.object({
             lane: z.enum(['web', 'ipad', 'iphone', 'system']),
-            device: z.enum(['imac', 'ipad', 'iphone']),
-            // lists the lane's other screens under the device, the ones not on its screen yet
-            grid: z.boolean().default(false),
+            device: z.enum(['imac']),
             screens: z
               .array(
                 z.object({
@@ -124,8 +129,41 @@ const caseStudies = defineCollection({
           }),
         )
         .default([]),
+      // an iPad and an iPhone side by side, replacing both lanes, playing the same chapters in
+      // step. A device a chapter leaves out holds its last screen; an overlay is a cropped
+      // dialog that pops up centred over the screen, `w` its width as a percent of the screen's
+      handhelds: z
+        .object({
+          label: z.string(),
+          chapters: z
+            .array(
+              z
+                .object({
+                  label: z.string(),
+                  ipad: handheldScreen.optional(),
+                  iphone: handheldScreen.optional(),
+                })
+                .refine((chapter) => chapter.ipad || chapter.iphone, 'A chapter needs at least one device'),
+            )
+            .min(2),
+        })
+        .optional(),
+      // a phone-first product: its key screens fanned out, then each flow played through a
+      // phone step by step. Replaces the gallery for a study that sets it.
+      phone: z
+        .object({
+          logo: image().optional(),
+          // `words` take turns in the middle of the line, the first one shown first
+          headline: z.object({ lead: z.string(), words: z.array(z.string()).min(2), tail: z.string() }),
+          keyScreens: z.array(phoneScreen).min(3),
+          flows: z
+            .array(z.object({ title: z.string(), summary: z.string(), screens: z.array(phoneScreen).min(2) }))
+            .min(1),
+        })
+        .optional(),
       status,
-    }),
+    });
+  },
 });
 
 export const collections = { writing, experiments, work, caseStudies };
