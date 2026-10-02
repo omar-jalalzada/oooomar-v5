@@ -120,6 +120,50 @@ function formatRange(start, end) {
   return `${formatYear(start)} – ${formatYear(end)}`;
 }
 
+function layoutVerticalTracks(items, era) {
+  const plotHeight = Math.max(700, Math.min(1120, items.length * 78));
+  const span = era.end - era.start;
+  const placements = new Map();
+  const groups = [];
+  let laneOffset = 0;
+
+  for (const region of REGION_ORDER) {
+    const regional = items
+      .filter((movement) => movement.region === region)
+      .map((movement) => {
+        const start = Math.max(era.start, Math.min(era.end, movement.start));
+        const end = Math.max(start, Math.min(era.end, movement.end));
+        const top = ((start - era.start) / span) * plotHeight;
+        const proportionalHeight = ((end - start) / span) * plotHeight;
+        const height = Math.max(70, proportionalHeight);
+        return {
+          movement,
+          top: Math.min(plotHeight - Math.min(height, plotHeight), top),
+          height: Math.min(height, plotHeight),
+        };
+      })
+      .sort((a, b) => a.top - b.top || b.height - a.height);
+    if (!regional.length) continue;
+
+    const laneEnds = [];
+    for (const item of regional) {
+      let lane = laneEnds.findIndex((end) => item.top >= end + 8);
+      if (lane === -1) lane = laneEnds.length;
+      laneEnds[lane] = item.top + item.height;
+      placements.set(item.movement.id, { top: item.top, height: item.height, lane: laneOffset + lane });
+    }
+    groups.push({ region, lane: laneOffset, lanes: laneEnds.length });
+    laneOffset += laneEnds.length;
+  }
+
+  for (const placement of placements.values()) {
+    placement.left = (placement.lane / laneOffset) * 100;
+    placement.width = (1 / laneOffset) * 100;
+  }
+
+  return { placements, groups, lanes: laneOffset, plotHeight };
+}
+
 function renderFilters() {
   const regions = ['All', ...REGION_ORDER.filter((region) => movements.some((movement) => movement.region === region))];
   regionFilters.innerHTML = regions
@@ -148,8 +192,32 @@ function renderEraNav() {
 function renderTimeline() {
   timeline.innerHTML = ERA_ORDER.map((era, eraIndex) => {
     const items = movements.filter((movement) => movement.era === era.id).sort((a, b) => a.start - b.start);
+    const layout = layoutVerticalTracks(items, era);
+    const ticks = Array.from({ length: 6 }, (_, index) =>
+      Math.round(era.start + ((era.end - era.start) * index) / 5),
+    );
+    const trackLabels = layout.groups
+      .map(
+        (group) => `
+          <span
+            class="track-label"
+            style="--track-left:${(group.lane / layout.lanes) * 100}%;--track-width:${(group.lanes / layout.lanes) * 100}%;--region-color:${REGION_COLORS[group.region]}"
+          >${esc(group.region)}</span>
+        `,
+      )
+      .join('');
+    const tickMarks = ticks
+      .map(
+        (tick, index) => `
+          <span class="time-tick" style="--tick-top:${(index / (ticks.length - 1)) * 100}%">
+            <span>${esc(formatYear(tick))}</span>
+          </span>
+        `,
+      )
+      .join('');
     const cards = items
       .map((movement) => {
+        const place = layout.placements.get(movement.id);
         const searchText = [
           movement.title,
           movement.region,
@@ -165,14 +233,13 @@ function renderTimeline() {
             data-movement="${esc(movement.id)}"
             data-region="${esc(movement.region)}"
             data-search="${esc(searchText)}"
-            style="--region-color:${REGION_COLORS[movement.region]}"
+            style="--region-color:${REGION_COLORS[movement.region]};--card-top:${place.top}px;--card-height:${place.height}px;--card-left:${place.left}%;--card-width:${place.width}%"
           >
             <span class="movement__date">${esc(formatRange(movement.start, movement.end))}</span>
             <span class="movement__body">
               <span class="movement__title">${esc(movement.title)}</span>
               <span class="movement__region">${esc(movement.region)}</span>
             </span>
-            <span class="movement__open" aria-hidden="true">Open</span>
           </button>
         `;
       })
@@ -188,7 +255,13 @@ function renderTimeline() {
             <p class="era__note">${esc(era.note)}</p>
           </div>
         </header>
-        <div class="era__track">${cards}</div>
+        <div class="era__chart-scroll" tabindex="0" aria-label="${esc(era.title)} parallel timeline tracks">
+          <div class="era__chart" style="--plot-height:${layout.plotHeight}px">
+            <div class="era__track-labels" aria-hidden="true">${trackLabels}</div>
+            <div class="era__time-axis" aria-hidden="true">${tickMarks}</div>
+            <div class="era__plot">${cards}</div>
+          </div>
+        </div>
       </section>
     `;
   }).join('');

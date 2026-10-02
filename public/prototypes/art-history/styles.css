@@ -275,25 +275,95 @@ a {
   color: var(--muted);
 }
 
-.era__track {
+.era__chart-scroll {
   min-width: 0;
-  display: grid;
+  overflow-x: auto;
+  scrollbar-color: var(--ink) var(--faint);
+}
+
+.era__chart {
+  position: relative;
+  min-width: 760px;
+  height: calc(var(--plot-height) + 44px);
+  background: var(--paper);
+}
+
+.era__track-labels {
+  position: absolute;
+  inset: 0 0 auto 76px;
+  height: 44px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.track-label {
+  position: absolute;
+  left: var(--track-left);
+  width: var(--track-width);
+  height: 44px;
+  padding: 11px 8px 0;
+  overflow: hidden;
+  border-left: 3px solid var(--region-color);
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.era__time-axis {
+  position: absolute;
+  inset: 44px 0 0;
+  pointer-events: none;
+}
+
+.time-tick {
+  position: absolute;
+  z-index: 1;
+  top: var(--tick-top);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
+}
+
+.time-tick span {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  width: 68px;
+  padding-right: 8px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.era__plot {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  left: 76px;
+  height: var(--plot-height);
+  background-image: linear-gradient(to right, var(--faint) 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%;
 }
 
 .movement {
   --region-color: var(--global);
-  width: 100%;
-  min-height: 88px;
-  padding: 0 16px 0 0;
-  display: grid;
-  grid-template-columns: minmax(124px, 0.24fr) minmax(0, 1fr) auto;
-  gap: 18px;
-  align-items: center;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-left: 8px solid var(--region-color);
+  position: absolute;
+  z-index: 2;
+  top: var(--card-top);
+  left: calc(var(--card-left) + 3px);
+  width: calc(var(--card-width) - 6px);
+  height: var(--card-height);
+  min-width: 0;
+  min-height: 0;
+  padding: 9px 8px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--region-color) 72%, var(--ink));
+  border-top: 5px solid var(--region-color);
   border-radius: 0;
-  background: var(--paper);
+  background: color-mix(in srgb, var(--region-color) 8%, var(--paper));
   color: var(--ink);
   text-align: left;
   cursor: pointer;
@@ -303,13 +373,16 @@ a {
 }
 
 .movement:hover {
-  transform: translateX(4px);
-  background: color-mix(in srgb, var(--region-color) 8%, var(--paper));
+  z-index: 4;
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--region-color) 16%, var(--paper));
 }
 
 .movement__date {
-  padding-left: 14px;
-  font-size: 10px;
+  display: block;
+  margin-bottom: 7px;
+  padding: 0;
+  font-size: 9px;
   line-height: 1.25;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
@@ -322,20 +395,15 @@ a {
 }
 
 .movement__title {
-  font-size: clamp(18px, 2.2vw, 30px);
+  font-size: clamp(12px, 1.25vw, 18px);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
 .movement__region {
   color: var(--muted);
-  font-size: 11px;
-}
-
-.movement__open {
-  font-size: 11px;
-  color: var(--muted);
+  font-size: 9px;
 }
 
 .movement[hidden] {
@@ -729,29 +797,16 @@ noscript {
     display: none;
   }
 
-  .movement {
-    min-height: 92px;
-    padding-right: 10px;
-    grid-template-columns: 74px minmax(0, 1fr);
-    gap: 10px;
-    border-left-width: 5px;
+  .era__chart {
+    min-width: 680px;
   }
 
   .movement:hover {
     transform: none;
   }
 
-  .movement__date {
-    padding-left: 8px;
-    font-size: 9px;
-  }
-
   .movement__title {
-    font-size: 16px;
-  }
-
-  .movement__open {
-    display: none;
+    font-size: 13px;
   }
 
   .movement-modal {
