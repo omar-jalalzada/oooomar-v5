@@ -317,9 +317,10 @@ function openMovement(id) {
   if (!movement) return;
   movementDialog.style.setProperty('--region-color', REGION_COLORS[movement.region]);
   movementDialogContent.innerHTML = `
+    <p class="movement-modal__geography"><i aria-hidden="true"></i>${esc(movement.region)}</p>
     <div class="movement-modal__head">
       <div>
-        <p class="movement-modal__kicker">${esc(movement.region)} · six examples</p>
+        <p class="movement-modal__kicker">Six examples</p>
         <h2 id="movement-modal-title">${esc(movement.title)}</h2>
         <p class="movement-modal__date">${esc(formatRange(movement.start, movement.end))}</p>
       </div>

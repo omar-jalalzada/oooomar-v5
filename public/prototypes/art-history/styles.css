@@ -360,7 +360,8 @@ a {
 
 .era__chart {
   position: relative;
-  min-width: 760px;
+  width: 200%;
+  min-width: 1520px;
   height: var(--plot-height);
   background: var(--paper);
 }
@@ -505,6 +506,28 @@ a {
   grid-template-columns: minmax(220px, 0.75fr) minmax(320px, 1.25fr);
   gap: 28px 56px;
   margin-bottom: 40px;
+}
+
+.movement-modal__geography {
+  width: fit-content;
+  margin: -28px 0 24px;
+  padding: 7px 12px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--region-color) 60%, var(--ink));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--region-color) 10%, var(--paper));
+  font-size: 12px;
+  line-height: 1;
+}
+
+.movement-modal__geography i {
+  width: 8px;
+  height: 8px;
+  display: block;
+  border-radius: 50%;
+  background: var(--region-color);
 }
 
 .movement-modal__kicker,
@@ -881,7 +904,7 @@ noscript {
   }
 
   .era__chart {
-    min-width: 680px;
+    min-width: 1360px;
   }
 
   .movement:hover {
