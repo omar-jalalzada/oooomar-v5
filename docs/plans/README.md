@@ -5,6 +5,7 @@ kept for learning and future reference. Each entry is the plan verbatim as appro
 
 | Date | Plan | Outcome |
 | --- | --- | --- |
+| 2026-10-02 | [Art History timeline](2026-10-02-art-history-timeline.md) | Build a comprehensive global timeline of 64 movements and traditions, with six sourced examples each, segmented eras, regional navigation, accessible expanded galleries, and rights-aware image handling |
 | 2026-09-24 | [Simplify the site to four pages](2026-09-24-simplify-site-pages.md) | Settle on a holding homepage plus Writing, Experiments and a single About page: fold the `about` card collection into `about.astro` and delete it, remove the dead Constellation canvas and duplicate Astro cards, drop Base's `immersive` mode so the homepage gets the nav, and hide the nav in production while soft presence is on |
 | 2026-09-23 | [Atlas as a COBE globe](2026-09-23-atlas-cobe.md) | Replace Atlas's flat canvas map with a vendored COBE WebGL globe: day-ordered travel arcs rebuilt from the raw Swarm export, scrubber-driven markers, photo stacks at chosen moments, and a local city + photo review list to decide the cleanup next |
 | 2026-09-23 | [Frontend-design skill audit](2026-09-23-frontend-design-audit.md) | Critique the full site (chrome + all prototypes) against Anthropic's `frontend-design` skill; deliver a Canvas findings report — evaluate only, no redesign |

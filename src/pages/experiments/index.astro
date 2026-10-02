@@ -13,6 +13,7 @@ const cards = experiments.map((experiment) => ({
   title: experiment.data.title,
   description: experiment.data.description,
   draft: experiment.data.status === 'draft',
+  look: experiment.id === 'art-history' ? 'art-history' as const : undefined,
 }));
 ---
 

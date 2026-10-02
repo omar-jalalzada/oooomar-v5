@@ -19,6 +19,40 @@
   box-shadow: var(--shadow-md);
 }
 
+.card[data-look='art-history'] {
+  min-height: calc(var(--space-24) * 3);
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.artHistoryVisual {
+  height: var(--space-24);
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) var(--space-6);
+  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-1);
+  align-items: end;
+  background: var(--color-ink);
+}
+
+.artHistoryVisual i {
+  height: calc(var(--space-3) + var(--space-2));
+  display: block;
+  background: var(--color-accent);
+  opacity: 0.45;
+}
+
+.artHistoryVisual i:nth-child(2n) {
+  height: var(--space-12);
+  opacity: 0.7;
+}
+
+.artHistoryVisual i:nth-child(3n) {
+  height: var(--space-16);
+  opacity: 1;
+}
+
 .heading {
   font-size: var(--text-base);
   font-weight: 600;

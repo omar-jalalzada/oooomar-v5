@@ -1,0 +1,676 @@
+[
+  {
+    "id": "cave-art",
+    "title": "Cave art",
+    "start": -40000,
+    "end": -10000,
+    "era": "origins",
+    "region": "Global",
+    "wiki": "Cave_painting",
+    "summary": "Pigment, engraving, and relief turned rock shelters into humanity's earliest surviving image spaces."
+  },
+  {
+    "id": "aboriginal-australian",
+    "title": "Aboriginal Australian art",
+    "start": -30000,
+    "end": 2026,
+    "era": "origins",
+    "region": "Oceania",
+    "wiki": "Australian_Aboriginal_art",
+    "summary": "Living visual systems connect Country, kinship, ceremony, and ancestral knowledge across many nations."
+  },
+  {
+    "id": "neolithic-art",
+    "title": "Neolithic art",
+    "start": -10000,
+    "end": -2000,
+    "era": "origins",
+    "region": "Global",
+    "wiki": "Neolithic_art",
+    "summary": "Settled communities made patterned vessels, figures, monuments, and architecture alongside farming."
+  },
+  {
+    "id": "mesopotamian-art",
+    "title": "Mesopotamian art",
+    "start": -4000,
+    "end": -539,
+    "era": "origins",
+    "region": "West Asia",
+    "wiki": "Art_of_Mesopotamia",
+    "summary": "City-states used relief, sculpture, seals, and architecture to picture ritual and power."
+  },
+  {
+    "id": "ancient-egyptian",
+    "title": "Ancient Egyptian art",
+    "start": -3100,
+    "end": 395,
+    "era": "origins",
+    "region": "Africa",
+    "wiki": "Art_of_ancient_Egypt",
+    "summary": "A durable visual grammar joined divine order, royal authority, daily life, and the afterlife."
+  },
+  {
+    "id": "indus-valley",
+    "title": "Indus Valley art",
+    "start": -2600,
+    "end": -1300,
+    "era": "origins",
+    "region": "South Asia",
+    "wiki": "Indus_Valley_Civilisation",
+    "summary": "Small seals, terracotta figures, metalwork, and planned cities reveal an urban visual culture."
+  },
+  {
+    "id": "ancient-greek",
+    "title": "Ancient Greek art",
+    "start": -1050,
+    "end": -31,
+    "era": "antiquity",
+    "region": "Europe",
+    "wiki": "Ancient_Greek_art",
+    "summary": "Artists repeatedly reworked the human figure through pottery, sculpture, painting, and temples."
+  },
+  {
+    "id": "roman-art",
+    "title": "Roman art",
+    "start": -500,
+    "end": 476,
+    "era": "antiquity",
+    "region": "Europe",
+    "wiki": "Roman_art",
+    "summary": "Portraiture, illusionistic rooms, monuments, and mosaics carried imperial and domestic stories."
+  },
+  {
+    "id": "achaemenid-art",
+    "title": "Achaemenid Persian art",
+    "start": -550,
+    "end": -330,
+    "era": "antiquity",
+    "region": "West Asia",
+    "wiki": "Achaemenid_architecture",
+    "summary": "Palatial reliefs and architecture joined regional forms into a precise language of empire."
+  },
+  {
+    "id": "gandharan-art",
+    "title": "Gandharan art",
+    "start": -100,
+    "end": 500,
+    "era": "antiquity",
+    "region": "South Asia",
+    "wiki": "Greco-Buddhist_art",
+    "summary": "Buddhist subjects met Hellenistic and South Asian forms along long-distance trade routes."
+  },
+  {
+    "id": "hindu-art",
+    "title": "Hindu temple art",
+    "start": 200,
+    "end": 1600,
+    "era": "antiquity",
+    "region": "South Asia",
+    "wiki": "Hindu_art",
+    "summary": "Temple architecture and sculpture made sacred narratives spatial, rhythmic, and bodily."
+  },
+  {
+    "id": "han-art",
+    "title": "Han dynasty art",
+    "start": -206,
+    "end": 220,
+    "era": "antiquity",
+    "region": "East Asia",
+    "wiki": "Han_dynasty_art",
+    "summary": "Tombs, lacquer, textiles, bronzes, and reliefs mapped an expanding imperial world."
+  },
+  {
+    "id": "olmec-art",
+    "title": "Olmec art",
+    "start": -1500,
+    "end": -400,
+    "era": "antiquity",
+    "region": "Americas",
+    "wiki": "Olmec_colossal_heads",
+    "summary": "Monumental stone heads and small ritual objects established enduring Mesoamerican forms."
+  },
+  {
+    "id": "maya-art",
+    "title": "Maya art",
+    "start": -500,
+    "end": 1697,
+    "era": "antiquity",
+    "region": "Americas",
+    "wiki": "Ancient_Maya_art",
+    "summary": "Architecture, painted vessels, books, and carved monuments bound image, text, and time."
+  },
+  {
+    "id": "moche-art",
+    "title": "Moche art",
+    "start": 100,
+    "end": 800,
+    "era": "antiquity",
+    "region": "Americas",
+    "wiki": "Moche_culture",
+    "summary": "Ceramics, metalwork, and murals pictured ceremony, ecology, conflict, and social roles."
+  },
+  {
+    "id": "nok-art",
+    "title": "Nok terracottas",
+    "start": -1500,
+    "end": 500,
+    "era": "antiquity",
+    "region": "Africa",
+    "wiki": "Nok_culture",
+    "summary": "Distinctive hollow terracotta figures preserve one of West Africa's earliest sculptural traditions."
+  },
+  {
+    "id": "byzantine-art",
+    "title": "Byzantine art",
+    "start": 330,
+    "end": 1453,
+    "era": "sacred-courts",
+    "region": "Europe",
+    "wiki": "Byzantine_art",
+    "summary": "Mosaics, icons, manuscripts, and churches shaped sacred presence through light and gold."
+  },
+  {
+    "id": "islamic-art",
+    "title": "Islamic art",
+    "start": 650,
+    "end": 1900,
+    "era": "sacred-courts",
+    "region": "West Asia",
+    "wiki": "Islamic_art",
+    "summary": "Calligraphy, geometry, vegetal pattern, objects, and architecture developed across connected regions."
+  },
+  {
+    "id": "gothic-art",
+    "title": "Gothic art",
+    "start": 1140,
+    "end": 1500,
+    "era": "sacred-courts",
+    "region": "Europe",
+    "wiki": "Gothic_art",
+    "summary": "Soaring structures, stained glass, sculpture, and manuscripts organized narrative through light."
+  },
+  {
+    "id": "song-painting",
+    "title": "Song dynasty painting",
+    "start": 960,
+    "end": 1279,
+    "era": "sacred-courts",
+    "region": "East Asia",
+    "wiki": "Culture_of_the_Song_dynasty",
+    "summary": "Monumental landscapes and intimate studies made observation a philosophical practice."
+  },
+  {
+    "id": "yamato-e",
+    "title": "Yamato-e",
+    "start": 900,
+    "end": 1500,
+    "era": "sacred-courts",
+    "region": "East Asia",
+    "wiki": "Yamato-e",
+    "summary": "Japanese court painting unfolded seasons, places, and literature across screens and handscrolls."
+  },
+  {
+    "id": "korean-celadon",
+    "title": "Goryeo celadon",
+    "start": 918,
+    "end": 1392,
+    "era": "sacred-courts",
+    "region": "East Asia",
+    "wiki": "Goryeo_ware",
+    "summary": "Korean potters refined translucent glazes and inlay into quiet, technically exact surfaces."
+  },
+  {
+    "id": "khmer-art",
+    "title": "Khmer art",
+    "start": 802,
+    "end": 1431,
+    "era": "sacred-courts",
+    "region": "Southeast Asia",
+    "wiki": "Khmer_sculpture",
+    "summary": "Temple complexes and sculpture joined Hindu and Buddhist cosmologies to royal landscapes."
+  },
+  {
+    "id": "ethiopian-christian",
+    "title": "Ethiopian Christian art",
+    "start": 400,
+    "end": 1900,
+    "era": "sacred-courts",
+    "region": "Africa",
+    "wiki": "Ethiopian_art",
+    "summary": "Churches, icons, crosses, and manuscripts sustained a distinct Christian visual tradition."
+  },
+  {
+    "id": "ife-art",
+    "title": "Ife art",
+    "start": 1100,
+    "end": 1500,
+    "era": "sacred-courts",
+    "region": "Africa",
+    "wiki": "Art_of_Ife",
+    "summary": "Naturalistic copper-alloy and terracotta heads articulated Yoruba sacred and royal identity."
+  },
+  {
+    "id": "andean-textiles",
+    "title": "Andean textiles",
+    "start": -1000,
+    "end": 1600,
+    "era": "sacred-courts",
+    "region": "Americas",
+    "wiki": "Andean_textiles",
+    "summary": "Fiber, dye, and structure carried status, cosmology, and information across Andean societies."
+  },
+  {
+    "id": "persian-miniature",
+    "title": "Persian miniature",
+    "start": 1200,
+    "end": 1700,
+    "era": "sacred-courts",
+    "region": "West Asia",
+    "wiki": "Persian_miniature",
+    "summary": "Dense color, flattened space, and fine detail animated poetry, history, and court life."
+  },
+  {
+    "id": "mughal-painting",
+    "title": "Mughal painting",
+    "start": 1550,
+    "end": 1850,
+    "era": "sacred-courts",
+    "region": "South Asia",
+    "wiki": "Mughal_painting",
+    "summary": "Court workshops fused Persian, South Asian, and European observation in precise miniatures."
+  },
+  {
+    "id": "renaissance",
+    "title": "Renaissance",
+    "start": 1400,
+    "end": 1600,
+    "era": "early-modern",
+    "region": "Europe",
+    "wiki": "Renaissance_art",
+    "summary": "Perspective, anatomy, antiquity, and patronage reshaped painting, sculpture, and architecture."
+  },
+  {
+    "id": "mannerism",
+    "title": "Mannerism",
+    "start": 1520,
+    "end": 1600,
+    "era": "early-modern",
+    "region": "Europe",
+    "wiki": "Mannerism",
+    "summary": "Elongated figures, unstable space, and cultivated artifice stretched Renaissance balance."
+  },
+  {
+    "id": "baroque",
+    "title": "Baroque",
+    "start": 1600,
+    "end": 1750,
+    "era": "early-modern",
+    "region": "Europe",
+    "wiki": "Baroque",
+    "summary": "Dramatic light, movement, scale, and illusion made persuasion physically immediate."
+  },
+  {
+    "id": "dutch-golden-age",
+    "title": "Dutch Golden Age",
+    "start": 1588,
+    "end": 1672,
+    "era": "early-modern",
+    "region": "Europe",
+    "wiki": "Dutch_Golden_Age_painting",
+    "summary": "A broad art market supported portraiture, landscape, still life, and domestic observation."
+  },
+  {
+    "id": "ukiyo-e",
+    "title": "Ukiyo-e",
+    "start": 1603,
+    "end": 1868,
+    "era": "early-modern",
+    "region": "East Asia",
+    "wiki": "Ukiyo-e",
+    "summary": "Woodblock prints circulated actors, landscapes, fashion, and urban pleasures at scale."
+  },
+  {
+    "id": "benin-art",
+    "title": "Benin court art",
+    "start": 1400,
+    "end": 1897,
+    "era": "early-modern",
+    "region": "Africa",
+    "wiki": "Benin_Bronzes",
+    "summary": "Royal workshops cast and carved histories of the Edo court with extraordinary control."
+  },
+  {
+    "id": "oceanic-art",
+    "title": "Oceanic art",
+    "start": 1000,
+    "end": 1900,
+    "era": "early-modern",
+    "region": "Oceania",
+    "wiki": "Oceanic_art",
+    "summary": "Navigation, genealogy, exchange, and ceremony informed objects across many Pacific cultures."
+  },
+  {
+    "id": "neoclassicism",
+    "title": "Neoclassicism",
+    "start": 1760,
+    "end": 1850,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Neoclassicism",
+    "summary": "Artists used classical form to stage civic virtue, empire, revolution, and restraint."
+  },
+  {
+    "id": "romanticism",
+    "title": "Romanticism",
+    "start": 1780,
+    "end": 1850,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Romanticism",
+    "summary": "Emotion, imagination, nature, history, and political upheaval displaced classical certainty."
+  },
+  {
+    "id": "realism",
+    "title": "Realism",
+    "start": 1840,
+    "end": 1880,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Realism_(arts)",
+    "summary": "Contemporary labor and ordinary life became subjects for unsentimental, materially direct art."
+  },
+  {
+    "id": "impressionism",
+    "title": "Impressionism",
+    "start": 1860,
+    "end": 1890,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Impressionism",
+    "summary": "Broken color and visible brushwork registered changing light and modern experience."
+  },
+  {
+    "id": "post-impressionism",
+    "title": "Post-Impressionism",
+    "start": 1886,
+    "end": 1905,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Post-Impressionism",
+    "summary": "Artists pushed beyond optical immediacy toward structure, symbol, emotion, and personal systems."
+  },
+  {
+    "id": "symbolism",
+    "title": "Symbolism",
+    "start": 1880,
+    "end": 1910,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Symbolism_(arts)",
+    "summary": "Dream, myth, spirituality, and suggestion challenged naturalism's visible world."
+  },
+  {
+    "id": "arts-and-crafts",
+    "title": "Arts and Crafts",
+    "start": 1880,
+    "end": 1920,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Arts_and_Crafts_movement",
+    "summary": "Designers tied skilled making and useful beauty to criticism of industrial production."
+  },
+  {
+    "id": "art-nouveau",
+    "title": "Art Nouveau",
+    "start": 1890,
+    "end": 1910,
+    "era": "revolutions",
+    "region": "Europe",
+    "wiki": "Art_Nouveau",
+    "summary": "Sinuous organic line linked posters, interiors, objects, architecture, and total design."
+  },
+  {
+    "id": "fauvism",
+    "title": "Fauvism",
+    "start": 1904,
+    "end": 1910,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Fauvism",
+    "summary": "Independent, high-key color became a structural force rather than a descriptive one."
+  },
+  {
+    "id": "expressionism",
+    "title": "Expressionism",
+    "start": 1905,
+    "end": 1930,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Expressionism",
+    "summary": "Distorted form and urgent color externalized psychic, social, and spiritual pressure."
+  },
+  {
+    "id": "cubism",
+    "title": "Cubism",
+    "start": 1907,
+    "end": 1914,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Cubism",
+    "summary": "Fragmented viewpoints rebuilt objects and space as interlocking signs and planes."
+  },
+  {
+    "id": "futurism",
+    "title": "Futurism",
+    "start": 1909,
+    "end": 1944,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Futurism",
+    "summary": "Speed, machines, noise, and violent change became subjects and formal methods."
+  },
+  {
+    "id": "dada",
+    "title": "Dada",
+    "start": 1916,
+    "end": 1924,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Dada",
+    "summary": "Chance, absurdity, collage, and readymades attacked art's institutions and wartime reason."
+  },
+  {
+    "id": "surrealism",
+    "title": "Surrealism",
+    "start": 1924,
+    "end": 1966,
+    "era": "modern",
+    "region": "Global",
+    "wiki": "Surrealism",
+    "summary": "Dream, automatism, and unlikely encounters opened images to unconscious association."
+  },
+  {
+    "id": "constructivism",
+    "title": "Constructivism",
+    "start": 1915,
+    "end": 1935,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Constructivism_(art)",
+    "summary": "Geometric abstraction was directed toward material, communication, and collective social use."
+  },
+  {
+    "id": "bauhaus",
+    "title": "Bauhaus",
+    "start": 1919,
+    "end": 1933,
+    "era": "modern",
+    "region": "Europe",
+    "wiki": "Bauhaus",
+    "summary": "A school joined art, craft, typography, architecture, and industrial production."
+  },
+  {
+    "id": "harlem-renaissance",
+    "title": "Harlem Renaissance",
+    "start": 1918,
+    "end": 1937,
+    "era": "modern",
+    "region": "Americas",
+    "wiki": "Harlem_Renaissance",
+    "summary": "Black artists shaped modern identity through painting, photography, print, music, and literature."
+  },
+  {
+    "id": "mexican-muralism",
+    "title": "Mexican muralism",
+    "start": 1920,
+    "end": 1970,
+    "era": "modern",
+    "region": "Americas",
+    "wiki": "Mexican_muralism",
+    "summary": "Public murals connected revolutionary history, labor, Indigenous heritage, and mass audiences."
+  },
+  {
+    "id": "abstract-expressionism",
+    "title": "Abstract Expressionism",
+    "start": 1943,
+    "end": 1965,
+    "era": "postwar",
+    "region": "Americas",
+    "wiki": "Abstract_expressionism",
+    "summary": "Scale, gesture, stain, and fields of color made painting an event and environment."
+  },
+  {
+    "id": "pop-art",
+    "title": "Pop Art",
+    "start": 1955,
+    "end": 1975,
+    "era": "postwar",
+    "region": "Global",
+    "wiki": "Pop_art",
+    "summary": "Advertising, comics, products, and celebrity imagery collapsed distinctions between art and commerce."
+  },
+  {
+    "id": "minimalism",
+    "title": "Minimalism",
+    "start": 1960,
+    "end": 1975,
+    "era": "postwar",
+    "region": "Americas",
+    "wiki": "Minimalism",
+    "summary": "Serial form, industrial materials, and literal space reduced composition to direct encounter."
+  },
+  {
+    "id": "conceptual-art",
+    "title": "Conceptual art",
+    "start": 1965,
+    "end": 1980,
+    "era": "postwar",
+    "region": "Global",
+    "wiki": "Conceptual_art",
+    "summary": "Instructions, language, documentation, and systems made the idea the primary medium."
+  },
+  {
+    "id": "land-art",
+    "title": "Land art",
+    "start": 1967,
+    "end": 1980,
+    "era": "postwar",
+    "region": "Global",
+    "wiki": "Land_art",
+    "summary": "Artists worked directly with sites, earth, duration, and ecological scale."
+  },
+  {
+    "id": "feminist-art",
+    "title": "Feminist art",
+    "start": 1969,
+    "end": 1990,
+    "era": "postwar",
+    "region": "Global",
+    "wiki": "Feminist_art_movement",
+    "summary": "Artists challenged exclusion, representation, authorship, labor, and the politics of the body."
+  },
+  {
+    "id": "street-art",
+    "title": "Street art",
+    "start": 1970,
+    "end": 2026,
+    "era": "contemporary",
+    "region": "Global",
+    "wiki": "Street_art",
+    "summary": "Unsanctioned marks, murals, stencils, and interventions turned public space into a medium."
+  },
+  {
+    "id": "digital-art",
+    "title": "Digital art",
+    "start": 1965,
+    "end": 2026,
+    "era": "contemporary",
+    "region": "Global",
+    "wiki": "Digital_art",
+    "summary": "Code, networks, computation, and electronic images changed how work is made and distributed."
+  },
+  {
+    "id": "gutai",
+    "title": "Gutai",
+    "start": 1954,
+    "end": 1972,
+    "era": "postwar",
+    "region": "East Asia",
+    "wiki": "Gutai_Art_Association",
+    "summary": "Japanese artists made matter, action, destruction, and outdoor display active collaborators."
+  },
+  {
+    "id": "bengal-school",
+    "title": "Bengal School",
+    "start": 1905,
+    "end": 1947,
+    "era": "modern",
+    "region": "South Asia",
+    "wiki": "Bengal_School_of_Art",
+    "summary": "Artists developed anti-colonial modernisms through Mughal, Japanese, and Indic sources."
+  },
+  {
+    "id": "papunya-tula",
+    "title": "Papunya Tula",
+    "start": 1971,
+    "end": 2026,
+    "era": "contemporary",
+    "region": "Oceania",
+    "wiki": "Papunya_Tula",
+    "summary": "Western Desert artists translated community-held visual knowledge into a new painting movement.",
+    "fallbacks": [
+      {
+        "title": "Gulgardi",
+        "creator": "Kaapa Tjampitjinpa",
+        "year": "1971",
+        "institution": "National Museum of Australia",
+        "source": "https://collectionsearch.nma.gov.au/icons/images/kaui2/index.html#/home",
+        "alt": "Citation record for Kaapa Tjampitjinpa's Gulgardi"
+      },
+      {
+        "title": "Water Dreaming at Kalipinypa",
+        "creator": "Johnny Warangkula Tjupurrula",
+        "year": "1972",
+        "institution": "National Gallery of Victoria",
+        "source": "https://www.ngv.vic.gov.au/explore/collection/work/5752/",
+        "alt": "Citation record for Johnny Warangkula Tjupurrula's Water Dreaming at Kalipinypa"
+      },
+      {
+        "title": "Warlugulong",
+        "creator": "Clifford Possum Tjapaltjarri and Tim Leura Tjapaltjarri",
+        "year": "1976",
+        "institution": "National Gallery of Australia",
+        "source": "https://searchthecollection.nga.gov.au/object/116326",
+        "alt": "Citation record for Warlugulong by Clifford Possum Tjapaltjarri and Tim Leura Tjapaltjarri"
+      },
+      {
+        "title": "Straightening Spears at Ilyingaungau",
+        "creator": "Turkey Tolson Tjupurrula",
+        "year": "1990",
+        "institution": "Art Gallery of New South Wales",
+        "source": "https://www.artgallery.nsw.gov.au/collection/works/385.1991/",
+        "alt": "Citation record for Turkey Tolson Tjupurrula's Straightening Spears at Ilyingaungau"
+      }
+    ]
+  }
+]
