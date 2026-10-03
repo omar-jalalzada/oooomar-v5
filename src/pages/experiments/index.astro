@@ -1,19 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { ExperimentsGrid } from '../../components/ui/ExperimentsGrid';
-import { getVisible, byDateDesc } from '../../lib/content';
+import ExperimentTile from '../../components/experiments/ExperimentTile.astro';
+import { experimentCards } from '../../lib/content';
 import { SOFT_PRESENCE } from '../../lib/soft-presence';
 
 if (SOFT_PRESENCE) return Astro.redirect('/');
 
-const experiments = (await getVisible('experiments')).sort(byDateDesc);
-
-const cards = experiments.map((experiment) => ({
-  href: `/experiments/${experiment.id}/`,
-  title: experiment.data.title,
-  description: experiment.data.description,
-  draft: experiment.data.status === 'draft',
-}));
+const cards = await experimentCards();
 ---
 
 <Base
@@ -22,7 +15,7 @@ const cards = experiments.map((experiment) => ({
 >
   <h1>Experiments</h1>
   <p class="intro">Interactive experiments. Each one is a self-contained prototype you can open full screen.</p>
-  <ExperimentsGrid client:visible {cards} />
+  <ExperimentTile {cards} />
 </Base>
 
 <style>

@@ -1,0 +1,287 @@
+---
+import { getEntry, render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import RoleCard from '../../components/work/RoleCard.astro';
+import CaseGallery, {
+  type GalleryItem,
+  type Handhelds,
+  type HandheldScreen,
+  type Showcase,
+} from '../../components/work/CaseGallery';
+import PhoneShowcase, { type PhoneScreen } from '../../components/work/PhoneShowcase';
+import { getVisible } from '../../lib/content';
+import { SOFT_PRESENCE } from '../../lib/soft-presence';
+
+export async function getStaticPaths() {
+  if (SOFT_PRESENCE) return [];
+  const studies = await getVisible('caseStudies');
+  return Promise.all(
+    studies.map(async (study) => {
+      const work = await getEntry('work', study.id);
+      if (!work) throw new Error(`Case study "${study.id}" has no matching work entry`);
+      return { params: { slug: study.id }, props: { study, work } };
+    }),
+  );
+}
+
+const { study, work } = Astro.props;
+const { Content } = await render(study);
+
+// Two sizes per screen: tiles never render wider than ~550px, the lightbox fills the window.
+const gallery: GalleryItem[] = await Promise.all(
+  study.data.gallery.map(async ({ src, alt, kind }) => {
+    const [thumb, full] = await Promise.all([
+      getImage({ src, width: Math.min(src.width, 1100), format: 'webp' }),
+      getImage({ src, width: Math.min(src.width, 2400), format: 'webp' }),
+    ]);
+    return {
+      thumb: thumb.src,
+      full: full.src,
+      w: src.width,
+      h: src.height,
+      alt,
+      kind,
+    };
+  }),
+);
+
+const webp = async (src: ImageMetadata, max: number) =>
+  (await getImage({ src, width: Math.min(src.width, max), format: 'webp' })).src;
+
+const showcases: Showcase[] = await Promise.all(
+  study.data.showcases.map(async ({ screens, ...showcase }) => ({
+    ...showcase,
+    screens: await Promise.all(
+      screens.map(async ({ src, hotspots, ...screen }) => ({
+        ...screen,
+        src: await webp(src, 2400),
+        hotspots: await Promise.all(
+          hotspots.map(async ({ reveals, ...hotspot }) => ({
+            ...hotspot,
+            reveals: await Promise.all(
+              reveals.map(async ({ src, ...reveal }) => ({
+                ...reveal,
+                src: await webp(src, 1800),
+                ratio: src.height / src.width,
+              })),
+            ),
+          })),
+        ),
+      })),
+    ),
+  })),
+);
+
+type HandheldSource = NonNullable<NonNullable<typeof study.data.handhelds>['chapters'][number]['ipad']>;
+
+// A screen at the gallery's lightbox size, so clicking it opens that same entry.
+const handheldScreen = async (screen?: HandheldSource): Promise<HandheldScreen | undefined> =>
+  screen && {
+    src: await webp(screen.src, 2400),
+    alt: screen.alt,
+    overlay: screen.overlay && {
+      src: await webp(screen.overlay.src, 1800),
+      alt: screen.overlay.alt,
+      w: screen.overlay.w,
+      ratio: screen.overlay.src.height / screen.overlay.src.width,
+    },
+  };
+
+const handhelds: Handhelds | undefined = study.data.handhelds && {
+  label: study.data.handhelds.label,
+  chapters: await Promise.all(
+    study.data.handhelds.chapters.map(async ({ label, ipad, iphone }) => ({
+      label,
+      ipad: await handheldScreen(ipad),
+      iphone: await handheldScreen(iphone),
+    })),
+  ),
+};
+
+type PhoneSource = NonNullable<typeof study.data.phone>['keyScreens'][number];
+
+// The phone never renders wider than ~360px; thumbs fill the flow strip and the ring.
+const phoneScreen = async ({ src, label, alt }: PhoneSource): Promise<PhoneScreen> => ({
+  screen: await webp(src, 750),
+  thumb: await webp(src, 300),
+  full: await webp(src, 1400),
+  ratio: src.height / src.width,
+  label,
+  alt,
+});
+
+const phone = study.data.phone && {
+  logo: study.data.phone.logo && (await webp(study.data.phone.logo, 480)),
+  headline: study.data.phone.headline,
+  keyScreens: await Promise.all(study.data.phone.keyScreens.map(phoneScreen)),
+  flows: await Promise.all(
+    study.data.phone.flows.map(async ({ screens, ...flow }) => ({
+      ...flow,
+      screens: await Promise.all(screens.map(phoneScreen)),
+    })),
+  ),
+};
+
+const hasGallery = gallery.length > 0 || showcases.length > 0 || handhelds;
+---
+
+<Base title={`${study.data.title} — ${work.data.company} — Omar Jalalzada`} description={study.data.summary}>
+  <article class="case">
+    <a class="back" href={`/about/#${work.id}`}>← About</a>
+
+    {
+      work.data.card && (
+        <div class="cover" style={`view-transition-name: role-card-${work.id}`}>
+          <RoleCard {...work.data.card} />
+        </div>
+      )
+    }
+
+    <header>
+      <p class="meta">
+        {work.data.company} · {work.data.period}
+        {study.data.status === 'draft' && <span class="draft">Draft</span>}
+      </p>
+      <h1>{study.data.title}</h1>
+      <p class="summary">{study.data.summary}</p>
+    </header>
+
+    <dl class="facts">
+      {
+        study.data.facts.map((fact) => (
+          <div>
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    {phone && <PhoneShowcase client:visible={{ rootMargin: '400px' }} {...phone} />}
+
+    {
+      hasGallery && (
+        <CaseGallery
+          client:visible={{ rootMargin: '400px' }}
+          items={gallery}
+          laneLabels={study.data.laneLabels}
+          showcases={showcases}
+          handhelds={handhelds}
+        />
+      )
+    }
+
+    {
+      study.body?.trim() && (
+        <div class="prose context">
+          <Content />
+        </div>
+      )
+    }
+
+    <a class="back end" href={`/about/#${work.id}`}>← Back to About</a>
+  </article>
+</Base>
+
+<style is:global>
+  /* The About page opts in too, so the role card morphs between the two. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: var(--duration-slow);
+    animation-timing-function: var(--ease-in-out);
+  }
+
+  /* The gallery runs the full window width; clip, don't scroll, what a scrollbar overlaps. */
+  html {
+    overflow-x: clip;
+  }
+</style>
+
+<style>
+  .back {
+    display: inline-block;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-ink-secondary);
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--color-accent);
+  }
+
+  .back.end {
+    margin: var(--space-16) 0 0;
+  }
+
+  .cover {
+    margin-bottom: var(--space-12);
+  }
+
+  .context {
+    max-width: var(--measure);
+    margin-top: var(--space-16);
+  }
+
+  header {
+    max-width: var(--measure);
+  }
+
+  .meta {
+    font-size: var(--text-sm);
+    color: var(--color-ink-tertiary);
+    margin-bottom: var(--space-3);
+  }
+
+  .draft {
+    margin-left: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .summary {
+    font-size: var(--text-lg);
+    line-height: 1.4;
+    color: var(--color-ink-secondary);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-6);
+    margin: var(--space-12) 0 var(--space-8);
+    padding-block: var(--space-6);
+    border-block: thin solid var(--color-border);
+  }
+
+  .facts dt {
+    font-size: var(--text-xs);
+    color: var(--color-ink-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+</style>

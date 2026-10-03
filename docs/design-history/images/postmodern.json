@@ -1,0 +1,125 @@
+{
+  "psychedelic": [
+    { "file": "File:Trips Festival poster.png", "title": "Trips Festival", "year": 1966, "figure": "wes-wilson" },
+    { "file": "File:Jefferson airplane fillmore poster 1966.jpg", "title": "Jefferson Airplane, Fillmore Auditorium", "year": 1966, "figure": null },
+    { "file": "File:San Francisco Oracle Cover Vol.1 No.5, January 1967.jpg", "title": "San Francisco Oracle, vol. 1 no. 5", "year": 1967, "figure": null },
+    { "file": "File:1967 Mantra-Rock Dance Avalon poster.jpg", "title": "Mantra-Rock Dance, Avalon Ballroom", "year": 1967, "figure": null }
+  ],
+  "punk": [
+    { "file": "File:Never Mind the Bollocks, Here's the Sex Pistols.png", "title": "Never Mind the Bollocks, Here's the Sex Pistols", "year": 1977, "figure": "jamie-reid" },
+    { "file": "File:ElvisCostello ArmedForces.jpg", "title": "Elvis Costello, Armed Forces", "year": 1979, "figure": "barney-bubbles" },
+    { "file": "File:UnknownPleasuresVinyl.jpg", "title": "Joy Division, Unknown Pleasures", "year": 1979, "figure": "peter-saville" },
+    { "file": "File:NewOrderBlueMonday.jpg", "title": "New Order, Blue Monday", "year": 1983, "figure": "peter-saville" }
+  ],
+  "new-wave": [
+    { "file": "File:DQ133.jpg", "title": "Design Quarterly 133: Does It Make Sense?", "year": 1986, "figure": "april-greiman" },
+    { "file": "File:Graphic Design in America-billboard.jpg", "title": "Graphic Design in America, Walker Art Center", "year": 1989, "figure": "april-greiman" }
+  ],
+  "memphis": [
+    { "file": "File:Carlton Bookcase, by Ettore Sottsass, 1981, wood veneer and plastic laminate, Inv. FNAC 1980, Musée des Arts Décoratifs, Paris (01).png", "title": "Carlton bookcase", "year": 1981, "figure": "ettore-sottsass" },
+    { "file": "File:Ngv design, michele de lucchi, first chair, 1983.JPG", "title": "First chair", "year": 1983, "figure": null },
+    { "file": "File:Dressing table and stool “Plaza”, by Michael Graves, 1981, painted wood, natural rosehips, mirrors and bulbs, Inv. FNAC 2633.A, Musée des Arts Décoratifs, Paris (01).jpg", "title": "Plaza dressing table and stool", "year": 1981, "figure": null }
+  ],
+  "postmodern-typography": [
+    { "file": "File:TalkingHeadsRemaininLight.jpg", "title": "Talking Heads, Remain in Light", "year": 1980, "figure": "tibor-kalman" },
+    { "file": "File:Cabaretmicro.jpg", "title": "Cabaret Voltaire, Micro-Phonies", "year": 1984, "figure": "neville-brody" },
+    { "file": "File:Pixies-Doolittle.jpg", "title": "Pixies, Doolittle", "year": 1989, "figure": "vaughan-oliver" },
+    { "file": "File:註解 2019-09-18 231937.png", "title": "Hand-lettering", "year": null, "figure": "ed-fella" }
+  ],
+  "emigre-digital-type": [
+    { "file": "File:Emigre 69 cover.png", "title": "Emigre #69: The End", "year": 2005, "figure": "rudy-vanderlans" },
+    { "file": "File:Matrix II OT.png", "title": "Matrix II", "year": 2007, "figure": "zuzana-licko" },
+    { "file": "File:Template Gothic font specimen.png", "title": "Template Gothic", "year": 1990, "figure": null },
+    { "file": "File:MrsEaves.png", "title": "Mrs Eaves", "year": 1996, "figure": "zuzana-licko" }
+  ],
+  "grunge-deconstruction": [
+    { "file": "File:Nine Inch Nails - The Fragile.png", "title": "Nine Inch Nails, The Fragile", "year": 1999, "figure": "david-carson" },
+    { "file": "File:WipEout poster (1995).jpg", "title": "Wipeout", "year": 1995, "figure": "the-designers-republic" },
+    { "file": "File:Barnbrook DesignersStayAway.jpg", "title": "Designers, Stay Away from Corporations billboard", "year": null, "figure": "jonathan-barnbrook" }
+  ],
+  "new-swiss-revival": [
+    { "file": "File:Whitney Museum Logo.jpg", "title": "Whitney Museum identity", "year": 2013, "figure": "experimental-jetset" },
+    { "file": "File:Manifesto PiratesoftheInternet.jpg", "title": "Pirates of the Internet manifesto", "year": 2009, "figure": "experimental-jetset" }
+  ],
+  "wes-wilson": [
+    { "file": "File:Trips Festival poster.png", "title": "Trips Festival", "year": 1966, "figure": "wes-wilson" }
+  ],
+  "victor-moscoso": [
+    { "file": "File:Herbie-Hancock-Head-Hunters.png", "title": "Herbie Hancock, Head Hunters", "year": 1973, "figure": "victor-moscoso" }
+  ],
+  "peter-max": [
+    { "file": "File:Expo74 Stamp.jpg", "title": "Expo '74 postage stamp", "year": 1974, "figure": "peter-max" },
+    { "file": "File:Peter Max hull art.jpg", "title": "Norwegian Breakaway hull art", "year": 2013, "figure": "peter-max" }
+  ],
+  "jamie-reid": [
+    { "file": "File:Never Mind the Bollocks, Here's the Sex Pistols.png", "title": "Never Mind the Bollocks, Here's the Sex Pistols", "year": 1977, "figure": "jamie-reid" },
+    { "file": "File:Sex Pistols - God Save the Queen.jpg", "title": "God Save the Queen", "year": 1977, "figure": "jamie-reid" }
+  ],
+  "barney-bubbles": [
+    { "file": "File:In Search of Space - Hawkwind.jpg", "title": "Hawkwind, In Search of Space", "year": 1971, "figure": "barney-bubbles" },
+    { "file": "File:Elvis-Costello-This-Years-Model.jpg", "title": "Elvis Costello, This Year's Model", "year": 1978, "figure": "barney-bubbles" },
+    { "file": "File:ElvisCostello ArmedForces.jpg", "title": "Elvis Costello, Armed Forces", "year": 1979, "figure": "barney-bubbles" }
+  ],
+  "peter-saville": [
+    { "file": "File:UnknownPleasuresVinyl.jpg", "title": "Joy Division, Unknown Pleasures", "year": 1979, "figure": "peter-saville" },
+    { "file": "File:NewOrderBlueMonday.jpg", "title": "New Order, Blue Monday", "year": 1983, "figure": "peter-saville" },
+    { "file": "File:New Order - Power, Corruption & Lies.png", "title": "New Order, Power, Corruption & Lies", "year": 1983, "figure": "peter-saville" }
+  ],
+  "neville-brody": [
+    { "file": "File:Cabaretmicro.jpg", "title": "Cabaret Voltaire, Micro-Phonies", "year": 1984, "figure": "neville-brody" },
+    { "file": "File:Typefaces-brody.jpg", "title": "Industria and Arcadia", "year": 1989, "figure": "neville-brody" },
+    { "file": "File:FF Blur Font Specimen.svg", "title": "FF Blur", "year": 1991, "figure": "neville-brody" }
+  ],
+  "april-greiman": [
+    { "file": "File:DQ133.jpg", "title": "Design Quarterly 133: Does It Make Sense?", "year": 1986, "figure": "april-greiman" },
+    { "file": "File:Graphic Design in America-billboard.jpg", "title": "Graphic Design in America, Walker Art Center", "year": 1989, "figure": "april-greiman" }
+  ],
+  "ettore-sottsass": [
+    { "file": "File:Olivetti-Valentine.jpg", "title": "Valentine typewriter", "year": 1969, "figure": "ettore-sottsass" },
+    { "file": "File:Ettore sottsass per memphis srl., libreria carlton, milano 1981.jpg", "title": "Carlton bookcase", "year": 1981, "figure": "ettore-sottsass" },
+    { "file": "File:Casablanca bookcase, by Ettore Sottsass for Memphis, 1981, plastic laminate, Inv. MOBILI 1932. Dono Fondazine UCIMU, Cinisello Balsamo (2003), Antique Furniture & Wooden Sculpture Museum, Milan (01).jpg", "title": "Casablanca sideboard", "year": 1981, "figure": "ettore-sottsass" }
+  ],
+  "ed-fella": [
+    { "file": "File:註解 2019-09-18 231937.png", "title": "Hand-lettering", "year": null, "figure": "ed-fella" }
+  ],
+  "rudy-vanderlans": [
+    { "file": "File:Emigre 69 cover.png", "title": "Emigre #69: The End", "year": 2005, "figure": "rudy-vanderlans" }
+  ],
+  "zuzana-licko": [
+    { "file": "File:Oakland (typeface name).svg", "title": "Oakland", "year": 1985, "figure": "zuzana-licko" },
+    { "file": "File:Matrix II OT.png", "title": "Matrix II", "year": 2007, "figure": "zuzana-licko" },
+    { "file": "File:MrsEaves.png", "title": "Mrs Eaves", "year": 1996, "figure": "zuzana-licko" }
+  ],
+  "david-carson": [
+    { "file": "File:Nine Inch Nails - The Fragile.png", "title": "Nine Inch Nails, The Fragile", "year": 1999, "figure": "david-carson" }
+  ],
+  "jonathan-barnbrook": [
+    { "file": "File:Barnbrook DesignersStayAway.jpg", "title": "Designers, Stay Away from Corporations billboard", "year": null, "figure": "jonathan-barnbrook" },
+    { "file": "File:Heathen (David Bowie album - cover art).jpg", "title": "David Bowie, Heathen", "year": 2002, "figure": "jonathan-barnbrook" },
+    { "file": "File:Blackstar (Front Cover).svg", "title": "David Bowie, Blackstar", "year": 2016, "figure": "jonathan-barnbrook" }
+  ],
+  "tibor-kalman": [
+    { "file": "File:TalkingHeadsRemaininLight.jpg", "title": "Talking Heads, Remain in Light", "year": 1980, "figure": "tibor-kalman" }
+  ],
+  "stefan-sagmeister": [
+    { "file": "File:Setthetwilight.jpg", "title": "Lou Reed, Set the Twilight Reeling", "year": 1996, "figure": "stefan-sagmeister" },
+    { "file": "File:Feelings (1997 David Byrne album).jpg", "title": "David Byrne, Feelings", "year": 1997, "figure": "stefan-sagmeister" },
+    { "file": "File:BridgesBabylon97.jpg", "title": "The Rolling Stones, Bridges to Babylon", "year": 1997, "figure": "stefan-sagmeister" }
+  ],
+  "experimental-jetset": [
+    { "file": "File:Whitney Museum Logo.jpg", "title": "Whitney Museum identity", "year": 2013, "figure": "experimental-jetset" },
+    { "file": "File:Manifesto PiratesoftheInternet.jpg", "title": "Pirates of the Internet manifesto", "year": 2009, "figure": "experimental-jetset" }
+  ],
+  "vaughan-oliver": [
+    { "file": "File:ItllEndinTearsalbumcover.png", "title": "This Mortal Coil, It'll End in Tears", "year": 1984, "figure": "vaughan-oliver" },
+    { "file": "File:SurferRosa.jpg", "title": "Pixies, Surfer Rosa", "year": 1988, "figure": "vaughan-oliver" },
+    { "file": "File:Pixies-Doolittle.jpg", "title": "Pixies, Doolittle", "year": 1989, "figure": "vaughan-oliver" }
+  ],
+  "why-not-associates": [
+    { "file": "File:The Comedy Carpet - geograph.org.uk - 4026540.jpg", "title": "Comedy Carpet, Blackpool", "year": 2011, "figure": "why-not-associates" }
+  ],
+  "the-designers-republic": [
+    { "file": "File:Very Metal Noise Pollution.jpg", "title": "Pop Will Eat Itself, Very Metal Noise Pollution", "year": 1989, "figure": "the-designers-republic" },
+    { "file": "File:WipEout poster (1995).jpg", "title": "Wipeout", "year": 1995, "figure": "the-designers-republic" }
+  ]
+}

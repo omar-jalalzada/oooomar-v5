@@ -1,0 +1,648 @@
+{
+  "movements": [
+    {
+      "id": "swiss-style",
+      "name": "Swiss Style",
+      "aka": ["International Typographic Style", "Swiss Design"],
+      "start": 1950, "end": 1975, "ongoing": false,
+      "peak": [1957, 1968],
+      "region": "europe",
+      "places": ["Zurich", "Basel"],
+      "lineage": "modernism",
+      "summary": "Grid-built, objective typography from Zürich and Basel: one sans-serif, asymmetric layouts and documentary photography, presented as neutral public communication.",
+      "influences": ["new-typography", "bauhaus", "de-stijl", "constructivism", "plakatstil"],
+      "principles": [
+        { "name": "The grid as constitution", "idea": "A modular grid fixed before content arrives governs the size and position of every element.", "example": "Josef Müller-Brockmann, Der Film poster, 1960" },
+        { "name": "Objectivity over persuasion", "idea": "Present information, don't cajole: neutral type, documentary photography, no illustration.", "example": "Josef Müller-Brockmann, schützt das Kind! poster, 1953" },
+        { "name": "Asymmetry and active white space", "idea": "Dynamic asymmetric composition in which empty space is structural, not leftover.", "example": "Emil Ruder, Typographie, 1967" },
+        { "name": "One sans-serif, flush left", "idea": "A single grotesque family in few weights and sizes, set ragged-right so spacing stays even.", "example": "Neue Grafik magazine, issue 1, 1958" },
+        { "name": "Elementary means", "idea": "Build the poster from the simplest elements and a single strong contrast.", "example": "Armin Hofmann, Giselle poster, 1959" }
+      ],
+      "keyWorks": [
+        { "title": "schützt das Kind!", "year": 1953, "figure": "josef-muller-brockmann", "kind": "poster" },
+        { "title": "Neue Haas Grotesk (Helvetica)", "year": 1957, "figure": "max-miedinger", "kind": "typeface" },
+        { "title": "Univers", "year": 1957, "figure": "adrian-frutiger", "kind": "typeface" },
+        { "title": "Neue Grafik / New Graphic Design", "year": 1958, "figure": "josef-muller-brockmann", "kind": "magazine" },
+        { "title": "Meister der Plakatkunst", "year": 1959, "figure": "siegfried-odermatt", "kind": "poster" },
+        { "title": "Giselle", "year": 1959, "figure": "armin-hofmann", "kind": "poster" },
+        { "title": "Der Film", "year": 1960, "figure": "josef-muller-brockmann", "kind": "poster" },
+        { "title": "Designing Programmes", "year": 1964, "figure": "karl-gerstner", "kind": "book" },
+        { "title": "Graphic Design Manual: Principles and Practice", "year": 1965, "figure": "armin-hofmann", "kind": "book" },
+        { "title": "Typographie: A Manual of Design", "year": 1967, "figure": "emil-ruder", "kind": "book" },
+        { "title": "Grid Systems in Graphic Design", "year": 1981, "figure": "josef-muller-brockmann", "kind": "book" }
+      ]
+    },
+    {
+      "id": "ulm-school",
+      "name": "Ulm School",
+      "aka": ["Hochschule für Gestaltung Ulm", "HfG Ulm", "Ulm Model"],
+      "start": 1953, "end": 1968, "ongoing": false,
+      "peak": [1955, 1965],
+      "region": "europe",
+      "places": ["Ulm"],
+      "lineage": "modernism",
+      "summary": "Post-war German design college that replaced Bauhaus artistry with science, semiotics and systems, producing Braun's product language and Lufthansa's identity.",
+      "influences": ["bauhaus", "swiss-style", "new-typography"],
+      "principles": [
+        { "name": "Design as science", "idea": "Decisions are justified by analysis of use, production, perception and sign, not by taste.", "example": "Otl Aicher and development group E5, Lufthansa identity, 1962" },
+        { "name": "The system over the object", "idea": "Design modular families and systems rather than single pieces.", "example": "Hans Gugelot, M125 storage system for Bofinger, developed from 1950" },
+        { "name": "Semiotics in practice", "idea": "Every graphic and product element is a sign with syntactic, semantic and pragmatic dimensions.", "example": "Tomás Maldonado and Gui Bonsiepe, Olivetti/Rinascente coding system, 1964-67" },
+        { "name": "Social responsibility", "idea": "Design is a political act with consequences, not commercial styling.", "example": "HfG Ulm founded by the Scholl Foundation as a democratic institution, 1953" }
+      ],
+      "keyWorks": [
+        { "title": "HfG Ulm building", "year": 1955, "figure": "max-bill", "kind": "building" },
+        { "title": "Ulmer Hocker", "year": 1954, "figure": "max-bill", "kind": "product" },
+        { "title": "Braun SK 4", "year": 1956, "figure": "hans-gugelot", "kind": "product" },
+        { "title": "Lufthansa corporate identity", "year": 1962, "figure": "otl-aicher", "kind": "identity" },
+        { "title": "Kodak Carousel-S slide projector", "year": 1963, "figure": "hans-gugelot", "kind": "product" }
+      ]
+    },
+    {
+      "id": "functionalist-product-design",
+      "name": "Functionalist Product Design",
+      "aka": ["Braun design", "German functionalism"],
+      "start": 1955, "end": 1997, "ongoing": false,
+      "peak": [1956, 1975],
+      "region": "europe",
+      "places": ["Frankfurt", "Kronberg", "Ulm"],
+      "lineage": "modernism",
+      "summary": "Braun's restrained, systematic appliances and Vitsœ's furniture systems: neutral bodies, colour only as signal, products as quiet tools.",
+      "influences": ["ulm-school", "bauhaus"],
+      "principles": [
+        { "name": "Form follows use", "idea": "An appliance is a tool; its form comes from what the user does with it.", "example": "Dieter Rams, Braun T3 pocket radio, 1958" },
+        { "name": "Colour as signal", "idea": "Neutral bodies; colour reserved for the one control that matters.", "example": "Dietrich Lubs, Braun ET 66 calculator, 1987" },
+        { "name": "Systems, not products", "idea": "Components that add up, last for decades and can be extended.", "example": "Dieter Rams, 606 Universal Shelving System for Vitsœ, 1960" },
+        { "name": "Restraint", "idea": "The product steps back so the user and their environment come forward.", "example": "Hans Gugelot and Dieter Rams, Braun SK 4, 1956" }
+      ],
+      "keyWorks": [
+        { "title": "Braun SK 4", "year": 1956, "figure": "dieter-rams", "kind": "product" },
+        { "title": "Braun T3 pocket radio", "year": 1958, "figure": "dieter-rams", "kind": "product" },
+        { "title": "606 Universal Shelving System", "year": 1960, "figure": "dieter-rams", "kind": "product" },
+        { "title": "620 Chair Programme", "year": 1962, "figure": "dieter-rams", "kind": "product" },
+        { "title": "Braun ET 66 calculator (Dietrich Lubs)", "year": 1987, "kind": "product" }
+      ]
+    },
+    {
+      "id": "dutch-modernism",
+      "name": "Dutch Modernism",
+      "aka": ["Total Design era", "Dutch functionalism"],
+      "start": 1955, "end": 1985, "ongoing": false,
+      "peak": [1963, 1976],
+      "region": "europe",
+      "places": ["Amsterdam", "Rotterdam"],
+      "lineage": "modernism",
+      "summary": "Amsterdam's grid-led, technology-minded modernism: visible grids, machine-drawn lettering and total identity programmes for museums, airports and the state.",
+      "influences": ["de-stijl", "new-typography", "swiss-style"],
+      "principles": [
+        { "name": "The grid made visible", "idea": "The grid is printed as part of the image rather than hidden beneath it.", "example": "Wim Crouwel, Vormgevers poster, Stedelijk Museum, 1968" },
+        { "name": "Type for the machine", "idea": "Letterforms drawn to the limits of a new display technology, not against them.", "example": "Wim Crouwel, New Alphabet, 1967" },
+        { "name": "Total identity", "idea": "One studio shapes graphics, interiors, signage and products so the environment speaks with one voice.", "example": "Benno Wissing / Total Design, Schiphol Airport signage, 1967" },
+        { "name": "Playful rigour", "idea": "Systematic work can be bright, witty and experimental.", "example": "Wim Crouwel, PTT numeral stamps, 1976" }
+      ],
+      "keyWorks": [
+        { "title": "Stedelijk Museum posters and catalogues", "year": 1964, "figure": "wim-crouwel", "kind": "poster" },
+        { "title": "New Alphabet", "year": 1967, "figure": "wim-crouwel", "kind": "typeface" },
+        { "title": "Schiphol Airport signage", "year": 1967, "figure": "total-design", "kind": "system" },
+        { "title": "Vormgevers", "year": 1968, "figure": "wim-crouwel", "kind": "poster" },
+        { "title": "Rabobank wordmark", "year": 1973, "figure": "wim-crouwel", "kind": "identity" },
+        { "title": "PTT numeral stamps", "year": 1976, "figure": "wim-crouwel", "kind": "other" }
+      ]
+    },
+    {
+      "id": "italian-modernism",
+      "name": "Italian Modernism",
+      "aka": ["Italian corporate modernism", "Olivetti style"],
+      "start": 1936, "end": 1975, "ongoing": false,
+      "peak": [1948, 1965],
+      "region": "europe",
+      "places": ["Milan", "Ivrea"],
+      "lineage": "modernism",
+      "summary": "Corporate modernism around Olivetti, Pirelli and La Rinascente: Swiss tools with Italian colour, wit and sculptural products.",
+      "influences": ["futurism", "bauhaus", "new-typography", "swiss-style"],
+      "principles": [
+        { "name": "Culture as identity", "idea": "A company's identity is everything it makes and commissions: products, buildings, ads, art.", "example": "MoMA, Olivetti: Design in Industry exhibition, 1952" },
+        { "name": "Abstraction that seduces", "idea": "Abstract shapes, numerals and colour express what a product does instead of depicting it.", "example": "Giovanni Pintori, Olivetti posters, late 1940s-1950s" },
+        { "name": "Sculptural products", "idea": "The industrial object as one soft, unified sculpture around its mechanism.", "example": "Marcello Nizzoli, Olivetti Lettera 22, 1950" },
+        { "name": "Kinetic, layered typography", "idea": "Type and colour overprinted as transparent planes to suggest speed and depth.", "example": "Max Huber, Gran Premio dell'Autodromo di Monza poster, 1948" }
+      ],
+      "keyWorks": [
+        { "title": "Olivetti logotype", "year": 1947, "figure": "giovanni-pintori", "kind": "identity" },
+        { "title": "Gran Premio dell'Autodromo di Monza", "year": 1948, "figure": "max-huber", "kind": "poster" },
+        { "title": "Olivetti Lexikon 80", "year": 1948, "figure": "marcello-nizzoli", "kind": "product" },
+        { "title": "La Rinascente mark", "year": 1950, "figure": "max-huber", "kind": "identity" },
+        { "title": "Olivetti Lettera 22", "year": 1950, "figure": "marcello-nizzoli", "kind": "product" },
+        { "title": "Declinazione grafica del nome Campari", "year": 1964, "figure": "bruno-munari", "kind": "poster" },
+        { "title": "Milan Metropolitana line 1 signage", "year": 1964, "figure": "bob-noorda", "kind": "system" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "ernst-keller",
+      "name": "Ernst Keller",
+      "born": 1891, "died": 1968,
+      "activeFrom": 1914, "activeTo": 1968,
+      "signatureYear": 1918,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer, typographer, educator",
+      "movements": ["swiss-style"],
+      "summary": "The teacher behind the Swiss school: from 1918 his Zürich course made analysis of the problem the starting point of every design.",
+      "principles": [
+        { "name": "The problem determines the form", "idea": "Derive the solution from content and brief, not from a house style.", "example": "Graphic design course, Kunstgewerbeschule Zürich, from 1918" },
+        { "name": "Lettering as architecture", "idea": "Type treated as a constructed, monumental object.", "example": "Lettering relief, Rentenanstalt building, Zürich, 1938" },
+        { "name": "Simple geometry, intense colour", "idea": "Bold simplified shapes and strong flat colour carry the message.", "example": "Typographic posters of the 1920s-1930s" }
+      ],
+      "keyWorks": [
+        { "title": "Graphic design course, Kunstgewerbeschule Zürich", "year": 1918, "kind": "other" },
+        { "title": "Rentenanstalt lettering and heraldic relief", "year": 1938, "kind": "building" },
+        { "title": "Lettering wall, Swiss National Exhibition", "year": 1939, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "max-bill",
+      "name": "Max Bill",
+      "born": 1908, "died": 1994,
+      "activeFrom": 1929, "activeTo": 1994,
+      "signatureYear": 1953,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Architect, artist, designer, educator",
+      "movements": ["swiss-style", "ulm-school"],
+      "summary": "Bauhaus-trained concrete artist who linked Bauhaus pedagogy to Swiss design and co-founded, designed and first led the Ulm school.",
+      "principles": [
+        { "name": "Concrete form", "idea": "Build design and art from pure, measurable relationships rather than imitation.", "example": "negerkunst poster, 1931" },
+        { "name": "Good form", "idea": "Judge everyday objects on the union of use, material and beauty, and show the good ones publicly.", "example": "Die gute Form exhibition, 1949" },
+        { "name": "The multifunctional object", "idea": "One simple form should serve many uses.", "example": "Ulmer Hocker with Hans Gugelot, 1954" }
+      ],
+      "keyWorks": [
+        { "title": "negerkunst: prähistorische felsbilder südafrikas", "year": 1931, "kind": "poster" },
+        { "title": "Die gute Form", "year": 1949, "kind": "exhibition" },
+        { "title": "HfG Ulm building", "year": 1953, "kind": "building" },
+        { "title": "Ulmer Hocker", "year": 1954, "kind": "product" }
+      ]
+    },
+    {
+      "id": "josef-muller-brockmann",
+      "name": "Josef Müller-Brockmann",
+      "born": 1914, "died": 1996,
+      "activeFrom": 1936, "activeTo": 1996,
+      "signatureYear": 1960,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer, author, educator",
+      "movements": ["swiss-style"],
+      "summary": "The Zürich master of the grid: Tonhalle concert posters, Der Film, Neue Grafik and the book that codified the modular grid.",
+      "principles": [
+        { "name": "The grid as attitude", "idea": "The grid is a way of thinking: the will to order, clarify and reach the essential.", "example": "Grid Systems in Graphic Design, 1981" },
+        { "name": "Music made visible", "idea": "Geometric rhythms express music's structure without illustrating it.", "example": "Tonhalle Musica Viva concert posters, from 1950" },
+        { "name": "Clarity as civic duty", "idea": "Public posters are a public service, so clarity is an ethical demand.", "example": "weniger Lärm poster, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "schützt das Kind!", "year": 1953, "kind": "poster" },
+        { "title": "Der Film", "year": 1960, "kind": "poster" },
+        { "title": "weniger Lärm", "year": 1960, "kind": "poster" },
+        { "title": "Grid Systems in Graphic Design", "year": 1981, "kind": "book" }
+      ]
+    },
+    {
+      "id": "armin-hofmann",
+      "name": "Armin Hofmann",
+      "born": 1920, "died": 2020,
+      "activeFrom": 1947, "activeTo": 1996,
+      "signatureYear": 1965,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer, educator",
+      "movements": ["swiss-style"],
+      "summary": "Basel teacher whose elementary form exercises and Yale professorship carried the Swiss method into design education worldwide.",
+      "principles": [
+        { "name": "Elementary form exercises", "idea": "Teach through systematic exploration of dot, line, plane and letter before any real brief.", "example": "Graphic Design Manual, 1965" },
+        { "name": "Contrast as engine", "idea": "Meaning comes from opposition: large/small, sharp/soft, static/dynamic.", "example": "Giselle poster, 1959" },
+        { "name": "Reduction to the sign", "idea": "A poster should collapse to one memorable form.", "example": "Herman Miller Collection poster, 1962" }
+      ],
+      "keyWorks": [
+        { "title": "Giselle", "year": 1959, "kind": "poster" },
+        { "title": "Herman Miller Collection", "year": 1962, "kind": "poster" },
+        { "title": "Wilhelm Tell", "year": 1963, "kind": "poster" },
+        { "title": "Graphic Design Manual: Principles and Practice", "year": 1965, "kind": "book" }
+      ]
+    },
+    {
+      "id": "emil-ruder",
+      "name": "Emil Ruder",
+      "born": 1914, "died": 1970,
+      "activeFrom": 1942, "activeTo": 1970,
+      "signatureYear": 1967,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Typographer, educator, writer",
+      "movements": ["swiss-style"],
+      "summary": "Basel typography teacher who argued modernism to the printing trade and wrote Typographie, the period's defining manual of rhythm and white space.",
+      "principles": [
+        { "name": "Communication first", "idea": "Legibility and order come before expression; form is earned by function.", "example": "Typographie, 1967" },
+        { "name": "Counter-form is form", "idea": "The white of the page and between letters is designed as deliberately as the black.", "example": "Exercises in Typographie, 1967" },
+        { "name": "Rhythm of the word", "idea": "A line of type has musical rhythm built from letter shapes and intervals.", "example": "TM article series Wesentliches, 1957-59" }
+      ],
+      "keyWorks": [
+        { "title": "Wesentliches (TM article series)", "year": 1957, "kind": "magazine" },
+        { "title": "Typographie: Ein Gestaltungslehrbuch", "year": 1967, "kind": "book" }
+      ]
+    },
+    {
+      "id": "karl-gerstner",
+      "name": "Karl Gerstner",
+      "born": 1930, "died": 2017,
+      "activeFrom": 1949, "activeTo": 2017,
+      "signatureYear": 1964,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Designer, typographer, advertising executive, artist",
+      "movements": ["swiss-style"],
+      "summary": "Basel designer and GGK co-founder who reframed design as writing programmes that generate solutions, the root of parametric and systems design.",
+      "principles": [
+        { "name": "Programmes for solutions", "idea": "Design the rules that generate all valid answers rather than one answer.", "example": "Designing Programmes, 1964" },
+        { "name": "Integral typography", "idea": "Form and content are one: the word's form expresses its meaning.", "example": "Typography for Markus Kutter's Schiff nach Europa, 1957" },
+        { "name": "Type families as systems", "idea": "A family can be designed as a mathematical matrix of variants.", "example": "Gerstner Programm typeface, 1964-67" }
+      ],
+      "keyWorks": [
+        { "title": "kalte Kunst?", "year": 1957, "kind": "book" },
+        { "title": "Schiff nach Europa (design)", "year": 1957, "kind": "book" },
+        { "title": "Designing Programmes", "year": 1964, "kind": "book" },
+        { "title": "Kompendium für Alphabeten", "year": 1972, "kind": "book" }
+      ]
+    },
+    {
+      "id": "adrian-frutiger",
+      "name": "Adrian Frutiger",
+      "born": 1928, "died": 2015,
+      "activeFrom": 1952, "activeTo": 2009,
+      "signatureYear": 1957,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Type designer",
+      "movements": ["swiss-style"],
+      "summary": "Type designer across metal, film and digital whose Univers made the type family a numbered system and whose Frutiger set the standard for signage.",
+      "principles": [
+        { "name": "The family as a system", "idea": "Design all weights and widths at once, named by a numbering grid instead of adjectives.", "example": "Univers, 21 styles numbered 39-83, 1957" },
+        { "name": "Legibility in motion", "idea": "Wayfinding letters must stay open and distinct at distance, angle and speed.", "example": "Frutiger, from the Charles de Gaulle Airport signage, 1976" },
+        { "name": "Design for the machine", "idea": "Work with the reproduction technology's constraints while staying humane.", "example": "OCR-B, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "Univers", "year": 1957, "kind": "typeface" },
+        { "title": "OCR-B", "year": 1968, "kind": "typeface" },
+        { "title": "Frutiger", "year": 1976, "kind": "typeface" },
+        { "title": "Avenir", "year": 1988, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "max-miedinger",
+      "name": "Max Miedinger",
+      "born": 1910, "died": 1980,
+      "activeFrom": 1926, "activeTo": 1980,
+      "signatureYear": 1957,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Typeface designer",
+      "movements": ["swiss-style"],
+      "summary": "Zürich typesetter who drew Neue Haas Grotesk for Eduard Hoffmann in 1957, renamed Helvetica in 1960.",
+      "principles": [
+        { "name": "Refine, don't invent", "idea": "Start from trusted models and remove their quirks.", "example": "Neue Haas Grotesk, refined from Akzidenz-Grotesk and Schelter-Grotesk references, 1957" },
+        { "name": "Uniformity as voice", "idea": "Tight spacing, horizontal terminals and a large x-height make a dense, even, impersonal texture.", "example": "Helvetica, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "Pro Arte", "year": 1954, "kind": "typeface" },
+        { "title": "Neue Haas Grotesk", "year": 1957, "kind": "typeface" },
+        { "title": "Helvetica (renamed and extended)", "year": 1960, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "siegfried-odermatt",
+      "name": "Siegfried Odermatt",
+      "born": 1926, "died": 2017,
+      "activeFrom": 1950, "activeTo": 2000,
+      "signatureYear": 1959,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer",
+      "movements": ["swiss-style"],
+      "summary": "Self-taught Zürich designer who kept the Swiss grid but added wit, overlap and surprise, in partnership with Rosmarie Tissi from 1968.",
+      "principles": [
+        { "name": "Constructive form with a twist", "idea": "Keep grid and sans-serif, then break the expected order to make an image.", "example": "Meister der Plakatkunst poster, 1959" },
+        { "name": "Type as image", "idea": "Letters overlap, tilt and scale until the word is the illustration.", "example": "Corporate advertising for industrial clients, 1960s" }
+      ],
+      "keyWorks": [
+        { "title": "Meister der Plakatkunst", "year": 1959, "kind": "poster" },
+        { "title": "Odermatt & Tissi studio", "year": 1968, "kind": "other" }
+      ]
+    },
+    {
+      "id": "rosmarie-tissi",
+      "name": "Rosmarie Tissi",
+      "born": 1937, "died": null,
+      "activeFrom": 1958, "activeTo": 2018,
+      "signatureYear": 1974,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer, typeface designer",
+      "movements": ["swiss-style"],
+      "summary": "Odermatt's partner from 1968, who loosened Swiss constructivism into bright, colliding, playful geometry.",
+      "principles": [
+        { "name": "Playful geometry", "idea": "Geometric forms arranged for tension and humour rather than equilibrium.", "example": "Posters for Englersatz and cultural clients, 1980s" },
+        { "name": "Letterforms as display objects", "idea": "A typeface can be a graphic voice in its own right.", "example": "Sinaloa display typeface for Letraset, 1974" }
+      ],
+      "keyWorks": [
+        { "title": "Sinaloa", "year": 1974, "kind": "typeface" },
+        { "title": "Swiss banknote competition design", "year": 1989, "kind": "other" }
+      ]
+    },
+    {
+      "id": "otl-aicher",
+      "name": "Otl Aicher",
+      "born": 1922, "died": 1991,
+      "activeFrom": 1947, "activeTo": 1991,
+      "signatureYear": 1972,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Graphic designer, typographer, educator",
+      "movements": ["ulm-school"],
+      "summary": "Ulm co-founder who built complete identity systems for Lufthansa and the 1972 Munich Olympics, whose grid pictograms became the world's signage language.",
+      "principles": [
+        { "name": "Identity as complete system", "idea": "One manual governs type, colour, grid, photography and signs everywhere.", "example": "Lufthansa identity, 1962" },
+        { "name": "Pictograms on a grid", "idea": "Signs built only from orthogonal and 45-degree lines so the family reads as one language.", "example": "Munich 1972 Olympic pictograms" },
+        { "name": "Colour as politics", "idea": "A deliberately light, un-German palette recasts a nation's image.", "example": "Munich 1972 palette: blue, green, silver, white, orange, no red or black" }
+      ],
+      "keyWorks": [
+        { "title": "Lufthansa corporate identity", "year": 1962, "kind": "identity" },
+        { "title": "Munich 1972 Olympics identity and pictograms", "year": 1972, "kind": "identity" },
+        { "title": "Rotis", "year": 1988, "kind": "typeface" },
+        { "title": "Die Welt als Entwurf", "year": 1991, "kind": "book" }
+      ]
+    },
+    {
+      "id": "hans-gugelot",
+      "name": "Hans Gugelot",
+      "born": 1920, "died": 1965,
+      "activeFrom": 1948, "activeTo": 1965,
+      "signatureYear": 1956,
+      "region": "europe",
+      "nationality": "Dutch-German",
+      "role": "Architect, industrial designer, educator",
+      "movements": ["ulm-school", "functionalist-product-design"],
+      "summary": "Ulm's head of product design, who gave Braun its new product language and made the module the basis of furniture and appliances.",
+      "principles": [
+        { "name": "Modular systems", "idea": "Products built from a standard module so they can grow and combine.", "example": "M125 storage system for Bofinger, 125 mm module, from 1950" },
+        { "name": "The product as a quiet box", "idea": "Strip furniture pretensions and expose function in a clean volume.", "example": "Braun SK 4 with Dieter Rams, 1956" },
+        { "name": "Ergonomics as form-giver", "idea": "Use and production determine shape.", "example": "Kodak Carousel-S slide projector with Reinhold Häcker, 1963" }
+      ],
+      "keyWorks": [
+        { "title": "Ulmer Hocker (with Max Bill)", "year": 1954, "kind": "product" },
+        { "title": "M125 storage system", "year": 1956, "kind": "product" },
+        { "title": "Braun SK 4", "year": 1956, "kind": "product" },
+        { "title": "Kodak Carousel-S", "year": 1963, "kind": "product" }
+      ]
+    },
+    {
+      "id": "tomas-maldonado",
+      "name": "Tomás Maldonado",
+      "born": 1922, "died": 2018,
+      "activeFrom": 1944, "activeTo": 2018,
+      "signatureYear": 1970,
+      "region": "europe",
+      "nationality": "Argentine",
+      "role": "Painter, designer, theorist, educator",
+      "movements": ["ulm-school", "argentine-modernism"],
+      "summary": "Argentine concretist who became Ulm's rector and chief theorist, turning design education towards science, semiotics and social critique.",
+      "principles": [
+        { "name": "Design as rational method", "idea": "Ground design in science, semiotics and production rather than intuition.", "example": "Ulm curriculum reforms after Bill's departure, late 1950s" },
+        { "name": "Coding systems", "idea": "Graphic languages as sign systems with explicit rules.", "example": "Olivetti/Rinascente coding system with Gui Bonsiepe, 1964-67" },
+        { "name": "Design as hope and critique", "idea": "The designer is responsible for environment and society.", "example": "La speranza progettuale (Design, Nature, and Revolution), 1970" }
+      ],
+      "keyWorks": [
+        { "title": "Asociación Arte Concreto-Invención (co-founder)", "year": 1945, "kind": "other" },
+        { "title": "Nueva Visión magazine", "year": 1951, "kind": "magazine" },
+        { "title": "Olivetti/Rinascente coding system", "year": 1964, "kind": "system" },
+        { "title": "La speranza progettuale", "year": 1970, "kind": "book" }
+      ]
+    },
+    {
+      "id": "dieter-rams",
+      "name": "Dieter Rams",
+      "born": 1932, "died": null,
+      "activeFrom": 1955, "activeTo": 1997,
+      "signatureYear": 1956,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Industrial designer",
+      "movements": ["functionalist-product-design"],
+      "summary": "Braun's head of design (1961-97) and Vitsœ's designer, whose 'less, but better' and ten principles define functionalist product design.",
+      "principles": [
+        { "name": "Useful, understandable, honest", "idea": "Good design is innovative, makes a product useful, aesthetic and understandable, and never overstates what it is.", "example": "Braun T 1000 world receiver, 1963" },
+        { "name": "Unobtrusive and long-lasting", "idea": "Products are neutral tools that avoid fashion and last; good design is environmentally friendly.", "example": "606 Universal Shelving System for Vitsœ, 1960" },
+        { "name": "Thorough to the last detail", "idea": "Nothing arbitrary or left to chance; care shows respect for the user.", "example": "Braun ET 66 calculator (Dietrich Lubs), 1987" },
+        { "name": "As little design as possible", "idea": "Less, but better: concentrate on essentials, back to purity and simplicity.", "example": "Braun SK 4 with Hans Gugelot, 1956" }
+      ],
+      "keyWorks": [
+        { "title": "Braun SK 4 (with Hans Gugelot)", "year": 1956, "kind": "product" },
+        { "title": "Braun T3 pocket radio", "year": 1958, "kind": "product" },
+        { "title": "606 Universal Shelving System", "year": 1960, "kind": "product" },
+        { "title": "620 Chair Programme", "year": 1962, "kind": "product" },
+        { "title": "Less but Better", "year": 1995, "kind": "book" }
+      ]
+    },
+    {
+      "id": "wim-crouwel",
+      "name": "Wim Crouwel",
+      "born": 1928, "died": 2019,
+      "activeFrom": 1955, "activeTo": 2019,
+      "signatureYear": 1967,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Graphic designer, type designer, educator, museum director",
+      "movements": ["dutch-modernism"],
+      "summary": "'Mr Gridnik': Total Design co-founder and Stedelijk Museum designer whose visible grids and New Alphabet anticipated screen typography.",
+      "principles": [
+        { "name": "The grid as visible structure", "idea": "The grid generates letterforms and images and is shown, not hidden.", "example": "Vormgevers poster, Stedelijk Museum, 1968" },
+        { "name": "Accept the machine's limits", "idea": "Design for what the display technology can render.", "example": "New Alphabet, 1967" },
+        { "name": "Neutral, not anonymous", "idea": "Systematic design can carry a strong signature through custom lettering.", "example": "Stedelijk Museum posters, from 1964" }
+      ],
+      "keyWorks": [
+        { "title": "Stedelijk Museum posters and catalogues", "year": 1964, "kind": "poster" },
+        { "title": "New Alphabet", "year": 1967, "kind": "typeface" },
+        { "title": "Vormgevers", "year": 1968, "kind": "poster" },
+        { "title": "PTT numeral stamps", "year": 1976, "kind": "other" }
+      ]
+    },
+    {
+      "id": "total-design",
+      "name": "Total Design",
+      "born": 1963, "died": null,
+      "activeFrom": 1963, "activeTo": 2026,
+      "signatureYear": 1967,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Multidisciplinary design studio",
+      "movements": ["dutch-modernism"],
+      "summary": "Amsterdam studio founded by Crouwel, Wissing, Kramer and the Schwarz brothers that brought systematic total identity to Dutch public life.",
+      "principles": [
+        { "name": "Multidisciplinary by design", "idea": "Graphics, products, interiors and environments under one roof so identity extends into space.", "example": "Dutch pavilion interior, Expo '70, Osaka, 1970" },
+        { "name": "Wayfinding as identity", "idea": "For a public institution, the signage is the identity.", "example": "Benno Wissing, Schiphol Airport signage, 1967" },
+        { "name": "Systematic corporate identity", "idea": "Logos specified in manuals and applied consistently.", "example": "Ben Bos, Randstad identity, late 1960s" }
+      ],
+      "keyWorks": [
+        { "title": "Schiphol Airport signage", "year": 1967, "kind": "system" },
+        { "title": "Dutch pavilion interior, Expo '70", "year": 1970, "kind": "exhibition" },
+        { "title": "Rabobank wordmark", "year": 1973, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "giovanni-pintori",
+      "name": "Giovanni Pintori",
+      "born": 1912, "died": 1999,
+      "activeFrom": 1936, "activeTo": 1980,
+      "signatureYear": 1947,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Graphic designer, art director",
+      "movements": ["italian-modernism"],
+      "summary": "Olivetti's advertising chief from 1936 to 1967, whose abstract numerals and lowercase logotype defined the world's model corporate image.",
+      "principles": [
+        { "name": "Show the idea, not the machine", "idea": "Evoke what a product does through abstraction rather than depicting it.", "example": "Olivetti calculating-machine posters of cascading numerals, 1940s-50s" },
+        { "name": "The logotype as signature", "idea": "A lowercase, wide-spaced sans wordmark as the company's voice.", "example": "Olivetti logotype, 1947" },
+        { "name": "Painterly modernism", "idea": "Colour fields and playful shapes on a structured page.", "example": "Olivetti calendars, 1951-69" }
+      ],
+      "keyWorks": [
+        { "title": "Olivetti logotype", "year": 1947, "kind": "identity" },
+        { "title": "Olivetti calendars", "year": 1951, "kind": "other" },
+        { "title": "Olivetti: Design in Industry (MoMA, featured)", "year": 1952, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "max-huber",
+      "name": "Max Huber",
+      "born": 1919, "died": 1992,
+      "activeFrom": 1935, "activeTo": 1992,
+      "signatureYear": 1948,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic designer",
+      "movements": ["italian-modernism", "swiss-style"],
+      "summary": "Swiss designer in Milan who bridged Zürich constructivism and Italian colour, with overprinted, kinetic posters and La Rinascente's mark.",
+      "principles": [
+        { "name": "Transparency and overlap", "idea": "Colour planes, type and photographs layered as if transparent to create depth and speed.", "example": "Gran Premio dell'Autodromo di Monza poster, 1948" },
+        { "name": "Swiss order, Italian colour", "idea": "A constructive base carrying saturated, festive colour.", "example": "La Rinascente mark and logotype, 1950" }
+      ],
+      "keyWorks": [
+        { "title": "Sirenella dance hall poster", "year": 1946, "kind": "poster" },
+        { "title": "Gran Premio dell'Autodromo di Monza", "year": 1948, "kind": "poster" },
+        { "title": "La Rinascente mark and logotype", "year": 1950, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "bruno-munari",
+      "name": "Bruno Munari",
+      "born": 1907, "died": 1998,
+      "activeFrom": 1927, "activeTo": 1998,
+      "signatureYear": 1949,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Artist, designer, writer, educator",
+      "movements": ["italian-modernism", "futurism"],
+      "summary": "Milanese artist-designer of useless machines, unreadable books and programmed art, who treated play and systematic variation as design method.",
+      "principles": [
+        { "name": "Play as method", "idea": "Curiosity and play are serious design tools.", "example": "libri illeggibili (unreadable books), from 1949" },
+        { "name": "Variation from one element", "idea": "Generate many forms by systematically varying one thing.", "example": "Declinazione grafica del nome Campari poster, 1964" },
+        { "name": "Design as ordinary craft", "idea": "The designer is a craftsman of everyday life, not a genius.", "example": "Arte come mestiere (Design as Art), 1966" }
+      ],
+      "keyWorks": [
+        { "title": "Macchine inutili", "year": 1933, "kind": "other" },
+        { "title": "Libri illeggibili", "year": 1949, "kind": "book" },
+        { "title": "Declinazione grafica del nome Campari", "year": 1964, "kind": "poster" },
+        { "title": "Falkland lamp (Danese)", "year": 1964, "kind": "product" },
+        { "title": "Arte come mestiere", "year": 1966, "kind": "book" }
+      ]
+    },
+    {
+      "id": "marcello-nizzoli",
+      "name": "Marcello Nizzoli",
+      "born": 1887, "died": 1969,
+      "activeFrom": 1913, "activeTo": 1969,
+      "signatureYear": 1950,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Industrial designer, architect, graphic designer",
+      "movements": ["italian-modernism"],
+      "summary": "Olivetti's chief product designer, whose sculptural Lexikon 80 and Lettera 22 made the office machine a warm, unified object.",
+      "principles": [
+        { "name": "The product as sculpture", "idea": "One softly modelled shell unifies the mechanism.", "example": "Olivetti Lexikon 80, 1948" },
+        { "name": "Portable and personal", "idea": "Mechanical precision in a light, friendly object for one person.", "example": "Olivetti Lettera 22, 1950" },
+        { "name": "Integration of the arts", "idea": "Product, graphic and architectural design as one practice.", "example": "ENI office building, San Donato Milanese, 1956-58" }
+      ],
+      "keyWorks": [
+        { "title": "Olivetti Lexikon 80", "year": 1948, "kind": "product" },
+        { "title": "Olivetti Lettera 22", "year": 1950, "kind": "product" },
+        { "title": "Necchi Mirella sewing machine", "year": 1957, "kind": "product" }
+      ]
+    },
+    {
+      "id": "bob-noorda",
+      "name": "Bob Noorda",
+      "born": 1927, "died": 2010,
+      "activeFrom": 1952, "activeTo": 2010,
+      "signatureYear": 1964,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Graphic designer",
+      "movements": ["italian-modernism", "corporate-identity"],
+      "summary": "Dutch designer in Milan whose 1964 Metropolitana signage invented modern transit wayfinding, before co-founding Unimark International.",
+      "principles": [
+        { "name": "Signage as continuous system", "idea": "Information on a continuous band at fixed height so passengers always know where to look.", "example": "Milan Metro line 1 signage, 1964" },
+        { "name": "Consistency at scale", "idea": "One sans, one colour code, applied everywhere.", "example": "New York subway wayfinding with Massimo Vignelli at Unimark, late 1960s" }
+      ],
+      "keyWorks": [
+        { "title": "Milan Metropolitana line 1 signage", "year": 1964, "kind": "system" },
+        { "title": "Unimark International (co-founder)", "year": 1965, "kind": "other" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1949, "label": "Die gute Form exhibition", "kind": "exhibition", "note": "Max Bill's Swiss Werkbund show turned 'good form' into a public argument for everyday design." },
+    { "year": 1952, "label": "Olivetti: Design in Industry at MoMA", "kind": "exhibition", "note": "Made Olivetti the world's model of a company whose identity is everything it makes." },
+    { "year": 1953, "label": "HfG Ulm founded", "kind": "institution", "note": "The post-war successor to the Bauhaus, where design became science, semiotics and systems." },
+    { "year": 1954, "label": "First Compasso d'Oro", "kind": "institution", "note": "Italy's design prize, first won by Nizzoli's Lettera 22, put industrial design on the cultural map." },
+    { "year": 1956, "label": "Braun SK 4", "kind": "product", "note": "Gugelot and Rams' radio-phonograph replaced the wooden cabinet with a rational appliance." },
+    { "year": 1957, "label": "Neue Haas Grotesk (Helvetica)", "kind": "technology", "note": "Miedinger and Hoffmann's neo-grotesque, renamed Helvetica in 1960, became modernism's default voice." },
+    { "year": 1957, "label": "Univers", "kind": "technology", "note": "Frutiger's family, made for Lumitype phototypesetting, introduced the numbered weight-and-width system." },
+    { "year": 1958, "label": "Neue Grafik magazine", "kind": "publication", "note": "The trilingual Zürich quarterly (1958-65) that served as the Swiss Style's manifesto." },
+    { "year": 1962, "label": "Lufthansa identity", "kind": "identity", "note": "Otl Aicher's Ulm group delivered one of the first complete corporate identity systems with a manual." },
+    { "year": 1963, "label": "Total Design founded", "kind": "institution", "note": "The Netherlands' first multidisciplinary design consultancy, bringing total identity to public life." },
+    { "year": 1964, "label": "Designing Programmes", "kind": "publication", "note": "Karl Gerstner reframed design as writing rules that generate solutions, a root of parametric design." },
+    { "year": 1967, "label": "New Alphabet", "kind": "technology", "note": "Wim Crouwel's type for cathode-ray screens treated the display's limits as the design brief." },
+    { "year": 1968, "label": "HfG Ulm closes", "kind": "institution", "note": "Funding cuts and conflict ended the school, scattering the Ulm Model across the world." },
+    { "year": 1972, "label": "Munich Olympics identity", "kind": "identity", "note": "Otl Aicher's grid pictograms and light palette set the template for wayfinding and event identity." },
+    { "year": 1974, "label": "US DOT pictograms", "kind": "technology", "note": "Public signage pictograms derived from Aicher's Munich system, now used worldwide." },
+    { "year": 1981, "label": "Grid Systems in Graphic Design", "kind": "publication", "note": "Müller-Brockmann codified the modular grid in the book still used to teach layout." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Richard Hollis, Swiss Graphic Design: The Origins and Growth of an International Style 1920-1965, 2006",
+    "Josef Müller-Brockmann, Grid Systems in Graphic Design, 1981",
+    "Emil Ruder, Typographie, 1967",
+    "Karl Gerstner, Designing Programmes, 1964",
+    "Dieter Rams, Less but Better, 1995",
+    "René Spitz, hfg ulm: The View Behind the Foreground, 2002",
+    "https://www.vitsoe.com/us/about/good-design",
+    "https://en.wikipedia.org/wiki/Swiss_Style_(design)",
+    "https://en.wikipedia.org/wiki/Ulm_School_of_Design",
+    "https://de.wikipedia.org/wiki/Neue_Grafik_(Zeitschrift)",
+    "https://en.wikipedia.org/wiki/Helvetica",
+    "https://en.wikipedia.org/wiki/Univers",
+    "https://de.wikipedia.org/wiki/Braun_SK_4",
+    "https://en.wikipedia.org/wiki/Otl_Aicher",
+    "https://en.wikipedia.org/wiki/Dieter_Rams",
+    "https://en.wikipedia.org/wiki/Wim_Crouwel",
+    "https://nl.wikipedia.org/wiki/Total_Design",
+    "https://en.wikipedia.org/wiki/Olivetti_Lettera_22",
+    "https://www.wikidata.org"
+  ]
+}

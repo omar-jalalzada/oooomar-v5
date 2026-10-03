@@ -1,0 +1,126 @@
+{
+  "gui-desktop-metaphor": [
+    { "file": "File:Xerox Alto full.jpg", "title": "Xerox Alto", "year": 1973, "figure": null },
+    { "file": "File:Evolution of the document icon shape.jpg", "title": "Xerox Star document icon studies", "year": 1981, "figure": null },
+    { "file": "File:Apple Lisa Office System 3.1.png", "title": "Apple Lisa Office System", "year": 1983, "figure": null },
+    { "file": "File:Windows 95 at first run.png", "title": "Windows 95 desktop", "year": 1995, "figure": null }
+  ],
+  "computational-design": [
+    { "file": "File:Processing 4.0b1 Screenshot.png", "title": "Processing", "year": 2001, "figure": null },
+    { "file": "File:Galapagos-icc-2.jpg", "title": "Galápagos", "year": 1997, "figure": null }
+  ],
+  "early-web": [
+    { "file": "File:NCSA Mosaic Browser Screenshot.png", "title": "NCSA Mosaic", "year": 1993, "figure": null },
+    { "file": "File:NCSAMosaic1.0Mac.png", "title": "NCSA Mosaic 1.0 for Macintosh", "year": 1993, "figure": null },
+    { "file": "File:My Boyfriend Came Back from the War screenshot.gif", "title": "My Boyfriend Came Back from the War", "year": 1996, "figure": null }
+  ],
+  "flash-era": [
+    { "file": "File:PrayStationHardDrive.jpg", "title": "PrayStation Hardrive", "year": 2001, "figure": "joshua-davis" },
+    { "file": "File:QWOP screenshot.jpg", "title": "QWOP", "year": 2008, "figure": null },
+    { "file": "File:The Big Adventure of Owata's Life Screenshot.png", "title": "The Big Adventure of Owata's Life", "year": null, "figure": null }
+  ],
+  "y2k-aesthetic": [
+    { "file": "File:IMac Bondi Blue.jpg", "title": "iMac G3, Bondi Blue", "year": 1998, "figure": "jony-ive" },
+    { "file": "File:Imac G3 5 flavors side lineup.jpg", "title": "iMac G3 \"five flavors\"", "year": 1999, "figure": "jony-ive" },
+    { "file": "File:Macosxpb.png", "title": "Mac OS X Public Beta (Aqua)", "year": 2000, "figure": null }
+  ],
+  "skeuomorphism": [
+    { "file": "File:MacOSX10-0screenshot.png", "title": "Mac OS X 10.0 Aqua", "year": 2001, "figure": null },
+    { "file": "File:IPhone OS 1 SS.png", "title": "iPhone OS 1 home screen", "year": 2007, "figure": "scott-forstall" },
+    { "file": "File:Windows Vista.png", "title": "Windows Vista Aero", "year": 2007, "figure": null },
+    { "file": "File:IOS 6 music player buttons.jpg", "title": "iOS 6 music player controls", "year": 2012, "figure": null }
+  ],
+  "flat-design": [
+    { "file": "File:Music+Video hub on Windows Phone 7.jpg", "title": "Windows Phone 7 Music + Video hub", "year": 2010, "figure": "albert-shum" },
+    { "file": "File:Letterpress screenshot.png", "title": "Letterpress", "year": 2012, "figure": "loren-brichter" },
+    { "file": "File:Start81.png", "title": "Windows 8.1 Start screen", "year": 2013, "figure": null },
+    { "file": "File:IOS 7.1 homescreen.png", "title": "iOS 7 home screen", "year": 2013, "figure": "jony-ive" }
+  ],
+  "responsive-design": [
+    { "file": "File:Wikipedia Vector 2022 skin (desktop view).png", "title": "Wikipedia, desktop layout", "year": 2023, "figure": null },
+    { "file": "File:Wikipedia Vector 2022 skin (mobile view).png", "title": "Wikipedia, mobile layout", "year": 2023, "figure": null }
+  ],
+  "material-design": [
+    { "file": "File:Android Lollipop screenshot.png", "title": "Android 5 Lollipop", "year": 2014, "figure": "matias-duarte" },
+    { "file": "File:Material Design 2.svg", "title": "Material Design 2 components", "year": 2018, "figure": null },
+    { "file": "File:Material you light.png", "title": "Material You", "year": 2021, "figure": null }
+  ],
+  "design-systems": [
+    { "file": "File:Bootstrap 5 Example.png", "title": "Bootstrap starter template", "year": 2021, "figure": null },
+    { "file": "File:Material Design 3.svg", "title": "Material Design 3 components", "year": 2021, "figure": null },
+    { "file": "File:A newly-created design project on Figma.png", "title": "Figma", "year": null, "figure": null }
+  ],
+  "liquid-glass": [
+    { "file": "File:VisionOS Home Screenshot.jpg", "title": "visionOS home view", "year": 2024, "figure": "alan-dye" },
+    { "file": "File:IOS 26 Homescreen.png", "title": "iOS 26 home screen", "year": 2025, "figure": "alan-dye" },
+    { "file": "File:MacOS Tahoe screenshot.png", "title": "macOS Tahoe", "year": 2025, "figure": "alan-dye" },
+    { "file": "File:IOS 27 Homescreen.png", "title": "iOS 27 home screen", "year": 2026, "figure": null }
+  ],
+  "generative-ai-design": [
+    { "file": "File:DALL-E 2 artificial intelligence digital image generated photo.jpg", "title": "DALL-E 2 image", "year": 2022, "figure": null },
+    { "file": "File:Théâtre D’opéra Spatial.png", "title": "Théâtre D'opéra Spatial (Midjourney)", "year": 2022, "figure": null },
+    { "file": "File:Algorithmically-generated landscape artwork of forest with Shinto shrine.png", "title": "Stable Diffusion image", "year": 2022, "figure": null },
+    { "file": "File:ChatGPT essay draft.png", "title": "ChatGPT conversation", "year": 2024, "figure": null }
+  ],
+  "douglas-engelbart": [
+    { "file": "File:SRI Computer Mouse.jpg", "title": "First computer mouse prototype", "year": 1964, "figure": "douglas-engelbart" },
+    { "file": "File:On Line System Videoconferencing FJCC 1968.jpg", "title": "NLS demonstration", "year": 1968, "figure": "douglas-engelbart" }
+  ],
+  "alan-kay": [
+    { "file": "File:Dynabook.png", "title": "Dynabook", "year": 1972, "figure": "alan-kay" }
+  ],
+  "larry-tesler": [
+    { "file": "File:Apple-lisa-1.jpg", "title": "Apple Lisa", "year": 1983, "figure": null },
+    { "file": "File:Apple Newton MessagePad 100 with stylus.jpg", "title": "Apple Newton MessagePad", "year": 1993, "figure": "larry-tesler" }
+  ],
+  "jef-raskin": [
+    { "file": "File:Macintosh 128k transparency.png", "title": "Macintosh", "year": 1984, "figure": null },
+    { "file": "File:Canon Cat front profile.jpg", "title": "Canon Cat", "year": 1987, "figure": "jef-raskin" }
+  ],
+  "bill-atkinson": [
+    { "file": "File:MacpaintWP.png", "title": "MacPaint", "year": 1984, "figure": "bill-atkinson" },
+    { "file": "File:Hypercard Date Book Stack.png", "title": "HyperCard", "year": 1987, "figure": "bill-atkinson" }
+  ],
+  "susan-kare": [
+    { "file": "File:Apple Macintosh Desktop.png", "title": "Macintosh icons", "year": 1984, "figure": "susan-kare" },
+    { "file": "File:Chicago typeface spec.svg", "title": "Chicago", "year": 1984, "figure": "susan-kare" },
+    { "file": "File:GenevaSpecimen.svg", "title": "Geneva", "year": 1984, "figure": "susan-kare" }
+  ],
+  "steve-jobs": [
+    { "file": "File:Computer macintosh 128k, 1984 (all about Apple onlus).jpg", "title": "Macintosh 128K", "year": 1984, "figure": null },
+    { "file": "File:NEXT Cube-IMG 7154.jpg", "title": "NeXTcube", "year": 1990, "figure": null },
+    { "file": "File:IPhone 1st Gen.svg", "title": "iPhone", "year": 2007, "figure": "jony-ive" }
+  ],
+  "muriel-cooper": [
+    { "file": "File:MIT Press logo (black).svg", "title": "MIT Press logo", "year": 1962, "figure": "muriel-cooper" }
+  ],
+  "jony-ive": [
+    { "file": "File:IMac G3 Bondi Blue, three-quarters view.png", "title": "iMac G3", "year": 1998, "figure": "jony-ive" },
+    { "file": "File:Ipod 1G.png", "title": "iPod", "year": 2001, "figure": "jony-ive" },
+    { "file": "File:IPhone First Generation 8GB (3677961514).jpg", "title": "iPhone", "year": 2007, "figure": "jony-ive" }
+  ],
+  "scott-forstall": [
+    { "file": "File:IPhone OS 1 SS.png", "title": "iPhone OS 1 home screen", "year": 2007, "figure": "scott-forstall" },
+    { "file": "File:IOS 6 Home Screen.png", "title": "iOS 6 home screen", "year": 2012, "figure": "scott-forstall" }
+  ],
+  "joshua-davis": [
+    { "file": "File:PrayStationHardDrive.jpg", "title": "PrayStation Hardrive", "year": 2001, "figure": "joshua-davis" }
+  ],
+  "matias-duarte": [
+    { "file": "File:Palm webOS Launcher.png", "title": "Palm webOS launcher", "year": 2009, "figure": "matias-duarte" },
+    { "file": "File:Android 4.0.png", "title": "Android 4.0 Holo", "year": 2011, "figure": "matias-duarte" },
+    { "file": "File:Android Lollipop screenshot.png", "title": "Android 5 Lollipop", "year": 2014, "figure": "matias-duarte" }
+  ],
+  "albert-shum": [
+    { "file": "File:WP7 screenshot.webp", "title": "Windows Phone 7 Start screen", "year": 2010, "figure": "albert-shum" },
+    { "file": "File:Music+Video hub on Windows Phone 7.jpg", "title": "Windows Phone 7 Music + Video hub", "year": 2010, "figure": "albert-shum" }
+  ],
+  "loren-brichter": [
+    { "file": "File:Letterpress screenshot.png", "title": "Letterpress", "year": 2012, "figure": "loren-brichter" }
+  ],
+  "alan-dye": [
+    { "file": "File:Apple Watch Series 4 Extract.png", "title": "Apple Watch California dial", "year": 2018, "figure": "alan-dye" },
+    { "file": "File:VisionOS Home Screenshot.jpg", "title": "visionOS home view", "year": 2024, "figure": "alan-dye" },
+    { "file": "File:IOS 26 Homescreen.png", "title": "iOS 26 Liquid Glass", "year": 2025, "figure": "alan-dye" }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "taller-grafica-popular": [
+    { "file": "File:Taller de Gráfica Popular logo.svg", "title": "Taller de Gráfica Popular emblem", "year": 1937, "figure": null },
+    { "file": "File:Sharecropper.jpg", "title": "Sharecropper (Elizabeth Catlett)", "year": 1952, "figure": null }
+  ],
+  "argentine-modernism": [
+    { "file": "File:Hospitaldurand sector nacimientos.jpg", "title": "Municipal hospitals signage, Hospital Durand", "year": 1978, "figure": "ronald-shakespear" },
+    { "file": "File:Carlos Pellegrini Signage.jpg", "title": "Buenos Aires Subte signage", "year": 1995, "figure": "ronald-shakespear" }
+  ],
+  "brazilian-concretism": [
+    { "file": "File:Itaú 73.svg", "title": "Banco Itaú mark", "year": 1973, "figure": "alexandre-wollner" },
+    { "file": "File:Globo logo 1965.svg", "title": "First Rede Globo symbol", "year": 1965, "figure": "aloisio-magalhaes" },
+    { "file": "File:Grega no. 4, 1955, Lygia Clark at Glenstone 2023.jpg", "title": "Grega no. 4 (Lygia Clark)", "year": 1955, "figure": null }
+  ],
+  "venezuelan-modernism": [
+    { "file": "File:Mural de Bruselas - Soto MBA.JPG", "title": "Mural de Bruselas (Jesús Soto)", "year": 1958, "figure": null },
+    { "file": "File:Cruz-Diez 2013 Grand Palais Paris France.jpg", "title": "Chromosaturation (Carlos Cruz-Diez)", "year": 1965, "figure": null },
+    { "file": "File:UCV 2015-201 Vitral de Alejandro Otero, 1954.JPG", "title": "Stained glass, Ciudad Universitaria (Alejandro Otero)", "year": 1954, "figure": null }
+  ],
+  "cuban-poster": [
+    { "file": "File:Death of a Bureaucrat.jpg", "title": "La muerte de un burócrata", "year": 1966, "figure": "alfredo-rostgaard" },
+    { "file": "File:Memorias del Subdesarrollo Poster.jpg", "title": "Memorias del subdesarrollo", "year": 1968, "figure": null },
+    { "file": "File:CheTriContinental.jpg", "title": "Hasta la victoria siempre, OSPAAAL", "year": 1969, "figure": null },
+    { "file": "File:Tricontinental issue 10 cover.jpg", "title": "Tricontinental no. 10", "year": 1969, "figure": null }
+  ],
+  "mexico-68": [
+    { "file": "File:1968 Mexico emblem.svg", "title": "MEXICO68 logotype", "year": 1968, "figure": "lance-wyman" },
+    { "file": "File:Metro Zapata.JPG", "title": "Mexico City Metro station sign, Zapata", "year": 1969, "figure": "lance-wyman" },
+    { "file": "File:Señales - Ángela Gurría - 04.jpg", "title": "Señales, Ruta de la Amistad (Ángela Gurría)", "year": 1968, "figure": null },
+    { "file": "File:Exposição Design & Utopia dos Jogos (28262053873).jpg", "title": "Mexico 68 identity, exhibition display", "year": 1968, "figure": "lance-wyman" }
+  ],
+  "tropicalia": [
+    { "file": "File:Tropicália LP.JPG", "title": "Tropicália ou Panis et Circencis", "year": 1968, "figure": null },
+    { "file": "File:Caetano Veloso 1968.jpg", "title": "Caetano Veloso album cover", "year": 1968, "figure": "rogerio-duarte" },
+    { "file": "File:Deus e o Diabo na Terra do Sol.jpg", "title": "Deus e o Diabo na Terra do Sol", "year": 1964, "figure": "rogerio-duarte" },
+    { "file": "File:Os Mutantes album.jpg", "title": "Os Mutantes album cover", "year": 1968, "figure": null }
+  ],
+  "chilean-popular-graphics": [
+    { "file": "File:Pongo en tus manos abiertas.jpeg", "title": "Pongo en tus manos abiertas", "year": 1969, "figure": null },
+    { "file": "File:X Vietnam (album).jpeg", "title": "X Vietnam", "year": 1968, "figure": null },
+    { "file": "File:Puro Chile - ¡Venceremos!.JPG", "title": "¡Venceremos!, Puro Chile", "year": 1970, "figure": null },
+    { "file": "File:CyberSyn-render-005.png", "title": "Cybersyn operations room (reconstruction)", "year": 1972, "figure": null }
+  ],
+  "latin-american-type": [
+    { "file": "File:Carlos Pellegrini Signage.jpg", "title": "Buenos Aires Subte signage", "year": 1995, "figure": "ronald-shakespear" }
+  ],
+  "ronald-shakespear": [
+    { "file": "File:Carlos Pellegrini Signage.jpg", "title": "Buenos Aires Subte signage", "year": 1995, "figure": "ronald-shakespear" },
+    { "file": "File:Hospitaldurand sector nacimientos.jpg", "title": "Municipal hospitals signage, Hospital Durand", "year": 1978, "figure": "ronald-shakespear" },
+    { "file": "File:Boca juniors.png", "title": "Boca Juniors crest", "year": null, "figure": "ronald-shakespear" }
+  ],
+  "alexandre-wollner": [
+    { "file": "File:Itaú 73.svg", "title": "Banco Itaú mark", "year": 1973, "figure": "alexandre-wollner" }
+  ],
+  "aloisio-magalhaes": [
+    { "file": "File:Globo logo 1965.svg", "title": "First Rede Globo symbol", "year": 1965, "figure": "aloisio-magalhaes" },
+    { "file": "File:5 Cruzeiro de 1967 Aluísio Magalhães.jpg", "title": "5 cruzeiro banknote", "year": 1966, "figure": "aloisio-magalhaes" }
+  ],
+  "rogerio-duarte": [
+    { "file": "File:Deus e o Diabo na Terra do Sol.jpg", "title": "Deus e o Diabo na Terra do Sol", "year": 1964, "figure": "rogerio-duarte" },
+    { "file": "File:Caetano Veloso 1968.jpg", "title": "Caetano Veloso album cover", "year": 1968, "figure": "rogerio-duarte" },
+    { "file": "File:Gilberto gil 1968.jpg", "title": "Gilberto Gil album cover", "year": 1968, "figure": "rogerio-duarte" }
+  ],
+  "alfredo-rostgaard": [
+    { "file": "File:Ché poster, 1968, designed by Alfredo Rostgaard.jpg", "title": "Che, OSPAAAL", "year": 1968, "figure": "alfredo-rostgaard" },
+    { "file": "File:Death of a Bureaucrat.jpg", "title": "La muerte de un burócrata", "year": 1966, "figure": "alfredo-rostgaard" }
+  ],
+  "lance-wyman": [
+    { "file": "File:1968 Mexico emblem.svg", "title": "MEXICO68 logotype", "year": 1968, "figure": "lance-wyman" },
+    { "file": "File:Mexico City Metro.svg", "title": "Mexico City Metro logo", "year": 1969, "figure": "lance-wyman" },
+    { "file": "File:Metro Zapata.JPG", "title": "Mexico City Metro station sign, Zapata", "year": 1969, "figure": "lance-wyman" }
+  ],
+  "eduardo-terrazas": [
+    { "file": "File:1968 Mexico emblem.svg", "title": "MEXICO68 logotype (with Lance Wyman)", "year": 1968, "figure": "eduardo-terrazas" }
+  ]
+}

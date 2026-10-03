@@ -1,0 +1,39 @@
+/* Figma draws a white rim round the face. It only reads against Figma's dark canvas: on the
+   site's white ground it's invisible, except in the compact crop where it shows as a seam. */
+.face {
+  background: var(--kin-face);
+  border-radius: var(--radius-card);
+}
+
+.masked {
+  mask-image: var(--mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+.heroScreen {
+  overflow: hidden;
+  border: var(--u) solid var(--kin-screen-rim);
+  border-radius: calc(var(--u) * 16);
+}
+
+.heroScreen > img {
+  object-fit: cover;
+}
+
+.logoTile,
+.logoMark {
+  position: absolute;
+}
+
+.logoTile {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.logoMark {
+  inset: 15.625%;
+  width: 68.75%;
+  height: 68.75%;
+}

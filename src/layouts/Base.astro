@@ -16,7 +16,10 @@ const nav = [
   { href: '/about/', label: 'About' },
 ];
 
-const isActive = (href: string) => Astro.url.pathname.startsWith(href);
+// Case studies at /work/ are reached from About, so they light it up.
+const isActive = (href: string) =>
+  Astro.url.pathname.startsWith(href) ||
+  (href === '/about/' && Astro.url.pathname.startsWith('/work/'));
 ---
 
 <html lang="en">

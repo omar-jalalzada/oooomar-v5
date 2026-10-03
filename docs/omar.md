@@ -104,13 +104,14 @@ designing the best solution within constraints to deliver business outcomes.
 
 ## 4) Voice & temperament
 
-- Natural voice is **calm, direct, thoughtful** — "observations and principles," not "hot takes."
-- **Non-performative.** Values-driven (mindfulness, compassion) without moralizing.
-- **Tone target:** measured confidence, high signal, low ego, clear craft authority.
-- **Avoid:** grandiose / self-fulfilling-prophecy language.
-- **Tone:** human, approachable, friendly — professional with charm. "Humble, but confident;
-  resolute; strong opinions loosely held."
-- **POV:** first-person throughout ("I").
+`docs/communication.md` is the canonical communication guide and supersedes other voice notes.
+
+Identity-specific context for the site:
+
+- Write from lived experience and direct observation.
+- Use first person.
+- Stay grounded and low ego. Avoid preaching or grandiosity.
+- Show clear craft authority through specific examples.
 
 ---
 

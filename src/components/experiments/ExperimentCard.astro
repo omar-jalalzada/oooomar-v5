@@ -1,0 +1,89 @@
+---
+/**
+ * The cover for one experiment: a painted ground, a line figure and the experiment's name,
+ * with motion only on hover. The look (ground and figure) is named in the experiment's
+ * frontmatter and lives in src/lib/experiment-card/; the words are the experiment's own.
+ *
+ * Everything that can be is rendered here, so the card reads before any script runs: the
+ * type as real text, and the ground as a gradient poster. runtime.js then swaps in the
+ * shader ground, draws the figure and wires the hover, for every card on the page at once.
+ *
+ * Inside the card, sizes are card pixels at a 320px card width, scaled as one to whatever
+ * width the card is given, the same exception the role cards make to the tokens rule.
+ */
+import '@fontsource-variable/outfit/wght.css';
+import { cardSpec, posterBackground } from '../../lib/experiment-card/looks.js';
+import { typeMarkup } from '../../lib/experiment-card/type.js';
+
+interface Props {
+  look: string;
+  href: string;
+  title: string;
+  date: Date;
+  techniques: string[];
+  stat?: { value: string; unit: string };
+  /** The experiment's place in the catalogue, oldest first. */
+  index: number;
+}
+
+const { look, href, title, date, techniques, stat, index } = Astro.props;
+
+const spec = cardSpec(look, {
+  index: `No. ${String(index).padStart(2, '0')}`,
+  title,
+  month: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
+  year: String(date.getUTCFullYear()),
+  statValue: stat?.value,
+  statUnit: stat?.unit,
+  techniques: techniques.slice(0, 3),
+});
+const { format, bg } = spec;
+const type = typeMarkup(spec.type, format.w, format.h);
+---
+
+<a
+  class="experiment-card"
+  href={href}
+  data-experiment-card={look}
+  style={`aspect-ratio: ${format.w} / ${format.h}; background: ${posterBackground(bg)};`}
+>
+  <canvas aria-hidden="true"></canvas>
+  <div data-type style={type.style} set:html={type.html} />
+</a>
+
+<style>
+  .experiment-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-md);
+    will-change: transform;
+    outline: none;
+  }
+
+  .experiment-card:hover,
+  .experiment-card:focus-visible {
+    z-index: 1;
+  }
+
+  .experiment-card:focus-visible {
+    outline: 1px solid var(--color-ink);
+    outline-offset: var(--space-1);
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  import '../../lib/experiment-card/runtime.js';
+</script>

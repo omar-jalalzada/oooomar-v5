@@ -66,6 +66,51 @@
   --duration-slow:     500ms;
   --duration-entrance: 800ms;
 
+  /* role cards — each card is drawn in its Figma frame's own units (1188 × 554), so layer
+     geometry is unitless design data scaled to the rendered width, not px on the 4px grid */
+  --role-card-font: "Syne", var(--font-sans);
+  --role-card-stage-w: 1188;
+  --role-card-stage-h: 554;
+
+  --kin-face: #f6a422;
+  --kin-grid: #f09a13;
+  --kin-ink: #4d3f29;
+  --kin-screen-rim: #5d4a2c;
+  /* the app's own palette, sampled from its screens, for the case study's phone showcase */
+  --kin-cream: #edebde;
+  --kin-sage: #357a67;
+  --kin-shadow: rgb(77 63 41 / 0.28);
+
+  --alto-face: #f9f2f8;
+  --alto-grid: #ffd3f6;
+  --alto-ink: #0a4a74;
+  --alto-screen-rim: #f7d0f2;
+  --alto-logo-rim: #d2e582;
+
+  --coatue-face: #1f87e5;
+  --coatue-grid: #319afa;
+  --coatue-ink: #ffffff;
+  --coatue-screen-rim: #1874c8;
+  --coatue-logo-rim: #1672c6;
+
+  /* the face is Macy's brand red, a step brighter than the app's own #c90813 headers, so
+     the screens still read as objects on it */
+  --macys-face: #e21a2c;
+  --macys-grid: #f03a4a;
+  --macys-ink: #ffffff;
+  --macys-accent: #c90813;
+  --macys-screen-rim: #b80f1f;
+  --macys-logo-rim: #b80f1f;
+  --macys-shadow: rgb(110 4 14 / 0.35);
+
+  /* device mock-ups and the interactive hotspots placed on them */
+  --device-bezel: #121214;
+  --device-chin: #e4e5e8;
+  --device-chin-shade: #cfd1d5;
+  --device-stand: #c7c9ce;
+  --hotspot: #ffc62b;
+  --mosaic-panel: #f2f2f2;
+
   /* z-index scale */
   --z-base:    0;
   --z-raised:  10;

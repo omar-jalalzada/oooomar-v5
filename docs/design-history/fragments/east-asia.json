@@ -1,0 +1,708 @@
+{
+  "movements": [
+    {
+      "id": "japanese-modernism",
+      "name": "Japanese Modernism",
+      "aka": ["Postwar Japanese graphic design", "Nippon Design Center generation"],
+      "start": 1951, "end": 1990, "ongoing": false,
+      "peak": [1960, 1972],
+      "region": "east-asia",
+      "places": ["Tokyo", "Osaka"],
+      "lineage": "modernism",
+      "summary": "Postwar Japan's corporate and national modernism: one bold geometric mark, objective photography, and design built as public infrastructure, crowned by Tokyo 1964.",
+      "influences": ["bauhaus", "new-typography", "constructivism", "art-deco", "swiss-style", "american-modernism"],
+      "principles": [
+        { "name": "One mark carries the idea", "idea": "Reduce a nation, event or company to a single geometric statement large enough to fill a poster.", "example": "Yusaku Kamekura, Tokyo 1964 Olympic emblem, 1960" },
+        { "name": "Photography as proof of modernity", "idea": "Use the camera's objectivity and technical difficulty as the message itself.", "example": "Kamekura and Osamu Hayasaki, Tokyo 1964 sprinter poster, 1962" },
+        { "name": "Tradition as geometry", "idea": "Abstract historical Japanese forms such as Rinpa colour fields, crests and Noh masks into flat geometric elements on a modernist grid.", "example": "Ikko Tanaka, Nihon Buyo poster, 1981" },
+        { "name": "Design as infrastructure", "idea": "Design is a public system for everyone, including people who cannot read the language.", "example": "Tokyo 1964 sport pictograms, Yoshiro Yamashita under Masaru Katsumi, 1963" },
+        { "name": "The designer as institution-builder", "idea": "Build shared studios and professional bodies so design can negotiate with industry as an equal.", "example": "Nippon Design Center, founded by eight companies, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "FRONT magazine", "year": 1942, "figure": "hiromu-hara", "kind": "magazine" },
+        { "title": "Nikon F logotype", "year": 1959, "figure": "yusaku-kamekura", "kind": "identity" },
+        { "title": "Tokyo 1964 Olympic emblem", "year": 1960, "figure": "yusaku-kamekura", "kind": "identity" },
+        { "title": "Tokyo 1964 Olympic poster no. 2 (sprinters)", "year": 1962, "figure": "yusaku-kamekura", "kind": "poster" },
+        { "title": "Tokyo 1964 sport pictograms", "year": 1963, "kind": "system" },
+        { "title": "Sapporo 1972 Winter Olympics emblem", "year": 1966, "figure": "kazumasa-nagai", "kind": "identity" },
+        { "title": "Victory 1945", "year": 1975, "figure": "shigeo-fukuda", "kind": "poster" },
+        { "title": "Nihon Buyo", "year": 1981, "figure": "ikko-tanaka", "kind": "poster" },
+        { "title": "Burning Butterflies (Hiroshima Appeals)", "year": 1983, "figure": "yusaku-kamekura", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "japanese-poster-avant-garde",
+      "name": "Japanese Poster Avant-garde",
+      "aka": ["Angura posters", "1960s Japanese underground graphics"],
+      "start": 1960, "end": 1975, "ongoing": false,
+      "peak": [1965, 1970],
+      "region": "east-asia",
+      "places": ["Tokyo"],
+      "lineage": "expression",
+      "summary": "Tokyo's 1960s underground turned against corporate modernism with dense collage of national symbols, folk motifs, kitsch and fluorescent silkscreen colour.",
+      "influences": ["push-pin", "psychedelic", "dada", "ulm-school", "japanese-modernism"],
+      "principles": [
+        { "name": "Pastiche as critique", "idea": "Collage the national symbols modernism suppressed, such as the Rising Sun, Fuji and Hokusai's wave, so they undercut themselves.", "example": "Tadanori Yokoo, Tadanori Yokoo (Having reached a climax at the age of 29, I was dead), 1965" },
+        { "name": "The vernacular is the avant-garde", "idea": "Bring folk motifs, festival printing and the rural into the city as a political act.", "example": "Kiyoshi Awazu, art direction for Double Suicide, 1969" },
+        { "name": "Maximum density", "idea": "Fill the sheet and let colour vibrate; refuse white space as an ideology.", "example": "Tadanori Yokoo, A la Maison de M. Civecawa, 1966" },
+        { "name": "The page as a field of energy", "idea": "Treat covers, books and diagrams as generated patterns and vibrations rather than neutral containers.", "example": "Kohei Sugiura, Ongaku Geijutsu covers, 1960-1963" },
+        { "name": "Politics through affect", "idea": "Aim the poster at the gut rather than at information.", "example": "Kiyoshi Awazu, Umi o Kaese (Give Back Our Oceans), 1955" }
+      ],
+      "keyWorks": [
+        { "title": "Umi o Kaese (Give Back Our Oceans)", "year": 1955, "figure": "kiyoshi-awazu", "kind": "poster" },
+        { "title": "Metabolism 1960 manifesto booklet", "year": 1960, "figure": "kiyoshi-awazu", "kind": "book" },
+        { "title": "Ongaku Geijutsu covers", "year": 1960, "figure": "kohei-sugiura", "kind": "magazine" },
+        { "title": "Tadanori Yokoo", "year": 1965, "figure": "tadanori-yokoo", "kind": "poster" },
+        { "title": "A la Maison de M. Civecawa", "year": 1966, "figure": "tadanori-yokoo", "kind": "poster" },
+        { "title": "Expo '70 Textile Pavilion", "year": 1970, "figure": "tadanori-yokoo", "kind": "building" },
+        { "title": "Parco advertising campaigns", "year": 1975, "figure": "eiko-ishioka", "kind": "poster" },
+        { "title": "Den Shingon-in Ryokai Mandara", "year": 1977, "figure": "kohei-sugiura", "kind": "book" }
+      ]
+    },
+    {
+      "id": "chinese-modern-design",
+      "name": "Chinese Modern Design",
+      "aka": ["Shanghai commercial art", "Hong Kong design", "Chinese book design"],
+      "start": 1920, "end": 2026, "ongoing": true,
+      "peak": [1928, 1937],
+      "region": "east-asia",
+      "places": ["Shanghai", "Beijing", "Hong Kong", "Taipei", "Shenzhen"],
+      "lineage": "commerce",
+      "summary": "From Shanghai calendar posters and New Culture covers through the PRC propaganda poster to Hong Kong's cross-cultural identity and contemporary Chinese book design.",
+      "influences": ["art-deco", "constructivism", "new-typography", "swiss-style", "corporate-identity", "japanese-modernism"],
+      "principles": [
+        { "name": "Commerce as modernity's first language", "idea": "In China modern visual culture arrived through advertising before it arrived through art schools.", "example": "Shanghai yuefenpai calendar posters for British American Tobacco and Nanyang Brothers, 1920s-1930s" },
+        { "name": "The cover as manifesto", "idea": "The book jacket was where the New Culture movement looked modern, with abstract motifs and hand-drawn characters.", "example": "Tao Yuanqing, cover for Lu Xun's Panghuang (Wandering), 1926" },
+        { "name": "Satire through the graphic line", "idea": "Caricature, Deco geometry and photomontage as political commentary under censorship.", "example": "Zhang Guangyu, Journey to the West caricature cycle, 1945" },
+        { "name": "Image as mass mobilisation", "idea": "One authorised image reproduced without limit, in saturated red with heroic faces and radiant light.", "example": "Liu Chunhua, Chairman Mao Goes to Anyuan, 1967, reproduced some 900 million times" },
+        { "name": "Cross-cultural synthesis", "idea": "Translate one specific Chinese form into modernist geometry for an international audience, rather than blending cultures into pastiche.", "example": "Kan Tai-keung, Bank of China symbol, 1980" }
+      ],
+      "keyWorks": [
+        { "title": "Panghuang (Wandering) cover for Lu Xun", "year": 1926, "kind": "book" },
+        { "title": "Kaiming Bookstore covers", "year": 1927, "figure": "qian-juntao", "kind": "book" },
+        { "title": "Shanghai Sketch (Shanghai Manhua)", "year": 1928, "figure": "zhang-guangyu", "kind": "magazine" },
+        { "title": "Modern Sketch (Shidai Manhua)", "year": 1934, "figure": "zhang-guangyu", "kind": "magazine" },
+        { "title": "Chairman Mao Goes to Anyuan", "year": 1967, "kind": "poster" },
+        { "title": "Bank of China symbol", "year": 1980, "figure": "kan-tai-keung", "kind": "identity" },
+        { "title": "HSBC hexagon", "year": 1983, "figure": "henry-steiner", "kind": "identity" },
+        { "title": "East Meets West", "year": 1991, "figure": "alan-chan", "kind": "exhibition" },
+        { "title": "Democracy at 4am", "year": 2014, "figure": "aaron-nieh", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "korean-modern-design",
+      "name": "Korean Modern Design",
+      "aka": ["Hangul typography modernisation"],
+      "start": 1966, "end": 2026, "ongoing": true,
+      "peak": [1985, 2000],
+      "region": "east-asia",
+      "places": ["Seoul", "Paju"],
+      "lineage": "modernism",
+      "summary": "Korea built a design profession from the 1960s and modernised Hangul type, freeing the alphabet's letters from the square syllable block.",
+      "influences": ["swiss-style", "new-typography", "japanese-modernism", "corporate-identity"],
+      "principles": [
+        { "name": "Liberate the letter from the square", "idea": "Let each Hangul letter keep one fixed shape so the alphabet's logic shows, instead of distorting letters to fill a square block.", "example": "Ahn Sang-soo, Ahn typeface, 1985" },
+        { "name": "The script is the identity", "idea": "Hangul itself is the most Korean material a designer has, and the national image is built from it.", "example": "Ahn typeface in the PyeongChang 2018 opening and closing ceremonies" },
+        { "name": "Identity as modernisation", "idea": "Corporate identity introduced as a tool of the export economy and taught to industry by exhibition.", "example": "Cho Young-jae, DECOMAS exhibition, Shinsegae Gallery, 1976" },
+        { "name": "Lyrical illustration as a national voice", "idea": "A gentle, simplified illustrative style as Korea's counterweight to Swiss objectivity.", "example": "Kim Kyo-man, culture posters for the 1986 Asian Games and 1988 Olympics" }
+      ],
+      "keyWorks": [
+        { "title": "OB Beer identity", "year": 1974, "figure": "cho-young-jae", "kind": "identity" },
+        { "title": "DECOMAS exhibition", "year": 1976, "figure": "cho-young-jae", "kind": "exhibition" },
+        { "title": "Seoul 1988 Olympic emblem (Yang Seung-choon)", "year": 1983, "kind": "identity" },
+        { "title": "Ahn typeface", "year": 1985, "figure": "ahn-sang-soo", "kind": "typeface" },
+        { "title": "bogoseo/bogoseo", "year": 1988, "figure": "ahn-sang-soo", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "japanese-emptiness",
+      "name": "Japanese Emptiness",
+      "aka": ["Muji aesthetic", "Karappo", "Design of emptiness"],
+      "start": 1980, "end": 2026, "ongoing": true,
+      "peak": [2001, 2012],
+      "region": "east-asia",
+      "places": ["Tokyo"],
+      "lineage": "modernism",
+      "summary": "Muji's no-brand design grew into a philosophy of the empty vessel: design that offers space for meaning rather than pushing a message.",
+      "influences": ["japanese-modernism", "functionalist-product-design", "swiss-style"],
+      "principles": [
+        { "name": "The empty vessel", "idea": "Design offers a space each person fills with their own meaning instead of transmitting a message.", "example": "Kenya Hara, Muji Horizon poster, 2003" },
+        { "name": "Subtract the brand", "idea": "Remove logos, ornament and colour so material and price become the message.", "example": "Ikko Tanaka, Muji launch packaging in kraft paper and cellophane, 1980" },
+        { "name": "White as potential", "idea": "White is not absence but the state before content.", "example": "Kenya Hara, White, 2008" },
+        { "name": "Re-design the ordinary", "idea": "Look again at everyday objects instead of inventing new ones.", "example": "Kenya Hara, Re-Design: Daily Products of the 21st Century exhibition, 2000" },
+        { "name": "Clarity through organisation", "idea": "Branding as tidying a client down to one essential form.", "example": "Kashiwa Sato, Uniqlo identity for the SoHo New York flagship, 2006" }
+      ],
+      "keyWorks": [
+        { "title": "Muji (Mujirushi Ryohin)", "year": 1980, "figure": "ikko-tanaka", "kind": "identity" },
+        { "title": "Re-Design: Daily Products of the 21st Century", "year": 2000, "figure": "kenya-hara", "kind": "exhibition" },
+        { "title": "Muji Horizon campaign", "year": 2003, "figure": "kenya-hara", "kind": "poster" },
+        { "title": "HAPTIC: Awakening the Senses", "year": 2004, "figure": "kenya-hara", "kind": "exhibition" },
+        { "title": "Uniqlo global identity", "year": 2006, "figure": "kashiwa-sato", "kind": "identity" },
+        { "title": "Tokyo 2020 sport pictograms (Masaaki Hiromura team)", "year": 2019, "kind": "system" }
+      ]
+    },
+    {
+      "id": "superflat",
+      "name": "Superflat",
+      "aka": ["Super Flat"],
+      "start": 2000, "end": 2012, "ongoing": false,
+      "peak": [2000, 2008],
+      "region": "east-asia",
+      "places": ["Tokyo", "Los Angeles", "New York"],
+      "lineage": "expression",
+      "summary": "Murakami's theory that Japanese visual culture and postwar society are flat, run as a brand system spanning paintings, merchandise and luxury collaborations.",
+      "influences": ["japanese-poster-avant-garde", "psychedelic"],
+      "principles": [
+        { "name": "Flatness as cultural theory", "idea": "No perspective or depth: hard line and flat colour as a claim about a society, not only a style.", "example": "Takashi Murakami, Superflat exhibition, Parco Gallery, 2000" },
+        { "name": "Collapse high and low", "idea": "Paintings, figures, handbags and album covers treated as one practice.", "example": "Murakami for Louis Vuitton, Multicolore monogram, 2003" },
+        { "name": "The character as brand", "idea": "A mascot that mutates endlessly across media carries the identity.", "example": "Murakami, Mr. DOB, from 1993" },
+        { "name": "Cuteness carries trauma", "idea": "Kawaii surfaces sit over the memory of defeat and the atomic bomb.", "example": "Murakami, Little Boy exhibition, Japan Society, 2005" }
+      ],
+      "keyWorks": [
+        { "title": "Superflat", "year": 2000, "figure": "takashi-murakami", "kind": "exhibition" },
+        { "title": "Louis Vuitton Multicolore monogram", "year": 2003, "figure": "takashi-murakami", "kind": "product" },
+        { "title": "Little Boy: The Arts of Japan's Exploding Subculture", "year": 2005, "figure": "takashi-murakami", "kind": "exhibition" },
+        { "title": "Graduation (Kanye West) cover", "year": 2007, "figure": "takashi-murakami", "kind": "other" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "hiromu-hara",
+      "name": "Hiromu Hara",
+      "born": 1903, "died": 1986,
+      "activeFrom": 1921, "activeTo": 1975,
+      "signatureYear": 1942,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Typographer, book designer, educator",
+      "movements": ["new-typography", "japanese-modernism"],
+      "summary": "Brought the New Typography to Japan, art-directed FRONT, co-founded the Nippon Design Center and lettered the Tokyo 1964 emblem.",
+      "principles": [
+        { "name": "Typography serves the client", "idea": "Designs built logically, without a signature style, on the client's side.", "example": "Showa Bungaku Zenshu series for Kadokawa, 1952-1955" },
+        { "name": "Paper is part of the design", "idea": "The substrate is designed, not picked from stock.", "example": "Paper series developed with Takeo, from 1959" },
+        { "name": "Modern means, any message", "idea": "His wartime FRONT shows the New Typography serving propaganda: form does not carry ethics.", "example": "FRONT magazine, 1942" }
+      ],
+      "keyWorks": [
+        { "title": "FRONT magazine", "year": 1942, "kind": "magazine" },
+        { "title": "Showa Bungaku Zenshu", "year": 1952, "kind": "book" },
+        { "title": "Tokyo 1964 emblem lettering", "year": 1960, "kind": "identity" },
+        { "title": "EXPO'70 lettering", "year": 1966, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "yusaku-kamekura",
+      "name": "Yusaku Kamekura",
+      "born": 1915, "died": 1997,
+      "activeFrom": 1933, "activeTo": 1997,
+      "signatureYear": 1962,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, art director",
+      "movements": ["japanese-modernism", "corporate-identity"],
+      "summary": "'The Boss' of postwar Japanese design: Tokyo 1964 emblem and posters, Nikon, NTT, co-founder of NDC and first JAGDA president.",
+      "principles": [
+        { "name": "Geometry plus light", "idea": "Pure geometric forms made to glow through colour gradation and photography.", "example": "Nikon F logotype, 1959" },
+        { "name": "Photograph the decisive instant", "idea": "Build the poster on one technically demanding photograph.", "example": "Tokyo 1964 sprinter poster, 1962" },
+        { "name": "The mark as monument", "idea": "Identities meant to outlast their companies' strategies.", "example": "NTT Dynamic Loop, 1985" }
+      ],
+      "keyWorks": [
+        { "title": "Nikon F logotype", "year": 1959, "kind": "identity" },
+        { "title": "Tokyo 1964 Olympic emblem", "year": 1960, "kind": "identity" },
+        { "title": "Tokyo 1964 Olympic poster no. 2", "year": 1962, "kind": "poster" },
+        { "title": "Trademarks and Symbols of the World", "year": 1965, "kind": "book" },
+        { "title": "NTT Dynamic Loop", "year": 1985, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ikko-tanaka",
+      "name": "Ikko Tanaka",
+      "born": 1930, "died": 2002,
+      "activeFrom": 1950, "activeTo": 2002,
+      "signatureYear": 1981,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, art director",
+      "movements": ["japanese-modernism", "japanese-emptiness"],
+      "summary": "Rebuilt Rinpa painting from flat geometry, art-directed the Seibu/Saison group's culture and created Muji's no-brand identity.",
+      "principles": [
+        { "name": "Rinpa from geometry", "idea": "Rinpa's flat colour fields reconstructed from circles, squares and bands.", "example": "Nihon Buyo poster, 1981" },
+        { "name": "Design as cultural programming", "idea": "The art director as curator of a whole culture of shops, theatres and museums.", "example": "Seibu Museum of Art art direction, 1975-1986" },
+        { "name": "The no-brand brand", "idea": "Remove the logo and let packaging material carry the identity.", "example": "Muji, 1980" }
+      ],
+      "keyWorks": [
+        { "title": "Issey Miyake brand mark", "year": 1979, "kind": "identity" },
+        { "title": "Japan Style", "year": 1980, "kind": "exhibition" },
+        { "title": "Muji", "year": 1980, "kind": "identity" },
+        { "title": "Nihon Buyo", "year": 1981, "kind": "poster" },
+        { "title": "Loft symbol", "year": 1987, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "kazumasa-nagai",
+      "name": "Kazumasa Nagai",
+      "born": 1929, "died": 2026,
+      "activeFrom": 1951, "activeTo": 2026,
+      "signatureYear": 1966,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, printmaker",
+      "movements": ["japanese-modernism"],
+      "summary": "NDC founder member and president, JAGDA's second president, who moved from engraved geometric abstraction to hand-drawn animals.",
+      "principles": [
+        { "name": "Abstraction as cosmology", "idea": "Fine engraved line fields that suggest energy and space rather than objects.", "example": "Sapporo 1972 Winter Olympics emblem, 1966" },
+        { "name": "From abstraction to living creatures", "idea": "Late work turns to staring animals drawn in ornamental line as a plea for life.", "example": "Life poster series, 1995" },
+        { "name": "The quiet corporate mark", "idea": "Restrained marks for large institutions.", "example": "Asahi Breweries symbol, 1986" }
+      ],
+      "keyWorks": [
+        { "title": "Sapporo 1972 Winter Olympics emblem", "year": 1966, "kind": "identity" },
+        { "title": "Asahi Breweries symbol", "year": 1986, "kind": "identity" },
+        { "title": "Life series", "year": 1995, "kind": "poster" },
+        { "title": "Mitsubishi UFJ Financial Group symbol", "year": 2004, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "shigeo-fukuda",
+      "name": "Shigeo Fukuda",
+      "born": 1932, "died": 2009,
+      "activeFrom": 1956, "activeTo": 2009,
+      "signatureYear": 1975,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, sculptor",
+      "movements": ["japanese-modernism"],
+      "summary": "'Japan's Escher': anti-war and environmental posters built on a single visual paradox, and illusion sculptures.",
+      "principles": [
+        { "name": "One twist does all the work", "idea": "Reduce the argument to a single impossible image.", "example": "Victory 1945, 1975" },
+        { "name": "Figure-ground ambiguity", "idea": "Two readings in one silhouette.", "example": "Happy Earth Day, 1982" },
+        { "name": "Illusion leaves the page", "idea": "The same logic built in three dimensions.", "example": "Lunch with a Helmet On, 1987" }
+      ],
+      "keyWorks": [
+        { "title": "Expo '70 official poster", "year": 1967, "kind": "poster" },
+        { "title": "Victory 1945", "year": 1975, "kind": "poster" },
+        { "title": "Amnesty International", "year": 1980, "kind": "poster" },
+        { "title": "Lunch with a Helmet On", "year": 1987, "kind": "other" }
+      ]
+    },
+    {
+      "id": "kohei-sugiura",
+      "name": "Kohei Sugiura",
+      "born": 1932, "died": null,
+      "activeFrom": 1955, "activeTo": 2026,
+      "signatureYear": 1977,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic and book designer, researcher of Asian iconography",
+      "movements": ["japanese-poster-avant-garde", "japanese-modernism"],
+      "summary": "Architect-trained designer who made the book, magazine and diagram serious media in Japan and taught a generation of Asian book designers.",
+      "principles": [
+        { "name": "Self-proliferating design", "idea": "One generative pattern re-run through rotations and colours produces a whole series from the same plates.", "example": "Ongaku Geijutsu covers, 1960-1963" },
+        { "name": "The cover is a face", "idea": "The cover answers the contents of each issue.", "example": "Covers for SD and Toshi Jutaku, late 1960s" },
+        { "name": "The book as architecture", "idea": "Design starts from vertical Mincho body text and works outward to the binding.", "example": "Den Shingon-in Ryokai Mandara, 1977" }
+      ],
+      "keyWorks": [
+        { "title": "Ongaku Geijutsu covers", "year": 1960, "kind": "magazine" },
+        { "title": "Experimental Music of Japan '69", "year": 1969, "kind": "other" },
+        { "title": "Den Shingon-in Ryokai Mandara", "year": 1977, "kind": "book" },
+        { "title": "Mandala: Now You See It, Now You Don't", "year": 1980, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "tadanori-yokoo",
+      "name": "Tadanori Yokoo",
+      "born": 1936, "died": null,
+      "activeFrom": 1956, "activeTo": 2026,
+      "signatureYear": 1965,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, painter",
+      "movements": ["japanese-poster-avant-garde", "psychedelic"],
+      "summary": "Collaged the Rising Sun, kitsch and his own biography into psychedelic posters that broke Japanese modernism's consensus.",
+      "principles": [
+        { "name": "The self as subject", "idea": "The designer's own biography is the poster's content.", "example": "Tadanori Yokoo, 1965" },
+        { "name": "Kitsch and sacred side by side", "idea": "Pin-ups, Buddhist imagery and national symbols in one plane, at equal weight.", "example": "A la Maison de M. Civecawa, 1966" },
+        { "name": "Restless restyling", "idea": "Refuse a fixed style; deliberately hang incompatible work together.", "example": "Jiga Jison self-curated retrospective, 2019" }
+      ],
+      "keyWorks": [
+        { "title": "Tadanori Yokoo", "year": 1965, "kind": "poster" },
+        { "title": "A la Maison de M. Civecawa", "year": 1966, "kind": "poster" },
+        { "title": "Expo '70 Textile Pavilion", "year": 1970, "kind": "building" }
+      ]
+    },
+    {
+      "id": "kiyoshi-awazu",
+      "name": "Kiyoshi Awazu",
+      "born": 1929, "died": 2009,
+      "activeFrom": 1948, "activeTo": 2009,
+      "signatureYear": 1955,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, filmmaker",
+      "movements": ["japanese-poster-avant-garde"],
+      "summary": "Self-taught activist designer who designed the Metabolist manifesto and fused folklore, protest and supergraphics.",
+      "principles": [
+        { "name": "Design sides with the dispossessed", "idea": "The poster as solidarity with people excluded from power.", "example": "Umi o Kaese (Give Back Our Oceans), 1955" },
+        { "name": "Reproduction as method", "idea": "Recurring motifs such as fingerprints and turtles reprinted and transformed for decades.", "example": "A Diversity of Birds, Hiroshima Appeals, 1984" },
+        { "name": "Graphics at architectural scale", "idea": "Supergraphics wrap a whole building.", "example": "Nibankan building exterior, Shinjuku, 1970" }
+      ],
+      "keyWorks": [
+        { "title": "Umi o Kaese", "year": 1955, "kind": "poster" },
+        { "title": "Metabolism 1960", "year": 1960, "kind": "book" },
+        { "title": "Double Suicide (art direction)", "year": 1969, "kind": "film" },
+        { "title": "A Diversity of Birds", "year": 1984, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "eiko-ishioka",
+      "name": "Eiko Ishioka",
+      "born": 1938, "died": 2012,
+      "activeFrom": 1961, "activeTo": 2012,
+      "signatureYear": 1975,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Art director, graphic and costume designer",
+      "movements": ["japanese-poster-avant-garde"],
+      "summary": "Parco's art director in the 1970s, then a total designer of film, stage and costume, with an Oscar for Dracula.",
+      "principles": [
+        { "name": "Advertise an attitude", "idea": "Sell a stance of independence and eroticism, showing almost no product.", "example": "Parco campaigns, 1975" },
+        { "name": "Total art direction", "idea": "Poster, set and costume as one designed world.", "example": "Mishima: A Life in Four Chapters, 1985" },
+        { "name": "Uncompromising originality", "idea": "Refuse borrowed style; every project from first principles.", "example": "Costumes for Bram Stoker's Dracula, 1992" }
+      ],
+      "keyWorks": [
+        { "title": "Parco campaigns", "year": 1975, "kind": "poster" },
+        { "title": "Mishima: A Life in Four Chapters (production design)", "year": 1985, "kind": "film" },
+        { "title": "Miles Davis, Tutu cover", "year": 1986, "kind": "other" },
+        { "title": "Bram Stoker's Dracula (costumes)", "year": 1992, "kind": "film" }
+      ]
+    },
+    {
+      "id": "kenya-hara",
+      "name": "Kenya Hara",
+      "born": 1958, "died": null,
+      "activeFrom": 1983, "activeTo": 2026,
+      "signatureYear": 2003,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Graphic designer, curator, writer",
+      "movements": ["japanese-emptiness"],
+      "summary": "Muji's art director since 2001 and NDC's president, who theorised emptiness, white and ex-formation as design.",
+      "principles": [
+        { "name": "Emptiness", "idea": "Design as an empty vessel that receives meaning rather than sending a message.", "example": "Muji Horizon, 2003" },
+        { "name": "Ex-formation", "idea": "Make the familiar unknown again so people notice it, instead of informing them.", "example": "Ex-formation seminar at Musashino Art University, from 2004" },
+        { "name": "Haptic design", "idea": "Design addressed to touch and the senses before the eye.", "example": "HAPTIC exhibition, 2004" }
+      ],
+      "keyWorks": [
+        { "title": "Re-Design: Daily Products of the 21st Century", "year": 2000, "kind": "exhibition" },
+        { "title": "Muji Horizon", "year": 2003, "kind": "poster" },
+        { "title": "Designing Design", "year": 2003, "kind": "book" },
+        { "title": "White", "year": 2008, "kind": "book" },
+        { "title": "Xiaomi logo", "year": 2021, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "kashiwa-sato",
+      "name": "Kashiwa Sato",
+      "born": 1965, "died": null,
+      "activeFrom": 1989, "activeTo": 2026,
+      "signatureYear": 2006,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Creative director, art director",
+      "movements": ["japanese-emptiness", "corporate-identity"],
+      "summary": "Founder of SAMURAI, whose loud reduction in primary colours shaped Uniqlo, Seven-Eleven, Rakuten and the National Art Center, Tokyo.",
+      "principles": [
+        { "name": "Organising", "idea": "Branding as tidying: find the essence and discard the rest.", "example": "Uniqlo identity, 2006" },
+        { "name": "Reduction, loudly", "idea": "Straight lines, primary colours and one strong square.", "example": "National Art Center, Tokyo identity, 2007" },
+        { "name": "Brand as environment", "idea": "Logo, store, product and architecture directed as one.", "example": "Fuji Kindergarten with Tezuka Architects, 2007" }
+      ],
+      "keyWorks": [
+        { "title": "SMAP 014 album artwork", "year": 2000, "kind": "other" },
+        { "title": "Uniqlo global identity", "year": 2006, "kind": "identity" },
+        { "title": "National Art Center, Tokyo identity", "year": 2007, "kind": "identity" },
+        { "title": "Cup Noodles Museum", "year": 2011, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "takashi-murakami",
+      "name": "Takashi Murakami",
+      "born": 1962, "died": null,
+      "activeFrom": 1991, "activeTo": 2026,
+      "signatureYear": 2000,
+      "region": "east-asia",
+      "nationality": "Japanese",
+      "role": "Artist, curator, entrepreneur",
+      "movements": ["superflat"],
+      "summary": "Coined Superflat and ran it as a brand system across painting, merchandise, Louis Vuitton and Kanye West covers.",
+      "principles": [
+        { "name": "The art enterprise", "idea": "The studio as a company with production lines, like an animation house.", "example": "Kaikai Kiki Co., 2001" },
+        { "name": "Repackage the subcultural", "idea": "Otaku forms presented as high art and sold back as goods.", "example": "Miss ko2, 1996" },
+        { "name": "Curate your own context", "idea": "Theory, exhibitions and product built together.", "example": "Superflat, 2000" }
+      ],
+      "keyWorks": [
+        { "title": "Superflat", "year": 2000, "kind": "exhibition" },
+        { "title": "Louis Vuitton Multicolore", "year": 2003, "kind": "product" },
+        { "title": "Little Boy", "year": 2005, "kind": "exhibition" },
+        { "title": "Graduation cover", "year": 2007, "kind": "other" }
+      ]
+    },
+    {
+      "id": "zhang-guangyu",
+      "name": "Zhang Guangyu",
+      "born": 1900, "died": 1965,
+      "activeFrom": 1915, "activeTo": 1965,
+      "signatureYear": 1928,
+      "region": "east-asia",
+      "nationality": "Chinese",
+      "role": "Cartoonist, illustrator, art designer",
+      "movements": ["chinese-modern-design", "art-deco"],
+      "summary": "Led Shanghai's manhua golden age through Shanghai Sketch and Modern Sketch, fusing Deco, Constructivism and folk art; later designed Havoc in Heaven.",
+      "principles": [
+        { "name": "Synthesis without hierarchy", "idea": "Bauhaus, Constructivism, Mexican murals and Chinese folk art in one decorative language.", "example": "Modern Sketch covers, 1934-1937" },
+        { "name": "Myth as political weapon", "idea": "Classical stories retold to satirise the present.", "example": "Journey to the West caricature cycle, 1945" },
+        { "name": "Design across every medium", "idea": "Furniture, covers, stamps and film from one hand.", "example": "Havoc in Heaven art design, 1961-1964" }
+      ],
+      "keyWorks": [
+        { "title": "Shanghai Sketch (Shanghai Manhua)", "year": 1928, "kind": "magazine" },
+        { "title": "Modern Sketch covers", "year": 1934, "kind": "magazine" },
+        { "title": "Journey to the West", "year": 1945, "kind": "book" },
+        { "title": "Havoc in Heaven (art design)", "year": 1961, "kind": "film" }
+      ]
+    },
+    {
+      "id": "qian-juntao",
+      "name": "Qian Juntao",
+      "born": 1907, "died": 1998,
+      "activeFrom": 1927, "activeTo": 1998,
+      "signatureYear": 1927,
+      "region": "east-asia",
+      "nationality": "Chinese",
+      "role": "Book cover designer, seal carver, calligrapher",
+      "movements": ["chinese-modern-design"],
+      "summary": "Kaiming Bookstore's art editor (1927-1934), nicknamed 'Qian Covers', who made cover design a recognised craft in Republican Shanghai.",
+      "principles": [
+        { "name": "The seal carver's economy", "idea": "A carved seal's compression, few strokes in a square field, brought to the cover.", "example": "Kaiming Bookstore covers, from 1927" },
+        { "name": "Western pattern, Chinese structure", "idea": "Art Nouveau and Deco ornament for borders and grounds while titles stay hand-drawn Chinese characters.", "example": "Kaiming Bookstore covers, 1927-1934" }
+      ],
+      "keyWorks": [
+        { "title": "Kaiming Bookstore cover designs", "year": 1927, "kind": "book" }
+      ]
+    },
+    {
+      "id": "henry-steiner",
+      "name": "Henry Steiner",
+      "born": 1934, "died": null,
+      "activeFrom": 1957, "activeTo": 2026,
+      "signatureYear": 1983,
+      "region": "east-asia",
+      "nationality": "Austrian-born, Hong Kong based",
+      "role": "Graphic designer",
+      "movements": ["chinese-modern-design", "corporate-identity"],
+      "summary": "Paul Rand's student who arrived in Hong Kong in 1961 and defined cross-cultural corporate identity, from HSBC to Hongkong Land.",
+      "principles": [
+        { "name": "One element from each side", "idea": "A Western structure paired with one specific Chinese form, never a pastiche.", "example": "Hongkong Land H mark with the character for longevity" },
+        { "name": "Equity over novelty", "idea": "Refresh an inherited mark rather than replace it.", "example": "Hong Kong Jockey Club monogram, redrawn before 1997" },
+        { "name": "Banknotes as public storytelling", "idea": "A currency's imagery as a coherent narrative system.", "example": "Standard Chartered Hong Kong notes with mythical creatures" }
+      ],
+      "keyWorks": [
+        { "title": "HSBC hexagon", "year": 1983, "kind": "identity" },
+        { "title": "Cross-Cultural Design (with Ken Haas)", "year": 1994, "kind": "book" },
+        { "title": "Standard Chartered 150-dollar commemorative note", "year": 2009, "kind": "other" }
+      ]
+    },
+    {
+      "id": "kan-tai-keung",
+      "name": "Kan Tai-keung",
+      "born": 1942, "died": null,
+      "activeFrom": 1967, "activeTo": 2026,
+      "signatureYear": 1980,
+      "region": "east-asia",
+      "nationality": "Chinese (Hong Kong)",
+      "role": "Graphic designer, ink painter",
+      "movements": ["chinese-modern-design"],
+      "summary": "Former tailor turned Hong Kong's leading Chinese designer, uniting ink painting with modernist identity, from the Bank of China to Chongqing.",
+      "principles": [
+        { "name": "Ink as a design element", "idea": "Literati ink-wash brought into the modernist poster as a pure field of tone.", "example": "Ink-and-typography posters, 1980s-1990s" },
+        { "name": "Archaic form, modern geometry", "idea": "An ancient object redrawn as a modern mark that carries a second reading.", "example": "Bank of China symbol, 1980" },
+        { "name": "The city as a character", "idea": "A civic identity built from one written character.", "example": "Chongqing city identity, 2006" }
+      ],
+      "keyWorks": [
+        { "title": "Bank of China symbol", "year": 1980, "kind": "identity" },
+        { "title": "Hong Kong Baptist University emblem", "year": 1994, "kind": "identity" },
+        { "title": "Chongqing city identity", "year": 2006, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "alan-chan",
+      "name": "Alan Chan",
+      "born": 1950, "died": null,
+      "activeFrom": 1970, "activeTo": 2026,
+      "signatureYear": 1991,
+      "region": "east-asia",
+      "nationality": "Chinese (Hong Kong)",
+      "role": "Graphic and interior designer, brand consultant",
+      "movements": ["chinese-modern-design"],
+      "summary": "Hong Kong brand designer whose 'East meets West' blend of Chinese ornament and Western layout reached Japan and the mainland first.",
+      "principles": [
+        { "name": "East meets West", "idea": "Chinese decorative vocabulary set in Western layouts for consumer brands.", "example": "East Meets West exhibition, Creation Gallery G8, Tokyo, 1991" },
+        { "name": "Nostalgia as brand asset", "idea": "Old Shanghai graphics reissued as products and packaging.", "example": "Alan Chan Design Company retro products, 1990s" }
+      ],
+      "keyWorks": [
+        { "title": "East Meets West", "year": 1991, "kind": "exhibition" },
+        { "title": "East Meets West (Ginza Graphic Gallery)", "year": 2002, "kind": "exhibition" },
+        { "title": "Art of Living (Hong Kong Heritage Museum)", "year": 2003, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "lu-jingren",
+      "name": "Lu Jingren",
+      "born": 1947, "died": null,
+      "activeFrom": 1978, "activeTo": 2026,
+      "signatureYear": 1999,
+      "region": "east-asia",
+      "nationality": "Chinese",
+      "role": "Book designer, illustrator, educator",
+      "movements": ["chinese-modern-design"],
+      "summary": "Sugiura-trained Beijing designer who moved Chinese practice from cover decoration to book design as a whole object.",
+      "principles": [
+        { "name": "Design from the inside out", "idea": "Text, grid, paper and binding form one structure, starting from the body text.", "example": "Zhu Xi Bangshu Qianziwen, 1999" },
+        { "name": "Material as meaning", "idea": "Wood, thread, rice paper and traditional binding used as structural argument, not decoration.", "example": "Zhu Xi Bangshu Qianziwen, 1999" }
+      ],
+      "keyWorks": [
+        { "title": "Zhu Xi Bangshu Qianziwen", "year": 1999, "kind": "book" }
+      ]
+    },
+    {
+      "id": "aaron-nieh",
+      "name": "Aaron Nieh",
+      "born": 1977, "died": null,
+      "activeFrom": 2002, "activeTo": 2026,
+      "signatureYear": 2014,
+      "region": "east-asia",
+      "nationality": "Taiwanese",
+      "role": "Graphic designer",
+      "movements": ["chinese-modern-design"],
+      "summary": "Taiwan's best-known graphic designer: Mandopop packaging, sliced Chinese typography and crowdfunded civic design, first Taiwanese AGI member.",
+      "principles": [
+        { "name": "Characters as malleable material", "idea": "Chinese characters sliced, layered and distorted until they are image and text at once.", "example": "50th Golden Horse Awards main visual, 2013" },
+        { "name": "Design as civic action", "idea": "Crowdfunded political design placed in mass media.", "example": "Democracy at 4am, 2014" }
+      ],
+      "keyWorks": [
+        { "title": "50th Golden Horse Awards visual", "year": 2013, "kind": "identity" },
+        { "title": "Democracy at 4am", "year": 2014, "kind": "poster" },
+        { "title": "Tsai Ing-wen presidential campaign", "year": 2016, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "choi-jeong-ho",
+      "name": "Choi Jeong-ho",
+      "born": 1916, "died": 1988,
+      "activeFrom": 1950, "activeTo": 1988,
+      "signatureYear": 1960,
+      "region": "east-asia",
+      "nationality": "Korean",
+      "role": "Type designer",
+      "movements": ["korean-modern-design"],
+      "summary": "Drew the myeongjo and gothic Hangul types of the 1950s-60s on which nearly every later Korean text face is based.",
+      "principles": [
+        { "name": "The text face as infrastructure", "idea": "Two families, myeongjo and gothic, designed for reading at national scale.", "example": "Myeongjo body type, 1960s" },
+        { "name": "Balance inside the square", "idea": "Each syllable block drawn so its optical colour matches its neighbours across thousands of combinations.", "example": "Dong-A Publishing typeface" }
+      ],
+      "keyWorks": [
+        { "title": "Myeongjo body type (1960s)", "year": 1960, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "cho-young-jae",
+      "name": "Cho Young-jae",
+      "born": 1935, "died": 2019,
+      "activeFrom": 1958, "activeTo": 2019,
+      "signatureYear": 1976,
+      "region": "east-asia",
+      "nationality": "Korean",
+      "role": "Graphic designer, educator",
+      "movements": ["korean-modern-design", "corporate-identity"],
+      "summary": "Introduced corporate identity to Korea, proposed the first non-square Hangul module, and chaired the Seoul 1988 Olympic design committee.",
+      "principles": [
+        { "name": "Design as thinking work", "idea": "The designer as strategist and manager, not decorator.", "example": "DECOMAS exhibition, 1976" },
+        { "name": "The non-square module", "idea": "Hangul letters with fixed shapes so machines can set the script beautifully.", "example": "Paper on Hangul mechanisation, Johyeong no. 1, 1976" }
+      ],
+      "keyWorks": [
+        { "title": "OB Beer identity", "year": 1974, "kind": "identity" },
+        { "title": "DECOMAS exhibition", "year": 1976, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "ahn-sang-soo",
+      "name": "Ahn Sang-soo",
+      "born": 1952, "died": null,
+      "activeFrom": 1977, "activeTo": 2026,
+      "signatureYear": 1985,
+      "region": "east-asia",
+      "nationality": "Korean",
+      "role": "Typographer, graphic designer, educator",
+      "movements": ["korean-modern-design", "postmodern-typography"],
+      "summary": "Founder of Ahn Graphics whose 1985 Ahn typeface freed Hangul from the square; Gutenberg Prize 2007 and founder of PaTI.",
+      "principles": [
+        { "name": "Unlock the square", "idea": "Fixed-shape letters and the first variable-width Hangul face.", "example": "Ahn typeface, 1985" },
+        { "name": "Typography as poetry", "idea": "Letters as a visual score, informed by Yi Sang's typographic poems.", "example": "Doctoral study of Yi Sang's poetry, 1995" },
+        { "name": "Play as pedagogy", "idea": "Learning by making, outside the official academy.", "example": "Paju Typography Institute (PaTI)" }
+      ],
+      "keyWorks": [
+        { "title": "Ahn typeface", "year": 1985, "kind": "typeface" },
+        { "title": "bogoseo/bogoseo", "year": 1988, "kind": "magazine" },
+        { "title": "Korean translation of Emil Ruder's Typographie", "year": 2001, "kind": "book" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1928, "label": "Shanghai Sketch launched", "kind": "context", "note": "Zhang Guangyu's weekly began Shanghai's manhua golden age, the testing ground for Chinese modernist graphics." },
+    { "year": 1933, "label": "Nippon Kobo founded", "kind": "context", "note": "Natori's studio trained Hiromu Hara and Yusaku Kamekura in modern photo-typographic layout." },
+    { "year": 1951, "label": "Japan Advertising Artists Club (Nissenbi)", "kind": "context", "note": "Japan's first professional body for graphic designers, and its exhibitions launched Awazu, Sugiura and Yokoo." },
+    { "year": 1955, "label": "Graphic '55 exhibition, Tokyo", "kind": "context", "note": "Japanese modernists hung beside Paul Rand at Takashimaya, inspiring the generation that founded NDC." },
+    { "year": 1956, "label": "PRC newspapers switch to horizontal setting", "kind": "context", "note": "On 1 January 1956 every newspaper in the People's Republic moved from vertical to horizontal typesetting by decree." },
+    { "year": 1960, "label": "World Design Conference, Tokyo", "kind": "context", "note": "Held 11-16 May with 227 delegates; it put Japanese design on the world stage and launched the Metabolist manifesto." },
+    { "year": 1960, "label": "Nippon Design Center opens", "kind": "context", "note": "Eight corporations funded a shared design department led by Kamekura, Hara and Tanaka." },
+    { "year": 1964, "label": "Tokyo 1964 Olympics design programme", "kind": "context", "note": "Kamekura's emblem and photo posters and the first systematic Olympic pictograms set the template for event identity." },
+    { "year": 1965, "label": "Persona exhibition, Matsuya Ginza", "kind": "context", "note": "Sixteen young designers, including Yokoo with his hanged self-portrait, announced the break with corporate modernism." },
+    { "year": 1966, "label": "Cultural Revolution begins", "kind": "context", "note": "Propaganda posters reached their peak production and the most centralised image-making in design history." },
+    { "year": 1970, "label": "Expo '70, Osaka", "kind": "context", "note": "Over 64 million visitors; Japanese graphic and architectural avant-gardes worked at national scale on pavilions and signs." },
+    { "year": 1972, "label": "Korea Society of Graphic Design founded", "kind": "context", "note": "Korea's first graphic design association, later KSVD, institutionalised the profession." },
+    { "year": 1978, "label": "JAGDA founded", "kind": "context", "note": "The Japan Graphic Designers Association formed with Kamekura as first president." },
+    { "year": 1980, "label": "Muji launched", "kind": "context", "note": "Forty no-brand products from Seiyu, designed by Ikko Tanaka's team, began the design of emptiness." },
+    { "year": 1983, "label": "Hiroshima Appeals poster series begins", "kind": "context", "note": "JAGDA's annual peace poster, opened by Kamekura's Burning Butterflies, became a lasting commission for Japanese designers." },
+    { "year": 1985, "label": "Ahn typeface", "kind": "technology", "note": "The first widely used non-square, variable-width Hangul face, released as a computer font in 1991." },
+    { "year": 1988, "label": "Seoul Olympics and the horizontal Hankyoreh", "kind": "context", "note": "Korea's 1964 moment in design, the same year a national daily launched in horizontal Hangul setting." },
+    { "year": 1997, "label": "Hong Kong handover", "kind": "context", "note": "Colonial identities were renamed and redrawn, and cross-cultural design became Hong Kong's explicit subject." },
+    { "year": 2000, "label": "Superflat exhibition, Parco Tokyo", "kind": "context", "note": "Murakami's show and theory travelled to Los Angeles in 2001, reframing Japanese pop graphics as art." },
+    { "year": 2019, "label": "Tokyo 2020 pictograms released", "kind": "context", "note": "Masaaki Hiromura's team updated the 1964 pictogram heritage, later animated in the 2021 opening ceremony." },
+    { "year": 2021, "label": "M+ opens in Hong Kong", "kind": "context", "note": "Asia's first global museum of visual culture to collect graphic design from across East Asia." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Richard S. Thornton, The Graphic Spirit of Japan, Van Nostrand Reinhold, 1991",
+    "Scott Minick & Jiao Ping, Chinese Graphic Design in the Twentieth Century, Thames & Hudson, 1990",
+    "Henry Steiner & Ken Haas, Cross-Cultural Design: Communicating in the Global Marketplace, Van Nostrand Reinhold, 1994",
+    "Henry Steiner, Graphic Communications: Essays on Design, Rennie's Mill Press, 2021",
+    "Kenya Hara, Designing Design, Lars Müller Publishers, 2007",
+    "Kenya Hara, White, Lars Müller Publishers, 2010",
+    "Noboru Kawazoe et al., Metabolism 1960: The Proposals for a New Urbanism, 1960",
+    "Takashi Murakami (ed.), Superflat, Madra Publishing, 2000",
+    "Takashi Murakami (ed.), Little Boy: The Arts of Japan's Exploding Subculture, Japan Society / Yale University Press, 2005",
+    "Kohei Sugiura et al., Wind and Lightning: A Half-Century of Magazine Design by Kohei Sugiura, DNP Graphic Design Archive, 2004",
+    "https://www.mplus.org.hk/",
+    "https://www.dnpfcp.jp/gallery/ggg/",
+    "https://www.ndc.co.jp/",
+    "https://www.jagda.or.jp/",
+    "https://chineseposters.net/",
+    "https://www.kidp.or.kr/",
+    "https://en.wikipedia.org/wiki/Yusaku_Kamekura",
+    "https://en.wikipedia.org/wiki/Henry_Steiner",
+    "https://en.wikipedia.org/wiki/K%C5%8Dhei_Sugiura",
+    "https://en.wikipedia.org/wiki/Metabolism_(architecture)",
+    "https://ja.wikipedia.org/wiki/1964年東京オリンピック",
+    "https://ja.wikipedia.org/wiki/日本デザインセンター",
+    "https://zh.wikipedia.org/wiki/月份牌",
+    "https://ko.wikipedia.org/wiki/조영제_(디자이너)",
+    "https://www.wikidata.org/wiki/Q135811502"
+  ]
+}

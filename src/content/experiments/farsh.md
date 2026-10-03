@@ -5,6 +5,9 @@ technique: [Three.js, WebGL, GLSL, Instanced geometry, GPU particles]
 date: 2026-09-12
 status: draft
 prototype: farsh
+card:
+  look: farsh
+  stat: { value: "478k", unit: "yarn tufts, each one animated" }
 ---
 
 The rug began to feel like wool when each tuft gained its own lean, taper, phase, dye, and response to light. Dark warp between the fibers gave the pile depth. The weaving animation exposed another issue. Loose yarn and finished pile felt disconnected when drawn as separate objects. Keeping each strand as the same tuft throughout the transition made the motion feel physical. Less moving wool and more open space made the weave easier to read.

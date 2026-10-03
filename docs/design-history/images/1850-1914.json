@@ -1,0 +1,151 @@
+{
+  "victorian-print": [
+    { "file": "File:Owen Jones - Grammar of Ornament - 1868 - plate 035 - 300ppi.jpg", "title": "The Grammar of Ornament: Arabian No. 5", "year": 1856, "figure": "owen-jones" },
+    { "file": "File:WalterCrane Baby'sOpera.png", "title": "The Baby's Opera: Old King Cole", "year": 1877, "figure": "walter-crane" },
+    { "file": "File:Edmunds003.jpg", "title": "The Illustrated London Almanac", "year": 1853, "figure": null },
+    { "file": "File:Caldecott Fox 1883 2.png", "title": "The Fox Jumped Over the Parson's Gate", "year": 1883, "figure": null }
+  ],
+  "arts-and-crafts": [
+    { "file": "File:Strawberrythief.jpg", "title": "Strawberry Thief", "year": 1883, "figure": "william-morris" },
+    { "file": "File:MackmurdoWren1883.gif", "title": "Wren's City Churches, title page", "year": 1883, "figure": null },
+    { "file": "File:Gustav Stickley. Dropfront Desk, ca. 1903..jpg", "title": "Drop-front desk", "year": 1903, "figure": null },
+    { "file": "File:Newcomb Pottery. Vase, 1902-1904.jpg", "title": "Newcomb Pottery vase", "year": 1902, "figure": null }
+  ],
+  "private-press": [
+    { "file": "File:SGP ch 2 1891.png", "title": "The Story of the Glittering Plain", "year": 1891, "figure": "william-morris" },
+    { "file": "File:Kelmscott Troilus.jpg", "title": "Kelmscott Chaucer: Troilus and Criseyde", "year": 1896, "figure": "william-morris" },
+    { "file": "File:Kelmscott Press Typefaces.jpg", "title": "Kelmscott Press typefaces", "year": 1897, "figure": "william-morris" },
+    { "file": "File:Doves Press Bible.jpg", "title": "The English Bible (Doves Press)", "year": 1903, "figure": null }
+  ],
+  "japonisme": [
+    { "file": "File:Le Japon artistique décembre 1889.jpg", "title": "Le Japon artistique, no. 20", "year": 1889, "figure": null },
+    { "file": "File:Henri de Toulouse-Lautrec - Divan Japonais - Google Art Project.jpg", "title": "Divan Japonais", "year": 1893, "figure": "henri-de-toulouse-lautrec" },
+    { "file": "File:Vincent van Gogh - Bloeiende pruimenboomgaard- naar Hiroshige - Google Art Project.jpg", "title": "Flowering Plum Orchard (after Hiroshige)", "year": 1887, "figure": null },
+    { "file": "File:Les 36 vues de la Tour Eiffel, planche 8, Henri Rivière.jpg", "title": "Thirty-Six Views of the Eiffel Tower, plate 8", "year": 1902, "figure": null }
+  ],
+  "art-nouveau": [
+    { "file": "File:Alphonse Mucha - Poster for Victorien Sardou's Gismonda starring Sarah Bernhardt.jpg", "title": "Gismonda", "year": 1894, "figure": "alphonse-mucha" },
+    { "file": "File:Lautrec moulin rouge, la goulue (poster) 1891.jpg", "title": "Moulin Rouge: La Goulue", "year": 1891, "figure": "henri-de-toulouse-lautrec" },
+    { "file": "File:Beardsley-peacockskirt.PNG", "title": "The Peacock Skirt (Salome)", "year": 1894, "figure": "aubrey-beardsley" },
+    { "file": "File:Abbesses.JPG", "title": "Paris Métro entrance, Abbesses", "year": 1900, "figure": null }
+  ],
+  "glasgow-school": [
+    { "file": "File:\"The May Queen\" de Margaret Macdonald (Glasgow) (3803689322).jpg", "title": "The May Queen", "year": 1900, "figure": "margaret-macdonald" },
+    { "file": "File:Wfm glasgow school of art.jpg", "title": "Glasgow School of Art", "year": 1897, "figure": "charles-rennie-mackintosh" },
+    { "file": "File:Mackintosh, Room de Luxe 1903.jpg", "title": "Willow Tea Rooms: Room de Luxe", "year": 1903, "figure": "charles-rennie-mackintosh" }
+  ],
+  "vienna-secession": [
+    { "file": "File:Koloman Moser Plakat 1899.jpg", "title": "Poster for the 5th Secession exhibition", "year": 1899, "figure": "koloman-moser" },
+    { "file": "File:Alfred roller, XIV austellung... secession, vienna 1902, 02.jpg", "title": "Poster for the 14th Secession exhibition", "year": 1902, "figure": null },
+    { "file": "File:Ver Sacrum, Issue 1, January 1898.jpg", "title": "Ver Sacrum, issue 1", "year": 1898, "figure": null },
+    { "file": "File:Klimt - Beethovenfries - Mittelwand.jpg", "title": "Beethoven Frieze", "year": 1902, "figure": "gustav-klimt" }
+  ],
+  "jugendstil": [
+    { "file": "File:Otto Eckmann - Jugend Nr. 14, 1896.jpg", "title": "Jugend, no. 14", "year": 1896, "figure": "otto-eckmann" },
+    { "file": "File:Joseph Sattler-PAN.jpg", "title": "Pan", "year": 1895, "figure": null },
+    { "file": "File:Behrens kiss.jpg", "title": "Der Kuss", "year": 1898, "figure": "peter-behrens" },
+    { "file": "File:Umschlag Simpl.JPG", "title": "Simplicissimus bulldog", "year": 1908, "figure": null }
+  ],
+  "plakatstil": [
+    { "file": "File:Bernhard Priester matches.jpg", "title": "Priester", "year": 1906, "figure": "lucian-bernhard" },
+    { "file": "File:Hans Rudi Erdt (1883-1918) - Opel.jpg", "title": "Opel", "year": 1911, "figure": null },
+    { "file": "File:Julius Klinger Möhring Kronleuchter 1908.jpg", "title": "Möhring Kronleuchter", "year": 1908, "figure": null },
+    { "file": "File:Plakat Zigarettenfabrik Jasmatzi 1913.jpg", "title": "Jasmatzi", "year": 1913, "figure": "ludwig-hohlwein" }
+  ],
+  "owen-jones": [
+    { "file": "File:Owen Jones - Grammar of Ornament - 1868 - plate 035 - 300ppi.jpg", "title": "The Grammar of Ornament: Arabian No. 5", "year": 1856, "figure": "owen-jones" },
+    { "file": "File:Alhambra 1,2.jpeg", "title": "Plans, Elevations, Sections and Details of the Alhambra", "year": 1842, "figure": "owen-jones" },
+    { "file": "File:Psalms of David, Owen Jones.png", "title": "Psalms of David", "year": 1845, "figure": "owen-jones" }
+  ],
+  "walter-crane": [
+    { "file": "File:The Baby's Opera A book of old Rhymes and The Music by the Earliest Masters Book Cover 1.png", "title": "The Baby's Opera", "year": 1877, "figure": "walter-crane" },
+    { "file": "File:Crane toybook.jpg", "title": "The Alphabet of Old Friends", "year": 1874, "figure": "walter-crane" },
+    { "file": "File:CRANE a garland for mayday 1895.jpg", "title": "A Garland for May Day", "year": 1895, "figure": "walter-crane" }
+  ],
+  "william-morris": [
+    { "file": "File:William Morris design for Trellis wallpaper 1862.jpg", "title": "Trellis wallpaper", "year": 1862, "figure": "william-morris" },
+    { "file": "File:Morris Strawberry Thief 1883 detail.jpg", "title": "Strawberry Thief", "year": 1883, "figure": "william-morris" },
+    { "file": "File:Kelmscott Troilus.jpg", "title": "Kelmscott Chaucer: Troilus and Criseyde", "year": 1896, "figure": "william-morris" }
+  ],
+  "jules-cheret": [
+    { "file": "File:Cheret, Jules - Le Pays des Fees (pl 181).jpg", "title": "Le Pays des Fées", "year": 1889, "figure": "jules-cheret" },
+    { "file": "File:Cheret, Jules - Les Saxoleine.jpg", "title": "Saxoléine", "year": 1895, "figure": "jules-cheret" },
+    { "file": "File:Cheret, Jules - L´Amant des Danseuses (pl 45).jpg", "title": "L'Amant des danseuses", "year": 1888, "figure": "jules-cheret" }
+  ],
+  "henri-de-toulouse-lautrec": [
+    { "file": "File:Lautrec moulin rouge, la goulue (poster) 1891.jpg", "title": "Moulin Rouge: La Goulue", "year": 1891, "figure": "henri-de-toulouse-lautrec" },
+    { "file": "File:Henri de Toulouse-Lautrec - Divan Japonais - Google Art Project.jpg", "title": "Divan Japonais", "year": 1893, "figure": "henri-de-toulouse-lautrec" },
+    { "file": "File:Jane Avril by Toulouse-Lautrec.jpeg", "title": "Jane Avril (Jardin de Paris)", "year": 1893, "figure": "henri-de-toulouse-lautrec" }
+  ],
+  "eugene-grasset": [
+    { "file": "File:Grasset - Sarah-Bernhardt.jpg", "title": "Jeanne d'Arc: Sarah Bernhardt", "year": 1890, "figure": "eugene-grasset" },
+    { "file": "File:Eugène Grasset - A La Place Clichy.jpg", "title": "A la Place Clichy", "year": 1891, "figure": "eugene-grasset" },
+    { "file": "File:Eugene Grasset, poster for Grafton Galleries, 1893.jpg", "title": "Grafton Galleries", "year": 1893, "figure": "eugene-grasset" }
+  ],
+  "alphonse-mucha": [
+    { "file": "File:Alphonse Mucha - Poster for Victorien Sardou's Gismonda starring Sarah Bernhardt.jpg", "title": "Gismonda", "year": 1894, "figure": "alphonse-mucha" },
+    { "file": "File:Alphonse Mucha - Job Cigarettes 1.jpg", "title": "Job", "year": 1896, "figure": "alphonse-mucha" },
+    { "file": "File:Alfons Mucha - 1896 - Summer.jpg", "title": "The Seasons: Summer", "year": 1896, "figure": "alphonse-mucha" }
+  ],
+  "aubrey-beardsley": [
+    { "file": "File:Beardsley-peacockskirt.PNG", "title": "The Peacock Skirt (Salome)", "year": 1894, "figure": "aubrey-beardsley" },
+    { "file": "File:How Morgan le Fay Cave a Shield to Sir Tristram.jpg", "title": "Le Morte d'Arthur: How Morgan le Fay Gave a Shield to Sir Tristram", "year": 1893, "figure": "aubrey-beardsley" },
+    { "file": "File:Aubrey Beardsley - The driving of Cupid from the garden - preparatory drawing for the cover design of 'The Savoy', no.3... - Google Art Project.jpg", "title": "The Savoy, no. 3, cover design", "year": 1896, "figure": "aubrey-beardsley" }
+  ],
+  "beggarstaffs": [
+    { "file": "File:Maîtres de l'affiche V 3 - Pl 107 - Beggarstaffs.jpg", "title": "Hamlet", "year": 1894, "figure": "beggarstaffs" },
+    { "file": "File:Maîtres de l'affiche V 2 - Pl 63 - Beggarstaffs.jpg", "title": "Don Quixote (Lyceum Theatre)", "year": 1895, "figure": "beggarstaffs" },
+    { "file": "File:Maîtres de l'affiche V 4 - Pl 168 - Beggarstaffs.jpg", "title": "Rowntree's Elect Cocoa", "year": 1896, "figure": "beggarstaffs" }
+  ],
+  "will-bradley": [
+    { "file": "File:The Chap-Book, Thanksgiving number, advertising poster, 1895.jpg", "title": "The Chap-Book: Thanksgiving", "year": 1895, "figure": "will-bradley" },
+    { "file": "File:Inland-Printer-February-1896.jpg", "title": "The Inland Printer", "year": 1896, "figure": "will-bradley" },
+    { "file": "File:William Henry Bradley - Bradley his book - Google Art Project.jpg", "title": "Bradley: His Book", "year": 1896, "figure": "will-bradley" }
+  ],
+  "charles-rennie-mackintosh": [
+    { "file": "File:Wfm glasgow school of art.jpg", "title": "Glasgow School of Art", "year": 1897, "figure": "charles-rennie-mackintosh" },
+    { "file": "File:Mackintosh, Room de Luxe 1903.jpg", "title": "Willow Tea Rooms: Room de Luxe", "year": 1903, "figure": "charles-rennie-mackintosh" },
+    { "file": "File:Washstand MET DT1424.jpg", "title": "Washstand", "year": 1904, "figure": "charles-rennie-mackintosh" }
+  ],
+  "margaret-macdonald": [
+    { "file": "File:\"The May Queen\" de Margaret Macdonald (Glasgow) (3803689322).jpg", "title": "The May Queen", "year": 1900, "figure": "margaret-macdonald" },
+    { "file": "File:Margaret MacDonald - White Rose And Red Rose.jpg", "title": "The White Rose and the Red Rose", "year": 1902, "figure": "margaret-macdonald" },
+    { "file": "File:Margaret MacDonald - Opera Of The Winds 1903.jpg", "title": "Opera of the Winds", "year": 1903, "figure": "margaret-macdonald" }
+  ],
+  "gustav-klimt": [
+    { "file": "File:Klimt - Beethovenfries - Mittelwand.jpg", "title": "Beethoven Frieze", "year": 1902, "figure": "gustav-klimt" },
+    { "file": "File:Preparatory design - Klimt - Stoclet Palace.jpg", "title": "Stoclet Frieze, preparatory design", "year": 1910, "figure": "gustav-klimt" }
+  ],
+  "koloman-moser": [
+    { "file": "File:Koloman Moser Plakat 1899.jpg", "title": "Poster for the 5th Secession exhibition", "year": 1899, "figure": "koloman-moser" },
+    { "file": "File:Koloman Moser 007.jpg", "title": "Fromme's Kalender", "year": 1899, "figure": "koloman-moser" },
+    { "file": "File:Kolo Moser - Franz Joseph1 - 1908.jpeg", "title": "Austrian Jubilee stamp design", "year": 1908, "figure": "koloman-moser" }
+  ],
+  "josef-hoffmann": [
+    { "file": "File:Ngv design, josef hoffmann, adjustable-back chair (stitzmachine) 1905 circa 02.JPG", "title": "Sitzmaschine", "year": 1905, "figure": "josef-hoffmann" },
+    { "file": "File:Josef Hoffmann - Kubus Fauteuil (1910).jpg", "title": "Kubus armchair", "year": 1910, "figure": "josef-hoffmann" },
+    { "file": "File:Palais Stoclet, vue ensemble.JPG", "title": "Palais Stoclet", "year": 1905, "figure": "josef-hoffmann" }
+  ],
+  "otto-eckmann": [
+    { "file": "File:Otto Eckmann - Jugend Nr. 14, 1896.jpg", "title": "Jugend, no. 14", "year": 1896, "figure": "otto-eckmann" },
+    { "file": "File:Otto Eckmann - Jugend Nr. 32, 1896.jpg", "title": "Jugend, no. 32", "year": 1896, "figure": "otto-eckmann" }
+  ],
+  "henry-van-de-velde": [
+    { "file": "File:Henry van de Velde - Chair - 1895.jpg", "title": "Bloemenwerf chair", "year": 1895, "figure": "henry-van-de-velde" },
+    { "file": "File:Deep plate by Henry van de Velde, Meissen factory, 1903, porcelain with blue underglaze and gold decoration - Hessisches Landesmuseum Darmstadt - Darmstadt, Germany - DSC00722.jpg", "title": "Meissen plate", "year": 1903, "figure": "henry-van-de-velde" },
+    { "file": "File:Van-de-Velde-Bau in Weimar (Südgiebel).jpg", "title": "Kunstgewerbeschule Weimar", "year": 1907, "figure": "henry-van-de-velde" }
+  ],
+  "peter-behrens": [
+    { "file": "File:Behrens kiss.jpg", "title": "Der Kuss", "year": 1898, "figure": "peter-behrens" },
+    { "file": "File:Behrens-aeg-wasserkocher.jpg", "title": "AEG electric kettles", "year": 1909, "figure": "peter-behrens" },
+    { "file": "File:AEG by Peter Behrens.jpg", "title": "AEG Turbine Factory", "year": 1909, "figure": "peter-behrens" }
+  ],
+  "lucian-bernhard": [
+    { "file": "File:Bernhard Priester matches.jpg", "title": "Priester", "year": 1906, "figure": "lucian-bernhard" }
+  ],
+  "ludwig-hohlwein": [
+    { "file": "File:Plakat Zigarettenfabrik Jasmatzi 1913.jpg", "title": "Jasmatzi", "year": 1913, "figure": "ludwig-hohlwein" },
+    { "file": "File:Flickr - …trialsanderrors - Richard Strauss-Woche, festival poster, 1910.jpg", "title": "Richard Strauss-Woche", "year": 1910, "figure": "ludwig-hohlwein" },
+    { "file": "File:Zoologischer Garten München.jpg", "title": "Zoologischer Garten München", "year": 1912, "figure": "ludwig-hohlwein" }
+  ]
+}

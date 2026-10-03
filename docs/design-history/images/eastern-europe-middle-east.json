@@ -1,0 +1,97 @@
+{
+ "czech-avant-garde": [
+  { "file": "File:Karel Teige, Pozdrav z cesty, 1923, koláž, papír, 33,1 x 23,5 cm, GHMP.png", "title": "Pozdrav z cesty (Greetings from the Journey)", "year": 1924, "figure": "karel-teige" },
+  { "file": "File:Štyrský Fantomas.jpg", "title": "Fantomas: Ruka bez těla (cover)", "year": 1930, "figure": null },
+  { "file": "File:Ladislav Sutnar Tea Set Mint Museum of Art Charlotte, NC.jpg", "title": "Tea set", "year": null, "figure": "ladislav-sutnar" }
+ ],
+ "karel-teige": [
+  { "file": "File:Teige, Odjezd na Kytheru (Departure for Cythera) (1923–24). Prague City Gallery.png", "title": "Odjezd na Kytheru (Departure for Cythera)", "year": 1923, "figure": "karel-teige" },
+  { "file": "File:Pekař Jan Marhoul obálka prvního vydání 1924.jpg", "title": "Pekař Jan Marhoul (cover)", "year": 1924, "figure": "karel-teige" },
+  { "file": "File:Valka s mloky (1936) – obalka.jpg", "title": "Válka s mloky (cover)", "year": 1936, "figure": "karel-teige" }
+ ],
+ "ladislav-sutnar": [
+  { "file": "File:Ladislav Sutnar Tea Set Mint Museum of Art Charlotte, NC.jpg", "title": "Tea set", "year": null, "figure": "ladislav-sutnar" },
+  { "file": "File:Ladislav Sutnar, repliky hraček.jpg", "title": "Rhinoceros and walrus toys", "year": 1927, "figure": "ladislav-sutnar" },
+  { "file": "File:Stojánek na ubrousky Ladislav Sutnar, Sandrik.jpg", "title": "Napkin holder for Sandrik", "year": null, "figure": "ladislav-sutnar" }
+ ],
+ "polish-poster-school": [
+  { "file": "File:Tadeusz Trepkowski Nie!.jpg", "title": "Nie!", "year": 1952, "figure": null },
+  { "file": "File:Henryk Tomaszewski, plakat \"Józef Szajna. Plastyka, teatr\".jpg", "title": "Józef Szajna. Plastyka, teatr", "year": null, "figure": "henryk-tomaszewski" },
+  { "file": "File:II Miedzynarodowe Biennale Plakatu (1968) Polish stamp; poster by Jan Lenica.jpg", "title": "Faust (Poster Biennale stamp)", "year": 1968, "figure": "jan-lenica" },
+  { "file": "File:Tentoonstelling van Roman Cieslewicz in Stedelijk, werk van Cieslewicz, Bestanddeelnr 926-1514.jpg", "title": "Cieślewicz posters at the Stedelijk", "year": 1973, "figure": "roman-cieslewicz" }
+ ],
+ "henryk-tomaszewski": [
+  { "file": "File:Henryk Tomaszewski, plakat \"Moore. Wystawa rzeźb Henry Moore'a\".jpg", "title": "Moore", "year": 1959, "figure": "henryk-tomaszewski" },
+  { "file": "File:Henryk Tomaszewski, plakat \"Inni. Od Nikifora do Głowackiej\" 01.jpg", "title": "Inni. Od Nikifora do Głowackiej", "year": 1965, "figure": "henryk-tomaszewski" },
+  { "file": "File:Henryk Tomaszewski, plakat \"Wystawa plakatu NRF\".jpg", "title": "Wystawa plakatu NRF", "year": null, "figure": "henryk-tomaszewski" }
+ ],
+ "jan-lenica": [
+  { "file": "File:II Miedzynarodowe Biennale Plakatu (1968) Polish stamp; poster by Jan Lenica.jpg", "title": "Faust (Poster Biennale stamp)", "year": 1968, "figure": "jan-lenica" }
+ ],
+ "roman-cieslewicz": [
+  { "file": "File:Sérigraphie Cieslewicz 1978.jpg", "title": "Untitled screenprint", "year": 1978, "figure": "roman-cieslewicz" },
+  { "file": "File:Tentoonstelling van Roman Cieslewicz in Stedelijk, werk van Cieslewicz, Bestanddeelnr 926-1515.jpg", "title": "Cieślewicz exhibition, Stedelijk Museum", "year": 1973, "figure": "roman-cieslewicz" }
+ ],
+ "franciszek-starowieyski": [
+  { "file": "File:Andrzej Kijowski - Dziecko przez ptaka przyniesione page001.jpg", "title": "Dziecko przez ptaka przyniesione (cover)", "year": 1968, "figure": "franciszek-starowieyski" }
+ ],
+ "wiktor-gorka": [
+  { "file": "File:Poster Pracujemy w trójkę budujemy za dwunastu.jpg", "title": "Pracujemy w trójkę, budujemy za dwunastu", "year": 1953, "figure": "wiktor-gorka" }
+ ],
+ "czechoslovak-film-poster": [
+  { "file": "File:Zdenek zieglar-The Cry (1963 film).jpg", "title": "Křik (The Cry)", "year": 1963, "figure": "zdenek-ziegler" },
+  { "file": "File:Daisies1966.jpg", "title": "Sedmikrásky (Daisies)", "year": 1966, "figure": null },
+  { "file": "File:Closelywatchedtrains.jpg", "title": "Ostře sledované vlaky (Closely Watched Trains)", "year": 1966, "figure": null },
+  { "file": "File:Marketa Lazarova film poster 1967 Czech film.jpg", "title": "Marketa Lazarová", "year": 1967, "figure": null }
+ ],
+ "zdenek-ziegler": [
+  { "file": "File:Zdenek zieglar-The Cry (1963 film).jpg", "title": "Křik (The Cry)", "year": 1963, "figure": "zdenek-ziegler" }
+ ],
+ "saqqakhaneh": [
+  { "file": "File:Heech in a Cage by Parviz Tanavoli 01.jpg", "title": "Heech in a Cage", "year": 2005, "figure": "parviz-tanavoli" },
+  { "file": "File:Heech 2006.jpg", "title": "Heech", "year": null, "figure": "parviz-tanavoli" }
+ ],
+ "parviz-tanavoli": [
+  { "file": "File:Heech in a Cage by Parviz Tanavoli 01.jpg", "title": "Heech in a Cage", "year": 2005, "figure": "parviz-tanavoli" },
+  { "file": "File:Parviz-Tanavoli-Heech-Lovers.jpg", "title": "Heech Lovers", "year": null, "figure": "parviz-tanavoli" },
+  { "file": "File:Heech 2006.jpg", "title": "Heech", "year": null, "figure": "parviz-tanavoli" }
+ ],
+ "iranian-graphic-design": [
+  { "file": "File:Gaav movie poster.jpg", "title": "Gav (The Cow)", "year": 1969, "figure": "farshid-mesghali" },
+  { "file": "File:Award-winning illustration on original cover of The Little Black Fish.png", "title": "Mahi-ye siyah-e kuchulu (The Little Black Fish)", "year": 1968, "figure": "farshid-mesghali" },
+  { "file": "File:The Deer movie poster.jpg", "title": "Gavaznha (The Deer)", "year": 1974, "figure": "morteza-momayez" },
+  { "file": "File:Dernière affiche du festival des arts de Shiraz-Persépolis (musée d'art moderne, Paris) (14553342799).jpg", "title": "12th Festival of Arts Shiraz–Persepolis", "year": 1978, "figure": "ghobad-shiva" }
+ ],
+ "morteza-momayez": [
+  { "file": "File:Iran National Standards Organization logo.svg", "title": "ISIRI standards mark", "year": 1985, "figure": "morteza-momayez" },
+  { "file": "File:Iranian Institute of Certified Accountants Logo 1353 by Morteza Momayez.jpg", "title": "Iranian Association of Certified Accountants mark", "year": 1974, "figure": "morteza-momayez" },
+  { "file": "File:The Deer movie poster.jpg", "title": "Gavaznha (The Deer)", "year": 1974, "figure": "morteza-momayez" }
+ ],
+ "ghobad-shiva": [
+  { "file": "File:Dernière affiche du festival des arts de Shiraz-Persépolis (musée d'art moderne, Paris) (14553342799).jpg", "title": "12th Festival of Arts Shiraz–Persepolis", "year": 1978, "figure": "ghobad-shiva" },
+  { "file": "File:گزارش (پوستر فارسی).jpg", "title": "Gozaresh (The Report)", "year": 1977, "figure": "ghobad-shiva" },
+  { "file": "File:نخستین جشنواره فیلم اگهی تهران (پوستر).jpg", "title": "First Tehran Advertising Film Festival", "year": 1973, "figure": "ghobad-shiva" }
+ ],
+ "farshid-mesghali": [
+  { "file": "File:Award-winning illustration on original cover of The Little Black Fish.png", "title": "Mahi-ye siyah-e kuchulu (The Little Black Fish)", "year": 1968, "figure": "farshid-mesghali" },
+  { "file": "File:Gaav movie poster.jpg", "title": "Gav (The Cow)", "year": 1969, "figure": "farshid-mesghali" },
+  { "file": "File:هالو (پوستر).jpg", "title": "Aghaye Hallou (Mr. Gullible)", "year": 1970, "figure": "farshid-mesghali" }
+ ],
+ "reza-abedini": [
+  { "file": "File:یک داستان واقعی (پوستر).jpg", "title": "A True Story", "year": 1995, "figure": "reza-abedini" },
+  { "file": "File:آتش در خرمن (پوستر انگلیسی).jpg", "title": "Fire in Harvest", "year": 1991, "figure": "reza-abedini" }
+ ],
+ "hurufiyya": [
+  { "file": "File:Flickr - Nic's events - London with Sub-Evil Boy (and Dori), 21 Oct 2007 - 104.jpg", "title": "Untitled calligram", "year": null, "figure": null },
+  { "file": "File:There is no i but i by kamal boullata.png", "title": "There Is No I but I", "year": null, "figure": "kamal-boullata" },
+  { "file": "File:National Museum of Ethnology, Osaka - Islamic calligraphy \"Ecstasy\" (Al-Wajd) - Paris in France - Made by Hassan Massoudy in 2001.jpg", "title": "Al-Wajd (Ecstasy)", "year": 2001, "figure": null }
+ ],
+ "kamal-boullata": [
+  { "file": "File:There is no i but i by kamal boullata.png", "title": "There Is No I but I", "year": null, "figure": "kamal-boullata" },
+  { "file": "File:Hommage to the flag by kamal boullata.png", "title": "Homage to the Flag", "year": 1990, "figure": "kamal-boullata" }
+ ],
+ "arabic-modernism": [
+  { "file": "File:Sindbad Children's Magazine.jpg", "title": "Sindbad, first issue", "year": 1952, "figure": null },
+  { "file": "File:Khatt Foundation (logo).jpg", "title": "Khatt Foundation mark", "year": null, "figure": null }
+ ]
+}

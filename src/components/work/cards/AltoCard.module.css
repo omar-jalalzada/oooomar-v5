@@ -1,0 +1,53 @@
+/* Figma's white rim round the face is left out, as on Kin: it's invisible on the white ground. */
+.face {
+  background: var(--alto-face);
+  border-radius: var(--radius-card);
+}
+
+.gridClip {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.gridFade {
+  background: linear-gradient(-23.318deg, var(--alto-face) 69.115%, transparent 84.519%);
+}
+
+.potFade {
+  background: linear-gradient(-42.16deg, var(--alto-face) 51.739%, transparent 86.73%);
+  border-radius: var(--radius-card);
+}
+
+.flipped > img {
+  transform: scaleX(-1);
+}
+
+.screen {
+  overflow: hidden;
+  border: var(--u) solid var(--alto-screen-rim);
+}
+
+.dashboard {
+  border-radius: calc(var(--u) * 3);
+}
+
+.phone {
+  border-radius: calc(var(--u) * 8);
+}
+
+.screen > .crop {
+  position: absolute;
+  left: var(--crop-l);
+  top: var(--crop-t);
+  width: var(--crop-w);
+  height: var(--crop-h);
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid var(--alto-logo-rim);
+  border-radius: 10.31%;
+}

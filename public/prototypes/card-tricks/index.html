@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--
+    One Card Tricks entry. Versions stay in vN/ so a pass is never overwritten —
+    this page is the shell that picks which one to load.
+    v1–v3 were built against a set of health-data reference cards, and keep their names.
+      v1/ — the background bench: soft-field gradients, colour, grain
+      v2/ — the visuals bench: line-drawing figures over the ground
+      v3/ — the type bench: slots, scale and ink tiers over both
+      v4/ — the card system: one line-work generator, a card per experiment
+      v5/ — name first: the title leads, the stat supports it
+      v6/ — motion as interaction: hover drives all three layers, at three depths
+      v7/ — livelier: 2.5× energy, a lag per plane, the bright spot follows the cursor
+      v8/ — the ground stays whole: no spot chases the cursor, fields keep their parallax
+      v9/ — no grain: texture grain at zero on every card
+      v10/ — Point Taken draws a jellyfish in dots: a filament mark and dotted strokes
+      v11/ — the composite, starting with one card: layer modules + composite.js, no bench
+      v12/ — the composite, all six cards tiled in three columns
+      v13/ — Flow State as a Sankey (flow mark); bench.html beside the composite, same modules
+    outfit-wght.woff2 is Outfit's variable face, shared by every version:
+      npm i -D @fontsource-variable/outfit
+      cp node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2 \
+         public/prototypes/card-tricks/outfit-wght.woff2
+
+    Paths always end in index.html so the iframe works under Vite's public/
+    server (no directory indexes) as well as on Vercel.
+  -->
+  <title>Card Tricks</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f4f4f5;
+      color: #18181b;
+      font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 40px;
+      padding: 0 14px;
+      background: rgba(244, 244, 245, 0.92);
+      border-bottom: 1px solid #e4e4e7;
+      backdrop-filter: blur(14px);
+    }
+    #bar .mark {
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    #bar label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    #version {
+      appearance: none;
+      -webkit-appearance: none;
+      margin: 0;
+      padding: 6px 28px 6px 10px;
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      background:
+        linear-gradient(45deg, transparent 50%, #18181b 50%) calc(100% - 14px) 50% / 5px 5px no-repeat,
+        linear-gradient(135deg, #18181b 50%, transparent 50%) calc(100% - 10px) 50% / 5px 5px no-repeat,
+        #ffffff;
+      color: #18181b;
+      font: inherit;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      max-width: min(420px, calc(100vw - 100px));
+    }
+    #version:hover,
+    #version:focus-visible {
+      border-color: #a1a1aa;
+      outline: none;
+    }
+
+    #stage {
+      position: absolute;
+      inset: 40px 0 0;
+      border: 0;
+      width: 100%;
+      height: calc(100% - 40px);
+      background: #f4f4f5;
+    }
+  </style>
+</head>
+<body>
+  <div id="bar">
+    <span class="mark">Card Tricks</span>
+    <label for="version">Version</label>
+    <select id="version">
+      <option value="v13">v13 — composite, Sankey flow</option>
+      <option value="v13-bench">v13 — bench</option>
+      <option value="v12">v12 — the composite, all six</option>
+      <option value="v11">v11 — the composite</option>
+      <option value="v10">v10 — a jellyfish for Point Taken</option>
+      <option value="v9">v9 — no grain</option>
+      <option value="v8">v8 — the ground stays whole</option>
+      <option value="v7">v7 — livelier, in depth</option>
+      <option value="v6">v6 — motion as interaction</option>
+      <option value="v5">v5 — name first</option>
+      <option value="v4">v4 — the card system</option>
+      <option value="v3">v3 — the type bench</option>
+      <option value="v2">v2 — the visuals bench</option>
+      <option value="v1">v1 — the background bench</option>
+    </select>
+  </div>
+  <iframe id="stage" title="Card Tricks"></iframe>
+
+  <script>
+    const VERSIONS = {
+      v13: { src: 'v13/index.html', title: 'Card Tricks v13 — the composite' },
+      'v13-bench': { src: 'v13/bench.html', title: 'Card Tricks v13 — bench' },
+      v12: { src: 'v12/index.html', title: 'Card Tricks v12 — the composite, all six' },
+      v11: { src: 'v11/index.html', title: 'Card Tricks v11 — the composite' },
+      v10: { src: 'v10/index.html', title: 'Card Tricks v10 — a jellyfish for Point Taken' },
+      v9: { src: 'v9/index.html', title: 'Card Tricks v9 — no grain' },
+      v8: { src: 'v8/index.html', title: 'Card Tricks v8 — the ground stays whole' },
+      v7: { src: 'v7/index.html', title: 'Card Tricks v7 — livelier, in depth' },
+      v6: { src: 'v6/index.html', title: 'Card Tricks v6 — motion as interaction' },
+      v5: { src: 'v5/index.html', title: 'Card Tricks v5 — name first' },
+      v4: { src: 'v4/index.html', title: 'Card Tricks v4 — the card system' },
+      v3: { src: 'v3/index.html', title: 'Card Tricks v3 — the type bench' },
+      v2: { src: 'v2/index.html', title: 'Card Tricks v2 — the visuals bench' },
+      v1: { src: 'v1/index.html', title: 'Card Tricks v1 — the background bench' },
+    };
+    const DEFAULT = 'v13';
+    const KEY = 'card-tricks-version';
+
+    const select = document.getElementById('version');
+    const stage = document.getElementById('stage');
+
+    function readInitial() {
+      const fromHash = location.hash.replace(/^#/, '');
+      if (VERSIONS[fromHash]) return fromHash;
+      try {
+        const stored = localStorage.getItem(KEY);
+        if (VERSIONS[stored]) return stored;
+      } catch (_) { /* private mode */ }
+      return DEFAULT;
+    }
+
+    function load(id) {
+      const v = VERSIONS[id] || VERSIONS[DEFAULT];
+      select.value = VERSIONS[id] ? id : DEFAULT;
+      stage.src = v.src;
+      document.title = v.title;
+      if (location.hash.replace(/^#/, '') !== select.value) {
+        history.replaceState(null, '', '#' + select.value);
+      }
+      try { localStorage.setItem(KEY, select.value); } catch (_) { /* private mode */ }
+    }
+
+    select.addEventListener('change', () => load(select.value));
+    window.addEventListener('hashchange', () => {
+      const id = location.hash.replace(/^#/, '');
+      if (VERSIONS[id] && id !== select.value) load(id);
+    });
+
+    load(readInitial());
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+/* Every layer is placed in the Figma frame's own units and scaled by --u, the rendered width of
+   one unit. --u is resolved where it's used, against the .frame container, so it always tracks
+   the card's actual width. */
+.frame {
+  container: role-card / inline-size;
+}
+
+.card {
+  --view-x: 0;
+  --view-y: 0;
+  --view-w: var(--role-card-stage-w);
+  --view-h: var(--role-card-stage-h);
+  --u: calc(100cqw / var(--view-w));
+
+  position: relative;
+  margin: 0;
+}
+
+.stage {
+  position: relative;
+  aspect-ratio: var(--view-w) / var(--view-h);
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--u) * var(--role-card-stage-w));
+  height: calc(var(--u) * var(--role-card-stage-h));
+  transform: translate(calc(var(--u) * var(--view-x) * -1), calc(var(--u) * var(--view-y) * -1));
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.place {
+  position: absolute;
+  left: calc(var(--u) * var(--x));
+  top: calc(var(--u) * var(--y));
+  width: calc(var(--u) * var(--w));
+  height: calc(var(--u) * var(--h));
+}
+
+.place > img,
+img.place {
+  display: block;
+  max-width: none;
+}
+
+.place > img {
+  width: 100%;
+  height: 100%;
+}
+
+.cells {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--grid-stroke);
+  stroke-width: 1;
+  stroke-dasharray: var(--grid-dash, none);
+}
+
+.caption {
+  position: absolute;
+  z-index: var(--z-raised);
+  left: calc(var(--u) * var(--caption-x));
+  top: calc(var(--u) * var(--caption-y));
+  width: calc(var(--u) * var(--caption-w));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--u) * var(--caption-gap));
+  font-family: var(--role-card-font);
+  font-weight: 700;
+  font-size: calc(var(--u) * 18);
+  line-height: calc(var(--u) * 24);
+  color: var(--caption-ink);
+}
+
+.logo {
+  position: relative;
+  display: block;
+  width: calc(var(--u) * var(--caption-logo));
+  height: calc(var(--u) * var(--caption-logo));
+}
+
+/* Compact: set as a word, the statement would shrink with the frame until it's unreadable, so it
+   leaves the artwork and sits above a crop of it on the card's own ground. */
+@container role-card (max-width: 860px) {
+  .card {
+    --view-x: var(--compact-view-x);
+    --view-y: var(--compact-view-y);
+    --view-w: var(--compact-view-w);
+    --view-h: var(--compact-view-h);
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .caption {
+    position: static;
+    width: auto;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-6) var(--space-2);
+    font-size: var(--text-base);
+    line-height: 1.4;
+    background: var(--caption-ground);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+
+  /* The caption's height is rarely a whole pixel, and the two boxes can snap to different device
+     rows, leaving a hairline of page between them. Overlapping by one closes it. */
+  .stage {
+    margin-top: -1px;
+  }
+
+  .logo {
+    width: var(--space-12);
+    height: var(--space-12);
+  }
+
+  .statement {
+    max-width: 22em;
+  }
+
+  /* Cards whose artwork escapes the top of the face put the caption below the crop instead, so
+     the escape survives and the crop tucks under the caption at the face's bottom edge. */
+  .card[data-compact-caption='below'] .caption {
+    order: 1;
+    margin-top: -1px;
+    padding: var(--space-4) var(--space-6) var(--space-6);
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+  }
+
+  .card[data-compact-caption='below'] .stage {
+    margin-top: 0;
+  }
+}

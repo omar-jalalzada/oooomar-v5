@@ -1,0 +1,859 @@
+{
+  "movements": [
+    {
+      "id": "psychedelic",
+      "name": "Psychedelic Poster",
+      "aka": ["Psychedelia", "San Francisco rock poster"],
+      "start": 1965, "end": 1972, "ongoing": false,
+      "peak": [1966, 1968],
+      "region": "north-america",
+      "places": ["San Francisco", "New York", "London"],
+      "lineage": "expression",
+      "summary": "Dance-hall posters that bent Art Nouveau lettering and vibrating colour into a slow-to-read image you had to stop and decode.",
+      "influences": ["art-nouveau", "vienna-secession", "push-pin"],
+      "principles": [
+        { "name": "Legibility as a delay", "idea": "Lettering swells to fill every gap in the shape it occupies, so reading becomes a deliberate act that holds the viewer in front of the poster.", "example": "Wes Wilson, Bill Graham Presents poster 'Fly 8 Miles High with Me', 1966" },
+        { "name": "Vibrating complements", "idea": "Equal-value complementary colours placed edge to edge make the boundary shimmer, so the flat print appears to move.", "example": "Victor Moscoso, Neon Rose #2 poster for the Matrix, 1967" },
+        { "name": "Borrowed ornament, new body", "idea": "Secession and Art Nouveau letterforms and Mucha-style figures are lifted wholesale and re-inked in fluorescent colour for a new audience.", "example": "Wes Wilson, Family Dog poster 'Sin Dance', 1966" },
+        { "name": "The poster as merchandise", "idea": "Event bills were reprinted and sold as wall art, turning ephemeral promotion into a collectible product and a style that could be licensed.", "example": "Peter Max, Poster Book, 1970" }
+      ],
+      "keyWorks": [
+        { "title": "Are We Next?", "year": 1965, "figure": "wes-wilson", "kind": "poster" },
+        { "title": "Trips Festival poster", "year": 1966, "figure": "wes-wilson", "kind": "poster" },
+        { "title": "Neon Rose series for the Matrix", "year": 1967, "figure": "victor-moscoso", "kind": "poster" },
+        { "title": "Zap Comix #2", "year": 1968, "figure": "victor-moscoso", "kind": "magazine" },
+        { "title": "Life magazine cover feature", "year": 1969, "figure": "peter-max", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "punk",
+      "name": "Punk and Post-punk Graphics",
+      "aka": ["DIY graphics", "Post-punk sleeve design"],
+      "start": 1976, "end": 1986, "ongoing": false,
+      "peak": [1977, 1983],
+      "region": "europe",
+      "places": ["London", "Manchester", "Sheffield"],
+      "lineage": "expression",
+      "summary": "Cut-up, photocopied, deliberately crude graphics for the punk explosion, and the cool modernist sleeves of the post-punk labels that followed.",
+      "influences": ["dada", "constructivism", "new-typography", "psychedelic"],
+      "principles": [
+        { "name": "Ransom-note lettering", "idea": "Letters cut from newspaper headlines and pasted at mismatched sizes make the message look illicit and anonymous, made with scissors rather than a typesetter.", "example": "Jamie Reid, 'God Save the Queen' sleeve for the Sex Pistols, 1977" },
+        { "name": "Détournement of icons", "idea": "An official image is defaced just enough to invert its meaning: the Queen's jubilee portrait with the eyes and mouth torn out.", "example": "Jamie Reid, 'God Save the Queen' poster, 1977" },
+        { "name": "The sleeve as a puzzle", "idea": "Packaging carries deliberate errors, die-cuts, misregistration and hidden codes, so the object rewards close attention and insider knowledge.", "example": "Barney Bubbles, Elvis Costello 'This Year's Model' sleeve, deliberately miscropped, 1978" },
+        { "name": "Modernism as a found object", "idea": "Post-punk designers quote Tschichold, scientific plots and classical paintings with cool detachment, placing the band name small or not at all.", "example": "Peter Saville, Joy Division 'Unknown Pleasures', 1979" }
+      ],
+      "keyWorks": [
+        { "title": "Never Mind the Bollocks, Here's the Sex Pistols", "year": 1977, "figure": "jamie-reid", "kind": "other" },
+        { "title": "Armed Forces (Elvis Costello)", "year": 1979, "figure": "barney-bubbles", "kind": "other" },
+        { "title": "Unknown Pleasures (Joy Division)", "year": 1979, "figure": "peter-saville", "kind": "other" },
+        { "title": "Blue Monday (New Order)", "year": 1983, "figure": "peter-saville", "kind": "other" },
+        { "title": "The Face art direction", "year": 1981, "figure": "neville-brody", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "new-wave",
+      "name": "New Wave Typography",
+      "aka": ["Swiss Punk", "Basel New Wave", "California New Wave"],
+      "start": 1968, "end": 1990, "ongoing": false,
+      "peak": [1972, 1986],
+      "region": "europe",
+      "places": ["Basel", "Los Angeles", "New York", "Philadelphia"],
+      "lineage": "expression",
+      "summary": "Swiss typography taken apart from inside: Weingart's Basel classroom kept the grid's discipline and broke its rules, and his students carried it to America.",
+      "influences": ["swiss-style", "dada", "constructivism"],
+      "principles": [
+        { "name": "Break the grid from inside", "idea": "Start from Swiss order, then stair-step, letterspace, rotate and overlap type so the structure is visible precisely because it is being violated.", "example": "Wolfgang Weingart, Kunsthalle Basel 'Kunstkredit 76-77' poster, 1977" },
+        { "name": "Film as a layer", "idea": "Halftone screens, typesetting film and photographs are sandwiched and re-photographed, so texture and transparency become typographic material.", "example": "Wolfgang Weingart, Kunstkredit poster, 1977" },
+        { "name": "Type in deep space", "idea": "Letters, colour swatches and photographs float at different apparent depths, a layered space rather than a flat page.", "example": "April Greiman and Jayme Odgers, CalArts poster, 1978" },
+        { "name": "Readability over legibility", "idea": "Instead of maximising letter recognition, the designer asks whether the whole composition draws a reader in and holds them.", "example": "Dan Friedman, teaching at Yale and SUNY Purchase, 1969-1975" }
+      ],
+      "keyWorks": [
+        { "title": "Kunsthalle Basel Kunstkredit 76-77", "year": 1977, "figure": "wolfgang-weingart", "kind": "poster" },
+        { "title": "CalArts poster (with Jayme Odgers)", "year": 1978, "figure": "april-greiman", "kind": "poster" },
+        { "title": "LA Summer Games runner poster (with Jayme Odgers)", "year": 1982, "figure": "april-greiman", "kind": "poster" },
+        { "title": "Design Quarterly 133: Does It Make Sense?", "year": 1986, "figure": "april-greiman", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "memphis",
+      "name": "Memphis",
+      "aka": ["Memphis Milano", "Memphis Group"],
+      "start": 1980, "end": 1988, "ongoing": false,
+      "peak": [1981, 1985],
+      "region": "europe",
+      "places": ["Milan"],
+      "lineage": "expression",
+      "summary": "Sottsass's Milan collective made furniture out of cheap laminate, clashing colour and toy-like geometry to mock good taste and functionalist restraint.",
+      "influences": ["art-deco", "psychedelic"],
+      "principles": [
+        { "name": "Cheap material, luxury price", "idea": "Printed plastic laminate, the material of diners and kitchens, is applied to gallery furniture so status and taste are put in question.", "example": "Ettore Sottsass, Carlton bookcase, 1981" },
+        { "name": "Pattern as surface, not ornament", "idea": "A squiggle or speckle covers a form flatly and arbitrarily, unrelated to structure, making the surface a graphic layer.", "example": "Ettore Sottsass, Bacterio laminate pattern, used on Memphis pieces from 1981" },
+        { "name": "Object as character", "idea": "A bookcase or lamp is composed like a totem or a figure, with arms and a head, so it reads as personality before function.", "example": "Ettore Sottsass, Carlton bookcase, 1981" },
+        { "name": "Clash on purpose", "idea": "Colours and shapes that should not sit together are stacked: pastel with black, terrazzo with primary yellow.", "example": "Ettore Sottsass, Casablanca sideboard, 1981" }
+      ],
+      "keyWorks": [
+        { "title": "Valentine typewriter (with Perry A. King, Olivetti)", "year": 1969, "figure": "ettore-sottsass", "kind": "product" },
+        { "title": "Carlton bookcase", "year": 1981, "figure": "ettore-sottsass", "kind": "product" },
+        { "title": "Casablanca sideboard", "year": 1981, "figure": "ettore-sottsass", "kind": "product" },
+        { "title": "Murmansk fruit bowl", "year": 1982, "figure": "ettore-sottsass", "kind": "product" }
+      ]
+    },
+    {
+      "id": "postmodern-typography",
+      "name": "Postmodern Typography",
+      "aka": ["Cranbrook deconstruction", "Designer as author", "Vernacular postmodernism"],
+      "start": 1978, "end": 1995, "ongoing": false,
+      "peak": [1984, 1993],
+      "region": "north-america",
+      "places": ["Bloomfield Hills (Cranbrook)", "Valencia (CalArts)", "New York", "London"],
+      "lineage": "expression",
+      "summary": "American and British designers read literary theory and the commercial vernacular into layouts that ask to be read in layers, not decoded once.",
+      "influences": ["new-wave", "swiss-style", "dada", "push-pin"],
+      "principles": [
+        { "name": "Reading and seeing at once", "idea": "Text is set to be both read and looked at: images and words interleave so meaning is assembled by the reader rather than delivered.", "example": "Katherine McCoy, Cranbrook Graduate Program in Design poster, 1989" },
+        { "name": "Learn from the vernacular", "idea": "Hand-lettered signs, clip art, Letraset and trade printing are treated as sources equal to Swiss modernism.", "example": "Ed Fella, Detroit Focus Gallery poster 'Morris Brose: A Sustained Vision', 1987" },
+        { "name": "The designer as author", "idea": "The designer adds a voice to the content rather than serving it invisibly, through self-initiated work, editing and commentary.", "example": "Tibor Kalman, M&Co, Talking Heads '(Nothing But) Flowers' typographic video, 1988" },
+        { "name": "Theory as a design tool", "idea": "Semiotics and post-structuralist ideas about how texts mean are tested directly in layout, and documented as a programme.", "example": "Katherine and Michael McCoy, Cranbrook Design: The New Discourse, 1991" }
+      ],
+      "keyWorks": [
+        { "title": "Cranbrook Graduate Program in Design poster", "year": 1989, "figure": "katherine-mccoy", "kind": "poster" },
+        { "title": "Detroit Focus Gallery poster, Morris Brose: A Sustained Vision", "year": 1987, "figure": "ed-fella", "kind": "poster" },
+        { "title": "Remain in Light (Talking Heads), with M&Co", "year": 1980, "figure": "tibor-kalman", "kind": "other" },
+        { "title": "Doolittle (Pixies)", "year": 1989, "figure": "vaughan-oliver", "kind": "other" },
+        { "title": "Fuse 1", "year": 1991, "figure": "neville-brody", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "emigre-digital-type",
+      "name": "Emigre and Early Digital Type",
+      "aka": ["Desktop publishing revolution", "Bitmap type"],
+      "start": 1984, "end": 2005, "ongoing": false,
+      "peak": [1985, 1995],
+      "region": "north-america",
+      "places": ["Berkeley", "San Francisco", "Valencia (CalArts)"],
+      "lineage": "expression",
+      "summary": "A Berkeley magazine and foundry that designed type on and for the first Macintosh, then made the pages a public argument about legibility.",
+      "influences": ["new-wave", "postmodern-typography", "dutch-modernism"],
+      "principles": [
+        { "name": "Design for the machine's grain", "idea": "Instead of forcing old typefaces into coarse screens and printers, letters are drawn from the pixel grid itself and its limits become the style.", "example": "Zuzana Licko, Oakland (later Lo-Res), used in Emigre #3, 1985" },
+        { "name": "You read best what you read most", "idea": "Legibility is learned habit, not a property of letterforms, so unfamiliar type is a question of exposure.", "example": "Zuzana Licko, interview in Emigre #15, 1990" },
+        { "name": "The magazine as specimen", "idea": "A publication shows its own foundry's fonts in use, and the fonts fund the magazine: medium, catalogue and business in one.", "example": "Emigre magazine with Emigre Fonts, from 1985" },
+        { "name": "Distortion as a typeface", "idea": "Typefaces encode accident, overlap and imperfection into the font file so any user can set 'damaged' type.", "example": "Barry Deck, Template Gothic, drawn 1989, released by Emigre 1991" }
+      ],
+      "keyWorks": [
+        { "title": "Emigre #1", "year": 1984, "figure": "rudy-vanderlans", "kind": "magazine" },
+        { "title": "Matrix", "year": 1986, "figure": "zuzana-licko", "kind": "typeface" },
+        { "title": "Emigre: Graphic Design into the Digital Realm", "year": 1993, "figure": "rudy-vanderlans", "kind": "book" },
+        { "title": "Mrs Eaves", "year": 1996, "figure": "zuzana-licko", "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "grunge-deconstruction",
+      "name": "Grunge Typography",
+      "aka": ["Deconstruction", "The end of print", "Digital expressionism"],
+      "start": 1989, "end": 2001, "ongoing": false,
+      "peak": [1992, 1996],
+      "region": "north-america",
+      "places": ["San Diego", "Santa Monica", "London", "Sheffield"],
+      "lineage": "expression",
+      "summary": "Layered, distressed, intuitive layouts made with QuarkXPress and Photoshop, where texture and attitude carried music and youth-culture content.",
+      "influences": ["postmodern-typography", "emigre-digital-type", "punk", "dada"],
+      "principles": [
+        { "name": "Intuition over system", "idea": "Each spread is composed by eye and mood, not from a master grid; consistency is in attitude, not in measurements.", "example": "David Carson, Ray Gun, 1992-1995" },
+        { "name": "Text as image", "idea": "Body copy is cropped, overlapped, set in dingbats or run off the page when its texture says more than its words.", "example": "David Carson, Bryan Ferry interview set in Zapf Dingbats, Ray Gun, 1990s" },
+        { "name": "Corporate language turned on itself", "idea": "Logos, slogans and manuals are parodied into an invented corporation's identity.", "example": "The Designers Republic, packaging and identity for Wipeout, 1995" },
+        { "name": "Type with a grudge", "idea": "Typefaces carry political names and historical baggage so their form and title argue with the reader.", "example": "Jonathan Barnbrook, Bastard typeface, 1990" }
+      ],
+      "keyWorks": [
+        { "title": "Ray Gun", "year": 1992, "figure": "david-carson", "kind": "magazine" },
+        { "title": "The End of Print", "year": 1995, "figure": "david-carson", "kind": "book" },
+        { "title": "Wipeout identity and packaging", "year": 1995, "figure": "the-designers-republic", "kind": "identity" },
+        { "title": "Bastard", "year": 1990, "figure": "jonathan-barnbrook", "kind": "typeface" },
+        { "title": "AIGA Detroit lecture poster", "year": 1999, "figure": "stefan-sagmeister", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "new-swiss-revival",
+      "name": "Neo-modernist Revival",
+      "aka": ["New Swiss", "Dutch neo-modernism", "Critical modernism"],
+      "start": 1997, "end": 2026, "ongoing": true,
+      "peak": [2001, 2013],
+      "region": "europe",
+      "places": ["Amsterdam", "Zurich", "Arnhem", "Lausanne"],
+      "lineage": "modernism",
+      "summary": "Designers in Amsterdam and Zurich returned to grids, grotesques and black-and-white after grunge, treating modernism as a critical language, not a corporate one.",
+      "influences": ["swiss-style", "dutch-modernism", "punk", "new-wave"],
+      "principles": [
+        { "name": "Helvetica as a found material", "idea": "A neutral grotesque is used without irony and without decoration, so meaning comes from scale, rhythm and repetition alone.", "example": "Experimental Jetset, John & Paul & Ringo & George T-shirt, 2001" },
+        { "name": "The responsive identity", "idea": "A mark is a system that changes shape to fit its context instead of a fixed logo.", "example": "Experimental Jetset, Whitney Museum 'Responsive W' identity, 2013" },
+        { "name": "The book as architecture", "idea": "Scale, thickness, edges and binding are designed as carefully as the pages, so the object itself carries the content.", "example": "Irma Boom, SHV Think Book 1996-1896, 1996" },
+        { "name": "Construct the letter", "idea": "Typefaces are rebuilt from first principles and rules, a modernist method producing deliberately odd results.", "example": "Norm, Simple typeface (Lineto), 2001" }
+      ],
+      "keyWorks": [
+        { "title": "SHV Think Book 1996-1896", "year": 1996, "figure": "irma-boom", "kind": "book" },
+        { "title": "John & Paul & Ringo & George", "year": 2001, "figure": "experimental-jetset", "kind": "other" },
+        { "title": "Simple", "year": 2001, "figure": "norm", "kind": "typeface" },
+        { "title": "Sheila Hicks: Weaving as Metaphor", "year": 2006, "figure": "irma-boom", "kind": "book" },
+        { "title": "Whitney Museum identity", "year": 2013, "figure": "experimental-jetset", "kind": "identity" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "wes-wilson",
+      "name": "Wes Wilson",
+      "born": 1937, "died": 2020,
+      "activeFrom": 1965, "activeTo": 2019,
+      "signatureYear": 1966,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Poster artist",
+      "movements": ["psychedelic"],
+      "summary": "The Fillmore's poster artist, who adapted Secession lettering into the melting 'psychedelic' letterform that defined the San Francisco poster.",
+      "principles": [
+        { "name": "Fill the shape", "idea": "Letters stretch and swell until they fill a silhouette entirely, so the word becomes a shape before it becomes a word.", "example": "Bill Graham Presents poster 'Fly 8 Miles High with Me', 1966" },
+        { "name": "Stop the passer-by", "idea": "Lettering is built to be 'something people had to stop to figure out', making slowness the hook.", "example": "Family Dog poster 'The Quick and the Dead', 1966" },
+        { "name": "Learn from Vienna", "idea": "He took the block lettering of the Secession, notably Alfred Roller, and resculpted it rather than inventing from nothing.", "example": "Fillmore posters for Bill Graham, 1966" }
+      ],
+      "keyWorks": [
+        { "title": "Are We Next?", "year": 1965, "kind": "poster" },
+        { "title": "Trips Festival poster", "year": 1966, "kind": "poster" },
+        { "title": "Fly 8 Miles High with Me (Bill Graham Presents)", "year": 1966, "kind": "poster" },
+        { "title": "Grateful Dead: Wilson's Last Stand", "year": 1967, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "victor-moscoso",
+      "name": "Victor Moscoso",
+      "born": 1936, "died": null,
+      "activeFrom": 1966, "activeTo": 2014,
+      "signatureYear": 1967,
+      "region": "north-america",
+      "nationality": "Spanish-American",
+      "role": "Poster artist, comix artist",
+      "movements": ["psychedelic"],
+      "summary": "The one Yale-trained artist among the San Francisco poster makers, who turned Albers's colour theory into posters that vibrate.",
+      "principles": [
+        { "name": "Colour as motion", "idea": "Albers's lesson that adjacent colours change each other is applied at full saturation so the poster appears to flicker.", "example": "Neon Rose #2, 1967" },
+        { "name": "Invert the academy", "idea": "Trained at Cooper Union and Yale, he used that training against itself: academic colour and lettering skill applied to make posters harder to read, not easier.", "example": "Family Dog poster 'Sphinx Dance', 1967" },
+        { "name": "Sequence and loop", "idea": "His comics repeat frames on a fixed grid so a story can be entered at any panel and read as a cycle.", "example": "'KSAN Comics', 1971" }
+      ],
+      "keyWorks": [
+        { "title": "Neon Rose series for the Matrix", "year": 1967, "kind": "poster" },
+        { "title": "Sphinx Dance (Family Dog)", "year": 1967, "kind": "poster" },
+        { "title": "Zap Comix #2 contributions", "year": 1968, "kind": "magazine" },
+        { "title": "Herbie Hancock, Head Hunters cover", "year": 1973, "kind": "other" }
+      ]
+    },
+    {
+      "id": "peter-max",
+      "name": "Peter Max",
+      "born": 1937, "died": 2026,
+      "activeFrom": 1962, "activeTo": 2015,
+      "signatureYear": 1969,
+      "region": "north-america",
+      "nationality": "German-American",
+      "role": "Artist, illustrator",
+      "movements": ["psychedelic"],
+      "summary": "The New York illustrator who turned the 'Cosmic '60s' look into mass-licensed merchandise, posters and a Life magazine cover.",
+      "principles": [
+        { "name": "The full spectrum", "idea": "Rainbow gradients and Day-Glo colour, often the whole visible spectrum in one image, carry optimism directly.", "example": "Poster Book, 1970" },
+        { "name": "Style as licence", "idea": "A single recognisable manner is applied across posters, clocks, clothing and stamps, making the artist a brand.", "example": "US 10-cent Expo '74 'Preserve the Environment' stamp, 1974" }
+      ],
+      "keyWorks": [
+        { "title": "Be-In flyers, Central Park", "year": 1967, "kind": "poster" },
+        { "title": "Life magazine cover, 5 September", "year": 1969, "kind": "magazine" },
+        { "title": "Poster Book", "year": 1970, "kind": "book" },
+        { "title": "Expo '74 postage stamp", "year": 1974, "kind": "other" }
+      ]
+    },
+    {
+      "id": "jamie-reid",
+      "name": "Jamie Reid",
+      "born": 1947, "died": 2023,
+      "activeFrom": 1970, "activeTo": 2023,
+      "signatureYear": 1977,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Artist, graphic designer",
+      "movements": ["punk"],
+      "summary": "The Sex Pistols' designer, who brought Situationist-style détournement and ransom-note lettering from a radical press into the record shop.",
+      "principles": [
+        { "name": "Ransom note", "idea": "Headline letters cut from newspapers and glued at random sizes make every word look stolen and every message anonymous.", "example": "Never Mind the Bollocks, Here's the Sex Pistols, 1977" },
+        { "name": "Deface the official image", "idea": "A sanctioned portrait is altered just enough to turn it against itself.", "example": "'God Save the Queen' sleeve, from a Cecil Beaton photograph, 1977" },
+        { "name": "Graphics as agitation", "idea": "Design comes from a political press, not an agency; the sleeve continues the pamphlet.", "example": "Suburban Press, founded 1970" }
+      ],
+      "keyWorks": [
+        { "title": "Suburban Press", "year": 1970, "kind": "magazine" },
+        { "title": "Anarchy in the U.K.", "year": 1976, "kind": "other" },
+        { "title": "God Save the Queen", "year": 1977, "kind": "other" },
+        { "title": "Never Mind the Bollocks, Here's the Sex Pistols", "year": 1977, "kind": "other" }
+      ]
+    },
+    {
+      "id": "barney-bubbles",
+      "name": "Barney Bubbles",
+      "born": 1942, "died": 1983,
+      "activeFrom": 1963, "activeTo": 1983,
+      "signatureYear": 1979,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic designer, art director, video director",
+      "movements": ["punk", "psychedelic"],
+      "summary": "Swiss-trained, mostly uncredited sleeve designer for Hawkwind, Stiff and Elvis Costello, who treated all of design history as a palette.",
+      "principles": [
+        { "name": "History as a palette", "idea": "Constructivism, Kandinsky, Pop and 1950s packaging are quoted freely, each chosen to say something about the record.", "example": "Nick Lowe, Labour of Lust 'Hamer & sickle' logo, 1979" },
+        { "name": "Errors on purpose", "idea": "Miscropping, wrong photographs and erratum stickers are designed in, rewarding the fan who notices.", "example": "The Damned, Damned Damned Damned sleeve with deliberate wrong photo, 1977" },
+        { "name": "The sleeve as a kit", "idea": "Fold-outs, die-cut postcards and build-it pyramids make the package an object to handle and assemble.", "example": "Glastonbury Fayre triple-LP package, 1972" },
+        { "name": "Anonymity", "idea": "From 1973 he mostly left his name off the work or used pseudonyms, so the band and the idea stayed in front.", "example": "Stiff Records sleeves, 1977" }
+      ],
+      "keyWorks": [
+        { "title": "Hawkwind, In Search of Space", "year": 1971, "kind": "other" },
+        { "title": "Elvis Costello, This Year's Model", "year": 1978, "kind": "other" },
+        { "title": "Elvis Costello, Armed Forces", "year": 1979, "kind": "other" },
+        { "title": "NME masthead redesign", "year": 1979, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "peter-saville",
+      "name": "Peter Saville",
+      "born": 1955, "died": null,
+      "activeFrom": 1978, "activeTo": 2026,
+      "signatureYear": 1979,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Art director, graphic designer",
+      "movements": ["punk"],
+      "summary": "Factory Records' co-founder and designer, who answered punk's mess with Tschichold, scientific plots and appropriated paintings.",
+      "principles": [
+        { "name": "The cool answer to punk", "idea": "He took the restrained New Typography of Tschichold as a parallel to the new wave coming out of punk.", "example": "Factory poster FAC 1, 1978" },
+        { "name": "Appropriate and recontextualise", "idea": "An image from another field (a pulsar plot, a Fantin-Latour still life) is lifted whole and made to stand for a record.", "example": "New Order, Power, Corruption & Lies, 1983" },
+        { "name": "Withhold the name", "idea": "Band names and titles are small, coded or absent, so the sleeve reads as an artwork and the fan has to know.", "example": "New Order, Blue Monday die-cut sleeve, 1983" }
+      ],
+      "keyWorks": [
+        { "title": "FAC 1 poster", "year": 1978, "kind": "poster" },
+        { "title": "Joy Division, Unknown Pleasures", "year": 1979, "kind": "other" },
+        { "title": "New Order, Blue Monday", "year": 1983, "kind": "other" },
+        { "title": "New Order, Power, Corruption & Lies", "year": 1983, "kind": "other" }
+      ]
+    },
+    {
+      "id": "neville-brody",
+      "name": "Neville Brody",
+      "born": 1957, "died": null,
+      "activeFrom": 1980, "activeTo": 2026,
+      "signatureYear": 1981,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic designer, art director, type designer",
+      "movements": ["punk", "postmodern-typography"],
+      "summary": "Art director of The Face, who drew custom geometric headline type and then founded FUSE to make type itself experimental.",
+      "principles": [
+        { "name": "Draw the headline", "idea": "Instead of buying display type, he drew constructivist-influenced alphabets for each magazine, so the publication's voice was its letterforms.", "example": "Industria, drawn for The Face, 1984" },
+        { "name": "The page as a poster", "idea": "Magazine pages are composed like posters, with type rotated, scaled and used as image.", "example": "The Face art direction, 1981-1986" },
+        { "name": "Type as experiment", "idea": "A publication ships new, often unusable fonts with essays, to treat typography as research rather than product.", "example": "FUSE 1, with Jon Wozencroft, 1991" }
+      ],
+      "keyWorks": [
+        { "title": "The Face art direction", "year": 1981, "kind": "magazine" },
+        { "title": "Cabaret Voltaire, Micro-Phonies", "year": 1984, "kind": "other" },
+        { "title": "Arena art direction", "year": 1987, "kind": "magazine" },
+        { "title": "FUSE 1", "year": 1991, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "wolfgang-weingart",
+      "name": "Wolfgang Weingart",
+      "born": 1941, "died": 2021,
+      "activeFrom": 1964, "activeTo": 2004,
+      "signatureYear": 1977,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Typographer, educator",
+      "movements": ["new-wave"],
+      "summary": "The Basel teacher who took Swiss typography as a starting point and 'blew it apart', and whose students carried New Wave to America.",
+      "principles": [
+        { "name": "Start from Swiss, then question it", "idea": "Keep the base of Swiss typography (sans serif, asymmetry, the grid) and test every one of its rules to destruction.", "example": "Typographische Monatsblätter covers, 1970s" },
+        { "name": "Typography as craft experiment", "idea": "Letterspacing, stepped lines and reversed type are explored by hand in hot metal and film, so experiment stays physical.", "example": "Kunsthalle Basel Kunstkredit 76-77 poster, 1977" },
+        { "name": "Teach, don't impose", "idea": "He insisted he never forced a style on students; the 'Weingart style' was what students picked up and spread.", "example": "Weiterbildungsklasse, Basel School of Design, from 1968" }
+      ],
+      "keyWorks": [
+        { "title": "Typographische Monatsblätter cover series", "year": 1972, "kind": "magazine" },
+        { "title": "Kunsthalle Basel Kunstkredit 76-77", "year": 1977, "kind": "poster" },
+        { "title": "Weingart: Typography (My Way to Typography)", "year": 2000, "kind": "book" }
+      ]
+    },
+    {
+      "id": "april-greiman",
+      "name": "April Greiman",
+      "born": 1948, "died": null,
+      "activeFrom": 1971, "activeTo": 2026,
+      "signatureYear": 1986,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Designer, 'transmedia artist', educator",
+      "movements": ["new-wave", "postmodern-typography"],
+      "summary": "Weingart's student who brought Basel New Wave to Los Angeles and was among the first to make the Macintosh a design medium.",
+      "principles": [
+        { "name": "Objects in space", "idea": "Type, swatches, lines and photographs float in a layered, illusionistic depth instead of sitting on the flat page.", "example": "CalArts poster, with Jayme Odgers, 1978" },
+        { "name": "Use the crude tool", "idea": "Low-resolution video capture and early Mac bitmaps are embraced as expressive material, not apologised for.", "example": "Design Quarterly 133: Does It Make Sense?, 1986" },
+        { "name": "Hybrid imagery", "idea": "Photography, video and type are fused into a single image so the medium boundaries disappear.", "example": "Pacific Wave poster, Museo Fortuny, 1987" }
+      ],
+      "keyWorks": [
+        { "title": "CalArts poster (with Jayme Odgers)", "year": 1978, "kind": "poster" },
+        { "title": "LA Summer Games runner poster", "year": 1982, "kind": "poster" },
+        { "title": "Design Quarterly 133: Does It Make Sense?", "year": 1986, "kind": "magazine" },
+        { "title": "Hybrid Imagery", "year": 1990, "kind": "book" }
+      ]
+    },
+    {
+      "id": "dan-friedman",
+      "name": "Dan Friedman",
+      "born": 1945, "died": 1995,
+      "activeFrom": 1969, "activeTo": 1995,
+      "signatureYear": 1994,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic and furniture designer, educator",
+      "movements": ["new-wave", "postmodern-typography"],
+      "summary": "Ulm- and Basel-trained designer and teacher who carried Weingart's ideas into American classrooms and argued for a 'radical modernism'.",
+      "principles": [
+        { "name": "Readability, not legibility", "idea": "He replaced legibility, a property of letters, with readability, whether a whole piece invites reading.", "example": "Typography teaching at Yale, 1969-1973" },
+        { "name": "Radical modernism", "idea": "Keep modernism's social optimism but drop its puritan restraint, letting in colour, kitsch and the personal.", "example": "Dan Friedman: Radical Modernism, 1994" },
+        { "name": "No border between disciplines", "idea": "Corporate identity, Day-Glo furniture and art catalogues are one practice.", "example": "Book for Keith Haring, 1982" }
+      ],
+      "keyWorks": [
+        { "title": "Book for Keith Haring", "year": 1982, "kind": "book" },
+        { "title": "Post Human (with Jeffrey Deitch)", "year": 1992, "kind": "book" },
+        { "title": "Dan Friedman: Radical Modernism", "year": 1994, "kind": "book" }
+      ]
+    },
+    {
+      "id": "ettore-sottsass",
+      "name": "Ettore Sottsass",
+      "born": 1917, "died": 2007,
+      "activeFrom": 1947, "activeTo": 2007,
+      "signatureYear": 1981,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Architect, designer",
+      "movements": ["memphis"],
+      "summary": "Olivetti's designer who brought colour and play to office machines, then founded Memphis to attack good taste head on.",
+      "principles": [
+        { "name": "Bring the office into pop culture", "idea": "A typewriter is coloured, named and marketed like a toy or a fashion item instead of equipment.", "example": "Valentine typewriter, with Perry A. King, 1969" },
+        { "name": "Refuse the consumerist product", "idea": "Objects become sculptural statements that question consumption rather than serve it.", "example": "Superbox laminated cabinets for Poltronova, 1966" },
+        { "name": "Radical, funny, outrageous", "idea": "Design is made to provoke and amuse, against prevailing 'good taste'.", "example": "Carlton bookcase, Memphis, 1981" }
+      ],
+      "keyWorks": [
+        { "title": "Elea 9003 mainframe (Olivetti)", "year": 1959, "kind": "product" },
+        { "title": "Valentine typewriter", "year": 1969, "kind": "product" },
+        { "title": "Carlton bookcase", "year": 1981, "kind": "product" },
+        { "title": "Casablanca sideboard", "year": 1981, "kind": "product" }
+      ]
+    },
+    {
+      "id": "katherine-mccoy",
+      "name": "Katherine McCoy",
+      "born": 1945, "died": null,
+      "activeFrom": 1967, "activeTo": 2004,
+      "signatureYear": 1989,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, educator",
+      "movements": ["postmodern-typography"],
+      "summary": "Co-chair of Cranbrook's design programme from 1971 to 1995, who joined Unimark-trained rigour to vernacular, semiotics and deconstruction.",
+      "principles": [
+        { "name": "Layered reading", "idea": "Visual and verbal readings overlap so a poster offers several routes in rather than one hierarchy.", "example": "Cranbrook Graduate Program in Design poster, 1989" },
+        { "name": "Studio as laboratory", "idea": "Minimal assignments and weekly critiques let each student develop a personal design voice, balanced by real client work.", "example": "Cranbrook graduate design programme, 1971-1995" },
+        { "name": "Read deeply, then design", "idea": "Students read history and theory behind their concerns and design with those ideas, from Venturi to post-structuralism.", "example": "Cranbrook Design: The New Discourse, 1991" }
+      ],
+      "keyWorks": [
+        { "title": "Cranbrook Graduate Program in Design poster", "year": 1989, "kind": "poster" },
+        { "title": "Cranbrook Design: The New Discourse", "year": 1991, "kind": "book" }
+      ]
+    },
+    {
+      "id": "ed-fella",
+      "name": "Ed Fella",
+      "born": 1938, "died": null,
+      "activeFrom": 1957, "activeTo": 2013,
+      "signatureYear": 1987,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, artist, educator",
+      "movements": ["postmodern-typography", "emigre-digital-type"],
+      "summary": "A Detroit commercial artist for thirty years who made exuberantly 'wrong' hand-built typography for gallery flyers, then taught a generation at CalArts.",
+      "principles": [
+        { "name": "Use every tool at once", "idea": "Found type, Letraset, stencils, scribble, clip art and the photostat sit together on one page.", "example": "Detroit Focus Gallery poster, Morris Brose: A Sustained Vision, 1987" },
+        { "name": "Make every letter different", "idea": "A sans serif is redrawn by hand with varying weights, curves and tails so no two characters repeat.", "example": "OutWest typeface (Emigre), 1993" },
+        { "name": "After the fact", "idea": "Posters made for those who attended an event, not to sell it beforehand, free the work from commercial persuasion.", "example": "Lecture flyers, 1990s" }
+      ],
+      "keyWorks": [
+        { "title": "Detroit Focus Gallery poster, Morris Brose: A Sustained Vision", "year": 1987, "kind": "poster" },
+        { "title": "OutWest", "year": 1993, "kind": "typeface" },
+        { "title": "Letters on America", "year": 2000, "kind": "book" }
+      ]
+    },
+    {
+      "id": "rudy-vanderlans",
+      "name": "Rudy VanderLans",
+      "born": 1955, "died": null,
+      "activeFrom": 1979, "activeTo": 2026,
+      "signatureYear": 1984,
+      "region": "north-america",
+      "nationality": "Dutch-American",
+      "role": "Graphic designer, editor, photographer",
+      "movements": ["emigre-digital-type"],
+      "summary": "Dutch-trained founder, editor and designer of Emigre magazine, who made it the main forum for, and against, digital-era graphic design.",
+      "principles": [
+        { "name": "The magazine as forum", "idea": "A design magazine publishes argument as well as work, inviting guest editors and critics, including opponents.", "example": "Emigre magazine, 1984-2005" },
+        { "name": "Specimen as design work", "idea": "The type specimen is a designed artefact that makes you want the face and then shows how to use it.", "example": "Emigre Fonts type specimens, from 1986" },
+        { "name": "Change format with purpose", "idea": "The magazine shrank from tabloid to letter size, to CD booklet, to book, as its content shifted from image to text.", "example": "Emigre #33 in letter format, 1995" }
+      ],
+      "keyWorks": [
+        { "title": "Emigre #1", "year": 1984, "kind": "magazine" },
+        { "title": "Emigre: Graphic Design into the Digital Realm", "year": 1993, "kind": "book" },
+        { "title": "Emigre #69: The End", "year": 2005, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "zuzana-licko",
+      "name": "Zuzana Licko",
+      "born": 1961, "died": null,
+      "activeFrom": 1984, "activeTo": 2026,
+      "signatureYear": 1985,
+      "region": "north-america",
+      "nationality": "Slovak-American",
+      "role": "Type designer",
+      "movements": ["emigre-digital-type"],
+      "summary": "Co-founder of Emigre Fonts, who drew the first Macintosh bitmap faces from the pixel up, then remade Baskerville and Bodoni for the digital page.",
+      "principles": [
+        { "name": "Start from the constraint", "idea": "Coarse screens and dot-matrix printers dictate the letter; the font is designed for 72 dots per inch rather than forced from metal.", "example": "Oakland / Lo-Res, 1985" },
+        { "name": "Legibility is habit", "idea": "'You read best what you read most': familiarity, not form, makes type readable.", "example": "Emigre #15, 1990" },
+        { "name": "Revival as reinterpretation", "idea": "A historical model is reworked for new uses, with a low x-height and abundant ligatures rather than a faithful copy.", "example": "Mrs Eaves, after Baskerville, 1996" }
+      ],
+      "keyWorks": [
+        { "title": "Oakland (later Lo-Res)", "year": 1985, "kind": "typeface" },
+        { "title": "Modula", "year": 1985, "kind": "typeface" },
+        { "title": "Matrix", "year": 1986, "kind": "typeface" },
+        { "title": "Mrs Eaves", "year": 1996, "kind": "typeface" },
+        { "title": "Filosofia", "year": 1996, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "david-carson",
+      "name": "David Carson",
+      "born": 1955, "died": null,
+      "activeFrom": 1983, "activeTo": 2026,
+      "signatureYear": 1992,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Art director, graphic designer",
+      "movements": ["grunge-deconstruction"],
+      "summary": "A former pro surfer whose layouts for Beach Culture and Ray Gun made intuitive, layered, barely legible typography a mainstream style.",
+      "principles": [
+        { "name": "Don't mistake legibility for communication", "idea": "A page that is hard to read can still communicate, through texture and emotion, if it is honest to its content.", "example": "Ray Gun, 1992-1995" },
+        { "name": "Basic decisions make the work", "idea": "Image choice, cropping and type choice matter more than the software's ability to overlap or fade.", "example": "Beach Culture, 1989-1991" },
+        { "name": "Each page its own answer", "idea": "No template: every spread is resolved from scratch by intuition.", "example": "The End of Print, 1995" }
+      ],
+      "keyWorks": [
+        { "title": "Beach Culture", "year": 1989, "kind": "magazine" },
+        { "title": "Ray Gun", "year": 1992, "kind": "magazine" },
+        { "title": "The End of Print", "year": 1995, "kind": "book" },
+        { "title": "Nine Inch Nails, The Fragile packaging", "year": 1999, "kind": "other" }
+      ]
+    },
+    {
+      "id": "jonathan-barnbrook",
+      "name": "Jonathan Barnbrook",
+      "born": 1966, "died": null,
+      "activeFrom": 1990, "activeTo": 2026,
+      "signatureYear": 2002,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic designer, type designer",
+      "movements": ["grunge-deconstruction", "emigre-digital-type"],
+      "summary": "Type designer and activist who gives fonts provocative names, uses détournement against corporations, and designed Bowie's late sleeves.",
+      "principles": [
+        { "name": "Design as a weapon", "idea": "Graphic work is a political response, often parodying advertising's own language.", "example": "Billboard 'Designers, stay away from corporations that want you to lie for them', 2001" },
+        { "name": "The loaded typeface", "idea": "A font's name and its historical form (blackletter, inscription) carry an argument.", "example": "Bastard, 1990" },
+        { "name": "Type as the cover", "idea": "A bespoke typeface does the work of the image on a record sleeve.", "example": "David Bowie, Heathen, with Priori, 2002" }
+      ],
+      "keyWorks": [
+        { "title": "Bastard", "year": 1990, "kind": "typeface" },
+        { "title": "Manson (later Mason), Emigre", "year": 1992, "kind": "typeface" },
+        { "title": "David Bowie, Heathen", "year": 2002, "kind": "other" },
+        { "title": "David Bowie, Blackstar", "year": 2016, "kind": "other" }
+      ]
+    },
+    {
+      "id": "tibor-kalman",
+      "name": "Tibor Kalman",
+      "born": 1949, "died": 1999,
+      "activeFrom": 1971, "activeTo": 1999,
+      "signatureYear": 1991,
+      "region": "north-america",
+      "nationality": "Hungarian-American",
+      "role": "Graphic designer, editor",
+      "movements": ["postmodern-typography"],
+      "summary": "Founder of M&Co and editor of Benetton's Colors, the 'bad boy' who used vernacular graphics and provocation as design's conscience.",
+      "principles": [
+        { "name": "Vernacular against corporate", "idea": "The language of cheap signs, menus and diners is used as a protest against corporate International Style.", "example": "Restaurant Florent graphics, M&Co, from 1985" },
+        { "name": "Good design needs a good client", "idea": "Design is only good if it serves an ethical end and increases public awareness.", "example": "Colors, 1991-1995" },
+        { "name": "Provoke with the obvious", "idea": "A single doctored image, the Queen recast as Black, says more than an essay.", "example": "Colors issue on race with doctored portraits, 1993" }
+      ],
+      "keyWorks": [
+        { "title": "Talking Heads, Remain in Light (with the band)", "year": 1980, "kind": "other" },
+        { "title": "Talking Heads, (Nothing But) Flowers video", "year": 1988, "kind": "film" },
+        { "title": "Colors magazine", "year": 1991, "kind": "magazine" },
+        { "title": "Tibor Kalman: Perverse Optimist", "year": 1999, "kind": "book" }
+      ]
+    },
+    {
+      "id": "stefan-sagmeister",
+      "name": "Stefan Sagmeister",
+      "born": 1962, "died": null,
+      "activeFrom": 1986, "activeTo": 2026,
+      "signatureYear": 1999,
+      "region": "north-america",
+      "nationality": "Austrian",
+      "role": "Graphic designer, typographer",
+      "movements": ["grunge-deconstruction", "postmodern-typography"],
+      "summary": "An M&Co alumnus whose handmade, often bodily typography for music and his own lectures made the designer's life part of the content.",
+      "principles": [
+        { "name": "The hand over the font", "idea": "Lettering is cut, built or written physically, so the labour and risk of making show.", "example": "AIGA Detroit lecture poster, text cut into his skin, 1999" },
+        { "name": "Hide and reveal", "idea": "Packaging uses coloured cases and transparency so the image changes when you take it apart.", "example": "Lou Reed, Set the Twilight Reeling, 1996" },
+        { "name": "Design about your own life", "idea": "Personal maxims and experiments become public typography and exhibitions.", "example": "Things I Have Learned in My Life So Far, 2008" }
+      ],
+      "keyWorks": [
+        { "title": "Lou Reed, Set the Twilight Reeling", "year": 1996, "kind": "other" },
+        { "title": "AIGA Detroit lecture poster", "year": 1999, "kind": "poster" },
+        { "title": "Things I Have Learned in My Life So Far", "year": 2008, "kind": "book" },
+        { "title": "The Happy Show", "year": 2012, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "experimental-jetset",
+      "name": "Experimental Jetset",
+      "born": 1997, "died": null,
+      "activeFrom": 1997, "activeTo": 2026,
+      "signatureYear": 2013,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Graphic design studio (Danny van den Dungen, Marieke Stolk, Erwin Brinkers)",
+      "movements": ["new-swiss-revival"],
+      "summary": "Amsterdam trio who fused Dutch modernism with post-punk attitude, using Helvetica, black, white, red and blue as a critical, not corporate, language.",
+      "principles": [
+        { "name": "Restricted means", "idea": "Typography alone, mostly Helvetica, in black, white, red and blue: the limits are the identity.", "example": "John & Paul & Ringo & George T-shirt, 2001" },
+        { "name": "Modernism plus punk", "idea": "De Stijl and Provo are read through Sonic Youth: modernism as an attitude of making, not a corporate look.", "example": "Studio name, after Sonic Youth's Experimental Jet Set, Trash and No Star (1994), 1997" },
+        { "name": "A line that responds", "idea": "An identity is a single rule that scales to whatever format it lands in.", "example": "Whitney Museum Responsive W, 2013" }
+      ],
+      "keyWorks": [
+        { "title": "John & Paul & Ringo & George", "year": 2001, "kind": "other" },
+        { "title": "Whitney Museum identity", "year": 2013, "kind": "identity" },
+        { "title": "Statement and Counter-Statement: Notes on Experimental Jetset", "year": 2017, "kind": "book" }
+      ]
+    },
+    {
+      "id": "irma-boom",
+      "name": "Irma Boom",
+      "born": 1960, "died": null,
+      "activeFrom": 1985, "activeTo": 2026,
+      "signatureYear": 1996,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Book designer",
+      "movements": ["new-swiss-revival"],
+      "summary": "Amsterdam book designer who builds books as architecture: 2,136 pages without page numbers, inkless embossed pages, sawn edges.",
+      "principles": [
+        { "name": "Build the book", "idea": "Thickness, edges, scale and binding carry the content; she works out each book first as a tiny model.", "example": "SHV Think Book 1996-1896, 1996" },
+        { "name": "Remove the expected", "idea": "No page numbers, no index, a blank cover, reverse chronology, so the reader discovers rather than navigates.", "example": "SHV Think Book, 1996" },
+        { "name": "Address other senses", "idea": "Embossing without ink or frayed edges speak to touch where print would speak to sight.", "example": "N°5 Culture Chanel, 2013" }
+      ],
+      "keyWorks": [
+        { "title": "SHV Think Book 1996-1896", "year": 1996, "kind": "book" },
+        { "title": "Sheila Hicks: Weaving as Metaphor", "year": 2006, "kind": "book" },
+        { "title": "Irma Boom: The Architecture of the Book", "year": 2010, "kind": "book" },
+        { "title": "N°5 Culture Chanel", "year": 2013, "kind": "book" }
+      ]
+    },
+    {
+      "id": "vaughan-oliver",
+      "name": "Vaughan Oliver",
+      "born": 1957, "died": 2019,
+      "activeFrom": 1980, "activeTo": 2019,
+      "signatureYear": 1989,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic designer, art director",
+      "movements": ["punk", "postmodern-typography"],
+      "summary": "4AD's designer (23 Envelope, then v23), whose surreal, tactile photography and ornate type gave a whole record label one atmosphere.",
+      "principles": [
+        { "name": "Label as one atmosphere", "idea": "Different bands share one visual sensibility, so the label itself becomes the brand.", "example": "4AD sleeves, 1982-1998" },
+        { "name": "Continuity with a fresh approach", "idea": "Each release of a band's catalogue is new but recognisably part of a series.", "example": "Pixies, Surfer Rosa (1988) and Doolittle (1989)" },
+        { "name": "Texture and the uncanny", "idea": "Close-up photography, blur and surreal objects make the image felt before it is understood.", "example": "This Mortal Coil, Filigree & Shadow, 1986" }
+      ],
+      "keyWorks": [
+        { "title": "This Mortal Coil, It'll End in Tears", "year": 1984, "kind": "other" },
+        { "title": "Lonely is an Eyesore (4AD compilation)", "year": 1987, "kind": "other" },
+        { "title": "Pixies, Surfer Rosa", "year": 1988, "kind": "other" },
+        { "title": "Pixies, Doolittle", "year": 1989, "kind": "other" }
+      ]
+    },
+    {
+      "id": "why-not-associates",
+      "name": "Why Not Associates",
+      "born": 1987, "died": null,
+      "activeFrom": 1987, "activeTo": 2026,
+      "signatureYear": 2011,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic design studio (Andy Altmann, David Ellis)",
+      "movements": ["grunge-deconstruction", "postmodern-typography"],
+      "summary": "London studio that took 1980s experimental typography into motion, exhibitions and public space, ending up with type you can walk on.",
+      "principles": [
+        { "name": "Type at architectural scale", "idea": "Typography leaves the page and becomes floor, wall and landscape, readable from close up and from a tower.", "example": "Comedy Carpet, Blackpool, with Gordon Young, 2011" },
+        { "name": "Experiment for clients", "idea": "Layered, kinetic typography is applied to commissions rather than kept to self-initiated work.", "example": "Sensation exhibition graphics, Royal Academy, 1997" }
+      ],
+      "keyWorks": [
+        { "title": "Sensation exhibition graphics, Royal Academy", "year": 1997, "kind": "exhibition" },
+        { "title": "Comedy Carpet, Blackpool (with Gordon Young)", "year": 2011, "kind": "other" }
+      ]
+    },
+    {
+      "id": "the-designers-republic",
+      "name": "The Designers Republic",
+      "born": 1986, "died": null,
+      "activeFrom": 1986, "activeTo": 2026,
+      "signatureYear": 1995,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic design studio (Ian Anderson, Nick Phillips)",
+      "movements": ["grunge-deconstruction", "punk"],
+      "summary": "Sheffield studio that parodied corporate identity and consumerism for Warp Records, Pop Will Eat Itself and the Wipeout games.",
+      "principles": [
+        { "name": "Brand the anti-brand", "idea": "Corporate logos, slogans and fake company names are turned on consumerism itself.", "example": "'Work Buy Consume Die' slogans; Pho-Ku corporation, 1990s" },
+        { "name": "Maximum-minimalism", "idea": "Clean, technical layouts are overloaded with icons, codes, anime and tiny type until restraint becomes excess.", "example": "Wipeout packaging and manual, 1995" },
+        { "name": "North of Nowhere", "idea": "Regional pride (Sheffield, 'SoYo') against the London design scene is part of the voice.", "example": "'Made in the Designers Republic' sign-offs, 1990s" }
+      ],
+      "keyWorks": [
+        { "title": "Pop Will Eat Itself, Very Metal Noise Pollution", "year": 1989, "kind": "other" },
+        { "title": "Emigre issue devoted to tDR", "year": 1994, "kind": "magazine" },
+        { "title": "Wipeout identity and packaging", "year": 1995, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ken-garland",
+      "name": "Ken Garland",
+      "born": 1929, "died": 2021,
+      "activeFrom": 1954, "activeTo": 2012,
+      "signatureYear": 1964,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Graphic designer, writer, educator",
+      "movements": ["swiss-style"],
+      "summary": "British designer and writer whose 1964 First Things First manifesto asked designers to put their skills to useful work; its 1999 reissue reopened the debate.",
+      "principles": [
+        { "name": "First things first", "idea": "Design skill belongs first to useful communication (signs, books, education, science), not to the 'high pitched scream' of consumer selling.", "example": "First Things First manifesto, 1964" },
+        { "name": "Clear form for a cause", "idea": "Plain, bold modernist graphics serve campaigns and education as well as clients.", "example": "CND Aldermaston to London Easter march poster, 1962" },
+        { "name": "Work is a team effort", "idea": "He insisted his studio's work was collective, and later argued for partnership with clients over 'us and them'.", "example": "'Last Things Last', Eye 83, 2012" }
+      ],
+      "keyWorks": [
+        { "title": "Aldermaston to London Easter 62 (CND)", "year": 1962, "kind": "poster" },
+        { "title": "First Things First", "year": 1964, "kind": "manifesto" },
+        { "title": "Graphics Handbook", "year": 1966, "kind": "book" },
+        { "title": "Mr Beck's Underground Map", "year": 1994, "kind": "book" }
+      ]
+    },
+    {
+      "id": "norm",
+      "name": "Norm",
+      "born": 1999, "died": null,
+      "activeFrom": 1999, "activeTo": 2026,
+      "signatureYear": 2001,
+      "region": "europe",
+      "nationality": "Swiss",
+      "role": "Graphic and type design studio (Dimitri Bruni, Manuel Krebs)",
+      "movements": ["new-swiss-revival"],
+      "summary": "Zurich duo who rebuilt Swiss modernism from its rules, producing strict, slightly strange typefaces such as Simple and Replica for Lineto.",
+      "principles": [
+        { "name": "Rules generate form", "idea": "A typeface comes from a stated construction system, so its oddities are the system's, not the hand's.", "example": "Simple (Lineto), 2001" },
+        { "name": "Modernism with a wink", "idea": "Strict, rigorous Swiss method with slight references to postmodern play.", "example": "Replica (Lineto), 2008" }
+      ],
+      "keyWorks": [
+        { "title": "Simple", "year": 2001, "kind": "typeface" },
+        { "title": "Replica", "year": 2008, "kind": "typeface" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1961, "label": "Letraset dry-transfer lettering", "kind": "technology", "note": "Rub-down letters put display type in anyone's hands, the tool of choice for punk fanzines and the vernacular postmodernists." },
+    { "year": 1964, "label": "First Things First manifesto", "kind": "context", "note": "Ken Garland's manifesto asked designers to prefer useful communication to consumer advertising, a question every later generation reopened." },
+    { "year": 1967, "label": "Summer of Love", "kind": "context", "note": "San Francisco's counterculture turned the dance-hall poster into a national craze and a collectible product." },
+    { "year": 1970, "label": "International Typeface Corporation founded", "kind": "technology", "note": "A foundry with no metal-type history, built for photocomposition, whose condensed spacing and big x-heights defined 1970s display type." },
+    { "year": 1972, "label": "Learning from Las Vegas", "kind": "context", "note": "Venturi, Scott Brown and Izenour's book licensed the commercial vernacular as a source, shaping Cranbrook and postmodern graphics." },
+    { "year": 1977, "label": "Punk's year", "kind": "context", "note": "'God Save the Queen' and Never Mind the Bollocks made cut-up, photocopied graphics a mass-market look." },
+    { "year": 1980, "label": "Memphis founded in Milan", "kind": "context", "note": "Sottsass's group launched postmodern design's loudest attack on functionalist good taste; its first show followed in 1981." },
+    { "year": 1984, "label": "Apple Macintosh", "kind": "technology", "note": "A bitmap screen, mouse and fonts on a desk made type and layout a personal, experimental medium; Emigre launched the same year." },
+    { "year": 1985, "label": "PostScript and the LaserWriter", "kind": "technology", "note": "Adobe's page-description language made outline type and pages device-independent, the base of desktop publishing." },
+    { "year": 1986, "label": "Fontographer", "kind": "technology", "note": "The first commercial Bézier font editor for a personal computer; anyone could now publish a typeface." },
+    { "year": 1987, "label": "QuarkXPress", "kind": "technology", "note": "The layout program that dominated professional publishing in the 1990s and made layered, free-form spreads routine." },
+    { "year": 1990, "label": "Adobe Photoshop 1.0", "kind": "technology", "note": "Layered raster compositing put photographic collage and texture on every designer's desk, the engine of grunge." },
+    { "year": 1991, "label": "Vignelli calls Emigre 'garbage'", "kind": "context", "note": "Massimo Vignelli's attack in Print made the legibility wars between modernists and the digital avant-garde public." },
+    { "year": 1992, "label": "Ray Gun launched", "kind": "context", "note": "David Carson's art direction took grunge typography from niche to newsstand." },
+    { "year": 1999, "label": "First Things First 2000 manifesto", "kind": "context", "note": "Adbusters, Emigre, Eye and others reissued Garland's manifesto with 33 signatories, reopening the debate about design and consumerism." },
+    { "year": 2007, "label": "Helvetica documentary", "kind": "context", "note": "Gary Hustwit's film, featuring Experimental Jetset and Norm, marked neo-modernism's arrival as a public taste." },
+    { "year": 2011, "label": "V&A: Postmodernism, Style and Subversion 1970-1990", "kind": "context", "note": "The V&A exhibition historicised postmodern design, from Memphis to Emigre, as a closed period." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Rick Poynor, No More Rules: Graphic Design and Postmodernism, 2003",
+    "Glenn Adamson & Jane Pavitt (eds.), Postmodernism: Style and Subversion 1970-1990, V&A Publishing, 2011",
+    "https://en.wikipedia.org/wiki/Wes_Wilson",
+    "https://en.wikipedia.org/wiki/Victor_Moscoso",
+    "https://en.wikipedia.org/wiki/Peter_Max",
+    "https://en.wikipedia.org/wiki/Jamie_Reid",
+    "https://en.wikipedia.org/wiki/Barney_Bubbles",
+    "https://en.wikipedia.org/wiki/Peter_Saville_(graphic_designer)",
+    "https://en.wikipedia.org/wiki/Neville_Brody",
+    "https://en.wikipedia.org/wiki/Wolfgang_Weingart",
+    "https://en.wikipedia.org/wiki/New_Wave_(design)",
+    "https://en.wikipedia.org/wiki/April_Greiman",
+    "https://en.wikipedia.org/wiki/Dan_Friedman_(graphic_designer)",
+    "https://en.wikipedia.org/wiki/Ettore_Sottsass",
+    "https://en.wikipedia.org/wiki/Memphis_Group",
+    "https://en.wikipedia.org/wiki/Katherine_McCoy",
+    "https://en.wikipedia.org/wiki/Edward_Fella",
+    "https://en.wikipedia.org/wiki/Rudy_VanderLans",
+    "https://en.wikipedia.org/wiki/Zuzana_Licko",
+    "https://en.wikipedia.org/wiki/Emigre_(magazine)",
+    "https://en.wikipedia.org/wiki/Emigre_Fonts",
+    "https://en.wikipedia.org/wiki/David_Carson_(graphic_designer)",
+    "https://en.wikipedia.org/wiki/Ray_Gun_(magazine)",
+    "https://en.wikipedia.org/wiki/Jonathan_Barnbrook",
+    "https://en.wikipedia.org/wiki/Tibor_Kalman",
+    "https://en.wikipedia.org/wiki/Stefan_Sagmeister",
+    "https://en.wikipedia.org/wiki/Experimental_Jetset",
+    "https://en.wikipedia.org/wiki/Irma_Boom",
+    "https://en.wikipedia.org/wiki/Vaughan_Oliver",
+    "https://en.wikipedia.org/wiki/Comedy_Carpet",
+    "https://en.wikipedia.org/wiki/The_Designers_Republic",
+    "https://en.wikipedia.org/wiki/Ken_Garland",
+    "https://en.wikipedia.org/wiki/First_Things_First_1964_manifesto",
+    "https://en.wikipedia.org/wiki/First_Things_First_2000_manifesto",
+    "https://en.wikipedia.org/wiki/Norm_(graphic_design_group)",
+    "https://en.wikipedia.org/wiki/Lineto",
+    "https://en.wikipedia.org/wiki/Letraset",
+    "https://en.wikipedia.org/wiki/Fontographer",
+    "https://en.wikipedia.org/wiki/QuarkXPress",
+    "https://en.wikipedia.org/wiki/PostScript",
+    "https://en.wikipedia.org/wiki/Adobe_Photoshop",
+    "https://en.wikipedia.org/wiki/Macintosh_128K",
+    "https://en.wikipedia.org/wiki/International_Typeface_Corporation",
+    "https://en.wikipedia.org/wiki/Postmodernism:_Style_and_Subversion_1970%E2%80%931990",
+    "https://collections.vam.ac.uk/item/O1155283/",
+    "https://collections.vam.ac.uk/item/O1176676/",
+    "https://collections.vam.ac.uk/item/O120192/",
+    "https://collections.vam.ac.uk/item/O192509/",
+    "https://www.emigre.com/"
+  ]
+}
