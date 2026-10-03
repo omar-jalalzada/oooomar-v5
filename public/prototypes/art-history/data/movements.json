@@ -87,12 +87,14 @@
   {
     "id": "aboriginal-australian",
     "title": "Aboriginal Australian art",
-    "start": -30000,
+    "start": -40000,
     "end": 2026,
+    "ongoing": true,
     "era": "origins",
     "region": "Oceania",
     "wiki": "Australian_Aboriginal_art",
     "summary": "Living visual systems connect Country, kinship, ceremony, and ancestral knowledge across many nations.",
+    "dateSource": "https://aiatsis.gov.au/explore/art-and-authenticity",
     "source": "https://en.wikipedia.org/wiki/Australian_Aboriginal_art",
     "examples": [
       {

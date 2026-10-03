@@ -117,8 +117,8 @@ function formatYear(year) {
   return `${year.toLocaleString()} CE`;
 }
 
-function formatRange(start, end) {
-  return `${formatYear(start)} – ${formatYear(end)}`;
+function formatRange(start, end, ongoing = false) {
+  return `${formatYear(start)} – ${ongoing ? 'present' : formatYear(end)}`;
 }
 
 function layoutContinuousTimeline(items) {
@@ -256,7 +256,7 @@ function renderTimeline() {
           data-search="${esc(searchText)}"
           style="--region-color:${REGION_COLORS[movement.region]};--card-top:${place.top}px;--card-height:${place.height}px;--card-left:${place.left}%;--card-width:${place.width}%"
         >
-          <span class="movement__date">${esc(formatRange(movement.start, movement.end))}</span>
+          <span class="movement__date">${esc(formatRange(movement.start, movement.end, movement.ongoing))}</span>
           <span class="movement__body">
             <span class="movement__title">${esc(movement.title)}</span>
             <span class="movement__region">${esc(movement.region)}</span>
@@ -322,7 +322,7 @@ function openMovement(id) {
       <div>
         <p class="movement-modal__kicker">Six examples</p>
         <h2 id="movement-modal-title">${esc(movement.title)}</h2>
-        <p class="movement-modal__date">${esc(formatRange(movement.start, movement.end))}</p>
+        <p class="movement-modal__date">${esc(formatRange(movement.start, movement.end, movement.ongoing))}</p>
       </div>
       <div>
         <p class="movement-modal__summary">${esc(movement.summary)}</p>
