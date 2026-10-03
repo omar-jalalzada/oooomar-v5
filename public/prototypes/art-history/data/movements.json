@@ -86,16 +86,15 @@
   },
   {
     "id": "aboriginal-australian",
-    "title": "Aboriginal Australian art",
-    "start": -40000,
-    "end": 2026,
-    "ongoing": true,
+    "title": "Kimberley Naturalistic rock art",
+    "start": -15000,
+    "end": -11000,
     "era": "origins",
     "region": "Oceania",
-    "wiki": "Australian_Aboriginal_art",
-    "summary": "Living visual systems connect Country, kinship, ceremony, and ancestral knowledge across many nations.",
-    "dateSource": "https://aiatsis.gov.au/explore/art-and-authenticity",
-    "source": "https://en.wikipedia.org/wiki/Australian_Aboriginal_art",
+    "wiki": "Kimberley_rock_art",
+    "summary": "Naturalistic animal paintings formed the earliest securely dated phase of Kimberley rock art.",
+    "dateSource": "https://www.nature.com/articles/s41562-020-01041-0",
+    "source": "https://www.nature.com/articles/s41562-020-01041-0",
     "examples": [
       {
         "id": "01-bradshaw-rock-paintings",
