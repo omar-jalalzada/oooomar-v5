@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta
+      name="description"
+      content="A global, segmented timeline of 64 art movements and traditions, with six sourced examples for each."
+    />
+    <title>Art History — 64 movements and traditions</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#timeline">Skip to timeline</a>
+
+    <header class="masthead">
+      <div class="masthead__count" aria-hidden="true">
+        <span>64</span>
+        <span>movements<br />and traditions</span>
+      </div>
+      <div class="masthead__copy">
+        <h1>Art<br />History</h1>
+        <p>
+          A broad global survey from early image-making to networked art. It is a route through history,
+          not a claim to a single complete canon.
+        </p>
+      </div>
+      <div class="masthead__key" aria-label="How to read the timeline">
+        <span>Each box is placed by date</span>
+        <span>Open one for six examples</span>
+        <span>Scale changes between chapters</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="controls" aria-label="Timeline controls">
+        <label class="search">
+          <span>Find a movement, place, or idea</span>
+          <input id="search" type="search" autocomplete="off" placeholder="Try “landscape” or “West Asia”" />
+        </label>
+        <div class="filter">
+          <span class="filter__label">Region</span>
+          <div id="region-filters" class="filter__items" role="group" aria-label="Filter by region"></div>
+        </div>
+        <nav id="era-nav" class="era-nav" aria-label="Jump to an era"></nav>
+        <p id="result-count" class="result-count" aria-live="polite"></p>
+      </section>
+
+      <section class="region-legend" aria-labelledby="region-legend-title">
+        <h2 id="region-legend-title">Color by region</h2>
+        <div id="region-legend-items"></div>
+      </section>
+
+      <div id="timeline" class="timeline" aria-label="Art history timeline"></div>
+    </main>
+
+    <footer class="colophon">
+      <p>
+        Dates are approximate. Movement names are useful handles, but cultures do not begin and end on command.
+      </p>
+      <p>Images are stored locally only when their source records permit reuse. Every example links back to its record.</p>
+    </footer>
+
+    <dialog id="movement-dialog" class="movement-modal" aria-labelledby="movement-modal-title">
+      <button class="movement-modal__close" type="button" aria-label="Close movement details">Close</button>
+      <div id="movement-modal-content"></div>
+    </dialog>
+
+    <dialog id="viewer" class="viewer" aria-labelledby="viewer-title">
+      <button class="viewer__close" type="button" aria-label="Close image viewer">Close</button>
+      <div class="viewer__stage">
+        <button class="viewer__step viewer__step--previous" type="button" aria-label="Previous example">←</button>
+        <figure>
+          <div class="viewer__image-wrap">
+            <img id="viewer-image" src="" alt="" />
+            <div id="viewer-no-image" class="viewer__no-image" hidden>Image not reproduced</div>
+          </div>
+          <figcaption>
+            <p id="viewer-position" class="viewer__position"></p>
+            <h2 id="viewer-title"></h2>
+            <dl id="viewer-meta"></dl>
+            <div class="viewer__links">
+              <a id="viewer-source" href="" target="_blank" rel="noreferrer">View source record</a>
+              <a id="viewer-rights" href="" target="_blank" rel="noreferrer">Rights information</a>
+            </div>
+          </figcaption>
+        </figure>
+        <button class="viewer__step viewer__step--next" type="button" aria-label="Next example">→</button>
+      </div>
+    </dialog>
+
+    <noscript>This timeline needs JavaScript to arrange and filter its source records.</noscript>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
