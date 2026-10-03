@@ -1,0 +1,121 @@
+{
+  "american-modernism": [
+    { "file": "File:Light - Rural electrification administration - Beall. LCCN2010646236.jpg", "title": "Light, Rural Electrification Administration", "year": 1937, "figure": "lester-beall" },
+    { "file": "File:Herbert Matter World War II poster.jpg", "title": "America Calling", "year": 1941, "figure": "herbert-matter" },
+    { "file": "File:Libres de miseria (Freedom from want) - DPLA - 2d8ff6479266a7835bddc33f4a5f89b4.jpg", "title": "Libres de miseria", "year": 1942, "figure": "alexey-brodovitch" }
+  ],
+  "new-york-school": [
+    { "file": "File:P rand ex.jpg", "title": "Container Corporation of America advertisement", "year": null, "figure": "paul-rand" },
+    { "file": "File:The Man with the Golden Arm poster.jpg", "title": "The Man with the Golden Arm", "year": 1955, "figure": "saul-bass" },
+    { "file": "File:StreetcarNamedDesire.JPG", "title": "A Streetcar Named Desire", "year": 1947, "figure": "alvin-lustig" }
+  ],
+  "midcentury-modern": [
+    { "file": "File:Eameslounch.jpg", "title": "Eames Lounge Chair and Ottoman", "year": 1956, "figure": "charles-and-ray-eames" },
+    { "file": "File:Comprehensive Storage Unit. 1966-1968.jpg", "title": "Comprehensive Storage Unit", "year": 1966, "figure": null },
+    { "file": "File:Diamond Chair - Harry Bertoia, MNAM.jpg", "title": "Diamond Chair", "year": 1952, "figure": null },
+    { "file": "File:Isamu Noguchi, Coffee table, 1959 (5646039032).jpg", "title": "Coffee table", "year": null, "figure": null }
+  ],
+  "corporate-identity": [
+    { "file": "File:Westinghouse logo paulrand1959.png", "title": "Westinghouse logo", "year": 1960, "figure": "paul-rand" },
+    { "file": "File:Chase 1962 logo.png", "title": "Chase Manhattan Bank symbol", "year": 1960, "figure": "chermayeff-geismar" },
+    { "file": "File:Mobil logo.svg", "title": "Mobil logo", "year": 1964, "figure": "chermayeff-geismar" },
+    { "file": "File:Graphic design applications created for IBM by Paul Rand.webp", "title": "IBM packaging", "year": null, "figure": "paul-rand" }
+  ],
+  "us-systems-modernism": [
+    { "file": "File:Vignelli 1972.jpg", "title": "New York City Subway diagram", "year": 1972, "figure": "massimo-vignelli" },
+    { "file": "File:NPS Unigrids.jpg", "title": "National Park Service Unigrid brochures", "year": null, "figure": "massimo-vignelli" },
+    { "file": "File:American Airlines logo.svg", "title": "American Airlines logo", "year": 1967, "figure": "massimo-vignelli" }
+  ],
+  "push-pin": [
+    { "file": "File:Kiss Kiss, Bang Bang (1968) - Pauline Kael (retouch).png", "title": "Kiss Kiss Bang Bang", "year": 1968, "figure": "seymour-chwast" },
+    { "file": "File:Zabriskie Point (1970 Milton Glaser poster).jpg", "title": "Zabriskie Point", "year": 1970, "figure": "milton-glaser" },
+    { "file": "File:I Love New York.svg", "title": "I♥NY", "year": 1977, "figure": "milton-glaser" }
+  ],
+  "expressive-typography-us": [
+    { "file": "File:Lubalin-logos.jpg", "title": "Logotypes", "year": null, "figure": "herb-lubalin" },
+    { "file": "File:ITC Avant Garde.png", "title": "ITC Avant Garde Gothic", "year": 1970, "figure": "herb-lubalin" },
+    { "file": "File:Noise Funk Playbill.jpg", "title": "Bring in 'da Noise, Bring in 'da Funk", "year": 1995, "figure": "paula-scher" }
+  ],
+  "alexey-brodovitch": [
+    { "file": "File:Libres de miseria (Freedom from want) - DPLA - 2d8ff6479266a7835bddc33f4a5f89b4.jpg", "title": "Libres de miseria", "year": 1942, "figure": "alexey-brodovitch" }
+  ],
+  "herbert-matter": [
+    { "file": "File:Herbert Matter World War II poster.jpg", "title": "America Calling", "year": 1941, "figure": "herbert-matter" },
+    { "file": "File:New York, New Haven and Hartford Railroad logo (1968).svg", "title": "New Haven Railroad logo", "year": 1954, "figure": "herbert-matter" },
+    { "file": "File:Boston and Maine Railroad logo (1956).svg", "title": "Boston and Maine Railroad logo", "year": 1956, "figure": "herbert-matter" }
+  ],
+  "lester-beall": [
+    { "file": "File:BeallREA.jpg", "title": "Rural Electrification Administration", "year": 1939, "figure": "lester-beall" },
+    { "file": "File:Light - Rural electrification administration - Beall. LCCN2010646236.jpg", "title": "Light, Rural Electrification Administration", "year": 1937, "figure": "lester-beall" },
+    { "file": "File:1951 SS United States Travel Poster by Lester Thomas Beall (1).jpg", "title": "S.S. United States", "year": 1951, "figure": "lester-beall" }
+  ],
+  "ladislav-sutnar": [
+    { "file": "File:Ladislav Sutnar Tea Set Mint Museum of Art Charlotte, NC.jpg", "title": "Tea set", "year": null, "figure": "ladislav-sutnar" }
+  ],
+  "alvin-lustig": [
+    { "file": "File:StreetcarNamedDesire.JPG", "title": "A Streetcar Named Desire", "year": 1947, "figure": "alvin-lustig" },
+    { "file": "File:Nausea.jpg", "title": "Nausea, New Classics", "year": null, "figure": "alvin-lustig" },
+    { "file": "File:Alvin Lustig, Perspektiven 5.jpg", "title": "Perspektiven 5", "year": null, "figure": "alvin-lustig" }
+  ],
+  "paul-rand": [
+    { "file": "File:IBM logo.svg", "title": "IBM logo", "year": 1972, "figure": "paul-rand" },
+    { "file": "File:UPS logo (1961-2003).svg", "title": "UPS logo", "year": 1961, "figure": "paul-rand" },
+    { "file": "File:Eye-Bee-M-Poster.jpg", "title": "Eye-Bee-M", "year": 1981, "figure": "paul-rand" }
+  ],
+  "saul-bass": [
+    { "file": "File:The Man with the Golden Arm poster.jpg", "title": "The Man with the Golden Arm", "year": 1955, "figure": "saul-bass" },
+    { "file": "File:Vertigomovie restoration.jpg", "title": "Vertigo", "year": 1958, "figure": "saul-bass" },
+    { "file": "File:AT&T logo 12-bar vertical lockup.svg", "title": "AT&T globe", "year": 1983, "figure": "saul-bass" }
+  ],
+  "bradbury-thompson": [
+    { "file": "File:Alphabet 26 by Bradbury Thompson.png", "title": "Alphabet 26", "year": 1950, "figure": "bradbury-thompson" }
+  ],
+  "charles-and-ray-eames": [
+    { "file": "File:LCW (Lounge Chair Wood) Chair by Charles and Ray Eames, Honolulu Museum of Art 4410.1.JPG", "title": "LCW chair", "year": 1946, "figure": "charles-and-ray-eames" },
+    { "file": "File:Eameslounch.jpg", "title": "Eames Lounge Chair and Ottoman", "year": 1956, "figure": "charles-and-ray-eames" },
+    { "file": "File:EamesCards.JPG", "title": "House of Cards", "year": 1952, "figure": "charles-and-ray-eames" }
+  ],
+  "louis-danziger": [
+    { "file": "File:FLAX logo, Louis Danziger, 1949.svg", "title": "Flax logo", "year": null, "figure": "louis-danziger" }
+  ],
+  "chermayeff-geismar": [
+    { "file": "File:Chase 1962 logo.png", "title": "Chase Manhattan Bank symbol", "year": 1960, "figure": "chermayeff-geismar" },
+    { "file": "File:Mobil logo.svg", "title": "Mobil logo", "year": 1964, "figure": "chermayeff-geismar" },
+    { "file": "File:Xerox logo (1968-2008).svg", "title": "Xerox wordmark", "year": 1968, "figure": "chermayeff-geismar" }
+  ],
+  "ivan-chermayeff": [
+    { "file": "File:North Cascades National Park Poster, 1972.jpg", "title": "North Cascades", "year": 1972, "figure": "ivan-chermayeff" },
+    { "file": "File:Mobil logo.svg", "title": "Mobil logo", "year": 1964, "figure": "chermayeff-geismar" }
+  ],
+  "pentagram": [
+    { "file": "File:The Public Theater logo.jpg", "title": "The Public Theater identity", "year": null, "figure": "paula-scher" },
+    { "file": "File:Citi.svg", "title": "Citi logo", "year": null, "figure": "paula-scher" }
+  ],
+  "unimark-international": [
+    { "file": "File:American Airlines logo.svg", "title": "American Airlines logo", "year": 1967, "figure": "massimo-vignelli" },
+    { "file": "File:JCPenney 1971-2000.png", "title": "JCPenney logo", "year": 1971, "figure": null }
+  ],
+  "massimo-vignelli": [
+    { "file": "File:Vignelli 1972.jpg", "title": "New York City Subway diagram", "year": 1972, "figure": "massimo-vignelli" },
+    { "file": "File:American Airlines logo.svg", "title": "American Airlines logo", "year": 1967, "figure": "massimo-vignelli" },
+    { "file": "File:Bloomingdale's Logo.svg", "title": "Bloomingdale's logo", "year": 1972, "figure": "massimo-vignelli" }
+  ],
+  "milton-glaser": [
+    { "file": "File:I Love New York.svg", "title": "I♥NY", "year": 1977, "figure": "milton-glaser" },
+    { "file": "File:Zabriskie Point (1970 Milton Glaser poster).jpg", "title": "Zabriskie Point", "year": 1970, "figure": "milton-glaser" },
+    { "file": "File:DC Bullet (SVG).svg", "title": "DC Comics bullet", "year": 1977, "figure": "milton-glaser" }
+  ],
+  "seymour-chwast": [
+    { "file": "File:Kiss Kiss, Bang Bang (1968) - Pauline Kael (retouch).png", "title": "Kiss Kiss Bang Bang", "year": 1968, "figure": "seymour-chwast" }
+  ],
+  "herb-lubalin": [
+    { "file": "File:Cover of Eros magazine, no. 2.jpg", "title": "Eros, no. 2", "year": 1962, "figure": "herb-lubalin" },
+    { "file": "File:AvantGarde logo.svg", "title": "Avant Garde masthead", "year": 1968, "figure": "herb-lubalin" },
+    { "file": "File:PBS 1971 id.svg", "title": "PBS logo", "year": 1971, "figure": "herb-lubalin" }
+  ],
+  "paula-scher": [
+    { "file": "File:The Public Theater logo.jpg", "title": "The Public Theater identity", "year": null, "figure": "paula-scher" },
+    { "file": "File:Noise Funk Playbill.jpg", "title": "Bring in 'da Noise, Bring in 'da Funk", "year": 1995, "figure": "paula-scher" },
+    { "file": "File:Citi.svg", "title": "Citi logo", "year": null, "figure": "paula-scher" }
+  ]
+}

@@ -1,0 +1,758 @@
+{
+  "movements": [
+    {
+      "id": "taller-grafica-popular",
+      "name": "Taller de Gráfica Popular",
+      "aka": ["TGP", "People's Graphic Workshop", "Mexican political printmaking"],
+      "start": 1937, "end": 1969, "ongoing": false,
+      "peak": [1937, 1953],
+      "region": "latin-america",
+      "places": ["Mexico City"],
+      "lineage": "expression",
+      "summary": "A Mexico City print collective that made the linocut and woodcut a cheap, fast, collective broadside medium for labour, anti-fascist and revolutionary causes.",
+      "influences": [],
+      "principles": [
+        { "name": "The cheapest block wins", "idea": "Linoleum and wood blocks cut fast and print on any paper, so a message could go from meeting to wall in days without a commercial printer.", "example": "TGP broadsides and handbills of the Cárdenas years, from 1937" },
+        { "name": "Collective authorship", "idea": "Work was often made collaboratively and editions were deliberately left unnumbered, refusing the collectible-print economy.", "example": "TGP portfolios sold under the La Estampa Mexicana imprint" },
+        { "name": "The vernacular as the source", "idea": "The popular broadside and the calavera of José Guadalupe Posada and Manuel Manilla, not academic art, set the visual language.", "example": "TGP's revival of the satirical calavera, 1940s" },
+        { "name": "Narrative in black and white", "idea": "Dense gouged blacks, figures massed in crowds and a single strong diagonal tell a political story in one image without colour.", "example": "Leopoldo Méndez, En el nombre de Cristo, lithographs, 1942" }
+      ],
+      "keyWorks": [
+        { "title": "En el nombre de Cristo (series of seven lithographs)", "year": 1942, "figure": "leopoldo-mendez", "kind": "other" },
+        { "title": "Illustrations for Juan de la Cabada, Incidentes melódicos del mundo irracional", "year": 1944, "figure": "leopoldo-mendez", "kind": "book" }
+      ]
+    },
+    {
+      "id": "argentine-modernism",
+      "name": "Argentine Modernism",
+      "aka": ["Arte Concreto-Invención", "Argentine concrete art", "Di Tella design"],
+      "start": 1945, "end": 1976, "ongoing": false,
+      "peak": [1960, 1972],
+      "region": "latin-america",
+      "places": ["Buenos Aires"],
+      "lineage": "modernism",
+      "summary": "From the 1945 Arte Concreto-Invención group to the Di Tella design department and the 1971-72 Buenos Aires signage plan: invention, then system.",
+      "influences": ["constructivism", "de-stijl", "bauhaus", "swiss-style", "new-york-school"],
+      "principles": [
+        { "name": "Invent, don't represent", "idea": "The invencionistas rejected illusion and symbolism: a work is a concrete object of colour, plane and line, not a picture of something else.", "example": "Manifiesto Invencionista, Buenos Aires, 1946" },
+        { "name": "Theory travels in print", "idea": "A small magazine can carry a whole design culture across a continent by publishing art, architecture, industrial design and typography side by side.", "example": "Nueva Visión, edited by Tomás Maldonado and Alfredo Hlito, 1951-1957" },
+        { "name": "One house, one voice", "idea": "An institution's posters, catalogues and programmes share a single visual identity produced by an in-house department, mixing Swiss order with New York wit.", "example": "Departamento de Diseño Gráfico, Instituto Di Tella, formalised 1963 under Juan Carlos Distéfano" },
+        { "name": "Design the street", "idea": "A city's signs, street names and public information are one coherent system, designed as public infrastructure rather than as individual objects.", "example": "González Ruiz and Shakespear, Plan Visual de la Ciudad de Buenos Aires, 1971-1972" }
+      ],
+      "keyWorks": [
+        { "title": "Manifiesto Invencionista", "year": 1946, "figure": "tomas-maldonado", "kind": "manifesto" },
+        { "title": "Nueva Visión magazine", "year": 1951, "figure": "tomas-maldonado", "kind": "magazine" },
+        { "title": "Instituto Di Tella graphic identity and posters", "year": 1963, "figure": "juan-carlos-distefano", "kind": "identity" },
+        { "title": "Hamlet poster", "year": 1964, "figure": "ronald-shakespear", "kind": "poster" },
+        { "title": "Plan Visual de la Ciudad de Buenos Aires", "year": 1971, "figure": "guillermo-gonzalez-ruiz", "kind": "system" }
+      ]
+    },
+    {
+      "id": "brazilian-concretism",
+      "name": "Brazilian Concretism",
+      "aka": ["Concretismo", "Poesia concreta", "Brazilian corporate modernism"],
+      "start": 1951, "end": 1978, "ongoing": false,
+      "peak": [1956, 1968],
+      "region": "latin-america",
+      "places": ["São Paulo", "Rio de Janeiro", "Recife"],
+      "lineage": "avant-garde",
+      "summary": "Concrete painting, the Noigandres poets and Ulm-trained designers turned Brazil's industrial boom into a geometric, word-as-object visual culture and a national identity practice.",
+      "influences": ["ulm-school", "constructivism", "de-stijl", "bauhaus", "swiss-style"],
+      "principles": [
+        { "name": "The word is a thing", "idea": "A poem is a visual-verbal object built from the space of the page; syntax is replaced by spatial arrangement, so typography carries the meaning.", "example": "Augusto de Campos, Haroldo de Campos and Décio Pignatari, Plano-piloto para poesia concreta, Noigandres 4, 1958" },
+        { "name": "Art meets industry", "idea": "Geometric art is not decoration but a method for industrial society; the same artists founded design offices and furniture factories.", "example": "Geraldo de Barros, Unilabor furniture cooperative, São Paulo, from 1954" },
+        { "name": "The sign without the name", "idea": "Identity is carried by a simple, constructed symbol strong enough that the company name can be dropped.", "example": "Forminform, Sardinhas Coqueiro mark built from semicircles, 1958" },
+        { "name": "Teach it as a discipline", "idea": "Design becomes a university subject on the Ulm model, with method, theory and industry links, not a branch of fine art.", "example": "Escola Superior de Desenho Industrial (ESDI), Rio de Janeiro, opened 1963" },
+        { "name": "The nation as client", "idea": "Modernist identity is applied to the state itself: anniversaries, broadcasters and the currency.", "example": "Aloísio Magalhães, winning cruzeiro novo banknote design competition, 1966" }
+      ],
+      "keyWorks": [
+        { "title": "Fotoformas (exhibition, MASP)", "year": 1950, "figure": "geraldo-de-barros", "kind": "exhibition" },
+        { "title": "Poster for the first Bienal de São Paulo (Antonio Maluf)", "year": 1951, "kind": "poster" },
+        { "title": "Poetamenos (published in Noigandres 2)", "year": 1955, "figure": "augusto-de-campos", "kind": "book" },
+        { "title": "beba coca cola", "year": 1957, "figure": "decio-pignatari", "kind": "other" },
+        { "title": "Plano-piloto para poesia concreta", "year": 1958, "figure": "haroldo-de-campos", "kind": "manifesto" },
+        { "title": "Sardinhas Coqueiro identity and packaging (Forminform)", "year": 1958, "figure": "alexandre-wollner", "kind": "identity" },
+        { "title": "IV Centenário do Rio de Janeiro symbol", "year": 1964, "figure": "aloisio-magalhaes", "kind": "identity" },
+        { "title": "Banco Itaú mark", "year": 1973, "figure": "alexandre-wollner", "kind": "identity" }
+      ]
+    },
+    {
+      "id": "venezuelan-modernism",
+      "name": "Venezuelan Modernism",
+      "aka": ["Venezuelan graphic modernism", "Venezuelan kinetic and graphic design"],
+      "start": 1952, "end": 1980, "ongoing": false,
+      "peak": [1957, 1972],
+      "region": "latin-america",
+      "places": ["Caracas"],
+      "lineage": "modernism",
+      "summary": "Oil-funded Caracas, where émigré designers and kinetic artists made corporate magazines, museum catalogues and alphabets into experiments in perception and print.",
+      "influences": ["swiss-style", "bauhaus", "constructivism"],
+      "principles": [
+        { "name": "The magazine as laboratory", "idea": "A corporate house magazine, freed from selling, becomes a place to test paper, folds, screens and typographic structure issue by issue.", "example": "El Farol (Creole Petroleum), art-directed by Gerd Leufert 1957-1959 and Nedo 1959-1972" },
+        { "name": "Exhibit the discipline", "idea": "Showing design in a museum establishes it as a culture in its own right, not a by-product of advertising.", "example": "Gráfica 1, Museo de Bellas Artes, Caracas, 1961, the country's first graphic design exhibition" },
+        { "name": "Perception as material", "idea": "Colour and line are treated as events that change with the viewer's movement, not as fixed fills.", "example": "Carlos Cruz-Diez, first Physichromie, 1959" },
+        { "name": "Letters as impossible objects", "idea": "An alphabet can be a geometric puzzle: reversible, impossible or computable forms that still read.", "example": "Nedo, Letromaquia exhibition, Museo de Bellas Artes, 1975" }
+      ],
+      "keyWorks": [
+        { "title": "El Farol redesign", "year": 1957, "figure": "gerd-leufert", "kind": "magazine" },
+        { "title": "Physichromie (first of the series)", "year": 1959, "kind": "other" },
+        { "title": "Gráfica 1 exhibition, Museo de Bellas Artes", "year": 1961, "figure": "gerd-leufert", "kind": "exhibition" },
+        { "title": "Emblem for the Venezuelan pavilion, New York World's Fair", "year": 1964, "figure": "gerd-leufert", "kind": "identity" },
+        { "title": "Reticulárea (Gego, first series)", "year": 1969, "kind": "other" },
+        { "title": "Letromaquia exhibition", "year": 1975, "figure": "nedo-mion-ferrario", "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "cuban-poster",
+      "name": "Cuban Poster",
+      "aka": ["Cuban revolutionary poster", "ICAIC film posters", "OSPAAAL solidarity posters"],
+      "start": 1959, "end": 1991, "ongoing": false,
+      "peak": [1966, 1975],
+      "region": "latin-america",
+      "places": ["Havana"],
+      "lineage": "expression",
+      "summary": "After 1959 Havana's film institute and solidarity organisation commissioned thousands of silkscreened and offset posters that sold cinema and revolution without selling products.",
+      "influences": ["polish-poster-school", "psychedelic", "push-pin", "american-modernism"],
+      "principles": [
+        { "name": "A poster with nothing to sell", "idea": "With advertising abolished, posters advertised films and causes, so designers could pursue metaphor and wit instead of product benefit.", "example": "René Azcuy, De la guerra americana, ICAIC, 1969" },
+        { "name": "Silkscreen as the house technique", "idea": "Short runs of hand-pulled screen prints in flat, saturated, overprinted colour made every film poster a small edition and gave the school its look.", "example": "Alfredo Rostgaard, Hanoi martes 13, screen print signed 'rostgaard/67', 1967" },
+        { "name": "One image, every language", "idea": "Solidarity posters were lettered in Spanish, English, French and Arabic and folded into Tricontinental magazine, so a single image travelled the Global South.", "example": "Elena Serrano, Day of the Heroic Guerrilla, OSPAAAL, 1968" },
+        { "name": "Repetition as rhetoric", "idea": "A single photographic icon multiplied, scaled or tiled becomes a mass rather than a portrait.", "example": "Elena Serrano, Che's face repeated in diminishing squares across a red South America, 1968" },
+        { "name": "Pop against pop", "idea": "The visual language of US pop and psychedelia was borrowed and turned against US policy.", "example": "Alfredo Rostgaard, Black Power poster for OSPAAAL, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "First ICAIC film poster", "year": 1960, "figure": "eduardo-munoz-bachs", "kind": "poster" },
+        { "title": "Sin esperanza", "year": 1967, "figure": "rene-azcuy", "kind": "poster" },
+        { "title": "Hanoi martes 13", "year": 1967, "figure": "alfredo-rostgaard", "kind": "poster" },
+        { "title": "Día del Guerrillero Heroico (Day of the Heroic Guerrilla), OSPAAAL", "year": 1968, "kind": "poster" },
+        { "title": "Day of World Solidarity with the Cuban Revolution, 26 July", "year": 1968, "figure": "raul-martinez", "kind": "poster" },
+        { "title": "De la guerra americana", "year": 1969, "figure": "rene-azcuy", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "mexico-68",
+      "name": "Mexico 68",
+      "aka": ["Mexico 1968 Olympic identity", "Programa de Identidad Olímpica"],
+      "start": 1966, "end": 1970, "ongoing": false,
+      "peak": [1968, 1969],
+      "region": "latin-america",
+      "places": ["Mexico City"],
+      "lineage": "commerce",
+      "summary": "An Olympic identity that fused op-art line with pre-Hispanic pattern and ran from logotype to street paving, then became the Mexico City Metro's pictograms.",
+      "influences": ["swiss-style", "corporate-identity", "isotype", "psychedelic"],
+      "principles": [
+        { "name": "The logotype generates the system", "idea": "Radiating parallel lines grown out of the letters of MEXICO68 become a pattern that extends to posters, clothing, stamps and the street.", "example": "Lance Wyman and Eduardo Terrazas, MEXICO68 logotype and posters, 1968" },
+        { "name": "Local form, international code", "idea": "The concentric-line pattern is widely read as both op art and Wixárika (Huichol) yarn work, so one mark spoke to world media and to Mexicans.", "example": "Official Mexico 1968 Olympic poster, Eduardo Terrazas and Lance Wyman, 1968" },
+        { "name": "Signs for people who cannot read the words", "idea": "Each station gets a simple pictogram drawn from its name or neighbourhood, coloured by its line, for a city with high illiteracy.", "example": "Lance Wyman, Mexico City Metro station pictograms, line 1 opened September 1969" },
+        { "name": "Urban design as identity", "idea": "Colour coding painted on pavements, kiosks and signage lets the whole city wear the event, not just the stadiums.", "example": "Eduardo Terrazas, Olympic urban design programme, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "MEXICO68 logotype and poster programme", "year": 1968, "figure": "lance-wyman", "kind": "identity" },
+        { "title": "Olympic urban design programme", "year": 1968, "figure": "eduardo-terrazas", "kind": "system" },
+        { "title": "Mexico City Metro pictograms", "year": 1969, "figure": "lance-wyman", "kind": "system" }
+      ]
+    },
+    {
+      "id": "tropicalia",
+      "name": "Tropicália",
+      "aka": ["Tropicalismo"],
+      "start": 1964, "end": 1972, "ongoing": false,
+      "peak": [1967, 1968],
+      "region": "latin-america",
+      "places": ["Rio de Janeiro", "São Paulo", "Salvador"],
+      "lineage": "expression",
+      "summary": "Brazil's late-1960s cannibal counterculture: concrete rigour, pop, psychedelia and Northeastern colour mixed on film posters and record covers under dictatorship.",
+      "influences": ["brazilian-concretism", "psychedelic"],
+      "principles": [
+        { "name": "Cannibalise everything", "idea": "Following Oswald de Andrade's 1928 Manifesto Antropófago, foreign and local, high and low are swallowed and recombined rather than chosen between.", "example": "Tropicália ou Panis et Circencis album, 1968" },
+        { "name": "Colour as provocation", "idea": "Saturated, clashing colour is used as political temperature under military rule, not as decoration.", "example": "Rogério Duarte, Deus e o Diabo na Terra do Sol poster, released two months after the 1964 coup" },
+        { "name": "Concrete discipline, psychedelic surface", "idea": "Ulm-literate designers kept structure and type control while letting the surface go lysergic.", "example": "Rogério Duarte, cover for Gilberto Gil's 1968 album" },
+        { "name": "Environment over object", "idea": "The work is a space you walk through, not a picture you look at.", "example": "Hélio Oiticica, Tropicália installation, Nova Objetividade Brasileira, MAM Rio, 1967" }
+      ],
+      "keyWorks": [
+        { "title": "Deus e o Diabo na Terra do Sol poster", "year": 1964, "figure": "rogerio-duarte", "kind": "poster" },
+        { "title": "Tropicália (Hélio Oiticica installation)", "year": 1967, "kind": "exhibition" },
+        { "title": "Terra em Transe poster", "year": 1967, "figure": "rogerio-duarte", "kind": "poster" },
+        { "title": "Caetano Veloso album cover", "year": 1968, "figure": "rogerio-duarte", "kind": "other" }
+      ]
+    },
+    {
+      "id": "chilean-popular-graphics",
+      "name": "Chilean Popular Graphics",
+      "aka": ["Nueva Canción graphics", "Unidad Popular graphics"],
+      "start": 1967, "end": 1973, "ongoing": false,
+      "peak": [1970, 1973],
+      "region": "latin-america",
+      "places": ["Santiago", "Valparaíso", "Concepción"],
+      "lineage": "expression",
+      "summary": "Record covers, street murals, mass paperbacks and even a cybernetic control room gave Allende's Chile a hopeful, flat-colour, hand-drawn public language until the 1973 coup.",
+      "influences": ["cuban-poster", "psychedelic", "push-pin", "ulm-school"],
+      "principles": [
+        { "name": "The record sleeve as poster", "idea": "Album covers for the Nueva Canción were the movement's most widely owned images, carrying its politics into homes.", "example": "Vicente Larrea, cover of Víctor Jara and Quilapayún, Canciones folklóricas de América, 1967" },
+        { "name": "Murals by brigade", "idea": "Fast, collective wall painting with a fixed iconography (wheat ear, fist, star, birds, workers) outlined in black over flat colour.", "example": "Brigada Ramona Parra with Roberto Matta, El primer gol del pueblo chileno, La Granja, 1971" },
+        { "name": "Print for the majority", "idea": "A state publisher produces cheap books and magazines for mass readership, making editorial design a social service.", "example": "Editora Nacional Quimantú, founded 1971" },
+        { "name": "Design the state's instruments", "idea": "Ulm-trained designers apply interface and industrial design to national infrastructure.", "example": "Gui Bonsiepe's team, Project Cybersyn operations room, 1972" }
+      ],
+      "keyWorks": [
+        { "title": "Canciones folklóricas de América album cover (Vicente Larrea)", "year": 1967, "kind": "other" },
+        { "title": "El primer gol del pueblo chileno (Brigada Ramona Parra and Roberto Matta)", "year": 1971, "kind": "other" },
+        { "title": "Project Cybersyn operations room (Gui Bonsiepe's team)", "year": 1972, "kind": "interface" }
+      ]
+    },
+    {
+      "id": "latin-american-type",
+      "name": "Latin American Type Design",
+      "aka": ["Tipos Latinos", "Latin American typography"],
+      "start": 1987, "end": 2026, "ongoing": true,
+      "peak": [2004, 2020],
+      "region": "latin-america",
+      "places": ["Buenos Aires", "Santiago", "Concepción", "São Paulo", "Mexico City"],
+      "lineage": "screen",
+      "summary": "A continental type-design scene, from Buenos Aires typographic publishing to digital foundries and a regional biennial, selling Latin American letterforms to the world.",
+      "influences": ["argentine-modernism", "swiss-style", "emigre-digital-type"],
+      "principles": [
+        { "name": "A regional canon", "idea": "A biennial that travels between countries builds a shared Latin American type culture rather than many national ones.", "example": "Bienal Tipos Latinos, first edition 2004" },
+        { "name": "Sell to the world from the periphery", "idea": "Digital distribution lets a foundry outside the centres reach global brands directly.", "example": "Latinotype, founded in Concepción, Chile, 2008; Trend among MyFonts' most popular fonts, 2013" },
+        { "name": "Signage as a national typeface practice", "idea": "Large wayfinding commissions become the testing ground for custom lettering.", "example": "Diseño Shakespear, Buenos Aires Subte signage, 1995-2008" }
+      ],
+      "keyWorks": [
+        { "title": "Buenos Aires Subte signage (Diseño Shakespear)", "year": 1995, "figure": "ronald-shakespear", "kind": "system" },
+        { "title": "Bienal Tipos Latinos, first edition", "year": 2004, "kind": "exhibition" },
+        { "title": "Latinotype foundry founded", "year": 2008, "kind": "other" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "leopoldo-mendez",
+      "name": "Leopoldo Méndez",
+      "born": 1902, "died": 1969,
+      "activeFrom": 1920, "activeTo": 1969,
+      "signatureYear": 1942,
+      "region": "latin-america",
+      "nationality": "Mexican",
+      "role": "Printmaker, co-founder of the Taller de Gráfica Popular",
+      "movements": ["taller-grafica-popular"],
+      "summary": "Mexico's central political printmaker, heir to Posada, who co-founded the TGP in 1937 and later cut prints for Mexican cinema.",
+      "principles": [
+        { "name": "Anonymity in the service of the message", "idea": "He kept individual credit small and worked through collectives, treating authorship as less important than reach.", "example": "Collaborative TGP broadsides, from 1937" },
+        { "name": "The print as cinema", "idea": "Sequences of prints work like film stills, and prints can enter film itself.", "example": "Engravings for Emilio Fernández's Río Escondido, late 1940s" },
+        { "name": "Posada's line, modern politics", "idea": "The popular broadside's directness is used for anti-fascism and labour, not just satire.", "example": "En el nombre de Cristo, 1942" }
+      ],
+      "keyWorks": [
+        { "title": "En el nombre de Cristo", "year": 1942, "kind": "other" },
+        { "title": "Illustrations for Incidentes melódicos del mundo irracional", "year": 1944, "kind": "book" },
+        { "title": "Engraved mural dedicated to José Guadalupe Posada, Talleres Gráficos de la Nación", "year": 1956, "kind": "other" }
+      ]
+    },
+    {
+      "id": "tomas-maldonado",
+      "name": "Tomás Maldonado",
+      "born": 1922, "died": 2018,
+      "activeFrom": 1944, "activeTo": 2018,
+      "signatureYear": 1970,
+      "region": "latin-america",
+      "nationality": "Argentine",
+      "role": "Painter, designer, theorist, educator",
+      "movements": ["argentine-modernism", "ulm-school"],
+      "summary": "Buenos Aires concrete painter who co-founded Arte Concreto-Invención, edited Nueva Visión, then shaped the Ulm model as teacher and rector.",
+      "principles": [
+        { "name": "Design as science-informed method", "idea": "Design should balance science and making, using planning methods, perception theory and semiotics rather than artistic intuition.", "example": "Ulm, Science and Design, 1964" },
+        { "name": "Systems over objects", "idea": "Codes and systems for a company matter more than any single beautiful artefact.", "example": "Sign and code systems for Olivetti and La Rinascente with Gui Bonsiepe, 1964-1967" },
+        { "name": "Design as environmental responsibility", "idea": "Design has to answer to ecology and society, not only to industry.", "example": "La speranza progettuale, 1970 (English: Design, Nature, and Revolution, 1972)" }
+      ],
+      "keyWorks": [
+        { "title": "Manifiesto Invencionista (co-signatory)", "year": 1946, "kind": "manifesto" },
+        { "title": "Nueva Visión magazine (co-founder, editor)", "year": 1951, "kind": "magazine" },
+        { "title": "Max Bill (monograph, Editorial Nueva Visión)", "year": 1955, "kind": "book" },
+        { "title": "La speranza progettuale", "year": 1970, "kind": "book" }
+      ]
+    },
+    {
+      "id": "juan-carlos-distefano",
+      "name": "Juan Carlos Distéfano",
+      "born": 1933, "died": 2026,
+      "activeFrom": 1951, "activeTo": 2026,
+      "signatureYear": 1963,
+      "region": "latin-america",
+      "nationality": "Argentine",
+      "role": "Graphic designer, sculptor, painter",
+      "movements": ["argentine-modernism"],
+      "summary": "Organised the Instituto Di Tella's graphic design department in the 1960s, Argentina's first professional design studio, then became a major figurative sculptor.",
+      "principles": [
+        { "name": "A horizontal studio", "idea": "He described the Di Tella team as having no rigid line between those who direct and those who execute.", "example": "Departamento de Diseño Gráfico, Instituto Di Tella, 1963-1970" },
+        { "name": "Swiss structure, New York wit", "idea": "Swiss order is combined with the idea-led advertising of the New York School inside one institutional voice.", "example": "Di Tella exhibition posters and catalogues, 1960s" },
+        { "name": "Make it by hand, fast and cheap", "idea": "Small budgets and short deadlines are worked with directly, not hidden.", "example": "Di Tella programmes and flyers, 1960s" }
+      ],
+      "keyWorks": [
+        { "title": "Prize-winning poster for the Siam Di Tella fiftieth anniversary competition", "year": 1960, "kind": "poster" },
+        { "title": "Instituto Di Tella graphic identity", "year": 1963, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ruben-fontana",
+      "name": "Rubén Fontana",
+      "born": 1942, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1987,
+      "region": "latin-america",
+      "nationality": "Argentine",
+      "role": "Graphic designer, typographer, editor, educator",
+      "movements": ["argentine-modernism", "latin-american-type"],
+      "summary": "Di Tella designer who ran its department in 1969-70, then built Argentine typographic culture through tipoGráfica magazine and the Fontana ND typeface.",
+      "principles": [
+        { "name": "Typography is culture, not styling", "idea": "A magazine and a school can make typography a shared intellectual discipline for a region.", "example": "tipoGráfica (tpG) magazine, Buenos Aires, from 1987" },
+        { "name": "A Latin American text face", "idea": "Text typefaces can be designed from the region for international distribution.", "example": "Fontana ND, published by Neufville Digital" }
+      ],
+      "keyWorks": [
+        { "title": "Co-direction of the Di Tella graphic design department", "year": 1969, "kind": "other" },
+        { "title": "tipoGráfica magazine", "year": 1987, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "guillermo-gonzalez-ruiz",
+      "name": "Guillermo González Ruiz",
+      "born": 1937, "died": null,
+      "activeFrom": 1961, "activeTo": 2011,
+      "signatureYear": 1971,
+      "region": "latin-america",
+      "nationality": "Argentine",
+      "role": "Architect, graphic designer, educator",
+      "movements": ["argentine-modernism"],
+      "summary": "Architect-designer who led the 1971-72 Buenos Aires signage plan with Ronald Shakespear and directed graphic design at the University of Buenos Aires.",
+      "principles": [
+        { "name": "Signage is architecture", "idea": "Wayfinding is designed with an architect's sense of space, sightlines and urban scale.", "example": "Plan Visual de la Ciudad de Buenos Aires, 1971-1972" },
+        { "name": "Teach the profession into existence", "idea": "A public university programme is the way to make design a recognised discipline in a country.", "example": "Director of Graphic Design at FADU, Universidad de Buenos Aires, 1985-1990" }
+      ],
+      "keyWorks": [
+        { "title": "Plan Visual de la Ciudad de Buenos Aires (with Ronald Shakespear)", "year": 1971, "kind": "system" }
+      ]
+    },
+    {
+      "id": "ronald-shakespear",
+      "name": "Ronald Shakespear",
+      "born": 1941, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1971,
+      "region": "latin-america",
+      "nationality": "Argentine",
+      "role": "Graphic designer, wayfinding and identity designer",
+      "movements": ["argentine-modernism", "latin-american-type"],
+      "summary": "Rosario-born designer of Buenos Aires's urban signage, hospital system and Subte wayfinding, and more than a thousand identities.",
+      "principles": [
+        { "name": "The city as a client", "idea": "Wayfinding at city scale, for streets, hospitals and subway, is the most public form of graphic design.", "example": "Municipal hospitals signage, with Raúl Shakespear, 1978" },
+        { "name": "A family studio across generations", "idea": "A practice carries a consistent system language across decades by passing projects to the next generation.", "example": "Subte signage with Lorenzo and Juan Shakespear, 1995-2008" }
+      ],
+      "keyWorks": [
+        { "title": "Hamlet poster", "year": 1964, "kind": "poster" },
+        { "title": "Plan Visual de la Ciudad de Buenos Aires (with Guillermo González Ruiz)", "year": 1971, "kind": "system" },
+        { "title": "Buenos Aires municipal hospitals signage", "year": 1978, "kind": "system" },
+        { "title": "Buenos Aires Subte signage", "year": 1995, "kind": "system" }
+      ]
+    },
+    {
+      "id": "geraldo-de-barros",
+      "name": "Geraldo de Barros",
+      "born": 1923, "died": 1998,
+      "activeFrom": 1945, "activeTo": 1998,
+      "signatureYear": 1950,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Photographer, painter, graphic and furniture designer",
+      "movements": ["brazilian-concretism"],
+      "summary": "Abstract photographer and Ruptura founder who moved concrete art into industry: Unilabor furniture, the Forminform design office and mass-produced modern objects.",
+      "principles": [
+        { "name": "Cut the negative", "idea": "Photographs are constructed by scratching, masking and multiple exposure, so the camera produces form rather than records it.", "example": "Fotoformas, MASP, 1950" },
+        { "name": "Art for the masses through production", "idea": "Modern design reaches people through cooperatives and factories, not galleries.", "example": "Unilabor furniture cooperative, 1954-1967" },
+        { "name": "The right to error", "idea": "He treated mistakes as part of the method; error is how new form appears.", "example": "Sobras, his last photographs, made with Ana Moraes, from 1996" }
+      ],
+      "keyWorks": [
+        { "title": "Fotoformas", "year": 1950, "kind": "exhibition" },
+        { "title": "Ruptura exhibition and manifesto (co-founder)", "year": 1952, "kind": "manifesto" },
+        { "title": "IV Centenário de São Paulo festival posters (with Alexandre Wollner)", "year": 1954, "kind": "poster" },
+        { "title": "Unilabor furniture", "year": 1954, "kind": "product" }
+      ]
+    },
+    {
+      "id": "decio-pignatari",
+      "name": "Décio Pignatari",
+      "born": 1927, "died": 2012,
+      "activeFrom": 1950, "activeTo": 2012,
+      "signatureYear": 1957,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Poet, advertising professional, semiotician, translator",
+      "movements": ["brazilian-concretism"],
+      "summary": "Noigandres poet whose 'beba coca cola' turned a slogan into an anti-advertisement, and who taught information theory and semiotics to Brazilian designers.",
+      "principles": [
+        { "name": "Detourn the slogan", "idea": "The grammar of advertising, short words and repetition, is rearranged until it critiques itself.", "example": "beba coca cola, 1957" },
+        { "name": "Information before ornament", "idea": "Communication theory, how much a sign carries, is a design tool.", "example": "Informação, Linguagem, Comunicação, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "beba coca cola", "year": 1957, "kind": "other" },
+        { "title": "Plano-piloto para poesia concreta (co-author)", "year": 1958, "kind": "manifesto" },
+        { "title": "Teoria da Poesia Concreta (with the Campos brothers)", "year": 1965, "kind": "book" },
+        { "title": "Informação, Linguagem, Comunicação", "year": 1968, "kind": "book" }
+      ]
+    },
+    {
+      "id": "haroldo-de-campos",
+      "name": "Haroldo de Campos",
+      "born": 1929, "died": 2003,
+      "activeFrom": 1949, "activeTo": 2003,
+      "signatureYear": 1958,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Poet, critic, translator",
+      "movements": ["brazilian-concretism"],
+      "summary": "Noigandres co-founder and theorist whose idea of translation as creative re-making ('transcreation') gave concrete poetry its intellectual reach.",
+      "principles": [
+        { "name": "Transcreation", "idea": "Translation re-creates form as well as meaning, so the visual and sonic structure of a text is what gets carried over.", "example": "His translations collected alongside the concrete theory of Teoria da Poesia Concreta, 1965" },
+        { "name": "Structure over line", "idea": "The poem's spatial structure, not the verse line, is the unit of composition.", "example": "Plano-piloto para poesia concreta, 1958" }
+      ],
+      "keyWorks": [
+        { "title": "Plano-piloto para poesia concreta (co-author)", "year": 1958, "kind": "manifesto" },
+        { "title": "Teoria da Poesia Concreta (with Augusto de Campos and Décio Pignatari)", "year": 1965, "kind": "book" }
+      ]
+    },
+    {
+      "id": "augusto-de-campos",
+      "name": "Augusto de Campos",
+      "born": 1931, "died": null,
+      "activeFrom": 1949, "activeTo": 2026,
+      "signatureYear": 1955,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Poet, translator, visual artist",
+      "movements": ["brazilian-concretism"],
+      "summary": "Noigandres poet whose colour-coded Poetamenos (1955) launched Brazilian concrete poetry, and who carried the method into poster-poems, objects and digital media.",
+      "principles": [
+        { "name": "Colour as voice", "idea": "Each colour in a poem marks a different voice or timbre, like a score.", "example": "Poetamenos, Noigandres 2, 1955" },
+        { "name": "The poem as poster", "idea": "Political poems are printed as large-format posters made from found commercial type.", "example": "Popcretos series, 1964-1966" },
+        { "name": "The reader assembles it", "idea": "Pop-up and folding structures make reading physical and interactive.", "example": "Poemóbiles, with Julio Plaza, 1974" }
+      ],
+      "keyWorks": [
+        { "title": "Poetamenos", "year": 1955, "kind": "book" },
+        { "title": "Popcretos (poster-poems)", "year": 1964, "kind": "poster" },
+        { "title": "Poemóbiles (with Julio Plaza)", "year": 1974, "kind": "book" },
+        { "title": "Viva Vaia (collected poems)", "year": 1979, "kind": "book" }
+      ]
+    },
+    {
+      "id": "alexandre-wollner",
+      "name": "Alexandre Wollner",
+      "born": 1928, "died": 2018,
+      "activeFrom": 1950, "activeTo": 2010,
+      "signatureYear": 1958,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Graphic designer, educator",
+      "movements": ["brazilian-concretism", "ulm-school"],
+      "summary": "Ulm-trained 'father of Brazilian modern design', co-founder of Forminform and ESDI, whose constructed marks defined Brazilian corporate identity.",
+      "principles": [
+        { "name": "Construct the mark", "idea": "Symbols are built from simple geometric parts (semicircles, triangles, lozenges) so they can be redrawn, scaled and remembered.", "example": "Sardinhas Coqueiro mark and packaging, Forminform, 1958" },
+        { "name": "Research before form", "idea": "Identity starts from historical and functional research, so form and colour are argued from the client's history rather than chosen for mood.", "example": "Banco Itaú mark, adopted 1973, later recoloured orange by DPZ's Francesc Petit, a change criticised for ignoring the original research" },
+        { "name": "Concrete art as a design grammar", "idea": "The concrete painter's training in proportion and the module carries straight into identity work.", "example": "Cinemateca Brasileira logotype, 1954" }
+      ],
+      "keyWorks": [
+        { "title": "Cinemateca Brasileira logotype (for the MAM Filmoteca)", "year": 1954, "kind": "identity" },
+        { "title": "Sardinhas Coqueiro identity and packaging", "year": 1958, "kind": "identity" },
+        { "title": "Banco Itaú mark", "year": 1973, "kind": "identity" },
+        { "title": "Design visual 50 anos", "year": 2003, "kind": "book" }
+      ]
+    },
+    {
+      "id": "aloisio-magalhaes",
+      "name": "Aloísio Magalhães",
+      "born": 1927, "died": 1982,
+      "activeFrom": 1954, "activeTo": 1982,
+      "signatureYear": 1966,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Graphic designer, educator, cultural policymaker",
+      "movements": ["brazilian-concretism"],
+      "summary": "Recife-born designer of Brazil's banknotes, the first Globo symbol and the Rio IV Centenário mark, who co-founded ESDI and later ran national heritage policy.",
+      "principles": [
+        { "name": "Design for a nation's identity", "idea": "Currency, anniversaries and broadcasters are where a country meets its own image daily.", "example": "Cruzeiro novo banknote competition, won 1966" },
+        { "name": "Pattern as security and beauty", "idea": "Moiré and mirrored designs make a note both hard to forge and readable whichever way it is held.", "example": "1,000-cruzeiro 'Barão' note with mirrored design, 1978" },
+        { "name": "Heritage is design's raw material", "idea": "Vernacular craft and cultural memory are the resources a modern design culture builds from.", "example": "Centro Nacional de Referência Cultural, from 1975" }
+      ],
+      "keyWorks": [
+        { "title": "O Gráfico Amador (co-founder, Recife)", "year": 1954, "kind": "book" },
+        { "title": "IV Centenário do Rio de Janeiro symbol", "year": 1964, "kind": "identity" },
+        { "title": "First Rede Globo symbol", "year": 1965, "kind": "identity" },
+        { "title": "Cruzeiro novo banknote design (competition winner)", "year": 1966, "kind": "other" },
+        { "title": "1,000-cruzeiro 'Barão' banknote", "year": 1978, "kind": "other" }
+      ]
+    },
+    {
+      "id": "rogerio-duarte",
+      "name": "Rogério Duarte",
+      "born": 1939, "died": 2016,
+      "activeFrom": 1960, "activeTo": 2016,
+      "signatureYear": 1964,
+      "region": "latin-america",
+      "nationality": "Brazilian",
+      "role": "Graphic designer, illustrator, musician, writer",
+      "movements": ["tropicalia"],
+      "summary": "Tropicália's graphic designer: Cinema Novo posters and the 1968 Caetano Veloso and Gilberto Gil covers, mixing Ulm-taught structure with psychedelic colour.",
+      "principles": [
+        { "name": "Colour researched, then released", "idea": "Colour is a researched instrument; he described the Deus e o Diabo poster as a new conception of colour born of deep research.", "example": "Deus e o Diabo na Terra do Sol poster, 1964" },
+        { "name": "Know the rules to break them", "idea": "Grounding in Ulm-style rational design is what lets the pop and psychedelic break land.", "example": "Gilberto Gil album cover, 1968" },
+        { "name": "Design for the left without its clichés", "idea": "Political graphics need not look like socialist realism; vernacular and pop sources can carry politics.", "example": "Head of visual arts at the Centro Popular de Cultura (UNE), early 1960s" }
+      ],
+      "keyWorks": [
+        { "title": "Deus e o Diabo na Terra do Sol poster", "year": 1964, "kind": "poster" },
+        { "title": "Terra em Transe poster", "year": 1967, "kind": "poster" },
+        { "title": "Caetano Veloso album cover", "year": 1968, "kind": "other" },
+        { "title": "Gilberto Gil album cover", "year": 1968, "kind": "other" }
+      ]
+    },
+    {
+      "id": "gerd-leufert",
+      "name": "Gerd Leufert",
+      "born": 1914, "died": 1998,
+      "activeFrom": 1939, "activeTo": 1998,
+      "signatureYear": 1957,
+      "region": "latin-america",
+      "nationality": "German-born Venezuelan (born in Memel)",
+      "role": "Graphic designer, painter, curator, educator",
+      "movements": ["venezuelan-modernism"],
+      "summary": "German-trained émigré who made El Farol and the Museo de Bellas Artes into laboratories, and staged Venezuela's first graphic design exhibition in 1961.",
+      "principles": [
+        { "name": "The client publication as experiment", "idea": "An oil company's magazine is used to test a new graphic language, free of folkloric illustration.", "example": "El Farol redesign, 1957-1959" },
+        { "name": "The museum as client and stage", "idea": "Museum catalogues and exhibitions both practise and present design.", "example": "Gráfica 1, Museo de Bellas Artes, Caracas, 1961" }
+      ],
+      "keyWorks": [
+        { "title": "El Farol art direction", "year": 1957, "kind": "magazine" },
+        { "title": "Gráfica 1 exhibition", "year": 1961, "kind": "exhibition" },
+        { "title": "Venezuelan pavilion emblem, New York World's Fair", "year": 1964, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "nedo-mion-ferrario",
+      "name": "Nedo Mion Ferrario",
+      "born": 1926, "died": 2001,
+      "activeFrom": 1950, "activeTo": 2001,
+      "signatureYear": 1959,
+      "region": "latin-america",
+      "nationality": "Italian-born Venezuelan",
+      "role": "Graphic designer, typographer, illustrator, educator",
+      "movements": ["venezuelan-modernism"],
+      "summary": "Milan-born Caracas designer, known as Nedo, who art-directed El Farol for thirteen years and drew around sixty geometric, 'impossible' and reversible alphabets.",
+      "principles": [
+        { "name": "The total magazine", "idea": "Paper changes, flaps, cover-to-body flow and halftone experiments make the turning of the page itself the design.", "example": "El Farol, sixty consecutive issues, 1959-1972" },
+        { "name": "Impossible letters", "idea": "Alphabets built on optical paradox (impossible, reversible, computable) are still legible type.", "example": "Reversibles exhibition, Museo de Bellas Artes, 1969" },
+        { "name": "Teach for decades", "idea": "A design chair held for 27 years forms a national profession.", "example": "Design chair at the Escuela de Artes Plásticas Cristóbal Rojas, from 1959" }
+      ],
+      "keyWorks": [
+        { "title": "El Farol art direction", "year": 1959, "kind": "magazine" },
+        { "title": "CAL magazine art direction", "year": 1962, "kind": "magazine" },
+        { "title": "Reversibles exhibition", "year": 1969, "kind": "exhibition" },
+        { "title": "Letromaquia exhibition", "year": 1975, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "eduardo-munoz-bachs",
+      "name": "Eduardo Muñoz Bachs",
+      "born": 1937, "died": 2001,
+      "activeFrom": 1960, "activeTo": 2001,
+      "signatureYear": 1967,
+      "region": "latin-america",
+      "nationality": "Spanish-born Cuban",
+      "role": "Poster designer, illustrator, comics artist",
+      "movements": ["cuban-poster"],
+      "summary": "Self-taught Valencia-born designer of ICAIC's first poster in 1960 and over 2,000 film posters, with a childlike drawn figure and hand lettering.",
+      "principles": [
+        { "name": "Draw like a child, think like an adult", "idea": "A naive, comic drawing style and hand-made lettering carry sophisticated irony.", "example": "La trampa poster, ICAIC, 1967" },
+        { "name": "The figure is the poster", "idea": "The human face or whole body dominates; colours are bright but never shocking.", "example": "En busca de un hombre poster, ICAIC, 1967" },
+        { "name": "Volume as a style", "idea": "Thousands of posters over a lifetime make a recognisable personal language within an institution.", "example": "No hay regreso para Johnny poster, ICAIC, 1971" }
+      ],
+      "keyWorks": [
+        { "title": "First ICAIC poster", "year": 1960, "kind": "poster" },
+        { "title": "La trampa", "year": 1967, "kind": "poster" },
+        { "title": "10 aniversario de los CDR", "year": 1970, "kind": "poster" },
+        { "title": "No hay regreso para Johnny", "year": 1971, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "raul-martinez",
+      "name": "Raúl Martínez",
+      "born": 1927, "died": 1995,
+      "activeFrom": 1947, "activeTo": 1995,
+      "signatureYear": 1968,
+      "region": "latin-america",
+      "nationality": "Cuban",
+      "role": "Painter, graphic designer, photographer",
+      "movements": ["cuban-poster"],
+      "summary": "Former Los Once abstractionist who became Cuba's pop portraitist of Martí and Camilo Cienfuegos and a designer for ICAIC, Casa de las Américas and OSPAAAL.",
+      "principles": [
+        { "name": "The hero, multiplied", "idea": "Portraits of national heroes are repeated in grids of flat colour, pop serialisation turned into revolutionary iconography.", "example": "Pop portraits of José Martí, mid-1960s" },
+        { "name": "Painter and designer as one practice", "idea": "The same artist moves between painting, book design and posters without a hierarchy.", "example": "Day of World Solidarity with the Cuban Revolution poster, OSPAAAL, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "Day of World Solidarity with the Cuban Revolution, 26 July", "year": 1968, "kind": "poster" },
+        { "title": "Lucía film poster (for Humberto Solás's 1968 film)", "year": 1968, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "felix-beltran",
+      "name": "Félix Beltrán",
+      "born": 1938, "died": 2022,
+      "activeFrom": 1953, "activeTo": 2022,
+      "signatureYear": 1968,
+      "region": "latin-america",
+      "nationality": "Cuban (based in Mexico from 1982)",
+      "role": "Graphic designer, educator, writer",
+      "movements": ["cuban-poster"],
+      "summary": "New York-trained Cuban designer who led the government's Comisión de Orientación Revolucionaria posters, taught design from 1963 and moved to Mexico in 1982.",
+      "principles": [
+        { "name": "Simplicity as effectiveness", "idea": "One idea, minimum elements: simplicity is the basis of communication that works.", "example": "Vietnam will win poster, 1968" },
+        { "name": "Theory alongside practice", "idea": "A designer writes and publishes on design to build the discipline.", "example": "Desde el diseño, Havana, 1970; Letragrafía, 1973; Acerca del diseño, 1975" },
+        { "name": "The archive as infrastructure", "idea": "Collecting design builds the discipline's memory.", "example": "First international graphic design archive in Latin America, Universidad Autónoma Metropolitana, Mexico City" }
+      ],
+      "keyWorks": [
+        { "title": "Vietnam will win", "year": 1968, "kind": "poster" },
+        { "title": "Desde el diseño", "year": 1970, "kind": "book" },
+        { "title": "Letragrafía", "year": 1973, "kind": "book" },
+        { "title": "Seremos reivindicados por la historia", "year": 1975, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "rene-azcuy",
+      "name": "René Azcuy",
+      "born": 1939, "died": 2019,
+      "activeFrom": 1960, "activeTo": 2019,
+      "signatureYear": 1969,
+      "region": "latin-america",
+      "nationality": "Cuban",
+      "role": "Poster designer, painter",
+      "movements": ["cuban-poster"],
+      "summary": "ICAIC's most austere film-poster designer: black, white and one colour, a single cropped photographic image, and a metaphor instead of a scene.",
+      "principles": [
+        { "name": "One image, one idea", "idea": "A single high-contrast photographic fragment stands in for the whole film.", "example": "De la guerra americana, ICAIC, 1969" },
+        { "name": "Restraint as intensity", "idea": "Minimal palette and large empty space make violence or desire more charged than illustration would.", "example": "Sin esperanza, ICAIC, 1967" }
+      ],
+      "keyWorks": [
+        { "title": "Sin esperanza", "year": 1967, "kind": "poster" },
+        { "title": "De la guerra americana", "year": 1969, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "alfredo-rostgaard",
+      "name": "Alfredo Rostgaard",
+      "born": 1943, "died": 2004,
+      "activeFrom": 1963, "activeTo": 2004,
+      "signatureYear": 1967,
+      "region": "latin-america",
+      "nationality": "Cuban",
+      "role": "Graphic designer, poster artist, caricaturist",
+      "movements": ["cuban-poster"],
+      "summary": "Guantánamo-born caricaturist who became OSPAAAL's art director in 1966, mixing pop, psychedelia and humour into the most travelled solidarity posters.",
+      "principles": [
+        { "name": "Humour for serious subjects", "idea": "Caricature and playfulness make grave political subjects memorable rather than solemn.", "example": "Create two, three... many Vietnams, 1967" },
+        { "name": "Borrow the enemy's pop", "idea": "Warhol-like commercial graphics and psychedelic line are turned to anti-imperialist ends.", "example": "Black Power poster, OSPAAAL, 1968" },
+        { "name": "Silkscreen colour as structure", "idea": "Flat overprinted inks carry the composition, not just fill it.", "example": "Hanoi martes 13, colour screen print, 1967" }
+      ],
+      "keyWorks": [
+        { "title": "Hanoi martes 13", "year": 1967, "kind": "poster" },
+        { "title": "Create two, three... many Vietnams", "year": 1967, "kind": "poster" },
+        { "title": "Black Power poster", "year": 1968, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "lance-wyman",
+      "name": "Lance Wyman",
+      "born": 1937, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1968,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, wayfinding designer",
+      "movements": ["mexico-68", "corporate-identity"],
+      "summary": "New Jersey designer who developed the MEXICO68 logotype and its applications, then the Mexico City Metro pictograms and the Washington Metro map.",
+      "principles": [
+        { "name": "A logo should become a programme", "idea": "A mark that adapts to signs and environments can drive an entire design programme.", "example": "Chrysler pavilion pointing-hand logo and signs, New York World's Fair, 1964" },
+        { "name": "Functional aesthetic", "idea": "He credits the no-nonsense functional aesthetic of the sea and the factories he grew up around as a key influence.", "example": "Mexico City Metro station pictograms, 1969" },
+        { "name": "Clarity over geography", "idea": "A transit map shows routes, transfers and landmarks clearly rather than distances to scale.", "example": "Washington Metro map, mid-1970s, revised by Wyman in 2012" }
+      ],
+      "keyWorks": [
+        { "title": "MEXICO68 logotype and applications", "year": 1968, "kind": "identity" },
+        { "title": "Mexico City Metro station pictograms", "year": 1969, "kind": "system" },
+        { "title": "Washington Metro map revision", "year": 2012, "kind": "system" }
+      ]
+    },
+    {
+      "id": "eduardo-terrazas",
+      "name": "Eduardo Terrazas",
+      "born": 1936, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1968,
+      "region": "latin-america",
+      "nationality": "Mexican",
+      "role": "Architect, urban designer, artist",
+      "movements": ["mexico-68"],
+      "summary": "Architect who coordinated the Mexico 68 identity programme and its urban design under Pedro Ramírez Vázquez, then became a painter of systematic geometric series.",
+      "principles": [
+        { "name": "Identity at city scale", "idea": "An event's identity is applied to streets, kiosks and pavements so the whole city becomes the medium.", "example": "Mexico 68 urban design programme, 1968" },
+        { "name": "Assemble an international team", "idea": "Local direction plus recruited international designers produce a system neither would alone.", "example": "Recruiting Lance Wyman and others to the Olympic identity programme, 1966-1968" }
+      ],
+      "keyWorks": [
+        { "title": "Mexico pavilion, New York World's Fair (with Pedro Ramírez Vázquez)", "year": 1964, "kind": "building" },
+        { "title": "Mexico 68 identity and urban design programme", "year": 1968, "kind": "system" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1937, "label": "Taller de Gráfica Popular founded", "kind": "context", "note": "Leopoldo Méndez, Pablo O'Higgins and Luis Arenal found the Mexico City print collective, making the linocut a mass political medium." },
+    { "year": 1951, "label": "First Bienal de São Paulo", "kind": "context", "note": "Max Bill's prize and his MASP retrospective the same year ignite Brazilian concrete art and, through it, Brazilian modern design." },
+    { "year": 1959, "label": "Cuban Revolution", "kind": "context", "note": "ICAIC is founded in March 1959, and with advertising gone the poster becomes a cultural rather than commercial medium." },
+    { "year": 1960, "label": "Brasília inaugurated", "kind": "context", "note": "Lúcio Costa and Oscar Niemeyer's capital, opened 21 April 1960, makes modernism Brazil's official national image." },
+    { "year": 1963, "label": "ESDI opens in Rio de Janeiro", "kind": "context", "note": "Latin America's first university-level design school, built on the Ulm model with Wollner, Magalhães and Bergmiller among its founders." },
+    { "year": 1966, "label": "Tricontinental Conference, Havana", "kind": "context", "note": "Founds OSPAAAL, whose multilingual solidarity posters, folded into Tricontinental magazine, become a graphic network for the Global South." },
+    { "year": 1968, "label": "Mexico 68 Olympics and Tlatelolco", "kind": "context", "note": "The most complete Olympic identity yet opens days after the 2 October massacre; protesters answer with a bayonet-pierced dove." },
+    { "year": 1969, "label": "Mexico City Metro opens", "kind": "context", "note": "Line 1 opens on 4-5 September 1969 with Lance Wyman's station pictograms, a wayfinding system designed for every literacy level." },
+    { "year": 1970, "label": "Instituto Di Tella closes its art centres", "kind": "context", "note": "Under the Onganía regime the Buenos Aires avant-garde's home, and Argentina's first professional design department, close in 1970." },
+    { "year": 1973, "label": "Chilean coup", "kind": "context", "note": "The 11 September coup ends Allende's government, painting over Unidad Popular murals and scattering its designers into exile." },
+    { "year": 2004, "label": "First Bienal Tipos Latinos", "kind": "context", "note": "A travelling Latin American type biennial gives the region's type designers a shared stage." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Lincoln Cushing, ¡Revolución! Cuban Poster Art, Chronicle Books, 2003",
+    "Richard Frick (ed.), Das trikontinentale Solidaritätsplakat / The Tricontinental Solidarity Poster, Comedia, Bern, 2003",
+    "Alexandre Wollner, Design visual 50 anos, Cosac & Naify, São Paulo, 2003",
+    "Lucy Niemeyer, Design no Brasil: origens e instalação, 2AB, Rio de Janeiro, 1998",
+    "Chico Homem de Melo (org.), O design gráfico brasileiro: anos 60, Cosac Naify, 2006",
+    "Christopher Dunn, Brutality Garden: Tropicália and the Emergence of a Brazilian Counterculture, University of North Carolina Press, 2001",
+    "Eden Medina, Cybernetic Revolutionaries: Technology and Politics in Allende's Chile, MIT Press, 2011",
+    "https://pt.wikipedia.org/wiki/Alexandre_Wollner",
+    "https://pt.wikipedia.org/wiki/Forminform",
+    "https://pt.wikipedia.org/wiki/Alo%C3%ADsio_Magalh%C3%A3es",
+    "https://pt.wikipedia.org/wiki/Geraldo_de_Barros",
+    "https://pt.wikipedia.org/wiki/Poesia_concreta",
+    "https://pt.wikipedia.org/wiki/Rog%C3%A9rio_Duarte",
+    "https://en.wikipedia.org/wiki/Tropic%C3%A1lia",
+    "https://en.wikipedia.org/wiki/Tom%C3%A1s_Maldonado",
+    "https://es.wikipedia.org/wiki/Juan_Carlos_Dist%C3%A9fano",
+    "https://es.wikipedia.org/wiki/Guillermo_Gonz%C3%A1lez_Ruiz",
+    "https://es.wikipedia.org/wiki/Ronald_Shakespear",
+    "https://es.wikipedia.org/wiki/Instituto_Di_Tella",
+    "https://es.wikipedia.org/wiki/Nedo_Mion_Ferrario",
+    "https://es.wikipedia.org/wiki/Gerd_Leufert",
+    "https://es.wikipedia.org/wiki/F%C3%A9lix_Beltr%C3%A1n",
+    "https://en.wikipedia.org/wiki/Eduardo_Mu%C3%B1oz_Bachs",
+    "https://en.wikipedia.org/wiki/Alfredo_Rostgaard",
+    "https://en.wikipedia.org/wiki/Ra%C3%BAl_Mart%C3%ADnez_(artist)",
+    "https://en.wikipedia.org/wiki/Lance_Wyman",
+    "https://en.wikipedia.org/wiki/1968_Summer_Olympics",
+    "https://es.wikipedia.org/wiki/Juegos_Ol%C3%ADmpicos_de_M%C3%A9xico_1968",
+    "https://en.wikipedia.org/wiki/Leopoldo_M%C3%A9ndez",
+    "https://en.wikipedia.org/wiki/Taller_de_Gr%C3%A1fica_Popular",
+    "https://collections.vam.ac.uk/item/O1441248/",
+    "https://collections.vam.ac.uk/item/O692907/",
+    "https://collections.vam.ac.uk/item/O113139/",
+    "https://collections.vam.ac.uk/item/O137690/",
+    "https://www.docspopuli.org/CubaWebCat/gallery-01.html",
+    "https://www.wikidata.org/wiki/Q6056371"
+  ]
+}

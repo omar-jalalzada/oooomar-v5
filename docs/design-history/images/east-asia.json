@@ -1,0 +1,90 @@
+{
+  "japanese-modernism": [
+    { "file": "File:Tokyo 1964 Summer Olympics logo.svg", "title": "Tokyo 1964 Olympic emblem", "year": 1960, "figure": "yusaku-kamekura" },
+    { "file": "File:Tanaka 1.jpg", "title": "Sankei Kanze Noh", "year": 1958, "figure": "ikko-tanaka" },
+    { "file": "File:Sapporo 1972 poster.png", "title": "Sapporo '72 Winter Olympics poster", "year": 1972, "figure": null },
+    { "file": "File:Romeo and Juliet3.jpg", "title": "Romeo and Juliet", "year": 1965, "figure": "shigeo-fukuda" }
+  ],
+  "japanese-poster-avant-garde": [
+    { "file": "File:Doublesuicideposter.jpg", "title": "Double Suicide", "year": 1969, "figure": "kiyoshi-awazu" },
+    { "file": "File:Agharta album cover.jpg", "title": "Miles Davis, Agharta", "year": 1975, "figure": "tadanori-yokoo" },
+    { "file": "File:Miles Davis-Tutu (album cover).jpg", "title": "Miles Davis, Tutu", "year": 1986, "figure": "eiko-ishioka" }
+  ],
+  "chinese-modern-design": [
+    { "file": "File:Cover of Ladies Journal, Vol 11 No. 5, 1925.png", "title": "The Ladies' Journal", "year": 1925, "figure": null },
+    { "file": "File:Ye Lingfeng, \"Untitled.\" Shanghai manhua 37 (Dec. 29, 1928).jpg", "title": "Shanghai Sketch, issue 37", "year": 1928, "figure": null },
+    { "file": "File:ChineseKoreanWarPoster.jpg", "title": "Resist America, Aid Korea", "year": 1952, "figure": null },
+    { "file": "File:Chairman Mao en route to Anyuan by Liu Chunhua.jpg", "title": "Chairman Mao Goes to Anyuan", "year": 1967, "figure": null }
+  ],
+  "korean-modern-design": [
+    { "file": "File:1988 Summer Olympics logo.svg", "title": "Seoul 1988 Olympic emblem", "year": 1983, "figure": null },
+    { "file": "File:글자 광 안상수체.png", "title": "Ahn typeface", "year": 1985, "figure": "ahn-sang-soo" }
+  ],
+  "japanese-emptiness": [
+    { "file": "File:MUJI logo.svg", "title": "Muji wordmark", "year": null, "figure": null },
+    { "file": "File:Muji NYC inside CD players.jpg", "title": "Muji wall-mounted CD player", "year": 1999, "figure": null },
+    { "file": "File:Uniqlo logo Japanese.svg", "title": "Uniqlo identity", "year": 2006, "figure": "kashiwa-sato" }
+  ],
+  "superflat": [
+    { "file": "File:Little Boy The Arts of Japan's Exploding Subculture.jpg", "title": "Little Boy: The Arts of Japan's Exploding Subculture", "year": 2005, "figure": null },
+    { "file": "File:'Cosmos Ball' by Takashi Murakami, molded plastic, 2000.jpg", "title": "Cosmos Ball", "year": 2000, "figure": "takashi-murakami" },
+    { "file": "File:Graduation (album).jpg", "title": "Kanye West, Graduation", "year": 2007, "figure": "takashi-murakami" }
+  ],
+  "yusaku-kamekura": [
+    { "file": "File:Tokyo 1964 Summer Olympics logo.svg", "title": "Tokyo 1964 Olympic emblem", "year": 1960, "figure": "yusaku-kamekura" },
+    { "file": "File:Nikon F SLR camera with NIKKOR-S Auto 1,4 f=5,8cm.JPG", "title": "Nikon F logotype", "year": 1959, "figure": "yusaku-kamekura" },
+    { "file": "File:NTT company logo.svg", "title": "NTT Dynamic Loop", "year": 1985, "figure": "yusaku-kamekura" }
+  ],
+  "ikko-tanaka": [
+    { "file": "File:Tanaka 1.jpg", "title": "Sankei Kanze Noh", "year": 1958, "figure": "ikko-tanaka" },
+    { "file": "File:Ikko Tanaka 4.jpg", "title": "Morisawa: Akashi", "year": null, "figure": "ikko-tanaka" }
+  ],
+  "kazumasa-nagai": [
+    { "file": "File:Asahi logo.svg", "title": "Asahi Breweries symbol", "year": 1986, "figure": "kazumasa-nagai" },
+    { "file": "File:Mitsubishi UFJ Financial Group.svg", "title": "Mitsubishi UFJ Financial Group symbol", "year": 2004, "figure": "kazumasa-nagai" }
+  ],
+  "shigeo-fukuda": [
+    { "file": "File:Romeo and Juliet3.jpg", "title": "Romeo and Juliet", "year": 1965, "figure": "shigeo-fukuda" }
+  ],
+  "tadanori-yokoo": [
+    { "file": "File:Agharta album cover.jpg", "title": "Miles Davis, Agharta", "year": 1975, "figure": "tadanori-yokoo" },
+    { "file": "File:SantanaLotusAlbum.jpg", "title": "Santana, Lotus", "year": 1974, "figure": "tadanori-yokoo" }
+  ],
+  "kiyoshi-awazu": [
+    { "file": "File:Doublesuicideposter.jpg", "title": "Double Suicide", "year": 1969, "figure": "kiyoshi-awazu" }
+  ],
+  "eiko-ishioka": [
+    { "file": "File:Miles Davis-Tutu (album cover).jpg", "title": "Miles Davis, Tutu", "year": 1986, "figure": "eiko-ishioka" }
+  ],
+  "kenya-hara": [
+    { "file": "File:Xiaomi logo (2021-).svg", "title": "Xiaomi logo", "year": 2021, "figure": "kenya-hara" }
+  ],
+  "kashiwa-sato": [
+    { "file": "File:Uniqlo logo Japanese.svg", "title": "Uniqlo identity", "year": 2006, "figure": "kashiwa-sato" },
+    { "file": "File:Logo TNAT.svg", "title": "National Art Center, Tokyo identity", "year": 2007, "figure": "kashiwa-sato" }
+  ],
+  "takashi-murakami": [
+    { "file": "File:Graduation (album).jpg", "title": "Kanye West, Graduation", "year": 2007, "figure": "takashi-murakami" },
+    { "file": "File:'Cosmos Ball' by Takashi Murakami, molded plastic, 2000.jpg", "title": "Cosmos Ball", "year": 2000, "figure": "takashi-murakami" },
+    { "file": "File:Kids See Ghosts Cover.png", "title": "Kids See Ghosts", "year": 2018, "figure": "takashi-murakami" }
+  ],
+  "zhang-guangyu": [
+    { "file": "File:Zhang Guangyu, \"Cubist Shanghai Life.\" Shanghai manhua 1 (April 21, 1928).jpg", "title": "Cubist Shanghai Life (Shanghai Sketch, issue 1)", "year": 1928, "figure": "zhang-guangyu" },
+    { "file": "File:Zhang Guangyu, \"Degenerate.\" Shanghai manhua 83 (Nov. 23, 1929).jpg", "title": "Degenerate (Shanghai Sketch, issue 83)", "year": 1929, "figure": "zhang-guangyu" },
+    { "file": "File:Modern Sketch Issue 1.jpg", "title": "Modern Sketch, issue 1", "year": 1934, "figure": "zhang-guangyu" }
+  ],
+  "henry-steiner": [
+    { "file": "File:HSBC logo (2018).svg", "title": "HSBC hexagon", "year": 1983, "figure": "henry-steiner" },
+    { "file": "File:Hong Kong Jockey Club logo at Happy Valley Racecourse 19970101.jpg", "title": "Hong Kong Jockey Club symbol", "year": null, "figure": "henry-steiner" },
+    { "file": "File:Hongkong Land Logo outside main building.jpg", "title": "Hongkong Land symbol", "year": null, "figure": "henry-steiner" }
+  ],
+  "kan-tai-keung": [
+    { "file": "File:Bank of China.svg", "title": "Bank of China symbol", "year": 1980, "figure": "kan-tai-keung" }
+  ],
+  "aaron-nieh": [
+    { "file": "File:Hebe Tien Insignificance album cover.jpg", "title": "Hebe Tien, Insignificance", "year": 2013, "figure": "aaron-nieh" }
+  ],
+  "ahn-sang-soo": [
+    { "file": "File:글자 광 안상수체.png", "title": "Ahn typeface", "year": 1985, "figure": "ahn-sang-soo" }
+  ]
+}

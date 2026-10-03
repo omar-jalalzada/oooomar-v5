@@ -216,6 +216,21 @@ export const PRESETS = [
       ],
     },
   },
+  {
+    id: 'design-history',
+    name: 'Old School',
+    note: 'Swiss red · a poster wall',
+    bg: {
+      format: { shape: 'tall' },
+      ground: '#e2382f',
+      texture: { vignette: 0.18 },
+      fields: [
+        field('#f0623a', 0.3, 0.05, 1.0, 0.35, 0.8),
+        field('#b81f22', 0.6, 1.02, 1.1, 0.4),
+        field('#f4a08a', 0.72, 0.5, 0.3, 0.2, 0.25),
+      ],
+    },
+  },
 ];
 
 export function defaultState() {

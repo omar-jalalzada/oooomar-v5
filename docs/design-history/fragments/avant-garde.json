@@ -1,0 +1,976 @@
+{
+  "movements": [
+    {
+      "id": "expressionism",
+      "name": "Expressionism",
+      "aka": ["German Expressionism", "Die Brücke", "Der Blaue Reiter"],
+      "start": 1905, "end": 1925, "ongoing": false,
+      "peak": [1910, 1920],
+      "region": "europe",
+      "places": ["Dresden", "Munich", "Berlin"],
+      "lineage": "avant-garde",
+      "summary": "German artists revived the raw woodcut and distorted colour to carry emotion; the early Bauhaus began inside it.",
+      "influences": ["jugendstil", "arts-and-crafts"],
+      "principles": [
+        { "name": "The cut shows", "idea": "The gouge mark of the woodblock is the expression; nothing is smoothed away.", "example": "Ernst Ludwig Kirchner, Brücke programme and membership woodcuts, 1905–1906" },
+        { "name": "Emotion over description", "idea": "Colour and distortion carry feeling rather than likeness.", "example": "Kandinsky & Marc, Der Blaue Reiter almanac, 1912" },
+        { "name": "Image and lettering as one block", "idea": "Letters are carved with the picture, so type inherits the image's roughness.", "example": "Lyonel Feininger, Cathedral woodcut, Bauhaus manifesto cover, 1919" }
+      ],
+      "keyWorks": [
+        { "title": "Programm der Künstlergruppe Brücke", "year": 1906, "kind": "manifesto" },
+        { "title": "Der Blaue Reiter almanac", "year": 1912, "kind": "book" },
+        { "title": "Cathedral (Feininger, Bauhaus manifesto cover)", "year": 1919, "kind": "manifesto" }
+      ]
+    },
+    {
+      "id": "futurism",
+      "name": "Futurism",
+      "aka": ["Italian Futurism", "Parole in libertà"],
+      "start": 1909, "end": 1944, "ongoing": false,
+      "peak": [1909, 1916],
+      "region": "europe",
+      "places": ["Milan", "Rome", "Rovereto"],
+      "lineage": "avant-garde",
+      "summary": "Marinetti's cult of speed and the machine exploded the printed page into words-in-freedom, typography performed as sound.",
+      "influences": [],
+      "principles": [
+        { "name": "Typography as sound", "idea": "Size, weight and face render loudness, onomatopoeia and rhythm, so the page is performed rather than read.", "example": "F.T. Marinetti, Zang Tumb Tuuum, 1914" },
+        { "name": "Destroy the horizontal line", "idea": "Words run diagonally, curve and radiate; the reading path is the composition.", "example": "F.T. Marinetti, Les mots en liberté futuristes, 1919" },
+        { "name": "Many typefaces on one page", "idea": "Mixing faces and ink colours is the point, against classical typographic harmony.", "example": "Carlo Carrà, Interventionist Demonstration, 1914" },
+        { "name": "The book as object", "idea": "Binding, material and format are part of the message.", "example": "Fortunato Depero, Depero futurista (the bolted book), 1927" },
+        { "name": "Advertising is art", "idea": "Commerce is treated as modern life's real theatre.", "example": "Fortunato Depero, Campari Soda bottle, 1932" }
+      ],
+      "keyWorks": [
+        { "title": "Manifesto of Futurism", "year": 1909, "figure": "filippo-tommaso-marinetti", "kind": "manifesto" },
+        { "title": "Zang Tumb Tuuum", "year": 1914, "figure": "filippo-tommaso-marinetti", "kind": "book" },
+        { "title": "Interventionist Demonstration", "year": 1914, "kind": "other" },
+        { "title": "Les mots en liberté futuristes", "year": 1919, "figure": "filippo-tommaso-marinetti", "kind": "book" },
+        { "title": "Depero futurista", "year": 1927, "figure": "fortunato-depero", "kind": "book" }
+      ]
+    },
+    {
+      "id": "vorticism",
+      "name": "Vorticism",
+      "aka": ["BLAST"],
+      "start": 1914, "end": 1919, "ongoing": false,
+      "peak": [1914, 1915],
+      "region": "europe",
+      "places": ["London"],
+      "lineage": "avant-garde",
+      "summary": "London's hard-edged riposte to Futurism, best remembered for BLAST's magenta cover and shouting slabs of black grotesque type.",
+      "influences": ["futurism"],
+      "principles": [
+        { "name": "Bless and blast", "idea": "Lists of heroes and enemies used as layout; the magazine page as polemic.", "example": "Wyndham Lewis, BLAST no. 1, 1914" },
+        { "name": "Typographic shouting", "idea": "Huge black condensed grotesque caps set in dense stacked blocks.", "example": "BLAST no. 1 cover and manifesto pages, 1914" },
+        { "name": "The vortex", "idea": "Hard-edged angular abstraction around a still centre rather than Futurist blur.", "example": "Edward Wadsworth, woodcuts, 1914–1917" }
+      ],
+      "keyWorks": [
+        { "title": "Timon of Athens portfolio", "year": 1913, "figure": "wyndham-lewis", "kind": "book" },
+        { "title": "BLAST no. 1", "year": 1914, "figure": "wyndham-lewis", "kind": "magazine" },
+        { "title": "BLAST no. 2", "year": 1915, "figure": "wyndham-lewis", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "suprematism",
+      "name": "Suprematism",
+      "aka": [],
+      "start": 1915, "end": 1927, "ongoing": false,
+      "peak": [1915, 1920],
+      "region": "eastern-europe",
+      "places": ["Petrograd", "Moscow", "Vitebsk"],
+      "lineage": "avant-garde",
+      "summary": "Malevich reduced painting to floating geometric planes on white, a grammar of pure form that Constructivism turned to use.",
+      "influences": ["futurism"],
+      "principles": [
+        { "name": "The zero of form", "idea": "Strip painting to elementary shapes on white; pure feeling, no object.", "example": "Kazimir Malevich, Black Square, 1915" },
+        { "name": "Floating planes in infinite space", "idea": "No horizon or gravity; forms drift at angles in an open white field.", "example": "Kazimir Malevich, Suprematist Composition: Airplane Flying, 1915" },
+        { "name": "A grammar of elements", "idea": "Square, circle, cross and bar as a teachable vocabulary.", "example": "Kazimir Malevich, The Non-Objective World, Bauhaus Book 11, 1927" },
+        { "name": "Abstract forms can narrate", "idea": "Geometric shapes act as characters in a story.", "example": "El Lissitzky, About Two Squares, 1922" }
+      ],
+      "keyWorks": [
+        { "title": "Black Square", "year": 1915, "figure": "kazimir-malevich", "kind": "other" },
+        { "title": "From Cubism and Futurism to Suprematism", "year": 1915, "figure": "kazimir-malevich", "kind": "manifesto" },
+        { "title": "Suprematist Composition: White on White", "year": 1918, "figure": "kazimir-malevich", "kind": "other" },
+        { "title": "About Two Squares", "year": 1922, "figure": "el-lissitzky", "kind": "book" },
+        { "title": "The Non-Objective World", "year": 1927, "figure": "kazimir-malevich", "kind": "book" }
+      ]
+    },
+    {
+      "id": "dada",
+      "name": "Dada",
+      "aka": ["Dadaism", "Berlin Dada", "Zurich Dada"],
+      "start": 1916, "end": 1924, "ongoing": false,
+      "peak": [1916, 1922],
+      "region": "europe",
+      "places": ["Zurich", "Berlin", "Hanover", "Cologne", "Paris", "New York"],
+      "lineage": "avant-garde",
+      "summary": "An anti-art revolt against the First World War that gave design photomontage, found-print collage and typographic anarchy.",
+      "influences": ["futurism", "expressionism"],
+      "principles": [
+        { "name": "Found material over drawn image", "idea": "Cut up the mass media and reassemble it to say what it hides.", "example": "Hannah Höch, Cut with the Kitchen Knife, 1919–1920" },
+        { "name": "Photomontage as weapon", "idea": "Recombined photographs make political lies visible with documentary authority.", "example": "John Heartfield, Adolf, the Superman: Swallows Gold and Spouts Junk, AIZ, 1932" },
+        { "name": "Typography without hierarchy", "idea": "Mixed faces, sizes and directions ambush the reader.", "example": "Hugo Ball, Karawane, printed in the Dada Almanach, 1920" },
+        { "name": "Everything is material", "idea": "Tickets, adverts and bank letterheads are as valid as paint.", "example": "Kurt Schwitters, Das Merzbild, 1918–1919" }
+      ],
+      "keyWorks": [
+        { "title": "Cabaret Voltaire", "year": 1916, "figure": "hugo-ball", "kind": "magazine" },
+        { "title": "Cut with the Kitchen Knife Dada Through the Last Weimar Beer-Belly Cultural Epoch of Germany", "year": 1919, "figure": "hannah-hoch", "kind": "other" },
+        { "title": "First International Dada Fair", "year": 1920, "kind": "exhibition" },
+        { "title": "Kleine Dada Soirée", "year": 1922, "figure": "theo-van-doesburg", "kind": "poster" },
+        { "title": "Merz", "year": 1923, "figure": "kurt-schwitters", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "de-stijl",
+      "name": "De Stijl",
+      "aka": ["Neoplasticism", "Nieuwe Beelding", "Elementarism"],
+      "start": 1917, "end": 1931, "ongoing": false,
+      "peak": [1917, 1925],
+      "region": "europe",
+      "places": ["Leiden", "Laren", "Utrecht", "Paris"],
+      "lineage": "avant-garde",
+      "summary": "Dutch artists sought universal harmony in orthogonal lines and primary colours, building letters, chairs and pages from rectangles.",
+      "influences": [],
+      "principles": [
+        { "name": "Only orthogonals and primaries", "idea": "Red, yellow and blue plus black, white and grey, in rectangles bounded by straight lines.", "example": "Piet Mondrian, Composition with Red, Blue and Yellow, 1930" },
+        { "name": "Letters built from the grid", "idea": "The alphabet is constructed from rectangles, so type shares the composition's structure.", "example": "Vilmos Huszár, De Stijl masthead, 1917" },
+        { "name": "Asymmetric equilibrium", "idea": "Unequal parts held in balance, never centred.", "example": "Gerrit Rietveld, Red Blue Chair, c. 1918–1923" },
+        { "name": "The diagonal as dynamism", "idea": "Elementarism tilts the grid 45 degrees to add energy, splitting the group.", "example": "Theo van Doesburg, Counter-Compositions, from 1924" }
+      ],
+      "keyWorks": [
+        { "title": "De Stijl magazine", "year": 1917, "figure": "theo-van-doesburg", "kind": "magazine" },
+        { "title": "Red Blue Chair", "year": 1918, "kind": "product" },
+        { "title": "Rietveld Schröder House", "year": 1924, "kind": "building" },
+        { "title": "Composition with Red, Blue and Yellow", "year": 1930, "figure": "piet-mondrian", "kind": "other" }
+      ]
+    },
+    {
+      "id": "constructivism",
+      "name": "Constructivism",
+      "aka": ["Russian Constructivism", "Productivism"],
+      "start": 1915, "end": 1934, "ongoing": false,
+      "peak": [1921, 1930],
+      "region": "eastern-europe",
+      "places": ["Moscow", "Petrograd", "Vitebsk"],
+      "lineage": "avant-garde",
+      "summary": "Soviet artists recast themselves as constructors of the new society, inventing the photomontage poster and the engineered page.",
+      "influences": ["futurism", "suprematism"],
+      "principles": [
+        { "name": "Art into production", "idea": "The designer is an engineer making useful things for mass life: posters, books, textiles, kiosks.", "example": "Rodchenko & Mayakovsky, Mosselprom advertising, 1923–1925" },
+        { "name": "Photomontage and factography", "idea": "Photography replaces drawing because it is documentary and mass-reproducible.", "example": "Alexander Rodchenko, Pro eto, 1923" },
+        { "name": "The diagonal as revolutionary energy", "idea": "Compositions on tilted axes in stark red and black.", "example": "El Lissitzky, Beat the Whites with the Red Wedge, 1919" },
+        { "name": "The page as built space", "idea": "Bars, rules and blocks of type act as structural members.", "example": "El Lissitzky, Dlia golosa (For the Voice), 1923" }
+      ],
+      "keyWorks": [
+        { "title": "Beat the Whites with the Red Wedge", "year": 1919, "figure": "el-lissitzky", "kind": "poster" },
+        { "title": "Electrification of the Entire Country", "year": 1920, "figure": "gustav-klutsis", "kind": "poster" },
+        { "title": "Dlia golosa (For the Voice)", "year": 1923, "figure": "el-lissitzky", "kind": "book" },
+        { "title": "Books (Lengiz poster)", "year": 1924, "figure": "alexander-rodchenko", "kind": "poster" },
+        { "title": "Man with a Movie Camera", "year": 1929, "figure": "stenberg-brothers", "kind": "poster" },
+        { "title": "Let Us Fulfill the Plan of Great Works", "year": 1930, "figure": "gustav-klutsis", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "bauhaus",
+      "name": "Bauhaus",
+      "aka": ["Staatliches Bauhaus"],
+      "start": 1919, "end": 1933, "ongoing": false,
+      "peak": [1923, 1930],
+      "region": "europe",
+      "places": ["Weimar", "Dessau", "Berlin"],
+      "lineage": "modernism",
+      "summary": "The German school that fused art, craft and industry and taught sans serif, photography and the foundation course to the world.",
+      "influences": ["arts-and-crafts", "expressionism", "de-stijl", "constructivism"],
+      "principles": [
+        { "name": "Unity of the arts", "idea": "Every discipline serves a shared built whole, under architecture.", "example": "Walter Gropius, Bauhaus manifesto, 1919" },
+        { "name": "Learn from materials first", "idea": "A preliminary course in form, colour and material comes before any specialism.", "example": "Josef Albers, Vorkurs paper-folding exercises, 1920s" },
+        { "name": "Design for industry", "idea": "Make prototypes for mass production, not crafts for the few.", "example": "Walter Gropius, Bauhaus Dessau building, 1926" },
+        { "name": "Elementary type", "idea": "Sans serif, lowercase, rules and photographs as the modern print vocabulary.", "example": "Herbert Bayer, universal alphabet, 1925" },
+        { "name": "Typophoto", "idea": "Text and image composed as a single visual statement.", "example": "László Moholy-Nagy, Malerei, Photographie, Film, 1925" }
+      ],
+      "keyWorks": [
+        { "title": "Bauhaus manifesto", "year": 1919, "figure": "walter-gropius", "kind": "manifesto" },
+        { "title": "Staatliche Bauhaus Ausstellung poster", "year": 1923, "figure": "joost-schmidt", "kind": "poster" },
+        { "title": "Malerei, Photographie, Film", "year": 1925, "figure": "laszlo-moholy-nagy", "kind": "book" },
+        { "title": "universal", "year": 1925, "figure": "herbert-bayer", "kind": "typeface" },
+        { "title": "Bauhaus Dessau building", "year": 1926, "figure": "walter-gropius", "kind": "building" },
+        { "title": "Kandinsky 60th birthday exhibition poster", "year": 1926, "figure": "herbert-bayer", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "new-typography",
+      "name": "New Typography",
+      "aka": ["Die neue Typographie", "Elementare Typographie"],
+      "start": 1923, "end": 1939, "ongoing": false,
+      "peak": [1925, 1933],
+      "region": "europe",
+      "places": ["Leipzig", "Munich", "Hanover", "Berlin", "The Hague"],
+      "lineage": "modernism",
+      "summary": "Tschichold codified the avant-garde for the printing trade: asymmetry, sans serif, photography and standard formats in the service of clarity.",
+      "influences": ["constructivism", "de-stijl", "bauhaus", "dada", "futurism"],
+      "principles": [
+        { "name": "Clarity as purpose", "idea": "Form is derived from the function of the message, not from tradition.", "example": "Jan Tschichold, Die neue Typographie, 1928" },
+        { "name": "Asymmetry over the central axis", "idea": "Arrange by reading order and importance instead of the symmetrical title page.", "example": "Jan Tschichold, Die Hose poster, 1927" },
+        { "name": "Sans serif as the face of the age", "idea": "Geometric and grotesque sans faces replace blackletter and historic romans.", "example": "Paul Renner, Futura, 1927" },
+        { "name": "Standardisation", "idea": "DIN paper sizes and standard letterheads, envelopes and forms.", "example": "Jan Tschichold, DIN letterhead schemes in Die neue Typographie, 1928" },
+        { "name": "Photography and white space as structure", "idea": "Photographs replace illustration; rules and empty space organise the page.", "example": "Piet Zwart, NKF cable catalogue, 1928" }
+      ],
+      "keyWorks": [
+        { "title": "elementare typographie", "year": 1925, "figure": "jan-tschichold", "kind": "magazine" },
+        { "title": "Futura", "year": 1927, "figure": "paul-renner", "kind": "typeface" },
+        { "title": "Die Hose", "year": 1927, "figure": "jan-tschichold", "kind": "poster" },
+        { "title": "Die neue Typographie", "year": 1928, "figure": "jan-tschichold", "kind": "book" },
+        { "title": "NKF catalogue", "year": 1928, "figure": "piet-zwart", "kind": "book" },
+        { "title": "Typographische Gestaltung", "year": 1935, "figure": "jan-tschichold", "kind": "book" }
+      ]
+    },
+    {
+      "id": "art-deco",
+      "name": "Art Deco",
+      "aka": ["Style Moderne", "Streamline Moderne"],
+      "start": 1920, "end": 1940, "ongoing": false,
+      "peak": [1925, 1935],
+      "region": "europe",
+      "places": ["Paris", "London", "New York"],
+      "lineage": "commerce",
+      "summary": "Commercial, glamorous modernism: Cubist and Futurist geometry turned into airbrushed posters for trains, liners and aperitifs.",
+      "influences": ["art-nouveau", "vienna-secession", "plakatstil", "futurism"],
+      "principles": [
+        { "name": "Geometric stylisation for speed", "idea": "Subjects reduced to a few planes and a single vanishing point, read in an instant.", "example": "A.M. Cassandre, Étoile du Nord, 1927" },
+        { "name": "Lettering from the image's geometry", "idea": "Custom display type is built from the same forms as the picture.", "example": "A.M. Cassandre, Bifur typeface, 1929" },
+        { "name": "Monumentality through scale", "idea": "Low viewpoint, huge object, tiny human.", "example": "A.M. Cassandre, Normandie, 1935" },
+        { "name": "Serial storytelling", "idea": "Images in sequence for viewers in motion.", "example": "A.M. Cassandre, Dubo, Dubon, Dubonnet, 1932" },
+        { "name": "Avant-garde forms for mass commerce", "idea": "Abstraction made desirable and used to sell.", "example": "E. McKnight Kauffer, Soaring to Success! Daily Herald – the Early Bird, 1918–1919" }
+      ],
+      "keyWorks": [
+        { "title": "Au Bûcheron", "year": 1923, "figure": "am-cassandre", "kind": "poster" },
+        { "title": "Exposition internationale des arts décoratifs et industriels modernes", "year": 1925, "kind": "exhibition" },
+        { "title": "Étoile du Nord", "year": 1927, "figure": "am-cassandre", "kind": "poster" },
+        { "title": "Bifur", "year": 1929, "figure": "am-cassandre", "kind": "typeface" },
+        { "title": "Power, the Nerve Centre of London's Underground", "year": 1930, "figure": "edward-mcknight-kauffer", "kind": "poster" },
+        { "title": "Normandie", "year": 1935, "figure": "am-cassandre", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "isotype",
+      "name": "Isotype",
+      "aka": ["Vienna Method of Pictorial Statistics", "International System of Typographic Picture Education"],
+      "start": 1925, "end": 1971, "ongoing": false,
+      "peak": [1928, 1940],
+      "region": "europe",
+      "places": ["Vienna", "The Hague", "Oxford", "Moscow"],
+      "lineage": "modernism",
+      "summary": "A team method for turning social statistics into rows of standard pictograms anyone could read, the root of modern information design.",
+      "influences": ["constructivism", "new-typography"],
+      "principles": [
+        { "name": "Repetition, not scale", "idea": "A greater quantity is shown by more symbols, never by a bigger symbol.", "example": "Gesellschaft und Wirtschaft atlas, 1930" },
+        { "name": "Transformation", "idea": "Analyse the data and decide what it should say before anything is drawn.", "example": "Marie Neurath (Reidemeister), charts for the Vienna museum, from 1925" },
+        { "name": "Standardised pictograms", "idea": "One reduced, consistent symbol per concept, combinable with others.", "example": "Gerd Arntz, Isotype pictogram library, about 4,000 signs, from 1928" },
+        { "name": "A picture language for everyone", "idea": "Charts that cross language and literacy barriers.", "example": "Otto Neurath, International Picture Language, 1936" }
+      ],
+      "keyWorks": [
+        { "title": "Gesellschaft und Wirtschaft", "year": 1930, "figure": "otto-neurath", "kind": "book" },
+        { "title": "International Picture Language", "year": 1936, "figure": "otto-neurath", "kind": "book" },
+        { "title": "Basic by Isotype", "year": 1937, "figure": "otto-neurath", "kind": "book" },
+        { "title": "Modern Man in the Making", "year": 1939, "figure": "otto-neurath", "kind": "book" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "filippo-tommaso-marinetti",
+      "name": "F.T. Marinetti",
+      "born": 1876, "died": 1944,
+      "activeFrom": 1905, "activeTo": 1944,
+      "signatureYear": 1909,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Poet, editor, founder of Futurism",
+      "movements": ["futurism"],
+      "summary": "Founded Futurism with a 1909 newspaper manifesto and invented words-in-freedom, typography that behaves like noise.",
+      "principles": [
+        { "name": "Words-in-freedom", "idea": "Abolish syntax, adjectives and punctuation; let nouns collide on the page.", "example": "Technical Manifesto of Futurist Literature, 1912" },
+        { "name": "The manifesto as medium", "idea": "A movement exists once it has published its rules in public.", "example": "Manifesto of Futurism, Le Figaro front page, 1909" },
+        { "name": "Typographic dissonance", "idea": "The page should break typographic harmony on purpose.", "example": "Zang Tumb Tuuum, 1914" }
+      ],
+      "keyWorks": [
+        { "title": "Manifesto of Futurism", "year": 1909, "kind": "manifesto" },
+        { "title": "Zang Tumb Tuuum", "year": 1914, "kind": "book" },
+        { "title": "Les mots en liberté futuristes", "year": 1919, "kind": "book" }
+      ]
+    },
+    {
+      "id": "fortunato-depero",
+      "name": "Fortunato Depero",
+      "born": 1892, "died": 1960,
+      "activeFrom": 1913, "activeTo": 1950,
+      "signatureYear": 1927,
+      "region": "europe",
+      "nationality": "Italian",
+      "role": "Painter, graphic and advertising designer",
+      "movements": ["futurism"],
+      "summary": "Futurist who made the portfolio a bolted object and built Campari's entire visual world, down to the bottle.",
+      "principles": [
+        { "name": "Self-promotion as a format", "idea": "The portfolio is itself a designed object.", "example": "Depero futurista, the bolted book, 1927" },
+        { "name": "Brand as a total world", "idea": "Ads, objects and packaging speak one invented language.", "example": "Campari Soda bottle, 1932" },
+        { "name": "Mechanical figuration", "idea": "People and things reduced to toy-like interlocking solids.", "example": "Campari advertising figures, late 1920s" }
+      ],
+      "keyWorks": [
+        { "title": "Depero futurista", "year": 1927, "kind": "book" },
+        { "title": "Campari advertising", "year": 1928, "kind": "poster" },
+        { "title": "Campari Soda bottle", "year": 1932, "kind": "product" }
+      ]
+    },
+    {
+      "id": "wyndham-lewis",
+      "name": "Wyndham Lewis",
+      "born": 1882, "died": 1957,
+      "activeFrom": 1909, "activeTo": 1951,
+      "signatureYear": 1914,
+      "region": "europe",
+      "nationality": "British (Canadian-born)",
+      "role": "Painter, writer, editor",
+      "movements": ["vorticism"],
+      "summary": "Founded Vorticism and wrote most of BLAST, whose magenta cover and slabs of grotesque type made polemic into layout.",
+      "principles": [
+        { "name": "Polemic as layout", "idea": "The argument is carried by type scale and list structure.", "example": "BLAST no. 1, 1914" },
+        { "name": "Hard edges over speed lines", "idea": "Static mechanical structure rather than Futurist blur.", "example": "Timon of Athens portfolio, 1913" }
+      ],
+      "keyWorks": [
+        { "title": "Timon of Athens", "year": 1913, "kind": "book" },
+        { "title": "BLAST no. 1", "year": 1914, "kind": "magazine" },
+        { "title": "BLAST no. 2", "year": 1915, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "kazimir-malevich",
+      "name": "Kazimir Malevich",
+      "born": 1879, "died": 1935,
+      "activeFrom": 1904, "activeTo": 1935,
+      "signatureYear": 1915,
+      "region": "eastern-europe",
+      "nationality": "Russian (born in Kyiv, of Polish descent)",
+      "role": "Painter, theorist, teacher",
+      "movements": ["suprematism", "futurism"],
+      "summary": "Founded Suprematism with Black Square in 1915 and taught a grammar of pure geometric form at Vitebsk.",
+      "principles": [
+        { "name": "Feeling over object", "idea": "Art should give pure sensation, not depict things.", "example": "Black Square, 1915" },
+        { "name": "Reduction as a radical act", "idea": "The smallest possible statement is the most provocative.", "example": "Suprematist Composition: White on White, 1918" },
+        { "name": "Teach the elements", "idea": "A vocabulary of forms can be transmitted as a school.", "example": "UNOVIS, Vitebsk, 1919–1922" }
+      ],
+      "keyWorks": [
+        { "title": "Victory over the Sun (designs)", "year": 1913, "kind": "other" },
+        { "title": "Black Square", "year": 1915, "kind": "other" },
+        { "title": "From Cubism and Futurism to Suprematism", "year": 1915, "kind": "manifesto" },
+        { "title": "The Non-Objective World", "year": 1927, "kind": "book" }
+      ]
+    },
+    {
+      "id": "hugo-ball",
+      "name": "Hugo Ball",
+      "born": 1886, "died": 1927,
+      "activeFrom": 1910, "activeTo": 1927,
+      "signatureYear": 1916,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Poet, performer, co-founder of the Cabaret Voltaire",
+      "movements": ["dada"],
+      "summary": "Opened the Cabaret Voltaire in Zurich in 1916 and pioneered sound poetry, language heard below meaning.",
+      "principles": [
+        { "name": "Language below meaning", "idea": "Invented words heard as pure sound.", "example": "Karawane, 1916" },
+        { "name": "The body as typeface", "idea": "Performance and costume as composition.", "example": "Cardboard costume for the sound poems, Cabaret Voltaire, 1916" }
+      ],
+      "keyWorks": [
+        { "title": "Cabaret Voltaire", "year": 1916, "kind": "magazine" },
+        { "title": "Karawane", "year": 1916, "kind": "other" },
+        { "title": "Dada Manifesto", "year": 1916, "kind": "manifesto" }
+      ]
+    },
+    {
+      "id": "kurt-schwitters",
+      "name": "Kurt Schwitters",
+      "born": 1887, "died": 1948,
+      "activeFrom": 1911, "activeTo": 1948,
+      "signatureYear": 1923,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Artist, typographer, advertising designer",
+      "movements": ["dada", "new-typography"],
+      "summary": "Built Merz from found fragments and proved Dada play and Constructivist order could share a page and an ad agency.",
+      "principles": [
+        { "name": "Build from fragments", "idea": "Everything had broken; new work is made from the pieces.", "example": "Das Merzbild, 1918–1919" },
+        { "name": "Play and order together", "idea": "Dada and Constructivism are compatible on one page.", "example": "Merz 4, carrying Lissitzky's Topography of Typography, 1923" },
+        { "name": "Typography as illustration", "idea": "Letters, rules and bars act as characters.", "example": "Die Scheuche, with Käte Steinitz and Theo van Doesburg, 1925" }
+      ],
+      "keyWorks": [
+        { "title": "Das Merzbild", "year": 1919, "kind": "other" },
+        { "title": "Merz", "year": 1923, "kind": "magazine" },
+        { "title": "Merz 11: Typoreklame", "year": 1924, "kind": "magazine" },
+        { "title": "Die Scheuche", "year": 1925, "kind": "book" }
+      ]
+    },
+    {
+      "id": "john-heartfield",
+      "name": "John Heartfield",
+      "born": 1891, "died": 1968,
+      "activeFrom": 1916, "activeTo": 1968,
+      "signatureYear": 1932,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Photomontage artist, book designer",
+      "movements": ["dada"],
+      "summary": "Turned Dada photomontage into anti-Nazi weaponry on the covers of the communist AIZ, one seamless image per idea.",
+      "principles": [
+        { "name": "Make the photograph tell the truth", "idea": "Seamless montage gives satire the authority of documentary.", "example": "Adolf, the Superman: Swallows Gold and Spouts Junk, AIZ, 1932" },
+        { "name": "One image, one idea", "idea": "A single sharp visual pun locked by a caption.", "example": "Four axes forming a swastika, AIZ, 1934" },
+        { "name": "The jacket as poster", "idea": "The book cover argues the book's politics.", "example": "Malik-Verlag book jackets, 1920s" }
+      ],
+      "keyWorks": [
+        { "title": "Malik-Verlag book jackets", "year": 1925, "kind": "book" },
+        { "title": "Adolf, the Superman: Swallows Gold and Spouts Junk", "year": 1932, "kind": "magazine" },
+        { "title": "The Meaning of Geneva", "year": 1932, "kind": "magazine" },
+        { "title": "Göring: The Executioner of the Third Reich", "year": 1933, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "hannah-hoch",
+      "name": "Hannah Höch",
+      "born": 1889, "died": 1978,
+      "activeFrom": 1915, "activeTo": 1978,
+      "signatureYear": 1919,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Artist, photomontage pioneer",
+      "movements": ["dada"],
+      "summary": "Berlin Dada's only woman and a co-inventor of photomontage, using the illustrated press to dissect power and gender.",
+      "principles": [
+        { "name": "Collage as social X-ray", "idea": "Scale and juxtaposition expose power.", "example": "Cut with the Kitchen Knife, 1919–1920" },
+        { "name": "Gender as subject", "idea": "The press's New Woman, re-cut and questioned.", "example": "Da-Dandy, 1919" },
+        { "name": "Craft pattern as source", "idea": "Domestic templates meet magazine photography.", "example": "From an Ethnographic Museum series, 1924–1930" }
+      ],
+      "keyWorks": [
+        { "title": "Da-Dandy", "year": 1919, "kind": "other" },
+        { "title": "Cut with the Kitchen Knife", "year": 1919, "kind": "other" },
+        { "title": "From an Ethnographic Museum", "year": 1924, "kind": "other" }
+      ]
+    },
+    {
+      "id": "theo-van-doesburg",
+      "name": "Theo van Doesburg",
+      "born": 1883, "died": 1931,
+      "activeFrom": 1912, "activeTo": 1931,
+      "signatureYear": 1917,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Painter, writer, designer, editor of De Stijl",
+      "movements": ["de-stijl", "dada"],
+      "summary": "Founded and edited De Stijl, carried it into the Bauhaus, and tilted its grid into Elementarism's diagonal.",
+      "principles": [
+        { "name": "The magazine as movement", "idea": "An editor's consistent format can become a school.", "example": "De Stijl, 1917–1928" },
+        { "name": "Construct the alphabet", "idea": "Letters as modular rectangles.", "example": "Geometric alphabet, 1919" },
+        { "name": "Dynamism through the diagonal", "idea": "Tilt the orthogonal grid 45 degrees.", "example": "Counter-Compositions, from 1924" }
+      ],
+      "keyWorks": [
+        { "title": "De Stijl", "year": 1917, "kind": "magazine" },
+        { "title": "Geometric alphabet", "year": 1919, "kind": "typeface" },
+        { "title": "Mecano", "year": 1922, "kind": "magazine" },
+        { "title": "Kleine Dada Soirée", "year": 1922, "kind": "poster" },
+        { "title": "Café Aubette", "year": 1928, "kind": "building" }
+      ]
+    },
+    {
+      "id": "piet-mondrian",
+      "name": "Piet Mondrian",
+      "born": 1872, "died": 1944,
+      "activeFrom": 1892, "activeTo": 1944,
+      "signatureYear": 1930,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Painter, theorist",
+      "movements": ["de-stijl"],
+      "summary": "Reduced painting to black bars and primary rectangles in dynamic equilibrium, the grid's most quoted ancestor.",
+      "principles": [
+        { "name": "Dynamic equilibrium", "idea": "Unequal rectangles held in asymmetric balance.", "example": "Composition with Red, Blue and Yellow, 1930" },
+        { "name": "Line as structure", "idea": "Black bars of varied weight divide the field rather than outline objects.", "example": "Composition with Red, Blue and Yellow, 1930" },
+        { "name": "Rhythm from a grid", "idea": "Repetition and interval as music.", "example": "Broadway Boogie Woogie, 1942–1943" }
+      ],
+      "keyWorks": [
+        { "title": "Le Néo-Plasticisme", "year": 1920, "kind": "book" },
+        { "title": "Composition with Red, Blue and Yellow", "year": 1930, "kind": "other" },
+        { "title": "Broadway Boogie Woogie", "year": 1943, "kind": "other" }
+      ]
+    },
+    {
+      "id": "el-lissitzky",
+      "name": "El Lissitzky",
+      "born": 1890, "died": 1941,
+      "activeFrom": 1917, "activeTo": 1941,
+      "signatureYear": 1919,
+      "region": "eastern-europe",
+      "nationality": "Russian",
+      "role": "Artist, architect, book and exhibition designer",
+      "movements": ["suprematism", "constructivism"],
+      "summary": "Carried Suprematism into books, posters and exhibitions, and carried the Russian avant-garde to Berlin, Hanover and the Bauhaus.",
+      "principles": [
+        { "name": "Optics over phonetics", "idea": "The printed word is learnt by sight, so design for the eye.", "example": "Topography of Typography, Merz 4, 1923" },
+        { "name": "The book as constructed object", "idea": "Sequence, index and spread designed like a building.", "example": "Dlia golosa, with die-cut thumb index, 1923" },
+        { "name": "Abstract narrative", "idea": "Geometric forms can tell a story.", "example": "About Two Squares, 1922" },
+        { "name": "Exhibition as immersive medium", "idea": "The display space itself is the message.", "example": "Soviet pavilion, Pressa, Cologne, 1928" }
+      ],
+      "keyWorks": [
+        { "title": "Beat the Whites with the Red Wedge", "year": 1919, "kind": "poster" },
+        { "title": "About Two Squares", "year": 1922, "kind": "book" },
+        { "title": "Dlia golosa (For the Voice)", "year": 1923, "kind": "book" },
+        { "title": "Pelikan advertising", "year": 1924, "kind": "poster" },
+        { "title": "Pressa Soviet pavilion", "year": 1928, "kind": "exhibition" },
+        { "title": "USSR Russische Ausstellung", "year": 1929, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "alexander-rodchenko",
+      "name": "Alexander Rodchenko",
+      "born": 1891, "died": 1956,
+      "activeFrom": 1915, "activeTo": 1956,
+      "signatureYear": 1924,
+      "region": "eastern-europe",
+      "nationality": "Russian",
+      "role": "Designer, photographer, artist",
+      "movements": ["constructivism"],
+      "summary": "Gave up painting for posters, books and photography, fusing slogan, photograph and bold type into one Constructivist shout.",
+      "principles": [
+        { "name": "Image and word as one shout", "idea": "Photograph, slogan and type locked into a single structure, made with the copywriter.", "example": "Lengiz Books poster, 1924" },
+        { "name": "Photography as the new drawing", "idea": "Montaged photographs replace illustration.", "example": "Pro eto, 1923" },
+        { "name": "The radical viewpoint", "idea": "Steep diagonal up- and down-shots make the familiar strange.", "example": "Pioneer with a Trumpet, 1930" }
+      ],
+      "keyWorks": [
+        { "title": "Pro eto", "year": 1923, "kind": "book" },
+        { "title": "LEF covers", "year": 1923, "kind": "magazine" },
+        { "title": "Books (Lengiz poster)", "year": 1924, "kind": "poster" },
+        { "title": "Workers' Club", "year": 1925, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "varvara-stepanova",
+      "name": "Varvara Stepanova",
+      "born": 1894, "died": 1958,
+      "activeFrom": 1913, "activeTo": 1958,
+      "signatureYear": 1924,
+      "region": "eastern-europe",
+      "nationality": "Russian",
+      "role": "Designer, artist, textile designer",
+      "movements": ["constructivism"],
+      "summary": "Constructivist who carried geometric design into textiles, sportswear and stage design for mass production.",
+      "principles": [
+        { "name": "Pattern from production", "idea": "Geometric prints designed for the machine and the worker.", "example": "Textile designs for the First State Textile Printing Factory, 1924" },
+        { "name": "Clothes as working tools", "idea": "Sports and work clothing designed for function and legibility.", "example": "Sportswear designs, 1923" },
+        { "name": "Visual poetry by hand", "idea": "Handwritten word-and-image books.", "example": "Gaust chaba, 1919" }
+      ],
+      "keyWorks": [
+        { "title": "Gaust chaba", "year": 1919, "kind": "book" },
+        { "title": "The Death of Tarelkin (sets and costumes)", "year": 1922, "kind": "other" },
+        { "title": "Textile designs", "year": 1924, "kind": "product" }
+      ]
+    },
+    {
+      "id": "gustav-klutsis",
+      "name": "Gustav Klutsis",
+      "born": 1895, "died": 1938,
+      "activeFrom": 1918, "activeTo": 1937,
+      "signatureYear": 1930,
+      "region": "eastern-europe",
+      "nationality": "Latvian-Soviet",
+      "role": "Designer, photomonteur, teacher",
+      "movements": ["constructivism"],
+      "summary": "Made photomontage monumental in Soviet posters with Valentina Kulagina, then was executed in Stalin's purges in 1938.",
+      "principles": [
+        { "name": "Photomontage at monumental scale", "idea": "Repeated photographed figures become a mass.", "example": "Let Us Fulfill the Plan of Great Works, 1930" },
+        { "name": "Montage plus geometry", "idea": "Suprematist planes structure the photographs.", "example": "Electrification of the Entire Country, 1920" },
+        { "name": "Multimedia street furniture", "idea": "Kiosks combining screen, loudspeaker and print.", "example": "Radio-orator and agitprop stand designs, 1922" }
+      ],
+      "keyWorks": [
+        { "title": "Electrification of the Entire Country", "year": 1920, "kind": "poster" },
+        { "title": "Agitprop kiosks (radio-orator)", "year": 1922, "kind": "other" },
+        { "title": "Let Us Fulfill the Plan of Great Works", "year": 1930, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "stenberg-brothers",
+      "name": "Stenberg Brothers (Vladimir & Georgii Stenberg)",
+      "born": 1919, "died": 1933,
+      "activeFrom": 1919, "activeTo": 1933,
+      "signatureYear": 1929,
+      "region": "eastern-europe",
+      "nationality": "Russian (Swedish citizens until 1933)",
+      "role": "Film poster designers (duo)",
+      "movements": ["constructivism"],
+      "summary": "Vladimir (1899–1982) and Georgii (1900–1933) made around 300 film posters that brought cinema's cuts and angles to lithography.",
+      "principles": [
+        { "name": "Stop the passer-by", "idea": "Distortion, inversion and scale arrest people in motion.", "example": "Man with a Movie Camera, 1929" },
+        { "name": "Hand-drawn photography", "idea": "Film stills redrawn so montage effects print in flat lithographic colour.", "example": "Berlin: Symphony of a Great City, 1928" },
+        { "name": "Cinema's rhythm in a still", "idea": "Repeated, rotating figures suggest editing.", "example": "Man with a Movie Camera, 1929" }
+      ],
+      "keyWorks": [
+        { "title": "Berlin: Symphony of a Great City", "year": 1928, "kind": "poster" },
+        { "title": "Man with a Movie Camera", "year": 1929, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "walter-gropius",
+      "name": "Walter Gropius",
+      "born": 1883, "died": 1969,
+      "activeFrom": 1908, "activeTo": 1969,
+      "signatureYear": 1919,
+      "region": "europe",
+      "nationality": "German-American",
+      "role": "Architect, founder of the Bauhaus",
+      "movements": ["bauhaus"],
+      "summary": "Founded and directed the Bauhaus, designing the school itself as the work, then carried it to Harvard.",
+      "principles": [
+        { "name": "The school as a design", "idea": "A curriculum is a designed system that shapes everyone in it.", "example": "Bauhaus manifesto and programme, 1919" },
+        { "name": "Art and technology, a new unity", "idea": "Artists should design for industrial production.", "example": "Bauhaus exhibition, Weimar, 1923" },
+        { "name": "Building as the total work", "idea": "Every workshop contributes to one object.", "example": "Bauhaus Dessau building, 1926" }
+      ],
+      "keyWorks": [
+        { "title": "Fagus factory", "year": 1911, "kind": "building" },
+        { "title": "Bauhaus manifesto", "year": 1919, "kind": "manifesto" },
+        { "title": "Bauhaus Dessau building", "year": 1926, "kind": "building" },
+        { "title": "Bauhaus 1919–1928 (MoMA)", "year": 1938, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "laszlo-moholy-nagy",
+      "name": "László Moholy-Nagy",
+      "born": 1895, "died": 1946,
+      "activeFrom": 1918, "activeTo": 1946,
+      "signatureYear": 1925,
+      "region": "europe",
+      "nationality": "Hungarian",
+      "role": "Artist, photographer, typographer, teacher",
+      "movements": ["bauhaus", "constructivism", "new-typography"],
+      "summary": "Brought Constructivism to the Bauhaus, coined typophoto and the New Vision, and founded the New Bauhaus in Chicago.",
+      "principles": [
+        { "name": "Typophoto", "idea": "Typography plus photography is the most exact visual communication.", "example": "Malerei, Photographie, Film, 1925" },
+        { "name": "The New Vision", "idea": "Camera, microscope and X-ray extend human seeing.", "example": "Photograms, from 1922" },
+        { "name": "Communication first", "idea": "Typography must achieve absolute clarity before anything else.", "example": "Die neue Typographie essay, Staatliches Bauhaus in Weimar 1919–1923, 1923" }
+      ],
+      "keyWorks": [
+        { "title": "Staatliches Bauhaus in Weimar 1919–1923", "year": 1923, "kind": "book" },
+        { "title": "Malerei, Photographie, Film", "year": 1925, "kind": "book" },
+        { "title": "Light-Space Modulator", "year": 1930, "kind": "other" },
+        { "title": "Vision in Motion", "year": 1947, "kind": "book" }
+      ]
+    },
+    {
+      "id": "herbert-bayer",
+      "name": "Herbert Bayer",
+      "born": 1900, "died": 1985,
+      "activeFrom": 1921, "activeTo": 1985,
+      "signatureYear": 1925,
+      "region": "europe",
+      "nationality": "Austrian-American",
+      "role": "Graphic designer, typographer, artist",
+      "movements": ["bauhaus", "new-typography"],
+      "summary": "Ran the Bauhaus print workshop, proposed a single lowercase alphabet, and carried Bauhaus rigour into American corporate design.",
+      "principles": [
+        { "name": "One alphabet", "idea": "Abolish capitals; a single geometric lowercase is enough.", "example": "universal, 1925" },
+        { "name": "Hierarchy without decoration", "idea": "Order comes from weight, size and rule alone.", "example": "Kandinsky 60th birthday exhibition poster, 1926" },
+        { "name": "Photography as the designer's tool", "idea": "The designer's own photograph becomes the cover.", "example": "bauhaus magazine 1928/1 cover" }
+      ],
+      "keyWorks": [
+        { "title": "Thuringian emergency banknotes", "year": 1923, "kind": "other" },
+        { "title": "universal", "year": 1925, "kind": "typeface" },
+        { "title": "Kandinsky 60th birthday exhibition poster", "year": 1926, "kind": "poster" },
+        { "title": "bauhaus 1928/1 cover", "year": 1928, "kind": "magazine" },
+        { "title": "World Geo-Graphic Atlas", "year": 1953, "kind": "book" }
+      ]
+    },
+    {
+      "id": "joost-schmidt",
+      "name": "Joost Schmidt",
+      "born": 1893, "died": 1948,
+      "activeFrom": 1919, "activeTo": 1948,
+      "signatureYear": 1923,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Typographer, teacher",
+      "movements": ["bauhaus"],
+      "summary": "Designed the 1923 Bauhaus exhibition poster and ran the school's advertising and printing department from 1928 to 1932.",
+      "principles": [
+        { "name": "Geometry as composition", "idea": "Circles, squares and rules interlocked like machine parts.", "example": "Staatliche Bauhaus Ausstellung poster, 1923" },
+        { "name": "Teach advertising as a system", "idea": "Typography, photography and exhibition design as one curriculum.", "example": "Bauhaus advertising workshop, 1928–1932" }
+      ],
+      "keyWorks": [
+        { "title": "Staatliche Bauhaus Ausstellung poster", "year": 1923, "kind": "poster" },
+        { "title": "Offset magazine, Bauhaus issue cover", "year": 1926, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "josef-albers",
+      "name": "Josef Albers",
+      "born": 1888, "died": 1976,
+      "activeFrom": 1920, "activeTo": 1976,
+      "signatureYear": 1963,
+      "region": "europe",
+      "nationality": "German-American",
+      "role": "Artist, educator",
+      "movements": ["bauhaus"],
+      "summary": "Taught the Bauhaus preliminary course, then Black Mountain and Yale; Interaction of Color made colour an experimental discipline.",
+      "principles": [
+        { "name": "Colour is relative", "idea": "A colour changes with its neighbours, so learn by experiment rather than rule.", "example": "Interaction of Color, 1963" },
+        { "name": "Economy of material", "idea": "Get the most form from the least material and waste.", "example": "Vorkurs paper-folding exercises, 1920s" },
+        { "name": "Modular letters", "idea": "Build an alphabet from a few geometric parts.", "example": "Kombinationsschrift stencil typeface, 1926" }
+      ],
+      "keyWorks": [
+        { "title": "Kombinationsschrift", "year": 1926, "kind": "typeface" },
+        { "title": "Homage to the Square", "year": 1950, "kind": "other" },
+        { "title": "Interaction of Color", "year": 1963, "kind": "book" }
+      ]
+    },
+    {
+      "id": "jan-tschichold",
+      "name": "Jan Tschichold",
+      "born": 1902, "died": 1974,
+      "activeFrom": 1923, "activeTo": 1974,
+      "signatureYear": 1928,
+      "region": "europe",
+      "nationality": "German-Swiss",
+      "role": "Typographer, book designer, writer",
+      "movements": ["new-typography"],
+      "summary": "Codified the avant-garde into the rules of Die neue Typographie, then recanted and standardised Penguin Books.",
+      "principles": [
+        { "name": "Codify for the trade", "idea": "Make radical form a standard ordinary compositors can follow.", "example": "elementare typographie, 1925" },
+        { "name": "Functional asymmetry", "idea": "Arrange by reading order and importance, not a central axis.", "example": "Die neue Typographie, 1928" },
+        { "name": "Rules, then judgment", "idea": "Apply the same rigour to classical books when the context changes.", "example": "Penguin Composition Rules, 1947" }
+      ],
+      "keyWorks": [
+        { "title": "elementare typographie", "year": 1925, "kind": "magazine" },
+        { "title": "Die Hose", "year": 1927, "kind": "poster" },
+        { "title": "Die neue Typographie", "year": 1928, "kind": "book" },
+        { "title": "Typographische Gestaltung", "year": 1935, "kind": "book" },
+        { "title": "Penguin Composition Rules", "year": 1947, "kind": "system" },
+        { "title": "Sabon", "year": 1967, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "paul-renner",
+      "name": "Paul Renner",
+      "born": 1878, "died": 1956,
+      "activeFrom": 1907, "activeTo": 1953,
+      "signatureYear": 1927,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Type designer, educator, writer",
+      "movements": ["new-typography"],
+      "summary": "Designed Futura, the geometric sans marketed as the typeface of our time, and ran Munich's master school for printers.",
+      "principles": [
+        { "name": "Geometry corrected by the eye", "idea": "Start from circle, triangle and square, then adjust optically so the type reads.", "example": "Futura, 1927" },
+        { "name": "Type for the age", "idea": "A typeface can be a manifesto for its period.", "example": "Bauer's Futura slogan, die Schrift unserer Zeit, 1927" },
+        { "name": "Printing as design education", "idea": "Train printers as designers.", "example": "Meisterschule für Deutschlands Buchdrucker, Munich, from 1927" }
+      ],
+      "keyWorks": [
+        { "title": "Typographie als Kunst", "year": 1922, "kind": "book" },
+        { "title": "Futura", "year": 1927, "kind": "typeface" },
+        { "title": "Kulturbolschewismus?", "year": 1932, "kind": "book" },
+        { "title": "Die Kunst der Typographie", "year": 1939, "kind": "book" }
+      ]
+    },
+    {
+      "id": "piet-zwart",
+      "name": "Piet Zwart",
+      "born": 1885, "died": 1977,
+      "activeFrom": 1919, "activeTo": 1960,
+      "signatureYear": 1928,
+      "region": "europe",
+      "nationality": "Dutch",
+      "role": "Typographer, photographer, industrial designer",
+      "movements": ["new-typography", "de-stijl"],
+      "summary": "Self-styled typotekt who made a cable company's catalogue into an avant-garde object with stock type and overprinted photography.",
+      "principles": [
+        { "name": "Build with the printer's case", "idea": "Compose from stock type, rules and blanks.", "example": "Vickers House advertisements, 1920s" },
+        { "name": "Photography as fact", "idea": "Close-up, cropped, overprinted product photographs.", "example": "NKF catalogue, 1928" },
+        { "name": "Play inside a functional brief", "idea": "A public-service manual can be joyful.", "example": "Het boek van PTT, 1938" }
+      ],
+      "keyWorks": [
+        { "title": "Vickers House advertisements", "year": 1922, "kind": "poster" },
+        { "title": "NKF catalogue", "year": 1928, "kind": "book" },
+        { "title": "Bruynzeel kitchen", "year": 1937, "kind": "product" },
+        { "title": "Het boek van PTT", "year": 1938, "kind": "book" }
+      ]
+    },
+    {
+      "id": "am-cassandre",
+      "name": "A.M. Cassandre",
+      "born": 1901, "died": 1968,
+      "activeFrom": 1922, "activeTo": 1968,
+      "signatureYear": 1935,
+      "region": "europe",
+      "nationality": "French (born in Kharkiv)",
+      "role": "Poster artist, type designer",
+      "movements": ["art-deco"],
+      "summary": "The great Art Deco poster artist: one geometric image for viewers in motion, with type built into the picture.",
+      "principles": [
+        { "name": "The poster as telegram", "idea": "One simple image read at speed from a car or train.", "example": "Étoile du Nord, 1927" },
+        { "name": "Image and type from one geometry", "idea": "Display letters drawn from the same forms as the picture.", "example": "Bifur, 1929" },
+        { "name": "Serial motion", "idea": "A sequence of frames tells the story to a moving viewer.", "example": "Dubo, Dubon, Dubonnet, 1932" },
+        { "name": "Monumental viewpoint", "idea": "Low angle and extreme scale make the product heroic.", "example": "Normandie, 1935" }
+      ],
+      "keyWorks": [
+        { "title": "Au Bûcheron", "year": 1923, "kind": "poster" },
+        { "title": "Étoile du Nord", "year": 1927, "kind": "poster" },
+        { "title": "Nord Express", "year": 1927, "kind": "poster" },
+        { "title": "Bifur", "year": 1929, "kind": "typeface" },
+        { "title": "Dubo, Dubon, Dubonnet", "year": 1932, "kind": "poster" },
+        { "title": "Normandie", "year": 1935, "kind": "poster" },
+        { "title": "Peignot", "year": 1937, "kind": "typeface" },
+        { "title": "Yves Saint Laurent monogram", "year": 1961, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "edward-mcknight-kauffer",
+      "name": "Edward McKnight Kauffer",
+      "born": 1890, "died": 1954,
+      "activeFrom": 1915, "activeTo": 1954,
+      "signatureYear": 1919,
+      "region": "europe",
+      "nationality": "American (worked in Britain)",
+      "role": "Poster artist, illustrator",
+      "movements": ["art-deco", "vorticism"],
+      "summary": "American in London who brought Vorticist and Cubist form to about 140 London Underground posters and to Shell.",
+      "principles": [
+        { "name": "Avant-garde form for a public client", "idea": "Abstraction used to sell newspapers and travel.", "example": "Soaring to Success! Daily Herald – the Early Bird, 1918–1919" },
+        { "name": "Many styles, one patron", "idea": "The client's system holds the identity while the idiom changes.", "example": "London Underground posters, 1915–1940" },
+        { "name": "Abstract symbol for an abstract service", "idea": "Invisible infrastructure shown as a symbolic image.", "example": "Power, the Nerve Centre of London's Underground, 1930" }
+      ],
+      "keyWorks": [
+        { "title": "Soaring to Success! Daily Herald – the Early Bird", "year": 1919, "kind": "poster" },
+        { "title": "Winter Sales Are Best Reached By Underground", "year": 1922, "kind": "poster" },
+        { "title": "Power, the Nerve Centre of London's Underground", "year": 1930, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "otto-neurath",
+      "name": "Otto Neurath",
+      "born": 1882, "died": 1945,
+      "activeFrom": 1919, "activeTo": 1945,
+      "signatureYear": 1930,
+      "region": "europe",
+      "nationality": "Austrian",
+      "role": "Philosopher, economist, founder of Isotype",
+      "movements": ["isotype"],
+      "summary": "Vienna Circle philosopher who invented the Vienna Method, later Isotype, to give working people statistics in pictures.",
+      "principles": [
+        { "name": "Visual education as democracy", "idea": "Social data belongs to the people it describes, so it must be readable by them.", "example": "Gesellschafts- und Wirtschaftsmuseum exhibitions, Vienna, from 1925" },
+        { "name": "A grammar for pictures", "idea": "Rules for combining signs, like a language.", "example": "International Picture Language, 1936" }
+      ],
+      "keyWorks": [
+        { "title": "Gesellschaft und Wirtschaft", "year": 1930, "kind": "book" },
+        { "title": "International Picture Language", "year": 1936, "kind": "book" },
+        { "title": "Modern Man in the Making", "year": 1939, "kind": "book" }
+      ]
+    },
+    {
+      "id": "marie-neurath",
+      "name": "Marie Neurath",
+      "born": 1898, "died": 1986,
+      "activeFrom": 1925, "activeTo": 1971,
+      "signatureYear": 1930,
+      "region": "europe",
+      "nationality": "German (later British)",
+      "role": "Information designer (transformer), author",
+      "movements": ["isotype"],
+      "summary": "Isotype's principal transformer, who decided what each chart should say, named the method and ran it for 26 years after Otto.",
+      "principles": [
+        { "name": "The transformer", "idea": "A role between expert and artist that decides what a chart should say before it is drawn.", "example": "Charts for Gesellschaft und Wirtschaft, 1930" },
+        { "name": "Information for new readers", "idea": "Design for children and new citizens first.", "example": "Isotype Institute voter education material for Western Nigeria, 1950s" }
+      ],
+      "keyWorks": [
+        { "title": "Gesellschaft und Wirtschaft (transformation)", "year": 1930, "kind": "book" },
+        { "title": "Isotype Institute children's books", "year": 1948, "kind": "book" }
+      ]
+    },
+    {
+      "id": "gerd-arntz",
+      "name": "Gerd Arntz",
+      "born": 1900, "died": 1988,
+      "activeFrom": 1920, "activeTo": 1970,
+      "signatureYear": 1930,
+      "region": "europe",
+      "nationality": "German (worked in Austria and the Netherlands)",
+      "role": "Artist, pictogram designer",
+      "movements": ["isotype"],
+      "summary": "Woodcut artist who drew Isotype's roughly 4,000 pictograms, the ancestors of every icon set and signage system.",
+      "principles": [
+        { "name": "Reduce to a type", "idea": "Each pictogram is the type of a thing, not a portrait of one.", "example": "Isotype pictograms, from 1928" },
+        { "name": "Woodcut economy", "idea": "Silhouette and minimal interior detail, cut for reproduction.", "example": "Political woodcuts, 1920s" }
+      ],
+      "keyWorks": [
+        { "title": "Political woodcuts", "year": 1927, "kind": "other" },
+        { "title": "Pictograms for Gesellschaft und Wirtschaft", "year": 1930, "kind": "system" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1905, "label": "Die Brücke founded in Dresden", "kind": "institution", "note": "The Expressionist group revived the woodcut as a raw modern medium, the starting point the Bauhaus later left behind." },
+    { "year": 1909, "label": "Manifesto of Futurism", "kind": "publication", "note": "Marinetti's front-page manifesto in Le Figaro made the manifesto itself the avant-garde's primary design medium." },
+    { "year": 1914, "label": "Zang Tumb Tuuum published", "kind": "publication", "note": "Marinetti's words-in-freedom book broke the horizontal line and made typography perform sound." },
+    { "year": 1914, "label": "BLAST no. 1", "kind": "publication", "note": "Vorticism's magenta magazine turned heavy grotesque type and lists into polemic layout." },
+    { "year": 1915, "label": "0,10 exhibition and Black Square", "kind": "exhibition", "note": "Malevich launched Suprematism in Petrograd, giving later design a grammar of floating geometric planes." },
+    { "year": 1916, "label": "Cabaret Voltaire opens in Zurich", "kind": "institution", "note": "The birthplace of Dada, whose collage and typographic anarchy fed photomontage and the New Typography." },
+    { "year": 1916, "label": "Johnston's Underground alphabet", "kind": "technology", "note": "Edward Johnston's sans for London Underground became the template for corporate typefaces and Gill Sans." },
+    { "year": 1917, "label": "De Stijl magazine founded", "kind": "publication", "note": "Van Doesburg's journal spread Neo-Plasticism's grid, primaries and rectangular letters across Europe." },
+    { "year": 1917, "label": "October Revolution", "kind": "politics", "note": "The Bolshevik state recast artists as constructors of a new society, creating Constructivist graphic design." },
+    { "year": 1919, "label": "Bauhaus founded in Weimar", "kind": "institution", "note": "Gropius merged art academy and craft school into the model for modern design education." },
+    { "year": 1920, "label": "First International Dada Fair, Berlin", "kind": "exhibition", "note": "The high point of Berlin Dada put photomontage and political collage in front of the public." },
+    { "year": 1921, "label": "First Working Group of Constructivists", "kind": "institution", "note": "Rodchenko, Stepanova and Gan rejected easel painting for production art at INKhUK in Moscow." },
+    { "year": 1922, "label": "DIN 476 paper sizes", "kind": "technology", "note": "Germany's A-series standard gave the New Typography its formats for letterheads, posters and forms." },
+    { "year": 1922, "label": "First Russian Art Exhibition, Berlin", "kind": "exhibition", "note": "Galerie van Diemen's show brought Suprematism and Constructivism to Western European designers." },
+    { "year": 1923, "label": "Bauhaus exhibition, Weimar", "kind": "exhibition", "note": "Under the slogan Art and Technology, a New Unity, the Bauhaus turned from craft Expressionism toward industry." },
+    { "year": 1925, "label": "Bauhaus moves to Dessau", "kind": "institution", "note": "The Dessau years produced the school's printing workshop, Bayer's universal and its mature graphic style." },
+    { "year": 1925, "label": "Exposition internationale des arts décoratifs, Paris", "kind": "exhibition", "note": "The exhibition gave Art Deco its name and showcased Cassandre, Melnikov and Rodchenko's Workers' Club." },
+    { "year": 1925, "label": "elementare typographie", "kind": "publication", "note": "Tschichold's special issue of a trade journal brought avant-garde typography to ordinary compositors." },
+    { "year": 1927, "label": "Futura released", "kind": "technology", "note": "Renner's geometric sans, sold by Bauer as the typeface of our time, became modernism's default voice." },
+    { "year": 1928, "label": "Die neue Typographie published", "kind": "publication", "note": "Tschichold's handbook codified asymmetry, sans serif and standard formats as rules for designers." },
+    { "year": 1928, "label": "Pressa, Cologne", "kind": "exhibition", "note": "Lissitzky's Soviet pavilion set the standard for immersive exhibition design with photomontage." },
+    { "year": 1929, "label": "Film und Foto, Stuttgart", "kind": "exhibition", "note": "The Werkbund show made the New Vision photography central to modern graphic design." },
+    { "year": 1932, "label": "Soviet decree dissolves artistic groups", "kind": "politics", "note": "The 23 April decree ended independent avant-garde groups, clearing the way for Socialist Realism in 1934." },
+    { "year": 1933, "label": "Bauhaus closes", "kind": "politics", "note": "Nazi pressure closed the school in Berlin, scattering its teachers to the USA, Britain and Switzerland." },
+    { "year": 1933, "label": "Beck's London Underground map", "kind": "technology", "note": "Harry Beck's diagram, drawn like a circuit with only verticals, horizontals and 45 degree lines, founded the topological transit map." },
+    { "year": 1937, "label": "Degenerate Art exhibition, Munich", "kind": "politics", "note": "The Nazis mocked modern art publicly, confirming the exile of the German avant-garde." },
+    { "year": 1937, "label": "New Bauhaus opens in Chicago", "kind": "institution", "note": "Moholy-Nagy's school transplanted Bauhaus teaching to American design education." },
+    { "year": 1938, "label": "Bauhaus 1919–1928 at MoMA", "kind": "exhibition", "note": "Bayer and Gropius's exhibition canonised the Bauhaus for American designers and museums." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Jan Tschichold, The New Typography, trans. Ruari McLean, University of California Press, 1995",
+    "Josef Albers, Interaction of Color, Yale University Press, 1963",
+    "Otto Neurath, International Picture Language, Kegan Paul, 1936",
+    "Christopher Burke, Paul Renner: The Art of Typography, Hyphen Press, 1998",
+    "Christopher Burke, Eric Kindel & Sue Walker (eds.), Isotype: Design and Contexts 1925–1971, Hyphen Press, 2013",
+    "Robin Kinross, Modern Typography, 2nd ed., Hyphen Press, 2004",
+    "https://www.bauhaus.de/en/",
+    "https://www.moma.org/collection/",
+    "https://collections.vam.ac.uk/",
+    "https://collection.cooperhewitt.org/",
+    "https://www.reading.ac.uk/typography/research/isotype",
+    "https://en.wikipedia.org/wiki/Manifesto_of_Futurism",
+    "https://en.wikipedia.org/wiki/Zang_Tumb_Tuuum",
+    "https://en.wikipedia.org/wiki/Blast_(magazine)",
+    "https://en.wikipedia.org/wiki/Kazimir_Malevich",
+    "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(Zurich)",
+    "https://en.wikipedia.org/wiki/De_Stijl",
+    "https://en.wikipedia.org/wiki/Constructivism_(art)",
+    "https://en.wikipedia.org/wiki/El_Lissitzky",
+    "https://en.wikipedia.org/wiki/Stenberg_brothers",
+    "https://en.wikipedia.org/wiki/Bauhaus",
+    "https://en.wikipedia.org/wiki/Jan_Tschichold",
+    "https://en.wikipedia.org/wiki/Futura_(typeface)",
+    "https://en.wikipedia.org/wiki/Piet_Zwart",
+    "https://en.wikipedia.org/wiki/Art_Deco",
+    "https://en.wikipedia.org/wiki/Cassandre_(artist)",
+    "https://en.wikipedia.org/wiki/Edward_McKnight_Kauffer",
+    "https://en.wikipedia.org/wiki/Isotype_(picture_language)",
+    "https://en.wikipedia.org/wiki/Marie_Neurath",
+    "https://en.wikipedia.org/wiki/Gerd_Arntz",
+    "https://en.wikipedia.org/wiki/Harry_Beck"
+  ]
+}

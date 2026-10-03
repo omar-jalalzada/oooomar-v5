@@ -695,6 +695,15 @@ export const VIS_PRESETS = {
     figure: 'sankey', place: { x: 0.5, y: 0.63, size: 0.82 },
     accentColor: '#e15c93', stroke: { fade: 0, opacity: 0.6 },
   },
+  // the timeline itself: movements as bars hung from one line of time, one person on them
+  'design-history': {
+    figure: 'bars', place: { x: 0.5, y: 0.56, size: 0.66 },
+    repeat: { count: 18, jitter: 0.85 },
+    sweep: { x0: -1, x1: 1, y0: -0.6, y1: -0.6, scale0: 0.9, scale1: 0.9, rot0: 90, rot1: 90 },
+    pin: { pin: 'start', anchor: 'pin' },
+    lineColor: '#ffffff', accentColor: '#111111',
+    stroke: { opacity: 0.85, width: 1.5, fade: 0 },
+  },
 };
 
 export function visPresetState(id) {

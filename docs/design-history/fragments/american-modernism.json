@@ -1,0 +1,773 @@
+{
+  "movements": [
+    {
+      "id": "american-modernism",
+      "name": "American Modernism",
+      "aka": ["Émigré modernism", "American Modern"],
+      "start": 1934, "end": 1960, "ongoing": false,
+      "peak": [1938, 1955],
+      "region": "north-america",
+      "places": ["New York", "Chicago", "Philadelphia", "Los Angeles"],
+      "lineage": "commerce",
+      "summary": "European avant-garde form, carried by émigrés and adopted by American business, stripped of ideology and turned into a tool for clarity and impact.",
+      "influences": ["bauhaus", "new-typography", "constructivism", "de-stijl", "dada", "plakatstil", "czech-avant-garde"],
+      "principles": [
+        { "name": "Form without the manifesto", "idea": "The avant-garde toolkit of asymmetry, sans-serif, photomontage and primary colour is adopted for clarity and impact, not as a social programme.", "example": "Lester Beall, Rural Electrification Administration posters, 1937" },
+        { "name": "The photograph as raw material", "idea": "Photographs are cropped hard, bled, scaled against each other and made to converse with type rather than framed as pictures.", "example": "Alexey Brodovitch, Harper's Bazaar spreads, from 1934" },
+        { "name": "White space is active", "idea": "Emptiness is the frame that makes the one element on the page loud.", "example": "Alexey Brodovitch, Portfolio magazine, 1950" },
+        { "name": "Information as architecture", "idea": "Large bodies of facts are organised by signs, tabs, grids and colour so a reader can navigate rather than merely read.", "example": "Ladislav Sutnar and Knud Lönberg-Holm, Catalog Design, 1944" },
+        { "name": "Enlightened patronage", "idea": "A company commissions art rather than advertising and lets the artist sign it, buying an image of intelligence.", "example": "Container Corporation of America, Great Ideas of Western Man campaign, from 1950" }
+      ],
+      "keyWorks": [
+        { "title": "Rural Electrification Administration posters", "year": 1937, "figure": "lester-beall", "kind": "poster" },
+        { "title": "Direction magazine covers", "year": 1938, "figure": "paul-rand", "kind": "magazine" },
+        { "title": "Catalog Design", "year": 1944, "figure": "ladislav-sutnar", "kind": "book" },
+        { "title": "Ballet", "year": 1945, "figure": "alexey-brodovitch", "kind": "book" },
+        { "title": "Portfolio", "year": 1950, "figure": "alexey-brodovitch", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "new-york-school",
+      "name": "New York School",
+      "aka": ["New York School of graphic design", "Creative Revolution"],
+      "start": 1945, "end": 1970, "ongoing": false,
+      "peak": [1950, 1965],
+      "region": "north-america",
+      "places": ["New York"],
+      "lineage": "commerce",
+      "summary": "American-born designers made the émigré toolkit witty and argumentative: one visual idea, often a pun, carrying the whole message.",
+      "influences": ["american-modernism", "dada", "constructivism", "bauhaus"],
+      "principles": [
+        { "name": "The idea is the design", "idea": "A single compressible concept, visual or verbal, carries the communication; style only serves it.", "example": "Paul Rand, Eye-Bee-M poster for IBM, 1981" },
+        { "name": "Wit and the visual pun", "idea": "Juxtaposition and double meaning make the viewer complete the message and remember it.", "example": "Doyle Dane Bernbach (art director Helmut Krone), Think Small Volkswagen ad, 1959" },
+        { "name": "Word and image as one", "idea": "Copy and picture are conceived together, often by art director and copywriter in the same room.", "example": "George Lois, Muhammad Ali as Saint Sebastian, Esquire cover, 1968" },
+        { "name": "The handmade inside the modern", "idea": "Collage, torn paper, brush lettering and childlike drawing loosen an otherwise spare modern page.", "example": "Saul Bass, The Man with the Golden Arm poster, 1955" },
+        { "name": "Simplify to the symbol", "idea": "Reduce a complex organisation or product to one memorable sign.", "example": "William Golden, CBS eye, 1951" }
+      ],
+      "keyWorks": [
+        { "title": "Thoughts on Design", "year": 1947, "figure": "paul-rand", "kind": "book" },
+        { "title": "The Man with the Golden Arm", "year": 1955, "figure": "saul-bass", "kind": "poster" },
+        { "title": "Esquire covers", "year": 1962, "figure": "george-lois", "kind": "magazine" },
+        { "title": "Seventeen magazine", "year": 1947, "figure": "cipe-pineles", "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "midcentury-modern",
+      "name": "Midcentury Modern",
+      "aka": ["Eames era", "West Coast modernism"],
+      "start": 1941, "end": 1975, "ongoing": false,
+      "peak": [1946, 1962],
+      "region": "north-america",
+      "places": ["Los Angeles", "Zeeland, Michigan", "New York"],
+      "lineage": "modernism",
+      "summary": "Postwar American design where new materials, furniture makers' patronage and a playful West Coast spirit joined furniture, film, exhibition and graphics.",
+      "influences": ["bauhaus", "functionalist-product-design", "american-modernism"],
+      "principles": [
+        { "name": "The material leads the form", "idea": "New processes produce new shapes, and the object shows how it was made.", "example": "Charles and Ray Eames, LCW moulded-plywood chair, 1946" },
+        { "name": "Design within constraints", "idea": "The designer's skill is recognising every constraint and working within it with enthusiasm.", "example": "Charles and Ray Eames, Eames House from off-the-shelf industrial parts, 1949" },
+        { "name": "One discipline across media", "idea": "The same office makes chairs, toys, films, exhibitions and graphics with one sensibility.", "example": "Charles and Ray Eames, Mathematica exhibition, 1961" },
+        { "name": "Play as method", "idea": "Toys, games and collections are treated as serious design research.", "example": "Charles and Ray Eames, House of Cards, 1952" },
+        { "name": "Explain with film and exhibition", "idea": "Complex ideas are taught through multi-screen film and walk-through shows.", "example": "Charles and Ray Eames, Glimpses of the USA, Moscow, 1959" }
+      ],
+      "keyWorks": [
+        { "title": "LCW chair", "year": 1946, "figure": "charles-and-ray-eames", "kind": "product" },
+        { "title": "Knoll advertising", "year": 1946, "figure": "herbert-matter", "kind": "other" },
+        { "title": "Eames Lounge Chair and Ottoman", "year": 1956, "figure": "charles-and-ray-eames", "kind": "product" },
+        { "title": "Powers of Ten", "year": 1977, "figure": "charles-and-ray-eames", "kind": "film" }
+      ]
+    },
+    {
+      "id": "corporate-identity",
+      "name": "Corporate Identity",
+      "aka": ["American corporate identity programme", "Corporate design"],
+      "start": 1951, "end": 1995, "ongoing": false,
+      "peak": [1956, 1975],
+      "region": "north-america",
+      "places": ["New York", "Chicago", "Los Angeles"],
+      "lineage": "commerce",
+      "summary": "National and multinational companies adopted a simple symbol plus a written standards manual, so one visual system could run across everything they touched.",
+      "influences": ["american-modernism", "new-york-school", "new-typography", "swiss-style", "plakatstil"],
+      "principles": [
+        { "name": "The mark as irreducible symbol", "idea": "A simple, often abstract mark can stand for a vast and complex company.", "example": "Chermayeff & Geismar, Chase Manhattan octagon, 1960" },
+        { "name": "The standards manual", "idea": "Rules for colour, type, spacing and applications are written down so thousands of people apply the identity consistently.", "example": "Saul Bass, Bell System identity manual, 1969" },
+        { "name": "Total design", "idea": "Graphics, products, architecture and environments speak one language under one design director.", "example": "IBM design programme under Eliot Noyes with Paul Rand, from 1956" },
+        { "name": "Longevity over fashion", "idea": "A mark is designed for decades, not for a campaign.", "example": "Chermayeff & Geismar, Mobil wordmark with the red o, 1964" }
+      ],
+      "keyWorks": [
+        { "title": "IBM logo", "year": 1956, "figure": "paul-rand", "kind": "identity" },
+        { "title": "Chase Manhattan Bank symbol", "year": 1960, "figure": "chermayeff-geismar", "kind": "identity" },
+        { "title": "Westinghouse logo", "year": 1960, "figure": "paul-rand", "kind": "identity" },
+        { "title": "Mobil identity", "year": 1964, "figure": "chermayeff-geismar", "kind": "identity" },
+        { "title": "Bell System identity", "year": 1969, "figure": "saul-bass", "kind": "identity" }
+      ]
+    },
+    {
+      "id": "us-systems-modernism",
+      "name": "American Systems Modernism",
+      "aka": ["Swiss-influenced US corporate modernism", "Unimark style"],
+      "start": 1965, "end": 1985, "ongoing": false,
+      "peak": [1966, 1977],
+      "region": "north-america",
+      "places": ["Chicago", "New York", "Washington, D.C."],
+      "lineage": "modernism",
+      "summary": "Swiss-trained rationalism industrialised in America: Helvetica, modular grids and standards manuals for corporations, transit systems and the federal government.",
+      "influences": ["swiss-style", "ulm-school", "corporate-identity", "new-typography"],
+      "principles": [
+        { "name": "The grid as operating system", "idea": "Every piece is built on a modular grid so many hands produce consistent results.", "example": "Massimo Vignelli, National Park Service Unigrid, 1977" },
+        { "name": "A limited typeface set", "idea": "A handful of faces, used with discipline, is enough for almost anything.", "example": "Unimark (Vignelli and Bob Noorda), NYCTA Graphics Standards Manual in Helvetica, 1970" },
+        { "name": "Information over expression", "idea": "The designer is a problem-solver serving the user, not an artist expressing a self.", "example": "AIGA and US Department of Transportation, Symbol Signs, 1974" },
+        { "name": "Abstraction for legibility", "idea": "A diagram beats a map when the user needs connections more than geography.", "example": "Massimo Vignelli, New York City Subway diagram, 1972" },
+        { "name": "Design as public service", "idea": "Government should communicate as well as the best corporations.", "example": "Danne & Blackburn, NASA logotype and graphics standards manual, 1975" }
+      ],
+      "keyWorks": [
+        { "title": "New York City Transit Authority Graphics Standards Manual", "year": 1970, "figure": "unimark-international", "kind": "system" },
+        { "title": "New York City Subway diagram", "year": 1972, "figure": "massimo-vignelli", "kind": "system" },
+        { "title": "National Park Service Unigrid", "year": 1977, "figure": "massimo-vignelli", "kind": "system" },
+        { "title": "American Airlines identity", "year": 1967, "figure": "unimark-international", "kind": "identity" }
+      ]
+    },
+    {
+      "id": "push-pin",
+      "name": "Push Pin Style",
+      "aka": ["Push Pin Studios"],
+      "start": 1954, "end": 1985, "ongoing": false,
+      "peak": [1957, 1975],
+      "region": "north-america",
+      "places": ["New York"],
+      "lineage": "commerce",
+      "summary": "Illustrator-designers who answered modernist correctness by raiding Victoriana, Art Nouveau, Deco and comics, with wit, bulbous line and flat colour.",
+      "influences": ["victorian-print", "art-nouveau", "art-deco", "new-york-school"],
+      "principles": [
+        { "name": "History as a toolbox", "idea": "Any past style can be revived, reinterpreted and combined to serve a new idea.", "example": "Milton Glaser, Bob Dylan poster, 1966" },
+        { "name": "Illustration is design", "idea": "Drawing, type and concept are made by one hand as one object.", "example": "Seymour Chwast, End Bad Breath poster, 1967" },
+        { "name": "Wit over neutrality", "idea": "Humour and irony replace modernist objectivity.", "example": "Push Pin Studios, The Push Pin Graphic, from 1957" },
+        { "name": "Display type as personality", "idea": "Custom phototype display faces give every job its own voice.", "example": "Seymour Chwast, Artone typeface for Photo-Lettering, 1964" }
+      ],
+      "keyWorks": [
+        { "title": "The Push Pin Graphic", "year": 1957, "figure": "seymour-chwast", "kind": "magazine" },
+        { "title": "Bob Dylan poster", "year": 1966, "figure": "milton-glaser", "kind": "poster" },
+        { "title": "End Bad Breath", "year": 1967, "figure": "seymour-chwast", "kind": "poster" },
+        { "title": "I♥NY", "year": 1977, "figure": "milton-glaser", "kind": "identity" }
+      ]
+    },
+    {
+      "id": "expressive-typography-us",
+      "name": "Expressive Typography (US)",
+      "aka": ["Typographics", "New York typographic expressionism"],
+      "start": 1958, "end": 1985, "ongoing": false,
+      "peak": [1962, 1975],
+      "region": "north-america",
+      "places": ["New York"],
+      "lineage": "commerce",
+      "summary": "Phototype freed display letters from metal, and New York art directors kerned, overlapped and scaled words until the word itself became the image.",
+      "influences": ["dada", "futurism", "new-york-school", "push-pin", "victorian-print"],
+      "principles": [
+        { "name": "Typography as image", "idea": "The word becomes the picture; meaning is expressed through the form of the letters.", "example": "Herb Lubalin, Mother & Child logotype, 1965" },
+        { "name": "Tight, touching type", "idea": "Phototype lets letters be kerned until they touch and overlap, forming new shapes.", "example": "Herb Lubalin, Avant Garde magazine logotype, 1968" },
+        { "name": "Ligatures as expression", "idea": "Alternates and ligatures are designed as the face's personality, not as exceptions.", "example": "Herb Lubalin and Tom Carnase, ITC Avant Garde Gothic, 1970" },
+        { "name": "Type as architecture", "idea": "Lettering at environmental scale turns a wall into a typographic composition.", "example": "Lou Dorfsman, Gastrotypographicalassemblage for CBS, 1966" }
+      ],
+      "keyWorks": [
+        { "title": "Eros", "year": 1962, "figure": "herb-lubalin", "kind": "magazine" },
+        { "title": "Mother & Child", "year": 1965, "figure": "herb-lubalin", "kind": "identity" },
+        { "title": "ITC Avant Garde Gothic", "year": 1970, "figure": "herb-lubalin", "kind": "typeface" },
+        { "title": "U&lc", "year": 1973, "figure": "herb-lubalin", "kind": "magazine" },
+        { "title": "The Best of Jazz", "year": 1979, "figure": "paula-scher", "kind": "poster" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "alexey-brodovitch",
+      "name": "Alexey Brodovitch",
+      "born": 1898, "died": 1971,
+      "activeFrom": 1924, "activeTo": 1966,
+      "signatureYear": 1950,
+      "region": "north-america",
+      "nationality": "Russian-American",
+      "role": "Art director, educator",
+      "movements": ["american-modernism"],
+      "summary": "Harper's Bazaar art director 1934–58 who made the magazine a cinematic sequence of bled photographs and white space, and taught a generation of photographers.",
+      "principles": [
+        { "name": "Cinematic pacing", "idea": "A magazine is an edited sequence; spreads rhyme, accelerate and pause like film.", "example": "Harper's Bazaar fashion portfolios, late 1930s–1940s" },
+        { "name": "Type takes the shape of the picture", "idea": "Text blocks are cut to echo the forms in the photograph.", "example": "Harper's Bazaar layouts, from 1934" },
+        { "name": "Shock value on every page", "idea": "Each page must surprise; never show the reader what they have seen before.", "example": "Portfolio magazine, 1950" }
+      ],
+      "keyWorks": [
+        { "title": "Harper's Bazaar", "year": 1934, "kind": "magazine" },
+        { "title": "Ballet", "year": 1945, "kind": "book" },
+        { "title": "Portfolio", "year": 1950, "kind": "magazine" },
+        { "title": "Observations (with Richard Avedon and Truman Capote)", "year": 1959, "kind": "book" }
+      ]
+    },
+    {
+      "id": "herbert-matter",
+      "name": "Herbert Matter",
+      "born": 1907, "died": 1984,
+      "activeFrom": 1932, "activeTo": 1976,
+      "signatureYear": 1935,
+      "region": "north-america",
+      "nationality": "Swiss-American",
+      "role": "Photographer, graphic designer",
+      "movements": ["american-modernism", "midcentury-modern"],
+      "summary": "Swiss photomontage pioneer who brought scale collision to America and built Knoll's identity almost entirely out of how its furniture was photographed.",
+      "principles": [
+        { "name": "Scale collision", "idea": "A huge close-up beside a tiny figure makes the image deep before a word is read.", "example": "Pontresina Engadin poster, 1935" },
+        { "name": "The product as abstract sculpture", "idea": "Furniture is photographed as form, shadow and line with almost no copy.", "example": "Knoll advertising, 1946–66" },
+        { "name": "One sign for a whole system", "idea": "A single monogram applied to everything from vehicles to timetables.", "example": "New Haven Railroad identity, 1954" }
+      ],
+      "keyWorks": [
+        { "title": "Pontresina Engadin", "year": 1935, "kind": "poster" },
+        { "title": "Knoll advertising", "year": 1946, "kind": "other" },
+        { "title": "Works of Calder", "year": 1950, "kind": "film" },
+        { "title": "New Haven Railroad identity", "year": 1954, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "lester-beall",
+      "name": "Lester Beall",
+      "born": 1903, "died": 1969,
+      "activeFrom": 1927, "activeTo": 1969,
+      "signatureYear": 1937,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer",
+      "movements": ["american-modernism", "corporate-identity"],
+      "summary": "Among the first American-born modernists; his Rural Electrification posters turned Constructivist arrows and stripes into a public American language.",
+      "principles": [
+        { "name": "Graphic signs over illustration", "idea": "Arrows, stripes and flat flags persuade more directly than a painted scene.", "example": "Rural Electrification Administration posters, 1937" },
+        { "name": "Photomontage for the common good", "idea": "Documentary photographs of real people, cut out against flat colour, sell a public programme.", "example": "REA photomontage poster, 1939" },
+        { "name": "Codify the mark", "idea": "An identity is written into a standards manual so it outlives its designer.", "example": "International Paper identity, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "Rural Electrification Administration posters", "year": 1937, "kind": "poster" },
+        { "title": "Rural Electrification Administration photomontage poster", "year": 1939, "kind": "poster" },
+        { "title": "International Paper logo", "year": 1960, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ladislav-sutnar",
+      "name": "Ladislav Sutnar",
+      "born": 1897, "died": 1976,
+      "activeFrom": 1923, "activeTo": 1970,
+      "signatureYear": 1950,
+      "region": "north-america",
+      "nationality": "Czech-American",
+      "role": "Graphic designer, information designer",
+      "movements": ["american-modernism", "czech-avant-garde"],
+      "summary": "Czech avant-gardist stranded in New York in 1939 who, at Sweet's Catalog Service, invented much of modern information design and navigation.",
+      "principles": [
+        { "name": "Visual flow", "idea": "A document is designed as a path, leading the eye from general to specific by size, colour, position and sign.", "example": "Catalog Design Progress, 1950" },
+        { "name": "Function, not decoration", "idea": "Every bar, tab and circled numeral has a navigational job.", "example": "Sweet's Catalog Service system, 1941–60" },
+        { "name": "Punctuation as structure", "idea": "Brackets, rules and numerals organise information; he is credited with parenthesised area codes.", "example": "Bell System telephone directories, late 1950s" }
+      ],
+      "keyWorks": [
+        { "title": "Catalog Design (with Knud Lönberg-Holm)", "year": 1944, "kind": "book" },
+        { "title": "Catalog Design Progress", "year": 1950, "kind": "book" },
+        { "title": "Package Design: The Force of Visual Selling", "year": 1953, "kind": "book" },
+        { "title": "Visual Design in Action", "year": 1961, "kind": "book" }
+      ]
+    },
+    {
+      "id": "will-burtin",
+      "name": "Will Burtin",
+      "born": 1908, "died": 1972,
+      "activeFrom": 1927, "activeTo": 1971,
+      "signatureYear": 1958,
+      "region": "north-america",
+      "nationality": "German-American",
+      "role": "Graphic and exhibition designer",
+      "movements": ["american-modernism"],
+      "summary": "German émigré who art-directed Fortune and then gave science a human scale, most famously in the walk-in model The Cell.",
+      "principles": [
+        { "name": "Make the invisible visible", "idea": "Scientific processes are given physical form at human scale.", "example": "The Cell exhibit for Upjohn, 1958" },
+        { "name": "Teach under pressure", "idea": "Instruction must work for a frightened novice in a moving aircraft.", "example": "Gunner's Information File: Flexible Gunnery, 1944" },
+        { "name": "Integration", "idea": "Art, science and technology are one design problem.", "example": "The Brain exhibit for Upjohn, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "Gunner's Information File: Flexible Gunnery", "year": 1944, "kind": "book" },
+        { "title": "Fortune (art director)", "year": 1945, "kind": "magazine" },
+        { "title": "Scope (art director)", "year": 1949, "kind": "magazine" },
+        { "title": "The Cell", "year": 1958, "kind": "exhibition" },
+        { "title": "The Brain", "year": 1960, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "alvin-lustig",
+      "name": "Alvin Lustig",
+      "born": 1915, "died": 1955,
+      "activeFrom": 1937, "activeTo": 1955,
+      "signatureYear": 1947,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Book designer, graphic and interior designer",
+      "movements": ["american-modernism", "midcentury-modern"],
+      "summary": "Made the New Directions paperback a site of modern art with abstract, symbolic jackets, and argued the designer should be a generalist.",
+      "principles": [
+        { "name": "Symbol, not illustration", "idea": "A jacket evokes the spirit of the text with an abstract sign rather than depicting a scene.", "example": "New Directions New Classics jackets, 1945–55" },
+        { "name": "The designer as total designer", "idea": "One designer moves across books, interiors, furniture and type.", "example": "Lustig Chair for Paramount Furniture, 1949" },
+        { "name": "Modern art as vernacular", "idea": "Lessons from Miró, Klee and Surrealism reach a mass audience on a cheap cover.", "example": "A Streetcar Named Desire jacket, New Directions, 1947" }
+      ],
+      "keyWorks": [
+        { "title": "New Directions New Classics jackets", "year": 1945, "kind": "book" },
+        { "title": "A Streetcar Named Desire jacket", "year": 1947, "kind": "book" },
+        { "title": "Lustig Chair", "year": 1949, "kind": "product" }
+      ]
+    },
+    {
+      "id": "paul-rand",
+      "name": "Paul Rand",
+      "born": 1914, "died": 1996,
+      "activeFrom": 1935, "activeTo": 1996,
+      "signatureYear": 1956,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, educator, writer",
+      "movements": ["american-modernism", "new-york-school", "corporate-identity"],
+      "summary": "Gave American design its theory in Thoughts on Design and its corporate face in IBM, Westinghouse, UPS and ABC: the idea first, delivered with play.",
+      "principles": [
+        { "name": "The idea", "idea": "Design starts from a concept that reconciles the client's problem with a visual form; without it everything is decoration.", "example": "Eye-Bee-M poster for IBM, 1981" },
+        { "name": "Play", "idea": "Design is a game with rules; wit and surprise make a problem solvable and memorable.", "example": "Essay Design and the Play Instinct, in Kepes's Education of Vision, 1965" },
+        { "name": "Form and content", "idea": "Content is what is said, form is how; good design fuses them and makes the commonplace strange.", "example": "Direction magazine cover, December 1940" },
+        { "name": "Simplicity and restraint", "idea": "A mark must survive blurring, reduction and misuse.", "example": "Westinghouse logo, 1960" }
+      ],
+      "keyWorks": [
+        { "title": "Thoughts on Design", "year": 1947, "kind": "book" },
+        { "title": "IBM logo", "year": 1956, "kind": "identity" },
+        { "title": "Westinghouse logo", "year": 1960, "kind": "identity" },
+        { "title": "UPS logo", "year": 1961, "kind": "identity" },
+        { "title": "ABC logo", "year": 1962, "kind": "identity" },
+        { "title": "IBM eight-bar logo", "year": 1972, "kind": "identity" },
+        { "title": "Eye-Bee-M poster", "year": 1981, "kind": "poster" },
+        { "title": "NeXT logo", "year": 1986, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "saul-bass",
+      "name": "Saul Bass",
+      "born": 1920, "died": 1996,
+      "activeFrom": 1946, "activeTo": 1995,
+      "signatureYear": 1955,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, title designer, filmmaker",
+      "movements": ["new-york-school", "corporate-identity", "midcentury-modern"],
+      "summary": "Turned film titles into a prologue and posters into one cut-paper symbol, then built some of America's longest-lived corporate marks.",
+      "principles": [
+        { "name": "Symbolize and summarize", "idea": "Reduce a whole film or company to one graphic sign used everywhere.", "example": "The Man with the Golden Arm poster and titles, 1955" },
+        { "name": "Titles as prologue", "idea": "The credit sequence sets mood and theme before the first scene.", "example": "Vertigo title sequence, 1958" },
+        { "name": "Making the ordinary extraordinary", "idea": "Familiar things are shown in an unfamiliar way.", "example": "Walk on the Wild Side title sequence, 1962" },
+        { "name": "Marks that outlive companies", "idea": "Simple symbolic logos designed to last decades.", "example": "Bell System logo, 1969" }
+      ],
+      "keyWorks": [
+        { "title": "The Man with the Golden Arm", "year": 1955, "kind": "film" },
+        { "title": "Vertigo", "year": 1958, "kind": "poster" },
+        { "title": "Anatomy of a Murder", "year": 1959, "kind": "poster" },
+        { "title": "Why Man Creates", "year": 1968, "kind": "film" },
+        { "title": "Bell System identity", "year": 1969, "kind": "identity" },
+        { "title": "United Airlines tulip", "year": 1974, "kind": "identity" },
+        { "title": "AT&T globe", "year": 1983, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "bradbury-thompson",
+      "name": "Bradbury Thompson",
+      "born": 1911, "died": 1995,
+      "activeFrom": 1934, "activeTo": 1995,
+      "signatureYear": 1979,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, art director, educator",
+      "movements": ["new-york-school", "expressive-typography-us"],
+      "summary": "Turned a paper company's promotion, Westvaco Inspirations, into a laboratory where printing's own process colours and plates became the image.",
+      "principles": [
+        { "name": "Process as image", "idea": "Separations, halftone dots and printing plates become the illustration.", "example": "Westvaco Inspirations, 1938–62" },
+        { "name": "Old and new together", "idea": "Antique engravings sit beside modern type and colour.", "example": "Westvaco Inspirations, 1938–62" },
+        { "name": "Reform the alphabet", "idea": "Question the two-case system with one form per letter.", "example": "Alphabet 26, 1950" },
+        { "name": "Read as spoken", "idea": "Break lines by phrase and cadence, not by measure.", "example": "Washburn College Bible in Sabon, 1979" }
+      ],
+      "keyWorks": [
+        { "title": "Westvaco Inspirations for Printers", "year": 1938, "kind": "magazine" },
+        { "title": "Mademoiselle (art director)", "year": 1945, "kind": "magazine" },
+        { "title": "Alphabet 26", "year": 1950, "kind": "typeface" },
+        { "title": "Washburn College Bible", "year": 1979, "kind": "book" },
+        { "title": "The Art of Graphic Design", "year": 1988, "kind": "book" }
+      ]
+    },
+    {
+      "id": "cipe-pineles",
+      "name": "Cipe Pineles",
+      "born": 1908, "died": 1991,
+      "activeFrom": 1931, "activeTo": 1991,
+      "signatureYear": 1947,
+      "region": "north-america",
+      "nationality": "Austrian-American",
+      "role": "Art director, illustrator, educator",
+      "movements": ["new-york-school"],
+      "summary": "First woman to art-direct major American mass-market magazines; at Seventeen and Charm she brought fine artists and real women's lives onto the page.",
+      "principles": [
+        { "name": "Fine art in mass media", "idea": "Commission serious painters, not illustrators, to interpret fiction.", "example": "Seventeen, with art by Ben Shahn, Ad Reinhardt and Andy Warhol, 1947–50" },
+        { "name": "Design for the reader's real life", "idea": "Fashion shown in offices and streets for women who work.", "example": "Charm, 1950–59" },
+        { "name": "The hand as voice", "idea": "Painted, hand-lettered illustration warms photographic glamour.", "example": "Leave Me Alone with the Recipes, made 1940s, published 2017" }
+      ],
+      "keyWorks": [
+        { "title": "Glamour (art director)", "year": 1942, "kind": "magazine" },
+        { "title": "Seventeen (art director)", "year": 1947, "kind": "magazine" },
+        { "title": "Charm (art director)", "year": 1950, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "george-lois",
+      "name": "George Lois",
+      "born": 1931, "died": 2022,
+      "activeFrom": 1954, "activeTo": 2010,
+      "signatureYear": 1968,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Art director, advertising executive",
+      "movements": ["new-york-school"],
+      "summary": "Creative Revolution provocateur whose Esquire covers made a single staged image into an editorial argument.",
+      "principles": [
+        { "name": "The Big Idea", "idea": "One provocative, instantly graspable concept beats a hundred well-made layouts.", "example": "Muhammad Ali as Saint Sebastian, Esquire, April 1968" },
+        { "name": "Image as editorial", "idea": "A cover is an argument, not a decoration.", "example": "Andy Warhol in a Campbell's soup can, Esquire, May 1969" },
+        { "name": "Speak in the audience's voice", "idea": "Put the slogan in the mouth of the viewer.", "example": "I Want My MTV campaign, 1982" }
+      ],
+      "keyWorks": [
+        { "title": "Esquire covers", "year": 1962, "kind": "magazine" },
+        { "title": "Muhammad Ali as Saint Sebastian (Esquire)", "year": 1968, "kind": "magazine" },
+        { "title": "I Want My MTV", "year": 1982, "kind": "other" },
+        { "title": "What's the Big Idea?", "year": 1991, "kind": "book" }
+      ]
+    },
+    {
+      "id": "charles-and-ray-eames",
+      "name": "Charles and Ray Eames",
+      "born": 1943, "died": 1988,
+      "activeFrom": 1943, "activeTo": 1988,
+      "signatureYear": 1956,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Designers: furniture, film, exhibition, architecture (the Eames Office)",
+      "movements": ["midcentury-modern"],
+      "summary": "Husband-and-wife office (Charles 1907–1978, Ray 1912–1988) that made furniture, toys, films and exhibitions one discipline of learning by doing.",
+      "principles": [
+        { "name": "Learning by doing", "idea": "Prototype endlessly; the model is the argument.", "example": "Moulded plywood experiments leading to the LCW chair, 1946" },
+        { "name": "The best for the most for the least", "idea": "Industrial production serves good design for ordinary people.", "example": "Eames Molded Fiberglass Armchair, 1950" },
+        { "name": "Powers of scale", "idea": "Understand a system by seeing it at every scale.", "example": "Powers of Ten, 1977" },
+        { "name": "Design depends on constraints", "idea": "Recognise as many constraints as possible and work within them with enthusiasm.", "example": "Design Q&A, 1972" }
+      ],
+      "keyWorks": [
+        { "title": "LCW chair", "year": 1946, "kind": "product" },
+        { "title": "Eames House", "year": 1949, "kind": "building" },
+        { "title": "House of Cards", "year": 1952, "kind": "product" },
+        { "title": "Eames Lounge Chair and Ottoman", "year": 1956, "kind": "product" },
+        { "title": "Glimpses of the USA", "year": 1959, "kind": "film" },
+        { "title": "Mathematica: A World of Numbers... and Beyond", "year": 1961, "kind": "exhibition" },
+        { "title": "Powers of Ten", "year": 1977, "kind": "film" }
+      ]
+    },
+    {
+      "id": "louis-danziger",
+      "name": "Louis Danziger",
+      "born": 1923, "died": null,
+      "activeFrom": 1949, "activeTo": 2010,
+      "signatureYear": 1956,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, educator",
+      "movements": ["midcentury-modern", "american-modernism"],
+      "summary": "Los Angeles modernist, taught by Lustig and Brodovitch, who brought Constructivist structure to American advertising and then taught design history for decades.",
+      "principles": [
+        { "name": "Constructivist form for ordinary products", "idea": "Diagonals, photography and type as structure, applied to everyday advertising.", "example": "Dreyfus Advertising Agency house campaign, 1956" },
+        { "name": "Clarity as intelligence", "idea": "Respect the reader enough to say one thing.", "example": "Container Corporation of America print ad, 1958" },
+        { "name": "Teach the history", "idea": "A designer's longest-lasting work can be teaching where solutions came from.", "example": "Art and Technology catalogue, LACMA, 1971" }
+      ],
+      "keyWorks": [
+        { "title": "Flax Artist's Materials identity", "year": 1952, "kind": "identity" },
+        { "title": "Dreyfus Advertising house campaign", "year": 1956, "kind": "other" },
+        { "title": "New York School exhibition poster, LACMA", "year": 1965, "kind": "poster" },
+        { "title": "Art and Technology catalogue, LACMA", "year": 1971, "kind": "book" }
+      ]
+    },
+    {
+      "id": "chermayeff-geismar",
+      "name": "Chermayeff & Geismar",
+      "born": 1957, "died": null,
+      "activeFrom": 1957, "activeTo": 2026,
+      "signatureYear": 1964,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Identity design firm (Chermayeff & Geismar & Haviv since 2013)",
+      "movements": ["corporate-identity"],
+      "summary": "Ivan Chermayeff and Tom Geismar's firm, founded with Robert Brownjohn, which made the abstract corporate symbol American: Chase, Mobil, NBC, PBS.",
+      "principles": [
+        { "name": "Memorable, appropriate, simple", "idea": "A mark must be all three; abstraction is allowed when the company cannot be pictured.", "example": "Chase Manhattan octagon, 1960" },
+        { "name": "Type as the mark", "idea": "A wordmark with one distinctive gesture.", "example": "Mobil with its red o, 1964" },
+        { "name": "Refresh, don't replace", "idea": "Evolve heritage marks rather than discard their equity.", "example": "NBC peacock reduced to six feathers, 1986" }
+      ],
+      "keyWorks": [
+        { "title": "Watching Words Move", "year": 1959, "kind": "book" },
+        { "title": "Chase Manhattan Bank symbol", "year": 1960, "kind": "identity" },
+        { "title": "Mobil identity", "year": 1964, "kind": "identity" },
+        { "title": "Xerox wordmark", "year": 1968, "kind": "identity" },
+        { "title": "PBS logo", "year": 1984, "kind": "identity" },
+        { "title": "NBC peacock", "year": 1986, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ivan-chermayeff",
+      "name": "Ivan Chermayeff",
+      "born": 1932, "died": 2017,
+      "activeFrom": 1955, "activeTo": 2017,
+      "signatureYear": 1964,
+      "region": "north-america",
+      "nationality": "British-American",
+      "role": "Graphic designer, collagist, illustrator",
+      "movements": ["corporate-identity", "new-york-school"],
+      "summary": "Co-founder of Chermayeff & Geismar whose identity rigour sat alongside hundreds of loose, witty collage posters and children's books.",
+      "principles": [
+        { "name": "Collage as found wit", "idea": "Scraps of everyday material assembled into a portrait or scene.", "example": "Collage posters for Mobil-sponsored public television arts programming, 1970s–80s" },
+        { "name": "Words that move", "idea": "Typography should act out its meaning.", "example": "Watching Words Move, with Brownjohn and Geismar, 1959" },
+        { "name": "Teach shapes first", "idea": "Basic forms are the first vocabulary of seeing.", "example": "First Shapes, 1991" }
+      ],
+      "keyWorks": [
+        { "title": "Watching Words Move", "year": 1959, "kind": "book" },
+        { "title": "Mobil identity (with Tom Geismar)", "year": 1964, "kind": "identity" },
+        { "title": "First Shapes", "year": 1991, "kind": "book" }
+      ]
+    },
+    {
+      "id": "pentagram",
+      "name": "Pentagram",
+      "born": 1972, "died": null,
+      "activeFrom": 1972, "activeTo": 2026,
+      "signatureYear": 1994,
+      "region": "europe",
+      "nationality": "British-American",
+      "role": "Multidisciplinary design partnership (London 1972, New York 1978)",
+      "movements": ["corporate-identity"],
+      "summary": "Partnership of equals founded in London in 1972; its New York office (1978) became the main heir of New York School wit in identity design.",
+      "principles": [
+        { "name": "A partnership of designers", "idea": "Each partner leads their own clients and team; profits are shared equally.", "example": "Pentagram's founding structure, 1972" },
+        { "name": "The idea, again", "idea": "Wit and concept carried from Fletcher/Forbes/Gill into identity work.", "example": "Paula Scher, Public Theater identity, 1994" },
+        { "name": "Identity as voice", "idea": "Typography and tone carry a brand as much as a logo does.", "example": "Michael Bierut, Saks Fifth Avenue identity, 2007" }
+      ],
+      "keyWorks": [
+        { "title": "Pentagram founded", "year": 1972, "kind": "other" },
+        { "title": "The Public Theater identity", "year": 1994, "kind": "identity" },
+        { "title": "Citi logo", "year": 1998, "kind": "identity" },
+        { "title": "Saks Fifth Avenue identity", "year": 2007, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "unimark-international",
+      "name": "Unimark International",
+      "born": 1965, "died": 1977,
+      "activeFrom": 1965, "activeTo": 1977,
+      "signatureYear": 1970,
+      "region": "north-america",
+      "nationality": "American-Italian",
+      "role": "International design firm (Chicago, New York, Milan)",
+      "movements": ["us-systems-modernism", "corporate-identity"],
+      "summary": "Design firm run like a corporation, briefly the world's largest, that sold grids, Helvetica and manuals instead of artistic personality.",
+      "principles": [
+        { "name": "Design as a business discipline", "idea": "Replace the designer-as-artist with standardised, repeatable method.", "example": "Unimark's corporate structure and client manuals, from 1965" },
+        { "name": "Helvetica and the grid as defaults", "idea": "A neutral typeface on a modular grid lets many hands stay consistent.", "example": "NYCTA Graphics Standards Manual, 1970" },
+        { "name": "Identity across every touchpoint", "idea": "One system governs aircraft, tickets, signs and stationery.", "example": "American Airlines identity, 1967" }
+      ],
+      "keyWorks": [
+        { "title": "Dot Zero", "year": 1966, "kind": "magazine" },
+        { "title": "American Airlines identity", "year": 1967, "kind": "identity" },
+        { "title": "New York City Transit Authority Graphics Standards Manual", "year": 1970, "kind": "system" }
+      ]
+    },
+    {
+      "id": "massimo-vignelli",
+      "name": "Massimo Vignelli",
+      "born": 1931, "died": 2014,
+      "activeFrom": 1950, "activeTo": 2014,
+      "signatureYear": 1972,
+      "region": "north-america",
+      "nationality": "Italian-American",
+      "role": "Graphic, product and interior designer",
+      "movements": ["us-systems-modernism", "corporate-identity"],
+      "summary": "Italian rationalist who systematised American public and corporate design; his Canon is semantics, syntactics, pragmatics and a handful of typefaces.",
+      "principles": [
+        { "name": "Semantics, syntactics, pragmatics", "idea": "Find the meaning, give it a consistent grammar of grid, type and colour, then make sure it is understood.", "example": "NYCTA subway signage, 1970" },
+        { "name": "Discipline and appropriateness", "idea": "Self-imposed rules applied to every detail; the solution fits the problem, not a style.", "example": "National Park Service Unigrid, 1977" },
+        { "name": "Ambiguity, used sparingly", "idea": "A plurality of meanings can enrich a design, but contradiction usually signals loss of control.", "example": "American Airlines mark, 1967" },
+        { "name": "A limited typeface set", "idea": "Garamond, Bodoni, Century Expanded and Helvetica, plus a few more, are enough; it is not the type but what you do with it.", "example": "New York City Subway diagram, 1972" }
+      ],
+      "keyWorks": [
+        { "title": "American Airlines identity", "year": 1967, "kind": "identity" },
+        { "title": "NYCTA Graphics Standards Manual (with Bob Noorda)", "year": 1970, "kind": "system" },
+        { "title": "New York City Subway diagram", "year": 1972, "kind": "system" },
+        { "title": "Bloomingdale's identity", "year": 1972, "kind": "identity" },
+        { "title": "National Park Service Unigrid", "year": 1977, "kind": "system" },
+        { "title": "The Vignelli Canon", "year": 2010, "kind": "book" }
+      ]
+    },
+    {
+      "id": "lella-vignelli",
+      "name": "Lella Vignelli",
+      "born": 1934, "died": 2016,
+      "activeFrom": 1958, "activeTo": 2008,
+      "signatureYear": 1964,
+      "region": "north-america",
+      "nationality": "Italian-American",
+      "role": "Architect, interior and product designer, studio CEO",
+      "movements": ["us-systems-modernism", "midcentury-modern"],
+      "summary": "Architect and long-under-credited co-founder of Unimark and Vignelli Associates, who led its three-dimensional work and ran the practice.",
+      "principles": [
+        { "name": "Design is one, in three dimensions", "idea": "The same discipline governs a plate, a chair and a showroom.", "example": "Heller stacking melamine dinnerware, 1964" },
+        { "name": "Sprezzatura", "idea": "Rigour that looks effortless.", "example": "Handkerchief chair for Knoll, 1983" },
+        { "name": "The office as a design", "idea": "Running the practice, its clients, money and people, is part of the work.", "example": "Vignelli Associates, from 1971" }
+      ],
+      "keyWorks": [
+        { "title": "Heller stacking dinnerware (with Massimo Vignelli)", "year": 1964, "kind": "product" },
+        { "title": "Vignelli Associates founded", "year": 1971, "kind": "other" },
+        { "title": "Handkerchief chair (with Massimo Vignelli)", "year": 1983, "kind": "product" }
+      ]
+    },
+    {
+      "id": "milton-glaser",
+      "name": "Milton Glaser",
+      "born": 1929, "died": 2020,
+      "activeFrom": 1954, "activeTo": 2020,
+      "signatureYear": 1977,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, illustrator",
+      "movements": ["push-pin"],
+      "summary": "Push Pin co-founder, New York magazine co-founder and author of I♥NY, who argued that style is a means and just enough is more.",
+      "principles": [
+        { "name": "Just enough is more", "idea": "Neither modernist reduction nor ornament by reflex, just enough to make the idea live.", "example": "I♥NY, 1977" },
+        { "name": "Style is not to be trusted", "idea": "Any style can serve an idea; none is a virtue in itself.", "example": "Bob Dylan poster, 1966" },
+        { "name": "Design for civic good", "idea": "A mark can change how people feel about a place.", "example": "I♥NY for New York State, 1977" }
+      ],
+      "keyWorks": [
+        { "title": "Bob Dylan poster", "year": 1966, "kind": "poster" },
+        { "title": "New York magazine", "year": 1968, "kind": "magazine" },
+        { "title": "Glaser Stencil", "year": 1970, "kind": "typeface" },
+        { "title": "I♥NY", "year": 1977, "kind": "identity" },
+        { "title": "DC Comics bullet", "year": 1977, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "seymour-chwast",
+      "name": "Seymour Chwast",
+      "born": 1931, "died": null,
+      "activeFrom": 1951, "activeTo": 2026,
+      "signatureYear": 1967,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Illustrator, graphic and typeface designer",
+      "movements": ["push-pin"],
+      "summary": "Push Pin co-founder whose thick, comic line, woodcut sources and display faces made protest and commerce funny.",
+      "principles": [
+        { "name": "Protest through humour", "idea": "The anti-war poster as a cartoon can carry more weight than a photograph.", "example": "End Bad Breath, 1967" },
+        { "name": "The vernacular as source", "idea": "Woodcut, comics and naive drawing are legitimate design languages.", "example": "The Push Pin Graphic, from 1957" },
+        { "name": "Type that draws", "idea": "Display faces are illustrations in alphabet form.", "example": "Artone for Photo-Lettering, 1964" }
+      ],
+      "keyWorks": [
+        { "title": "The Push Pin Graphic", "year": 1957, "kind": "magazine" },
+        { "title": "Artone", "year": 1964, "kind": "typeface" },
+        { "title": "End Bad Breath", "year": 1967, "kind": "poster" },
+        { "title": "Kiss Kiss Bang Bang jacket", "year": 1968, "kind": "book" },
+        { "title": "Blimp", "year": 1970, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "herb-lubalin",
+      "name": "Herb Lubalin",
+      "born": 1918, "died": 1981,
+      "activeFrom": 1939, "activeTo": 1981,
+      "signatureYear": 1965,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, typographer",
+      "movements": ["expressive-typography-us"],
+      "summary": "Master of 'typographics' who used phototype to make words into images, from Mother & Child to Avant Garde, ITC and U&lc.",
+      "principles": [
+        { "name": "Typographics", "idea": "Type is not set but designed into an image of its own meaning.", "example": "Mother & Child logotype, 1965" },
+        { "name": "The logotype as editorial", "idea": "A masthead can be a manifesto for the magazine it heads.", "example": "Avant Garde magazine, 1968" },
+        { "name": "Promote type by showing it off", "idea": "A type catalogue disguised as a lively magazine sells faces by using them.", "example": "U&lc, 1973" }
+      ],
+      "keyWorks": [
+        { "title": "NBC peacock (with John J. Graham)", "year": 1957, "kind": "identity" },
+        { "title": "Eros", "year": 1962, "kind": "magazine" },
+        { "title": "Fact", "year": 1964, "kind": "magazine" },
+        { "title": "Mother & Child", "year": 1965, "kind": "identity" },
+        { "title": "Avant Garde", "year": 1968, "kind": "magazine" },
+        { "title": "ITC Avant Garde Gothic (with Tom Carnase)", "year": 1970, "kind": "typeface" },
+        { "title": "U&lc", "year": 1973, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "paula-scher",
+      "name": "Paula Scher",
+      "born": 1948, "died": null,
+      "activeFrom": 1972, "activeTo": 2026,
+      "signatureYear": 1994,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Graphic designer, painter; Pentagram partner",
+      "movements": ["expressive-typography-us", "postmodern-typography"],
+      "summary": "From CBS Records covers to Pentagram's Public Theater identity, she spoke new things in the borrowed grammar of Constructivism and wood type.",
+      "principles": [
+        { "name": "Historical vocabulary, not historical copy", "idea": "Borrow the grammar of Constructivism or Deco and say something new with it.", "example": "The Best of Jazz poster, CBS Records, 1979" },
+        { "name": "Parody as homage", "idea": "Reprise a classic so precisely the reference becomes the message.", "example": "Swatch poster after Herbert Matter, 1985" },
+        { "name": "Type as the street", "idea": "Loud, mixed wood type that feels like the city an institution lives in.", "example": "The Public Theater identity, 1994" }
+      ],
+      "keyWorks": [
+        { "title": "The Best of Jazz", "year": 1979, "kind": "poster" },
+        { "title": "Swatch", "year": 1985, "kind": "poster" },
+        { "title": "The Public Theater identity", "year": 1994, "kind": "identity" },
+        { "title": "Bring in 'da Noise, Bring in 'da Funk", "year": 1995, "kind": "poster" },
+        { "title": "Citi logo", "year": 1998, "kind": "identity" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1934, "label": "Brodovitch joins Harper's Bazaar", "kind": "context", "note": "European avant-garde layout enters the American mass-market magazine." },
+    { "year": 1937, "label": "New Bauhaus opens in Chicago", "kind": "context", "note": "Moholy-Nagy transplants Bauhaus teaching to the US, backed by Walter Paepcke's circle." },
+    { "year": 1938, "label": "MoMA's Bauhaus 1919–1928 exhibition", "kind": "context", "note": "Gives émigré modernism institutional standing in America." },
+    { "year": 1950, "label": "CCA Great Ideas of Western Man", "kind": "context", "note": "Container Corporation's campaign proves enlightened corporate patronage of designers." },
+    { "year": 1951, "label": "International Design Conference in Aspen", "kind": "context", "note": "Walter Paepcke's conference links designers and business leaders for decades." },
+    { "year": 1951, "label": "CBS eye", "kind": "context", "note": "William Golden shows a single symbol can carry a brand on television." },
+    { "year": 1955, "label": "The Man with the Golden Arm titles", "kind": "context", "note": "Saul Bass makes the film title sequence a designed prologue." },
+    { "year": 1956, "label": "IBM logo and design programme", "kind": "context", "note": "Rand's mark and Eliot Noyes's total design programme set the template for corporate identity." },
+    { "year": 1959, "label": "Think Small (Volkswagen)", "kind": "context", "note": "DDB's ad crowns the Creative Revolution's idea-first, art-director-plus-copywriter method." },
+    { "year": 1960, "label": "Chase Manhattan octagon", "kind": "context", "note": "One of the first purely abstract American corporate symbols." },
+    { "year": 1965, "label": "Unimark International founded", "kind": "context", "note": "Systems modernism is industrialised as a corporate design firm." },
+    { "year": 1970, "label": "NYCTA Graphics Standards Manual", "kind": "context", "note": "Vignelli and Noorda's manual makes Helvetica the voice of the New York subway." },
+    { "year": 1970, "label": "International Typeface Corporation founded", "kind": "technology", "note": "Lubalin, Burns and Rondthaler license phototype faces, spreading expressive display type." },
+    { "year": 1972, "label": "Federal Design Improvement Program", "kind": "context", "note": "After Nixon's memo, the NEA brings modernist identity and graphics standards to US federal agencies." },
+    { "year": 1972, "label": "Vignelli New York City Subway diagram", "kind": "context", "note": "Diagram over geography becomes the defining argument in transit cartography." },
+    { "year": 1972, "label": "IBM eight-bar logo", "kind": "context", "note": "Rand's striped revision becomes one of the most recognised corporate marks." },
+    { "year": 1972, "label": "Pentagram founded", "kind": "context", "note": "A partnership of equal designer-owners becomes a new model for the design firm." },
+    { "year": 1974, "label": "AIGA/DOT Symbol Signs", "kind": "context", "note": "34 public pictograms set the standard for US wayfinding." },
+    { "year": 1975, "label": "NASA worm logotype", "kind": "context", "note": "Danne & Blackburn's mark, under the federal program, is the high point of public-sector modernism." },
+    { "year": 1977, "label": "I♥NY", "kind": "context", "note": "Milton Glaser's rebus shows a mark can change how people feel about a place." },
+    { "year": 1977, "label": "National Park Service Unigrid", "kind": "context", "note": "Vignelli's grid standardises every US national park brochure." },
+    { "year": 1978, "label": "Pentagram opens in New York", "kind": "context", "note": "Carries London wit into American identity design; later home of Scher and Bierut." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "R. Roger Remington, American Modernism: Graphic Design 1920 to 1960, Yale University Press, 2003",
+    "R. Roger Remington & Robert S. P. Fripp, Design and Science: The Life and Work of Will Burtin, 2007",
+    "Steven Heller & Seymour Chwast, Graphic Style: From Victorian to New Century, 2011",
+    "Paul Rand, Thoughts on Design, 1947; A Designer's Art, Yale University Press, 1985",
+    "Pat Kirkham & Jennifer Bass, Saul Bass: A Life in Film & Design, 2011",
+    "Carmel Snow, The World of Carmel Snow, 1962",
+    "Massimo Vignelli, The Vignelli Canon, 2010: https://www.rit.edu/vignellicenter/sites/rit.edu.vignellicenter/files/documents/The%20Vignelli%20Canon.pdf",
+    "Milton Glaser, Ten Things I Have Learned, AIGA London, 2001: https://www.miltonglaser.com/milton/c:essays/",
+    "Charles Eames, Design Q&A, 1972: https://en.wikiquote.org/wiki/Charles_Eames",
+    "RIT Vignelli Center for Design Studies: https://www.rit.edu/vignellicenter/",
+    "RIT Graphic Design Archive: https://library.rit.edu/gda/",
+    "AIGA Medal: https://www.aiga.org/aiga-medal",
+    "MoMA, George Lois: The Esquire Covers at MoMA, 2008: https://www.moma.org/",
+    "Cooper Hewitt collection: https://collection.cooperhewitt.org/",
+    "Wikipedia articles on each figure and event (consulted October 2026): https://en.wikipedia.org/"
+  ]
+}

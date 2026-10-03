@@ -1,0 +1,98 @@
+{
+  "swiss-style": [
+    { "file": "File:Josef Müller-Brockmann 1957.jpg", "title": "Juni-Festwochen Zürich", "year": 1957, "figure": "josef-muller-brockmann" },
+    { "file": "File:1959 - Kunsthalle Basel - 4 Bildhauer.jpg", "title": "4 Bildhauer, Kunsthalle Basel", "year": 1959, "figure": "armin-hofmann" },
+    { "file": "File:Specimen-1963-Neuburg Rudin.jpg", "title": "Helvetica specimen, Haas Type Foundry", "year": 1963, "figure": null },
+    { "file": "File:Neue Grafik July 1963.jpg", "title": "Neue Grafik, no. 16", "year": 1963, "figure": "josef-muller-brockmann" }
+  ],
+  "ulm-school": [
+    { "file": "File:1955 Foto-HansGConrad HfGUlm Architekt-MaxBill.jpg", "title": "HfG Ulm building", "year": 1955, "figure": "max-bill" },
+    { "file": "File:Ulmer-hocker.jpg", "title": "Ulmer Hocker", "year": 1954, "figure": "max-bill" },
+    { "file": "File:LufthansacorporateHfG.jpg", "title": "Lufthansa corporate identity", "year": 1962, "figure": "otl-aicher" },
+    { "file": "File:HfGUlmPublication.jpg", "title": "Concert poster, HfG Ulm student work", "year": 1965, "figure": null }
+  ],
+  "functionalist-product-design": [
+    { "file": "File:Braun SK 4.1.jpg", "title": "Braun SK 4", "year": 1956, "figure": "dieter-rams" },
+    { "file": "File:Vitsoe606.jpg", "title": "606 Universal Shelving System", "year": 1960, "figure": "dieter-rams" },
+    { "file": "File:Braun KM 3 Küchenmaschine mit Rührschüssel -5435.jpg", "title": "Braun KM 3 food processor", "year": 1957, "figure": null },
+    { "file": "File:Dieter Rams i Dieter Lubs- Calculator Braun ET66-1987.dhub.jpg", "title": "Braun ET 66 calculator", "year": 1987, "figure": null }
+  ],
+  "dutch-modernism": [
+    { "file": "File:Schiphol signposting.jpg", "title": "Schiphol Airport signage", "year": 1967, "figure": "total-design" },
+    { "file": "File:NewAlphabetSpec2.png", "title": "New Alphabet", "year": 1967, "figure": "wim-crouwel" },
+    { "file": "File:GridnikSpec.svg", "title": "Gridnik", "year": 1974, "figure": "wim-crouwel" }
+  ],
+  "italian-modernism": [
+    { "file": "File:Olivetti Lettera 22 Typewriter Marcello Nizzoli.jpg", "title": "Olivetti Lettera 22", "year": 1950, "figure": "marcello-nizzoli" },
+    { "file": "File:Milano, piazza San Babila 02.jpg", "title": "Milan Metropolitana line 1 signage", "year": 1964, "figure": "bob-noorda" },
+    { "file": "File:Falkland Sosp ph Miro Zagnoli 01.jpg", "title": "Falkland lamp", "year": 1964, "figure": "bruno-munari" }
+  ],
+  "max-bill": [
+    { "file": "File:Ulmer-hocker-hfg-ulm-max-bill.jpg", "title": "Ulmer Hocker", "year": 1954, "figure": "max-bill" },
+    { "file": "File:Max Bill Junghans.jpg", "title": "Junghans kitchen clock", "year": 1956, "figure": "max-bill" },
+    { "file": "File:Junghans Max Bill Automatik.JPG", "title": "Junghans wristwatch", "year": 1962, "figure": "max-bill" }
+  ],
+  "josef-muller-brockmann": [
+    { "file": "File:Josef Müller-Brockmann der Film.jpg", "title": "Der Film", "year": 1960, "figure": "josef-muller-brockmann" },
+    { "file": "File:Musica Viva. Müller-Brockmann.jpg", "title": "Musica Viva", "year": 1959, "figure": "josef-muller-brockmann" },
+    { "file": "File:Raster-Systeme-Cover.jpg", "title": "Grid Systems in Graphic Design", "year": 1981, "figure": "josef-muller-brockmann" }
+  ],
+  "armin-hofmann": [
+    { "file": "File:1959 - Gewerbemuseum Basel - Alte und neue Formen in Japan.jpg", "title": "Alte und neue Formen in Japan, Gewerbemuseum Basel", "year": 1959, "figure": "armin-hofmann" },
+    { "file": "File:1962 - Kunsthalle Basel - Rothko Chillida.jpg", "title": "Rothko / Chillida, Kunsthalle Basel", "year": 1962, "figure": "armin-hofmann" },
+    { "file": "File:Form Farbe Gewerbemuseum Winterthur 1951.jpg", "title": "Form und Farbe, Gewerbemuseum Winterthur", "year": 1951, "figure": "armin-hofmann" }
+  ],
+  "emil-ruder": [
+    { "file": "File:TM Typographische Monatsblätter 1959 6.jpg", "title": "Typographische Monatsblätter 6/7", "year": 1959, "figure": "emil-ruder" },
+    { "file": "File:Kunsthalle Basel Bodmer Hartung 1952.jpg", "title": "Bodmer / Hartung, Kunsthalle Basel", "year": 1952, "figure": "emil-ruder" },
+    { "file": "File:Die Gute Form Logo.jpg", "title": "Die gute Form seal", "year": 1956, "figure": "emil-ruder" }
+  ],
+  "karl-gerstner": [
+    { "file": "File:Karl Gerstner Kalte Kunst 1957.jpg", "title": "kalte Kunst?", "year": 1957, "figure": "karl-gerstner" },
+    { "file": "File:Karl Gerstner Cover of Designing Programmes 1968 Edition.jpg", "title": "Designing Programmes", "year": 1968, "figure": "karl-gerstner" },
+    { "file": "File:Gerstner-Programm-specimen.png", "title": "Gerstner-Programm typeface", "year": 1964, "figure": "karl-gerstner" }
+  ],
+  "adrian-frutiger": [
+    { "file": "File:Remy Peignot Univers specimen 1964.jpg", "title": "Univers specimen, Deberny & Peignot", "year": 1964, "figure": "adrian-frutiger" },
+    { "file": "File:OCR-B.png", "title": "OCR-B", "year": 1968, "figure": "adrian-frutiger" },
+    { "file": "File:FrutigerSpec-1.svg", "title": "Frutiger", "year": 1976, "figure": "adrian-frutiger" }
+  ],
+  "max-miedinger": [
+    { "file": "File:Specimen-1963-Neuburg Rudin.jpg", "title": "Helvetica specimen, Haas Type Foundry", "year": 1963, "figure": "max-miedinger" }
+  ],
+  "otl-aicher": [
+    { "file": "File:Olympic games 1972 pictogramms olympic station 0877 a.jpg", "title": "Munich 1972 Olympic pictograms", "year": 1972, "figure": "otl-aicher" },
+    { "file": "File:LufthansacorporateHfG.jpg", "title": "Lufthansa corporate identity", "year": 1962, "figure": "otl-aicher" },
+    { "file": "File:Rotis muster.svg", "title": "Rotis", "year": 1988, "figure": "otl-aicher" }
+  ],
+  "hans-gugelot": [
+    { "file": "File:Braun SK 4.1.jpg", "title": "Braun SK 4", "year": 1956, "figure": "hans-gugelot" },
+    { "file": "File:Hans Gugelot- Furniture sistem M125- 1956-dhub-1.jpg", "title": "M125 storage system", "year": 1956, "figure": "hans-gugelot" },
+    { "file": "File:Braun Sixtant.jpg", "title": "Braun Sixtant shaver", "year": 1962, "figure": "hans-gugelot" }
+  ],
+  "dieter-rams": [
+    { "file": "File:606-Universal-Shelving-System.jpg", "title": "606 Universal Shelving System", "year": 1960, "figure": "dieter-rams" },
+    { "file": "File:Vitsoe 620 Chair Programme.jpg", "title": "620 Chair Programme", "year": 1962, "figure": "dieter-rams" },
+    { "file": "File:Braun TS 45, TG 60, L 450.jpg", "title": "Braun TS 45, TG 60 and L 450 hi-fi", "year": 1964, "figure": "dieter-rams" }
+  ],
+  "wim-crouwel": [
+    { "file": "File:NewAlphabetSpec2.png", "title": "New Alphabet", "year": 1967, "figure": "wim-crouwel" },
+    { "file": "File:GridnikSpec.svg", "title": "Gridnik", "year": 1974, "figure": "wim-crouwel" }
+  ],
+  "total-design": [
+    { "file": "File:Schiphol signposting.jpg", "title": "Schiphol Airport signage", "year": 1967, "figure": "total-design" }
+  ],
+  "bruno-munari": [
+    { "file": "File:Falkland Sosp ph Miro Zagnoli 01.jpg", "title": "Falkland lamp", "year": 1964, "figure": "bruno-munari" },
+    { "file": "File:Posacenere Cubo, Bruno Munari 1957-01.png", "title": "Cubo ashtray", "year": 1957, "figure": "bruno-munari" },
+    { "file": "File:Swing into books, Book week, November 1-7, 1964.jpg", "title": "Swing into Books", "year": 1964, "figure": "bruno-munari" }
+  ],
+  "marcello-nizzoli": [
+    { "file": "File:Olivetti Lettera 22 Typewriter Marcello Nizzoli.jpg", "title": "Olivetti Lettera 22", "year": 1950, "figure": "marcello-nizzoli" },
+    { "file": "File:Olivetti-mc24-marcello-nizzoli.jpg", "title": "Olivetti MC 24 calculator", "year": 1956, "figure": "marcello-nizzoli" }
+  ],
+  "bob-noorda": [
+    { "file": "File:Milano, piazza San Babila 02.jpg", "title": "Milan Metropolitana line 1 signage", "year": 1964, "figure": "bob-noorda" },
+    { "file": "File:Flag of Lombardy.svg", "title": "Lombardy regional emblem", "year": 1975, "figure": "bob-noorda" }
+  ]
+}

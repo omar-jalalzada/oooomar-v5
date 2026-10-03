@@ -199,6 +199,23 @@ comes later as its own phase.
 - **A rule that scales below 1px can't be a border.** Chrome rounds any border thinner than 1px up
  to a full pixel, so a design-unit border scales down until it's suddenly several units thick.
  Draw it with an inset `box-shadow` instead, or drop it if it's invisible on the white ground.
+- **The design history timeline's data is generated.** `public/prototypes/design-history/data.json`
+ is built by `node scripts/design-history-merge.mjs` from the research fragments in
+ `docs/design-history/fragments/`, which are the source; the prose wiki beside them
+ (`docs/design-history/<slice>.md`) carries the principles, quotes and disputed dates the
+ course material will draw on. Ids, lineages and regions are fixed in `SPEC.md` there. Edit a
+ fragment and rerun the merge, never the JSON. The merge fails on dangling movement ids, and
+ the turning points drawn across the page are the `MAJOR` list in the script.
+- **Its work images are curated, then fetched.** The picks are Commons file titles in
+ `docs/design-history/images/<slice>.json`; `node scripts/design-history-images.mjs fetch`
+ downloads each as a small JPEG into `img/`, named by a hash of its file title so a work shown
+ under several entries is stored once, and writes `images.json` with the licence, author and
+ source page for every one. Then rerun the merge, which attaches them. Copyrighted work is a
+ Wikipedia non-free thumbnail capped at 400px and always shown as "Fair use" with its source
+ linked; keep it small, since the whole folder ships. Existing files are skipped, so delete
+ `img/` after changing the sizes. Find candidates with `candidates <slice>` or
+ `candidates --title "<article>"` (both need network outside the sandbox, and run them one
+ at a time: Wikipedia rate-limits parallel requests).
 - **Tools**: prefer well-known tools with deep community and AI training data (Astro, React)
  over niche ones.
 - `site` in `astro.config.mjs` is a placeholder until the real domain is connected in Vercel.

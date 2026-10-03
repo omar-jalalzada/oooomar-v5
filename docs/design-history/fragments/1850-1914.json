@@ -1,0 +1,762 @@
+{
+  "movements": [
+    {
+      "id": "victorian-print",
+      "name": "Victorian Print",
+      "aka": ["Victorian commercial printing", "Victorian job printing"],
+      "start": 1840, "end": 1900, "ongoing": false,
+      "peak": [1851, 1880],
+      "region": "europe",
+      "places": ["London", "New York", "Boston", "Edinburgh"],
+      "lineage": "ornament",
+      "summary": "Industrial print's first flood: wood type, chromolithography and ornament catalogues let every printer combine every style at once, loudly and cheaply.",
+      "influences": [],
+      "principles": [
+        { "name": "Every line a different face", "idea": "Job printers set each line of a bill in a different display face and size, so the hierarchy came from variety and sheer scale rather than from a system.", "example": "Darius Wells's wood type specimens, New York, from 1828, the toolkit behind the mid-century letterpress playbill" },
+        { "name": "Ornament as a grammar", "idea": "Ornament was catalogued, compared and taught as a language with rules, rather than copied piecemeal from a single historical style.", "example": "Owen Jones, The Grammar of Ornament, 1856" },
+        { "name": "Colour for the mass market", "idea": "Chromolithography and colour wood-engraving put saturated colour into ordinary homes through cards, labels and children's books for the first time.", "example": "Walter Crane and Edmund Evans, The Baby's Opera, 1877; Louis Prang's Christmas cards, from 1874" },
+        { "name": "Eclectic revivalism", "idea": "Gothic, Egyptian, Moorish and Rococo motifs were mixed freely on one surface, with fidelity to the motif valued over unity of the whole.", "example": "Owen Jones, Plans, Elevations, Sections and Details of the Alhambra, 1836-1845" }
+      ],
+      "keyWorks": [
+        { "title": "Plans, Elevations, Sections and Details of the Alhambra", "year": 1836, "figure": "owen-jones", "kind": "book" },
+        { "title": "The Grammar of Ornament", "year": 1856, "figure": "owen-jones", "kind": "book" },
+        { "title": "The Baby's Opera (printed by Edmund Evans)", "year": 1877, "figure": "walter-crane", "kind": "book" }
+      ]
+    },
+    {
+      "id": "arts-and-crafts",
+      "name": "Arts and Crafts",
+      "aka": ["Arts and Crafts Movement"],
+      "start": 1861, "end": 1920, "ongoing": false,
+      "peak": [1880, 1900],
+      "region": "europe",
+      "places": ["London", "Birmingham", "Chipping Campden", "East Aurora"],
+      "lineage": "ornament",
+      "summary": "A moral revolt against shoddy machine goods: unity of design and making, honest materials, and ornament drawn from nature and medieval craft.",
+      "influences": ["victorian-print"],
+      "principles": [
+        { "name": "The designer makes", "idea": "Design and production are one act; the designer should understand, and ideally practise, the craft that realises the drawing.", "example": "Morris, Marshall, Faulkner & Co., founded 1861, where the partners designed and supervised their own glass, textiles and furniture" },
+        { "name": "Truth to materials", "idea": "A pattern should reveal how it is made, whether block-printed, woven or hand-set, instead of imitating another medium.", "example": "William Morris, Strawberry Thief, indigo-discharge block-printed textile, 1883" },
+        { "name": "Nature, stylised and repeated", "idea": "Plants and birds are flattened into an interlocking repeat with strong structural rhythm, never naturalistic illusion.", "example": "William Morris, Trellis wallpaper, designed 1862, issued 1864" },
+        { "name": "Useful and beautiful", "idea": "Everyday objects deserve the same care as fine art; the decorative arts are not a lesser category.", "example": "Arts and Crafts Exhibition Society, first exhibition, London, 1888" },
+        { "name": "The book as architecture", "idea": "Title page, frame and text block are designed as one built structure.", "example": "Arthur Heygate Mackmurdo, Wren's City Churches title page, 1883" }
+      ],
+      "keyWorks": [
+        { "title": "Strawberry Thief", "year": 1883, "figure": "william-morris", "kind": "other" },
+        { "title": "Wren's City Churches (title page, A. H. Mackmurdo)", "year": 1883, "kind": "book" },
+        { "title": "The Century Guild Hobby Horse", "year": 1884, "kind": "magazine" },
+        { "title": "The Bases of Design", "year": 1898, "figure": "walter-crane", "kind": "book" }
+      ]
+    },
+    {
+      "id": "private-press",
+      "name": "Private Press Movement",
+      "aka": ["Fine press", "Book beautiful"],
+      "start": 1891, "end": 1935, "ongoing": false,
+      "peak": [1891, 1916],
+      "region": "europe",
+      "places": ["Hammersmith", "Chelsea", "East Aurora", "Boston", "Weimar"],
+      "lineage": "ornament",
+      "summary": "Small presses rebuilt the book from the type up, reviving incunabula-era type, handmade paper and the double-page spread as the unit of design.",
+      "influences": ["arts-and-crafts"],
+      "principles": [
+        { "name": "The spread is the unit", "idea": "Design the two facing pages together, with margins graduated inner, top, outer and bottom so the two text blocks read as one composition.", "example": "Kelmscott Press, The Works of Geoffrey Chaucer, 1896" },
+        { "name": "Type from the source", "idea": "Redraw a typeface from the strongest historical model, here Jenson's 1470s roman, rather than from the weakened commercial faces of the day.", "example": "William Morris, Golden Type, 1890" },
+        { "name": "Dense, even colour", "idea": "Tight word spacing and heavy type make the page an even dark texture, a counter to thin, grey Victorian book pages.", "example": "Kelmscott Press, The Story of the Glittering Plain, 1891" },
+        { "name": "Austerity as luxury", "idea": "The second wave stripped ornament out entirely and let a fine roman, generous margins and perfect presswork carry the book.", "example": "Doves Press Bible, five volumes, 1903-1905" }
+      ],
+      "keyWorks": [
+        { "title": "The Story of the Glittering Plain", "year": 1891, "figure": "william-morris", "kind": "book" },
+        { "title": "The Works of Geoffrey Chaucer (Kelmscott Chaucer)", "year": 1896, "figure": "william-morris", "kind": "book" },
+        { "title": "Doves Type (Emery Walker and T. J. Cobden-Sanderson)", "year": 1900, "kind": "typeface" },
+        { "title": "The English Bible (Doves Press)", "year": 1903, "kind": "book" }
+      ]
+    },
+    {
+      "id": "japonisme",
+      "name": "Japonisme",
+      "aka": ["Japonism"],
+      "start": 1862, "end": 1910, "ongoing": false,
+      "peak": [1867, 1895],
+      "region": "europe",
+      "places": ["Paris", "London"],
+      "lineage": "ornament",
+      "summary": "Western artists absorbed the Japanese woodblock print: flat colour, cropped asymmetric framing, the outline, and empty ground as an active element.",
+      "influences": [],
+      "principles": [
+        { "name": "Flat colour, bounded line", "idea": "Areas of unmodelled colour are held by a confident contour, so the image reads as pattern and silhouette rather than modelled volume.", "example": "Henri de Toulouse-Lautrec, Divan Japonais, 1893" },
+        { "name": "The cropped frame", "idea": "Figures are cut by the edge and viewed from high or oblique angles, so the frame feels like a glimpse rather than a stage.", "example": "Henri de Toulouse-Lautrec, Ambassadeurs: Aristide Bruant, 1892" },
+        { "name": "Empty ground", "idea": "Large untouched areas of paper become part of the composition rather than leftover background.", "example": "Aubrey Beardsley, The Peacock Skirt, from Salome, 1894" }
+      ],
+      "keyWorks": [
+        { "title": "Le Japon artistique (journal, ed. Siegfried Bing)", "year": 1888, "kind": "magazine" },
+        { "title": "Divan Japonais", "year": 1893, "figure": "henri-de-toulouse-lautrec", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "art-nouveau",
+      "name": "Art Nouveau",
+      "aka": ["Style moderne", "Modern Style", "Stile Liberty", "Modernisme"],
+      "start": 1890, "end": 1910, "ongoing": false,
+      "peak": [1895, 1902],
+      "region": "europe",
+      "places": ["Paris", "Brussels", "Nancy", "London", "Chicago"],
+      "lineage": "ornament",
+      "summary": "The first international style made for the street: the whiplash line, flat Japanese colour and the large-format lithographic poster as public art.",
+      "influences": ["arts-and-crafts", "japonisme", "victorian-print"],
+      "principles": [
+        { "name": "The whiplash line", "idea": "A single sinuous, accelerating contour organises the whole sheet: hair, smoke, stems and lettering all follow the same curve.", "example": "Alphonse Mucha, Job cigarette papers poster, 1896" },
+        { "name": "The poster as street art", "idea": "Large colour lithographs treat the wall as a gallery and the figure as a seductive brand ambassador.", "example": "Jules Chéret, Bal au Moulin Rouge, 1889" },
+        { "name": "Silhouette over shading", "idea": "Flat areas of colour and a few contours carry the image, so it reads from across a boulevard.", "example": "Henri de Toulouse-Lautrec, Moulin Rouge: La Goulue, 1891" },
+        { "name": "Lettering as ornament", "idea": "Hand-drawn letters are shaped to fit the composition and share its line, not typeset in a separate band.", "example": "Will Bradley, The Chap-Book: The Twins, 1894" },
+        { "name": "The halo and the frame", "idea": "A circular nimbus or arched mosaic frame isolates the figure like an icon and makes a repeatable format.", "example": "Alphonse Mucha, Gismonda, 1894" }
+      ],
+      "keyWorks": [
+        { "title": "Bal au Moulin Rouge", "year": 1889, "figure": "jules-cheret", "kind": "poster" },
+        { "title": "Moulin Rouge: La Goulue", "year": 1891, "figure": "henri-de-toulouse-lautrec", "kind": "poster" },
+        { "title": "Gismonda", "year": 1894, "figure": "alphonse-mucha", "kind": "poster" },
+        { "title": "Salome (illustrations for Oscar Wilde)", "year": 1894, "figure": "aubrey-beardsley", "kind": "book" },
+        { "title": "Tropon", "year": 1898, "figure": "henry-van-de-velde", "kind": "poster" },
+        { "title": "Paris Métro entrances (Hector Guimard)", "year": 1900, "kind": "building" }
+      ]
+    },
+    {
+      "id": "glasgow-school",
+      "name": "Glasgow Style",
+      "aka": ["Glasgow School", "The Four", "Spook School"],
+      "start": 1890, "end": 1910, "ongoing": false,
+      "peak": [1894, 1903],
+      "region": "europe",
+      "places": ["Glasgow"],
+      "lineage": "ornament",
+      "summary": "Glasgow's austere strand of Art Nouveau: elongated figures, the rose motif and rectilinear grids that pointed Vienna toward geometry.",
+      "influences": ["arts-and-crafts", "art-nouveau", "japonisme"],
+      "principles": [
+        { "name": "Verticality", "idea": "Figures and forms are stretched into tall, column-like shapes that turn the poster into a narrow architectural elevation.", "example": "Charles Rennie Mackintosh, The Scottish Musical Review, 1896" },
+        { "name": "Curve held by the grid", "idea": "Organic motifs are boxed by straight lines and squares, so the curve is ornament and the rectangle is structure.", "example": "Mackintosh, Glasgow School of Art, north facade and library, 1897-1909" },
+        { "name": "The stylised rose", "idea": "One reduced, repeatable motif, the cabbage rose, travels across posters, stencils, gesso and furniture as a house mark.", "example": "Margaret Macdonald, The May Queen gesso panel, 1900" },
+        { "name": "The room as one work", "idea": "Lettering, stencils, furniture and cutlery are designed as one environment, keyed to a restricted palette of white, mauve and silver.", "example": "Mackintosh and Macdonald, Willow Tea Rooms, Room de Luxe, 1903" }
+      ],
+      "keyWorks": [
+        { "title": "Poster for the Glasgow Institute of the Fine Arts (with Frances Macdonald and Herbert MacNair)", "year": 1895, "figure": "margaret-macdonald", "kind": "poster" },
+        { "title": "The Scottish Musical Review", "year": 1896, "figure": "charles-rennie-mackintosh", "kind": "poster" },
+        { "title": "Glasgow School of Art", "year": 1897, "figure": "charles-rennie-mackintosh", "kind": "building" },
+        { "title": "Willow Tea Rooms", "year": 1903, "figure": "charles-rennie-mackintosh", "kind": "building" }
+      ]
+    },
+    {
+      "id": "vienna-secession",
+      "name": "Vienna Secession",
+      "aka": ["Wiener Secession", "Secessionstil", "Wiener Werkstätte"],
+      "start": 1897, "end": 1914, "ongoing": false,
+      "peak": [1898, 1905],
+      "region": "europe",
+      "places": ["Vienna"],
+      "lineage": "ornament",
+      "summary": "Vienna's break from the academy turned Art Nouveau's curve into the square: modular grids, block lettering and the total work of art.",
+      "influences": ["arts-and-crafts", "glasgow-school", "art-nouveau", "japonisme"],
+      "principles": [
+        { "name": "The square module", "idea": "The square and the grid replace the whiplash as the organising unit, from page layouts to perforated metal to whole buildings.", "example": "Josef Hoffmann, Gitterwerk perforated metal objects, Wiener Werkstätte, c. 1904" },
+        { "name": "Lettering as architecture", "idea": "Letters are drawn as blocky, condensed shapes fitted into rectangles, so the type itself becomes a structural field.", "example": "Koloman Moser, poster for the 13th Secession exhibition, 1902" },
+        { "name": "Flat field, precise figure", "idea": "Large areas of flat colour or empty paper are punctuated by a small, exactly placed figurative or ornamental element.", "example": "Gustav Klimt, poster for the 1st Secession exhibition, 1898" },
+        { "name": "Gesamtkunstwerk", "idea": "Exhibition, building, magazine, furniture and cutlery are designed as one coherent work.", "example": "14th Secession exhibition (Beethoven), installed by Josef Hoffmann with Klimt's Beethoven Frieze, 1902" },
+        { "name": "The maker's mark as identity", "idea": "Monograms and marks for the designer, the craftsman and the workshop are stamped on every object, an early system of brand marks.", "example": "Wiener Werkstätte rose mark and monograms, 1903" }
+      ],
+      "keyWorks": [
+        { "title": "Poster for the 1st Secession exhibition", "year": 1898, "figure": "gustav-klimt", "kind": "poster" },
+        { "title": "Secession Building (Joseph Maria Olbrich)", "year": 1898, "kind": "building" },
+        { "title": "Ver Sacrum (magazine)", "year": 1898, "figure": "koloman-moser", "kind": "magazine" },
+        { "title": "Poster for the 13th Secession exhibition", "year": 1902, "figure": "koloman-moser", "kind": "poster" },
+        { "title": "Beethoven Frieze", "year": 1902, "figure": "gustav-klimt", "kind": "exhibition" },
+        { "title": "Palais Stoclet", "year": 1905, "figure": "josef-hoffmann", "kind": "building" }
+      ]
+    },
+    {
+      "id": "jugendstil",
+      "name": "Jugendstil",
+      "aka": ["Youth Style", "German Art Nouveau"],
+      "start": 1895, "end": 1914, "ongoing": false,
+      "peak": [1896, 1905],
+      "region": "europe",
+      "places": ["Munich", "Berlin", "Darmstadt", "Weimar"],
+      "lineage": "ornament",
+      "summary": "Germany's Art Nouveau, named after the magazine Jugend, moved from floral line toward abstraction, new typefaces and industrial design.",
+      "influences": ["art-nouveau", "arts-and-crafts", "japonisme"],
+      "principles": [
+        { "name": "The magazine as laboratory", "idea": "Weekly and quarterly art magazines changed their cover art every issue, making the periodical a running test bed for the style.", "example": "Jugend, Munich, founded by Georg Hirth, 1896" },
+        { "name": "Typefaces drawn with a brush", "idea": "Letterforms adopt the swelling, plant-like stroke of the ornament so that type and image belong to one hand.", "example": "Otto Eckmann, Eckmann-Schrift, 1900" },
+        { "name": "From curve to abstraction", "idea": "Natural forms are pushed toward pure abstract line and later toward geometric rigour.", "example": "Peter Behrens, Der Kuss, colour woodcut for Pan, 1898" },
+        { "name": "The artists' colony", "idea": "A designed community where architecture, furniture, books and exhibition were one demonstration of a new way of living.", "example": "Darmstadt Artists' Colony exhibition, Ein Dokument deutscher Kunst, 1901" }
+      ],
+      "keyWorks": [
+        { "title": "Pan (magazine)", "year": 1895, "kind": "magazine" },
+        { "title": "Jugend (magazine)", "year": 1896, "kind": "magazine" },
+        { "title": "Simplicissimus bulldog (Thomas Theodor Heine)", "year": 1896, "kind": "identity" },
+        { "title": "Der Kuss", "year": 1898, "figure": "peter-behrens", "kind": "other" },
+        { "title": "Eckmann-Schrift", "year": 1900, "figure": "otto-eckmann", "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "plakatstil",
+      "name": "Plakatstil",
+      "aka": ["Sachplakat", "Object poster", "Poster style"],
+      "start": 1905, "end": 1920, "ongoing": false,
+      "peak": [1906, 1914],
+      "region": "europe",
+      "places": ["Berlin", "Munich"],
+      "lineage": "commerce",
+      "summary": "Berlin's object poster reduced advertising to one product, one or two words and a few flat colours, the first modern brand language.",
+      "influences": ["jugendstil", "vienna-secession", "art-nouveau"],
+      "principles": [
+        { "name": "The object is the message", "idea": "Show the product itself, alone and large, with no scene, no figure and no slogan.", "example": "Lucian Bernhard, Priester matches, c. 1906" },
+        { "name": "One word", "idea": "The brand name, set in heavy hand-drawn capitals, is the entire text.", "example": "Lucian Bernhard, Stiller shoes, 1908" },
+        { "name": "Flat colour, few colours", "idea": "Two to four flat lithographic colours against a strong ground give a sheet that reads in a second from a moving tram.", "example": "Hans Rudi Erdt, Opel, 1911" },
+        { "name": "Pattern and light as texture", "idea": "In the Munich variant, the figure dissolves into flat interlocking patches of light and shadow that read as tone without modelling.", "example": "Ludwig Hohlwein, Hermann Scherrer, 1911" }
+      ],
+      "keyWorks": [
+        { "title": "Priester", "year": 1906, "figure": "lucian-bernhard", "kind": "poster" },
+        { "title": "Stiller", "year": 1908, "figure": "lucian-bernhard", "kind": "poster" },
+        { "title": "Möhring candelabra factory (Julius Klinger)", "year": 1908, "kind": "poster" },
+        { "title": "Das Plakat (magazine, Verein der Plakatfreunde)", "year": 1910, "kind": "magazine" },
+        { "title": "Opel (Hans Rudi Erdt)", "year": 1911, "kind": "poster" },
+        { "title": "Hermann Scherrer", "year": 1911, "figure": "ludwig-hohlwein", "kind": "poster" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "owen-jones",
+      "name": "Owen Jones",
+      "born": 1809, "died": 1874,
+      "activeFrom": 1832, "activeTo": 1874,
+      "signatureYear": 1856,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Architect, ornament theorist, chromolithographic book designer",
+      "movements": ["victorian-print"],
+      "summary": "His Grammar of Ornament turned the world's decoration into a teachable system of propositions and brought chromolithography to its peak.",
+      "principles": [
+        { "name": "Ornament has rules", "idea": "Decoration follows stated propositions about geometry, proportion and colour, so it can be taught rather than merely copied.", "example": "The Grammar of Ornament, 37 general propositions, 1856" },
+        { "name": "Decorate construction", "idea": "Ornament should grow from and clarify the structure of the object, never be built for its own sake.", "example": "The Grammar of Ornament, proposition 5, 1856" },
+        { "name": "Flat for flat surfaces", "idea": "Ornament on a flat surface should be flat and conventionalised, not a naturalistic illusion of depth.", "example": "Plates of stylised leaves and flowers in The Grammar of Ornament, 1856" }
+      ],
+      "keyWorks": [
+        { "title": "Plans, Elevations, Sections and Details of the Alhambra", "year": 1836, "kind": "book" },
+        { "title": "Colour scheme and interior decoration of the Great Exhibition building", "year": 1851, "kind": "exhibition" },
+        { "title": "The Grammar of Ornament", "year": 1856, "kind": "book" }
+      ]
+    },
+    {
+      "id": "walter-crane",
+      "name": "Walter Crane",
+      "born": 1845, "died": 1915,
+      "activeFrom": 1859, "activeTo": 1915,
+      "signatureYear": 1877,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Illustrator, designer, educator, theorist",
+      "movements": ["victorian-print", "arts-and-crafts"],
+      "summary": "Crane's colour toy books with printer Edmund Evans made the picture book a designed object, and his later teaching codified Arts and Crafts design.",
+      "principles": [
+        { "name": "The page as decorative unit", "idea": "Picture, border and text are composed together as one flat decorative panel.", "example": "The Baby's Opera, 1877" },
+        { "name": "Line first", "idea": "Outline is the fundamental means of design; colour and mass come second.", "example": "Line and Form, 1900" },
+        { "name": "Design for the press", "idea": "Draw for the limits of the reproduction method, here a few flat colour blocks, rather than against them.", "example": "Toy books engraved and printed by Edmund Evans, 1865-1876" }
+      ],
+      "keyWorks": [
+        { "title": "The Absurd ABC", "year": 1874, "kind": "book" },
+        { "title": "The Baby's Opera", "year": 1877, "kind": "book" },
+        { "title": "The Bases of Design", "year": 1898, "kind": "book" },
+        { "title": "Line and Form", "year": 1900, "kind": "book" }
+      ]
+    },
+    {
+      "id": "william-morris",
+      "name": "William Morris",
+      "born": 1834, "died": 1896,
+      "activeFrom": 1857, "activeTo": 1896,
+      "signatureYear": 1896,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Designer, manufacturer, typographer, writer, socialist",
+      "movements": ["arts-and-crafts", "private-press"],
+      "summary": "Morris made design a moral project, built a firm that made what it designed, and with the Kelmscott Press restarted serious book typography.",
+      "principles": [
+        { "name": "Useful or beautiful", "idea": "Nothing belongs in a home unless it is known to be useful or believed to be beautiful; the test applies to every object.", "example": "The Beauty of Life, lecture, 1880" },
+        { "name": "Structure under pattern", "idea": "Every repeat is built on a hidden armature, a diagonal trellis or a turnover, so dense ornament stays legible.", "example": "Strawberry Thief, 1883" },
+        { "name": "Return to the source", "idea": "When a craft has decayed, go back to its best historical moment and relearn it by doing, from dye vat to punch.", "example": "Golden Type, modelled on Nicolas Jenson's roman of 1470, 1890" },
+        { "name": "The book as a whole", "idea": "Type, paper, ink, margins, initials and borders are designed together as a single object.", "example": "The Works of Geoffrey Chaucer, Kelmscott Press, 1896" }
+      ],
+      "keyWorks": [
+        { "title": "Trellis wallpaper", "year": 1864, "kind": "other" },
+        { "title": "Strawberry Thief", "year": 1883, "kind": "other" },
+        { "title": "Golden Type", "year": 1890, "kind": "typeface" },
+        { "title": "The Story of the Glittering Plain", "year": 1891, "kind": "book" },
+        { "title": "The Works of Geoffrey Chaucer (Kelmscott Chaucer)", "year": 1896, "kind": "book" }
+      ]
+    },
+    {
+      "id": "jules-cheret",
+      "name": "Jules Chéret",
+      "born": 1836, "died": 1932,
+      "activeFrom": 1858, "activeTo": 1900,
+      "signatureYear": 1889,
+      "region": "europe",
+      "nationality": "French",
+      "role": "Lithographer, poster artist",
+      "movements": ["art-nouveau"],
+      "summary": "The father of the modern poster: Chéret industrialised the large colour lithograph and invented the joyful poster heroine Paris called the Chérette.",
+      "principles": [
+        { "name": "Three stones, maximum colour", "idea": "Build the image from a few overlapping colour stones, typically red, yellow and blue over a black key, to get rich colour cheaply.", "example": "Bal Valentino, 1869" },
+        { "name": "Movement as message", "idea": "A single figure caught mid-leap or mid-spin carries the energy of the product; the event sells itself through motion.", "example": "Folies-Bergère: La Loïe Fuller, 1893" },
+        { "name": "Letters that float", "idea": "Hand-drawn lettering curves around the figure and into the air, integrated with the image rather than set in a separate band.", "example": "Bal au Moulin Rouge, 1889" }
+      ],
+      "keyWorks": [
+        { "title": "Orphée aux Enfers", "year": 1858, "kind": "poster" },
+        { "title": "Bal Valentino", "year": 1869, "kind": "poster" },
+        { "title": "Bal au Moulin Rouge", "year": 1889, "kind": "poster" },
+        { "title": "Folies-Bergère: La Loïe Fuller", "year": 1893, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "henri-de-toulouse-lautrec",
+      "name": "Henri de Toulouse-Lautrec",
+      "born": 1864, "died": 1901,
+      "activeFrom": 1882, "activeTo": 1901,
+      "signatureYear": 1891,
+      "region": "europe",
+      "nationality": "French",
+      "role": "Painter, printmaker, poster artist",
+      "movements": ["art-nouveau", "japonisme"],
+      "summary": "In about thirty posters Lautrec brought Japanese flatness, cropping and caricature to the Paris wall, and made a person into a graphic sign.",
+      "principles": [
+        { "name": "The silhouette as character", "idea": "Reduce a person to one unmistakable flat shape: a hat, a scarf, a black glove.", "example": "Ambassadeurs: Aristide Bruant, 1892" },
+        { "name": "Layered planes", "idea": "Stack a cropped foreground shape, a midground subject and a flat background to create space with no perspective drawing.", "example": "Moulin Rouge: La Goulue, 1891" },
+        { "name": "Spatter as tone", "idea": "Crachis, ink spattered from a toothbrush across the stone, gives texture and half-tone without hatching.", "example": "Divan Japonais, 1893" }
+      ],
+      "keyWorks": [
+        { "title": "Moulin Rouge: La Goulue", "year": 1891, "kind": "poster" },
+        { "title": "Ambassadeurs: Aristide Bruant", "year": 1892, "kind": "poster" },
+        { "title": "Divan Japonais", "year": 1893, "kind": "poster" },
+        { "title": "Jane Avril (Jardin de Paris)", "year": 1893, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "eugene-grasset",
+      "name": "Eugène Grasset",
+      "born": 1845, "died": 1917,
+      "activeFrom": 1871, "activeTo": 1917,
+      "signatureYear": 1883,
+      "region": "europe",
+      "nationality": "Swiss-French",
+      "role": "Illustrator, poster artist, type designer, teacher of ornament",
+      "movements": ["art-nouveau"],
+      "summary": "Grasset joined medieval line and Japanese flatness, designed a typeface, and wrote the method books that taught a generation of French ornament.",
+      "principles": [
+        { "name": "Text and image in one plate", "idea": "Illustration, border and text are printed together and interpenetrate on every page of the book.", "example": "Histoire des quatre fils Aymon, 1883" },
+        { "name": "Contour and flat fill", "idea": "A thick, even outline encloses flat colour, a stained-glass logic adapted to lithography.", "example": "Harper's Magazine Christmas cover, 1892" },
+        { "name": "Ornament from the plant", "idea": "Study a real plant's structure, then derive borders and motifs from it methodically.", "example": "La Plante et ses applications ornementales, 1896" }
+      ],
+      "keyWorks": [
+        { "title": "Histoire des quatre fils Aymon", "year": 1883, "kind": "book" },
+        { "title": "Harper's Magazine Christmas cover", "year": 1892, "kind": "magazine" },
+        { "title": "Salon des Cent: Exposition E. Grasset", "year": 1894, "kind": "poster" },
+        { "title": "Grasset (typeface, Peignot)", "year": 1898, "kind": "typeface" },
+        { "title": "Méthode de composition ornementale", "year": 1905, "kind": "book" }
+      ]
+    },
+    {
+      "id": "alphonse-mucha",
+      "name": "Alphonse Mucha",
+      "born": 1860, "died": 1939,
+      "activeFrom": 1887, "activeTo": 1939,
+      "signatureYear": 1894,
+      "region": "europe",
+      "nationality": "Czech",
+      "role": "Illustrator, poster artist, painter",
+      "movements": ["art-nouveau"],
+      "summary": "Mucha's Bernhardt posters and decorative panels fixed the Art Nouveau formula: a woman, a halo, swirling hair and a Byzantine frame.",
+      "principles": [
+        { "name": "The template", "idea": "A repeatable layout of figure, circular halo, mosaic arch and lettering band could be refilled for any client.", "example": "Gismonda, 1894; repeated across the Bernhardt posters to 1899" },
+        { "name": "The tall format", "idea": "An extreme vertical, near life-size sheet turns the figure into a standing presence on the street.", "example": "Gismonda, roughly 2 m tall, 1894" },
+        { "name": "A pattern book for the style", "idea": "Publish the system itself as plates so others can apply it to any object.", "example": "Documents décoratifs, 1902" }
+      ],
+      "keyWorks": [
+        { "title": "Gismonda", "year": 1894, "kind": "poster" },
+        { "title": "Job", "year": 1896, "kind": "poster" },
+        { "title": "The Seasons (decorative panels)", "year": 1896, "kind": "poster" },
+        { "title": "Documents décoratifs", "year": 1902, "kind": "book" }
+      ]
+    },
+    {
+      "id": "aubrey-beardsley",
+      "name": "Aubrey Beardsley",
+      "born": 1872, "died": 1898,
+      "activeFrom": 1891, "activeTo": 1898,
+      "signatureYear": 1894,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Illustrator, art editor",
+      "movements": ["art-nouveau", "japonisme"],
+      "summary": "In six years Beardsley made black-and-white line work as graphic and as transgressive as anything in the period, drawn for the new photo-engraved line block.",
+      "principles": [
+        { "name": "Black and white, nothing between", "idea": "Pure black masses against pure white paper with no grey, so the image survives cheap photomechanical line-block reproduction.", "example": "The Peacock Skirt, Salome, 1894" },
+        { "name": "Line against mass", "idea": "Hairline detail is set against huge flat black areas so each makes the other louder.", "example": "The Climax, Salome, 1894" },
+        { "name": "The cover as a brand", "idea": "A bold, flat cover image gives a periodical an unmistakable face on the bookstall.", "example": "The Yellow Book, vol. 1, 1894" }
+      ],
+      "keyWorks": [
+        { "title": "Le Morte d'Arthur (J. M. Dent)", "year": 1893, "kind": "book" },
+        { "title": "Salome (Oscar Wilde, English edition)", "year": 1894, "kind": "book" },
+        { "title": "The Yellow Book", "year": 1894, "kind": "magazine" },
+        { "title": "The Savoy", "year": 1896, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "beggarstaffs",
+      "name": "The Beggarstaffs",
+      "born": 1894, "died": 1899,
+      "activeFrom": 1894, "activeTo": 1899,
+      "signatureYear": 1894,
+      "region": "europe",
+      "nationality": "British",
+      "role": "Poster design partnership of James Pryde (1866-1941) and William Nicholson (1872-1949)",
+      "movements": ["art-nouveau"],
+      "summary": "Pryde and Nicholson cut posters from flat paper shapes and let the viewer's eye complete them, a reduction a decade ahead of Plakatstil.",
+      "principles": [
+        { "name": "Collage of flat shapes", "idea": "Compose by cutting and arranging pieces of coloured paper, then print the result as flat colour.", "example": "Hamlet, 1894" },
+        { "name": "Let the eye close the shape", "idea": "Leave out contours where figure and ground share a colour, so the image completes itself in the viewer's head.", "example": "Girl on a Sofa, 1895" },
+        { "name": "Two colours and a big shape", "idea": "Use a very few flat colours and one dominant silhouette sized for the hoarding.", "example": "Rowntree's Elect Cocoa, 1896" }
+      ],
+      "keyWorks": [
+        { "title": "Hamlet", "year": 1894, "kind": "poster" },
+        { "title": "Don Quixote (Lyceum Theatre)", "year": 1895, "kind": "poster" },
+        { "title": "Harper's Magazine", "year": 1895, "kind": "poster" },
+        { "title": "Rowntree's Elect Cocoa", "year": 1896, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "will-bradley",
+      "name": "Will Bradley",
+      "born": 1868, "died": 1962,
+      "activeFrom": 1886, "activeTo": 1930,
+      "signatureYear": 1894,
+      "region": "north-america",
+      "nationality": "American",
+      "role": "Illustrator, typographer, printer, art director",
+      "movements": ["art-nouveau", "private-press"],
+      "summary": "America's first great designer-typographer: Bradley adapted Beardsley's line into posters and covers, then ran his own press and type revivals.",
+      "principles": [
+        { "name": "Repeat for rhythm", "idea": "Duplicate or mirror a figure to make a flat, rhythmic pattern from a single drawing.", "example": "The Chap-Book: The Twins, 1894" },
+        { "name": "Type and drawing share weight", "idea": "Hand lettering and the drawing use the same weight of black, so they fuse into one block.", "example": "The Inland Printer covers, 1894-1895" },
+        { "name": "Look backward to move forward", "idea": "Revive colonial American chapbook typography, Caslon and woodcut ornament, as a fresh vernacular.", "example": "Bradley: His Book, 1896" }
+      ],
+      "keyWorks": [
+        { "title": "The Inland Printer covers", "year": 1894, "kind": "magazine" },
+        { "title": "The Chap-Book: The Twins", "year": 1894, "kind": "poster" },
+        { "title": "Bradley: His Book", "year": 1896, "kind": "magazine" },
+        { "title": "Wayside Roman (American Type Founders)", "year": 1900, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "charles-rennie-mackintosh",
+      "name": "Charles Rennie Mackintosh",
+      "born": 1868, "died": 1928,
+      "activeFrom": 1884, "activeTo": 1928,
+      "signatureYear": 1896,
+      "region": "europe",
+      "nationality": "Scottish",
+      "role": "Architect, designer, artist",
+      "movements": ["glasgow-school"],
+      "summary": "Mackintosh joined Art Nouveau's organic line to a rectilinear grid, and his elongated posters and total interiors helped turn Vienna square.",
+      "principles": [
+        { "name": "The vertical stretch", "idea": "Elongate everything, figures, chair backs and lettering, until it reads as an architectural column.", "example": "The Scottish Musical Review, 1896" },
+        { "name": "Square and rose", "idea": "Pair a hard grid of small squares with a single soft organic motif; the contrast is the style.", "example": "Willow Tea Rooms, 1903" },
+        { "name": "Light and dark rooms", "idea": "Design environments in white or dark keys, with colour reserved for tiny accents of mauve or pink.", "example": "Hill House interiors, 1902-1904" }
+      ],
+      "keyWorks": [
+        { "title": "The Scottish Musical Review", "year": 1896, "kind": "poster" },
+        { "title": "Glasgow School of Art", "year": 1897, "kind": "building" },
+        { "title": "Hill House", "year": 1902, "kind": "building" },
+        { "title": "Willow Tea Rooms", "year": 1903, "kind": "building" }
+      ]
+    },
+    {
+      "id": "margaret-macdonald",
+      "name": "Margaret Macdonald",
+      "born": 1864, "died": 1933,
+      "activeFrom": 1891, "activeTo": 1921,
+      "signatureYear": 1895,
+      "region": "europe",
+      "nationality": "British (Scottish-based)",
+      "role": "Artist, designer, member of The Four",
+      "movements": ["glasgow-school"],
+      "summary": "Macdonald co-authored the Glasgow Style's ghostly figures and rose motifs, in posters and gesso panels that were among the first statements of it.",
+      "principles": [
+        { "name": "The emblematic figure", "idea": "Attenuated, symmetrical figures function as signs rather than portraits, almost lettering in themselves.", "example": "Glasgow Institute of the Fine Arts poster, with Frances Macdonald and Herbert MacNair, 1895" },
+        { "name": "Surface as relief", "idea": "Gesso, string, beads and metal leaf build a low relief that catches light like a printed varnish.", "example": "The May Queen, gesso panel, 1900" }
+      ],
+      "keyWorks": [
+        { "title": "Glasgow Institute of the Fine Arts poster (with Frances Macdonald and Herbert MacNair)", "year": 1895, "kind": "poster" },
+        { "title": "The May Queen", "year": 1900, "kind": "other" },
+        { "title": "The White Rose and the Red Rose", "year": 1902, "kind": "other" }
+      ]
+    },
+    {
+      "id": "gustav-klimt",
+      "name": "Gustav Klimt",
+      "born": 1862, "died": 1918,
+      "activeFrom": 1879, "activeTo": 1918,
+      "signatureYear": 1898,
+      "region": "europe",
+      "nationality": "Austrian",
+      "role": "Painter, Secession founder and first president, poster designer",
+      "movements": ["vienna-secession"],
+      "summary": "The Secession's first president, Klimt brought gold, flat pattern and a radically empty layout to its first poster and its exhibitions.",
+      "principles": [
+        { "name": "The empty middle", "idea": "Leave the centre of the sheet blank and push image and text to the edges, so the void becomes the event.", "example": "Poster for the 1st Secession exhibition, 1898" },
+        { "name": "Pattern as space", "idea": "Flat ornamental fields of gold, spirals and squares replace perspective and surround naturalistic faces and hands.", "example": "Beethoven Frieze, 1902" }
+      ],
+      "keyWorks": [
+        { "title": "Poster for the 1st Secession exhibition", "year": 1898, "kind": "poster" },
+        { "title": "Ver Sacrum contributions", "year": 1898, "kind": "magazine" },
+        { "title": "Beethoven Frieze", "year": 1902, "kind": "exhibition" },
+        { "title": "Stoclet Frieze (designs, for Palais Stoclet)", "year": 1910, "kind": "other" }
+      ]
+    },
+    {
+      "id": "koloman-moser",
+      "name": "Koloman Moser",
+      "born": 1868, "died": 1918,
+      "activeFrom": 1893, "activeTo": 1918,
+      "signatureYear": 1898,
+      "region": "europe",
+      "nationality": "Austrian",
+      "role": "Graphic designer, Secession and Wiener Werkstätte co-founder",
+      "movements": ["vienna-secession"],
+      "summary": "Moser was the Secession's chief graphic designer: Ver Sacrum, block lettering, modular pattern and Austria's stamps and banknotes.",
+      "principles": [
+        { "name": "Letters as building blocks", "idea": "Draw letters as condensed rectangles that lock together into a solid field of type.", "example": "Poster for the 13th Secession exhibition, 1902" },
+        { "name": "Pattern by module", "idea": "Generate ornament by repeating and rotating a simple unit on a grid, so the method is visible.", "example": "Die Quelle, pattern portfolio, 1901" },
+        { "name": "The state as client", "idea": "Apply the modern style to official, mass-circulation graphics such as postage and currency.", "example": "Austrian Jubilee stamps, 1908" }
+      ],
+      "keyWorks": [
+        { "title": "Ver Sacrum (art direction and covers)", "year": 1898, "kind": "magazine" },
+        { "title": "Poster for the 13th Secession exhibition", "year": 1902, "kind": "poster" },
+        { "title": "Wiener Werkstätte marks and stationery (with Josef Hoffmann)", "year": 1903, "kind": "identity" },
+        { "title": "Austrian Jubilee stamps", "year": 1908, "kind": "other" }
+      ]
+    },
+    {
+      "id": "josef-hoffmann",
+      "name": "Josef Hoffmann",
+      "born": 1870, "died": 1956,
+      "activeFrom": 1897, "activeTo": 1956,
+      "signatureYear": 1903,
+      "region": "europe",
+      "nationality": "Austrian",
+      "role": "Architect, designer, Wiener Werkstätte co-founder",
+      "movements": ["vienna-secession"],
+      "summary": "Nicknamed Quadratl-Hoffmann for his squares, he made the grid a total design language from cutlery to the Palais Stoclet.",
+      "principles": [
+        { "name": "The square everywhere", "idea": "One module, the square, at every scale from a perforated basket to a facade, gives an entire environment one voice.", "example": "Sanatorium Purkersdorf, 1904" },
+        { "name": "Better ten days on one thing", "idea": "Quality of making is the brand: the workshop prefers slow, excellent production to fast, mediocre volume.", "example": "Arbeitsprogramm der Wiener Werkstätte, 1905" },
+        { "name": "Contour as frame", "idea": "Outline edges in a contrasting band, like a dark metal trim on white stone, so form reads as drawing.", "example": "Palais Stoclet, Brussels, 1905-1911" }
+      ],
+      "keyWorks": [
+        { "title": "Wiener Werkstätte (co-founded)", "year": 1903, "kind": "identity" },
+        { "title": "Sanatorium Purkersdorf", "year": 1904, "kind": "building" },
+        { "title": "Sitzmaschine", "year": 1905, "kind": "product" },
+        { "title": "Palais Stoclet", "year": 1905, "kind": "building" },
+        { "title": "Kubus armchair", "year": 1910, "kind": "product" }
+      ]
+    },
+    {
+      "id": "otto-eckmann",
+      "name": "Otto Eckmann",
+      "born": 1865, "died": 1902,
+      "activeFrom": 1885, "activeTo": 1902,
+      "signatureYear": 1900,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Painter turned graphic and type designer",
+      "movements": ["jugendstil"],
+      "summary": "Eckmann gave up painting for applied design and drew the defining Jugendstil typeface, a brush-written letter that fused type with ornament.",
+      "principles": [
+        { "name": "Type from the brush", "idea": "Letters are written with a broad brush, so the swell and taper of the stroke matches the plant ornament around them.", "example": "Eckmann-Schrift, 1900" },
+        { "name": "Applied over fine", "idea": "Treat the magazine cover and the typeface as the serious work, ahead of the easel picture.", "example": "Auctioned his paintings to work on Pan and Jugend, 1894-1896" }
+      ],
+      "keyWorks": [
+        { "title": "Pan and Jugend contributions", "year": 1896, "kind": "magazine" },
+        { "title": "Eckmann-Schrift", "year": 1900, "kind": "typeface" },
+        { "title": "Fette Eckmann", "year": 1902, "kind": "typeface" }
+      ]
+    },
+    {
+      "id": "henry-van-de-velde",
+      "name": "Henry van de Velde",
+      "born": 1863, "died": 1957,
+      "activeFrom": 1889, "activeTo": 1947,
+      "signatureYear": 1898,
+      "region": "europe",
+      "nationality": "Belgian",
+      "role": "Painter, designer, architect, educator",
+      "movements": ["art-nouveau", "jugendstil"],
+      "summary": "Van de Velde pushed Art Nouveau into pure abstract line and founded the Weimar school that the Bauhaus grew from.",
+      "principles": [
+        { "name": "Abstract line as force", "idea": "Line carries energy and emotion by itself, with no flowers or figures required.", "example": "Tropon, 1898" },
+        { "name": "The artist's individuality", "idea": "Defended the designer's free invention against standardised types in the 1914 Werkbund debate with Hermann Muthesius.", "example": "Werkbund congress, Cologne, 1914" }
+      ],
+      "keyWorks": [
+        { "title": "Villa Bloemenwerf", "year": 1895, "kind": "building" },
+        { "title": "Tropon", "year": 1898, "kind": "poster" },
+        { "title": "Kunstgewerbeschule Weimar", "year": 1907, "kind": "building" },
+        { "title": "Werkbund Theatre, Cologne", "year": 1914, "kind": "building" }
+      ]
+    },
+    {
+      "id": "peter-behrens",
+      "name": "Peter Behrens",
+      "born": 1868, "died": 1940,
+      "activeFrom": 1890, "activeTo": 1940,
+      "signatureYear": 1908,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Architect, industrial designer, typographer",
+      "movements": ["jugendstil", "corporate-identity"],
+      "summary": "From Jugendstil woodcuts to AEG's artistic consultant, Behrens designed a company's buildings, products, type and print as one: the first corporate identity.",
+      "principles": [
+        { "name": "One hand for everything", "idea": "The same designer shapes the factory, the kettle, the catalogue, the typeface and the trademark, so the company has one face.", "example": "AEG, from 1907" },
+        { "name": "Geometry over ornament", "idea": "Replace naturalistic decoration with a modular grid and simple geometric marks.", "example": "AEG hexagonal honeycomb trademark, 1908" },
+        { "name": "Type standards", "idea": "Draw a house typeface and use it consistently, so the letters themselves identify the company.", "example": "Behrens-Antiqua (Klingspor), used across AEG print, 1908" },
+        { "name": "Standardised parts, varied products", "idea": "Combine a small set of interchangeable components into a product range.", "example": "AEG electric kettles, 1909" }
+      ],
+      "keyWorks": [
+        { "title": "Der Kuss", "year": 1898, "kind": "other" },
+        { "title": "Behrens house, Darmstadt Artists' Colony", "year": 1901, "kind": "building" },
+        { "title": "Behrens-Schrift", "year": 1902, "kind": "typeface" },
+        { "title": "AEG trademark", "year": 1908, "kind": "identity" },
+        { "title": "AEG electric kettles", "year": 1909, "kind": "product" },
+        { "title": "AEG Turbine Factory", "year": 1909, "kind": "building" }
+      ]
+    },
+    {
+      "id": "lucian-bernhard",
+      "name": "Lucian Bernhard",
+      "born": 1883, "died": 1972,
+      "activeFrom": 1905, "activeTo": 1960,
+      "signatureYear": 1906,
+      "region": "europe",
+      "nationality": "German (American from 1923)",
+      "role": "Poster, trademark and type designer",
+      "movements": ["plakatstil"],
+      "summary": "Bernhard's Priester matches poster, two matches and a word, founded the Sachplakat and the idea that a brand is a product and a name.",
+      "principles": [
+        { "name": "Subtract until it breaks", "idea": "Remove every element that is not the product or its name, then check the poster still works from across the street.", "example": "Priester, c. 1906" },
+        { "name": "The name as the hero", "idea": "The brand name, in heavy hand-drawn sans or Fraktur-derived capitals, is given equal visual weight to the object.", "example": "Stiller, 1908" },
+        { "name": "Contrasting fields", "idea": "Set the object and lettering on a dark, flat ground with one hot accent colour.", "example": "Bosch, 1914" }
+      ],
+      "keyWorks": [
+        { "title": "Priester", "year": 1906, "kind": "poster" },
+        { "title": "Stiller", "year": 1908, "kind": "poster" },
+        { "title": "Bosch", "year": 1914, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "ludwig-hohlwein",
+      "name": "Ludwig Hohlwein",
+      "born": 1874, "died": 1949,
+      "activeFrom": 1906, "activeTo": 1945,
+      "signatureYear": 1911,
+      "region": "europe",
+      "nationality": "German",
+      "role": "Architect turned poster artist",
+      "movements": ["plakatstil"],
+      "summary": "Munich's master of the figure poster, Hohlwein built people from flat patches of light and shade; his later work served Nazi propaganda.",
+      "principles": [
+        { "name": "Light as flat shapes", "idea": "Break a figure into interlocking flat zones of light and shadow, so it reads as volume with no modelling.", "example": "Hermann Scherrer, 1911" },
+        { "name": "Texture against flatness", "idea": "Set a patterned area, a check or a stipple, against plain fields to give a flat poster tactile richness.", "example": "Jasmatzi, 1908" }
+      ],
+      "keyWorks": [
+        { "title": "Jasmatzi", "year": 1908, "kind": "poster" },
+        { "title": "Hermann Scherrer", "year": 1911, "kind": "poster" },
+        { "title": "Tierpark Hellabrunn", "year": 1912, "kind": "poster" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1837, "label": "Chromolithography patented", "kind": "technology", "note": "Godefroy Engelmann's patent for printing colour from multiple stones made mass colour printing, and later the colour poster, possible." },
+    { "year": 1851, "label": "Great Exhibition, London", "kind": "context", "note": "The Crystal Palace displayed industrial goods so overdecorated that it provoked the design-reform movement, from Owen Jones to Morris." },
+    { "year": 1856, "label": "The Grammar of Ornament", "kind": "context", "note": "Owen Jones's chromolithographed survey made ornament a teachable system and became the period's standard pattern source." },
+    { "year": 1861, "label": "Morris, Marshall, Faulkner & Co. founded", "kind": "context", "note": "A firm where designers made what they designed: the practical start of the Arts and Crafts movement." },
+    { "year": 1865, "label": "Edmund Evans colour toy books", "kind": "technology", "note": "Evans's colour wood-engraved picture books with Walter Crane made the illustrated children's book a designed object for a mass market." },
+    { "year": 1867, "label": "Exposition Universelle, Paris", "kind": "context", "note": "Japan's display of prints and crafts fed the Japonisme that reshaped Western poster composition." },
+    { "year": 1874, "label": "Prang's Christmas cards", "kind": "technology", "note": "Louis Prang's chromolithographed cards brought high-quality colour printing into ordinary American homes." },
+    { "year": 1880, "label": "First halftone photograph in a newspaper", "kind": "technology", "note": "The New York Daily Graphic printed A Scene in Shantytown, beginning the replacement of hand engraving by photographic reproduction." },
+    { "year": 1881, "label": "French press law of 29 July", "kind": "context", "note": "Liberalised bill-posting in France, opening Paris's walls to the colour poster boom of the 1880s and 1890s." },
+    { "year": 1881, "label": "Ives halftone process patented", "kind": "technology", "note": "Frederic Ives's screen method made photographs printable alongside type in ordinary letterpress." },
+    { "year": 1886, "label": "Linotype", "kind": "technology", "note": "Ottmar Mergenthaler's line-casting machine went into use at the New York Tribune, mechanising text composition for newspapers and books." },
+    { "year": 1887, "label": "Monotype", "kind": "technology", "note": "Tolbert Lanston founded the company behind the single-type caster that brought hot-metal quality to book typesetting and later commissioned historic revivals." },
+    { "year": 1888, "label": "Arts and Crafts Exhibition Society founded", "kind": "context", "note": "Gave the movement its name and a public showcase in London, with Walter Crane as founding president." },
+    { "year": 1891, "label": "Kelmscott Press founded", "kind": "context", "note": "William Morris's press launched the private press revival and reset standards for type, paper and page design." },
+    { "year": 1895, "label": "Maison de l'Art Nouveau opens", "kind": "context", "note": "Siegfried Bing's Paris gallery gave the international style its name." },
+    { "year": 1896, "label": "Jugend founded", "kind": "context", "note": "Georg Hirth's Munich weekly gave German Art Nouveau its name, Jugendstil, and a cover a week to experiment on." },
+    { "year": 1897, "label": "Vienna Secession founded", "kind": "context", "note": "Klimt, Moser, Hoffmann and Olbrich broke with the academy and launched a design language that turned the curve into the square." },
+    { "year": 1900, "label": "Exposition Universelle, Paris", "kind": "context", "note": "The high point and public consecration of Art Nouveau, with Guimard's Métro entrances opening the same year." },
+    { "year": 1903, "label": "Wiener Werkstätte founded", "kind": "context", "note": "Hoffmann, Moser and Fritz Waerndorfer's workshop applied a single geometric language to every object and stamped each with makers' marks." },
+    { "year": 1904, "label": "Offset lithography on paper", "kind": "technology", "note": "Ira Washington Rubel's offset press transferred the image via a rubber blanket, the process that would come to dominate commercial printing." },
+    { "year": 1907, "label": "Deutscher Werkbund founded; Behrens joins AEG", "kind": "context", "note": "Industry, artists and the state allied to raise German product quality, and AEG hired Behrens to design its whole identity." },
+    { "year": 1910, "label": "Das Plakat magazine", "kind": "context", "note": "The Verein der Plakatfreunde's journal treated posters as collectible art and documented Plakatstil as it happened." },
+    { "year": 1914, "label": "Werkbund exhibition, Cologne; First World War", "kind": "context", "note": "The Muthesius-van de Velde debate on standard types versus artistic individuality, then the war, closed the ornament era." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., Wiley, 2016",
+    "Owen Jones, The Grammar of Ornament, Day and Son, London, 1856",
+    "William Morris, A Note by William Morris on His Aims in Founding the Kelmscott Press, Kelmscott Press, 1898",
+    "William Morris, Hopes and Fears for Art, Ellis and White, 1882 (includes The Beauty of Life, 1880)",
+    "Alain Weill, The Poster: A Worldwide Survey and History, G. K. Hall, 1985",
+    "Colin Campbell, The Beggarstaff Posters: The Work of James Pryde and William Nicholson, Barrie & Jenkins, 1990",
+    "Jeremy Aynsley, A Century of Graphic Design, Mitchell Beazley, 2001",
+    "Christian Witt-Dörring and Janis Staggs (eds.), Wiener Werkstätte 1903-1932: The Luxury of Beauty, Neue Galerie / Prestel, 2017",
+    "https://en.wikipedia.org/wiki/William_Morris",
+    "https://en.wikipedia.org/wiki/Kelmscott_Press",
+    "https://en.wikipedia.org/wiki/Doves_Press",
+    "https://en.wikipedia.org/wiki/Owen_Jones_(architect)",
+    "https://en.wikipedia.org/wiki/Walter_Crane",
+    "https://en.wikipedia.org/wiki/Edmund_Evans",
+    "https://en.wikipedia.org/wiki/Arthur_Heygate_Mackmurdo",
+    "https://en.wikipedia.org/wiki/Jules_Ch%C3%A9ret",
+    "https://en.wikipedia.org/wiki/Henri_de_Toulouse-Lautrec",
+    "https://en.wikipedia.org/wiki/Alphonse_Mucha",
+    "https://en.wikipedia.org/wiki/Eug%C3%A8ne_Grasset",
+    "https://en.wikipedia.org/wiki/Aubrey_Beardsley",
+    "https://en.wikipedia.org/wiki/Will_H._Bradley",
+    "https://en.wikipedia.org/wiki/James_Pryde",
+    "https://en.wikipedia.org/wiki/William_Nicholson_(artist,_born_1872)",
+    "https://en.wikipedia.org/wiki/Charles_Rennie_Mackintosh",
+    "https://en.wikipedia.org/wiki/Margaret_Macdonald_Mackintosh",
+    "https://en.wikipedia.org/wiki/Vienna_Secession",
+    "https://en.wikipedia.org/wiki/Gustav_Klimt",
+    "https://en.wikipedia.org/wiki/Koloman_Moser",
+    "https://en.wikipedia.org/wiki/Josef_Hoffmann",
+    "https://en.wikipedia.org/wiki/Joseph_Maria_Olbrich",
+    "https://en.wikipedia.org/wiki/Otto_Eckmann",
+    "https://en.wikipedia.org/wiki/Jugend_(magazine)",
+    "https://en.wikipedia.org/wiki/Henry_van_de_Velde",
+    "https://en.wikipedia.org/wiki/Peter_Behrens",
+    "https://en.wikipedia.org/wiki/Deutscher_Werkbund",
+    "https://en.wikipedia.org/wiki/Lucian_Bernhard",
+    "https://en.wikipedia.org/wiki/Ludwig_Hohlwein",
+    "https://en.wikipedia.org/wiki/Plakatstil",
+    "https://en.wikipedia.org/wiki/Julius_Klinger",
+    "https://en.wikipedia.org/wiki/Hans_Rudi_Erdt",
+    "https://en.wikipedia.org/wiki/Siegfried_Bing",
+    "https://en.wikipedia.org/wiki/Chromolithography",
+    "https://en.wikipedia.org/wiki/Halftone",
+    "https://en.wikipedia.org/wiki/Linotype_machine",
+    "https://en.wikipedia.org/wiki/Monotype_Corporation",
+    "https://en.wikipedia.org/wiki/Offset_printing",
+    "https://en.wikipedia.org/wiki/Louis_Prang",
+    "https://en.wikipedia.org/wiki/Wood_type",
+    "https://en.wikipedia.org/wiki/Great_Exhibition",
+    "https://www.vam.ac.uk/articles/introducing-william-morris"
+  ]
+}

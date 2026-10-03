@@ -1,0 +1,738 @@
+{
+  "movements": [
+    {
+      "id": "czech-avant-garde",
+      "name": "Czech Avant-garde",
+      "aka": ["Devětsil", "Poetism"],
+      "start": 1920, "end": 1948, "ongoing": false,
+      "peak": [1923, 1931],
+      "region": "eastern-europe",
+      "places": ["Prague", "Brno"],
+      "lineage": "avant-garde",
+      "summary": "Devětsil's Poetism turned Constructivist type, photomontage and the picture poem into a playful, lyrical modernism; Teige and Sutnar made it typography.",
+      "influences": ["constructivism", "dada", "new-typography", "bauhaus"],
+      "principles": [
+        { "name": "The picture poem", "idea": "Image and verse share one surface; the page is a canvas, not a column of text.", "example": "Karel Teige, typography for Jaroslav Seifert's Na vlnách TSF, 1925" },
+        { "name": "Letters as bodies", "idea": "The alphabet is performed: each letter staged as a pose and a photomontage.", "example": "Nezval, Teige and Mayerová, Abeceda, 1926" },
+        { "name": "Constructivist economy for a lyrical end", "idea": "Sans-serifs, bars and photographs used for joy and everyday modern life rather than agitation.", "example": "Karel Teige, covers for ReD (Revue Devětsilu), 1927–1931" },
+        { "name": "Type alone holds attention", "idea": "A strict hierarchy of type sizes replaces the picture.", "example": "Ladislav Sutnar, Visit the Modern Textile Exhibition poster, 1930" }
+      ],
+      "keyWorks": [
+        { "title": "Na vlnách TSF", "year": 1925, "figure": "karel-teige", "kind": "book" },
+        { "title": "Abeceda", "year": 1926, "figure": "karel-teige", "kind": "book" },
+        { "title": "ReD (Revue Devětsilu)", "year": 1927, "figure": "karel-teige", "kind": "magazine" },
+        { "title": "Visit the Modern Textile Exhibition", "year": 1930, "figure": "ladislav-sutnar", "kind": "poster" },
+        { "title": "Nejmenší byt (The Minimum Dwelling)", "year": 1932, "figure": "karel-teige", "kind": "book" }
+      ]
+    },
+    {
+      "id": "polish-poster-school",
+      "name": "Polish Poster School",
+      "aka": ["Polska szkoła plakatu", "Polish School of Posters"],
+      "start": 1947, "end": 1989, "ongoing": false,
+      "peak": [1956, 1975],
+      "region": "eastern-europe",
+      "places": ["Warsaw", "Kraków", "Katowice"],
+      "lineage": "expression",
+      "summary": "State-commissioned film, theatre and circus posters where one authored, painterly metaphor and hand-drawn lettering replaced the star portrait and the grid.",
+      "influences": ["art-deco", "constructivism", "dada"],
+      "principles": [
+        { "name": "The poster as authored picture", "idea": "The designer is also the image-maker; the personal hand is the point, not a house style.", "example": "Henryk Tomaszewski, Obywatel Kane (Citizen Kane) poster, 1948" },
+        { "name": "Metaphor over depiction", "idea": "One shortcut image stands for the whole film or play; indirection also passed the censor.", "example": "Wiktor Górka, Kabaret (Cabaret) poster, 1973" },
+        { "name": "Hand-lettering as image", "idea": "Type is drawn, not set, and often carries the whole composition.", "example": "Henryk Tomaszewski, Moore exhibition poster, 1959" },
+        { "name": "Painterly gesture in print", "idea": "Gouache, crayon, collage and photomontage go straight into offset lithography.", "example": "Waldemar Świerzy, Czerwona Oberża (The Red Inn) poster, 1955" },
+        { "name": "Style follows the subject", "idea": "No enforced style: baroque, art-nouveau line and halftone montage all belong.", "example": "Roman Cieślewicz, Zawrót głowy (Vertigo) poster, 1963" }
+      ],
+      "keyWorks": [
+        { "title": "Czarny Narcyz (Black Narcissus)", "year": 1948, "figure": "henryk-tomaszewski", "kind": "poster" },
+        { "title": "Czerwona Oberża (The Red Inn)", "year": 1955, "figure": "waldemar-swierzy", "kind": "poster" },
+        { "title": "Projekt magazine", "year": 1956, "figure": "jozef-mroszczak", "kind": "magazine" },
+        { "title": "Franek V", "year": 1962, "figure": "franciszek-starowieyski", "kind": "poster" },
+        { "title": "Zawrót głowy (Vertigo)", "year": 1963, "figure": "roman-cieslewicz", "kind": "poster" },
+        { "title": "Wozzeck", "year": 1964, "figure": "jan-lenica", "kind": "poster" },
+        { "title": "1st International Poster Biennale, Warsaw", "year": 1966, "figure": "jozef-mroszczak", "kind": "exhibition" },
+        { "title": "Kabaret (Cabaret)", "year": 1973, "figure": "wiktor-gorka", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "czechoslovak-film-poster",
+      "name": "Czechoslovak Film Poster",
+      "aka": ["Czech film poster"],
+      "start": 1959, "end": 1989, "ongoing": false,
+      "peak": [1963, 1975],
+      "region": "eastern-europe",
+      "places": ["Prague", "Brno"],
+      "lineage": "expression",
+      "summary": "State-distributor film posters by architects, painters and typographers, lightly censored for export, mixing avant-garde typography with surrealist painting.",
+      "influences": ["czech-avant-garde", "polish-poster-school"],
+      "principles": [
+        { "name": "Typography as the film's voice", "idea": "The title is designed rather than illustrated; letterform carries mood.", "example": "Zdeněk Ziegler, Křik (The Cry) poster, 1963" },
+        { "name": "Surrealist painting on the street", "idea": "Magic-realist painting replaces the publicity still.", "example": "Josef Vyleťal, Panna a netvor poster, awarded Chicago 1979" },
+        { "name": "The painter's catalogue", "idea": "The poster is one medium within a painter's practice, alongside books and stage design.", "example": "Karel Vaca, 341 theatre and film posters, 1950s–1980s" }
+      ],
+      "keyWorks": [
+        { "title": "Křik (The Cry)", "year": 1963, "figure": "zdenek-ziegler", "kind": "poster" }
+      ]
+    },
+    {
+      "id": "saqqakhaneh",
+      "name": "Saqqakhaneh",
+      "aka": ["Saqqa-khaneh school", "Saqqā-ḵāna"],
+      "start": 1958, "end": 1979, "ongoing": false,
+      "peak": [1962, 1977],
+      "region": "middle-east",
+      "places": ["Tehran"],
+      "lineage": "expression",
+      "summary": "Iranian neo-traditional modernism that turned Shi'a votive objects, talismans, locks and script into modern painting, sculpture and graphic form.",
+      "influences": [],
+      "principles": [
+        { "name": "Folk-devotional objects as modern material", "idea": "Locks, hands, talismans and astrolabes from water shrines become modern form.", "example": "Parviz Tanavoli, Heech series, from the 1960s" },
+        { "name": "Script as visual matter", "idea": "Letters are used for rhythm and charge rather than legibility.", "example": "Hossein Zenderoudi, Who is this Hossein the world is crazy about?, linocut, 1958" },
+        { "name": "A grid of signs", "idea": "Surfaces covered edge to edge with letters and numerals like a talisman.", "example": "Hossein Zenderoudi, K+L+32+H+4. Mon père et moi, 1962 (MoMA)" }
+      ],
+      "keyWorks": [
+        { "title": "Who is this Hossein the world is crazy about?", "year": 1958, "kind": "other" },
+        { "title": "K+L+32+H+4. Mon père et moi", "year": 1962, "kind": "other" },
+        { "title": "Poet Turning into Heech", "year": 2007, "figure": "parviz-tanavoli", "kind": "other" }
+      ]
+    },
+    {
+      "id": "iranian-graphic-design",
+      "name": "Iranian Graphic Design",
+      "aka": ["Modern Iranian graphic design", "Tehran school"],
+      "start": 1958, "end": 2026, "ongoing": true,
+      "peak": [1968, 1978],
+      "region": "middle-east",
+      "places": ["Tehran", "Shiraz", "Isfahan"],
+      "lineage": "modernism",
+      "summary": "Persian-script modernism: marks built from letters, Kanoon's illustrated books, festival posters, revolutionary posters, then the script-first cultural poster.",
+      "influences": ["saqqakhaneh", "hurufiyya", "polish-poster-school", "constructivism", "japanese-modernism"],
+      "principles": [
+        { "name": "The mark built from Persian letters", "idea": "A logotype grows out of the script's own rhythm rather than a Latin monogram.", "example": "Morteza Momayez, ISIRI standards mark turning the initials into 'Iran', 1985" },
+        { "name": "One concentrated image", "idea": "The poster states the film in a single image, partly learned from Polish posters.", "example": "Farshid Mesghali, Gav (The Cow) poster, 1969" },
+        { "name": "Children's culture as laboratory", "idea": "At Kanoon, designers worked across picture books, animation and posters.", "example": "Farshid Mesghali, The Little Black Fish illustrations, 1968" },
+        { "name": "Calligraphy as structure", "idea": "Letters enlarged and interlaced become architecture, not decoration.", "example": "Mohammad Ehsai and Morteza Momayez, Reza Abbasi Museum mark, 1976" },
+        { "name": "Script as the whole image", "idea": "Hand-built Persian lettering is the poster's image and concept at once.", "example": "Reza Abedini, Fajr Film Festival best-poster winners, from 1993" }
+      ],
+      "keyWorks": [
+        { "title": "Iran Tea Organization mark", "year": 1958, "figure": "morteza-momayez", "kind": "identity" },
+        { "title": "Mahi-ye siyah-e kuchulu (The Little Black Fish)", "year": 1968, "figure": "farshid-mesghali", "kind": "book" },
+        { "title": "Gav (The Cow)", "year": 1969, "figure": "farshid-mesghali", "kind": "poster" },
+        { "title": "3rd Shiraz Arts Festival poster", "year": 1969, "figure": "ghobad-shiva", "kind": "poster" },
+        { "title": "Reza Abbasi Museum mark", "year": 1976, "figure": "morteza-momayez", "kind": "identity" },
+        { "title": "ISIRI standards mark", "year": 1985, "figure": "morteza-momayez", "kind": "identity" },
+        { "title": "Iranian Graphic Designers Society mark", "year": 1997, "figure": "ghobad-shiva", "kind": "identity" }
+      ]
+    },
+    {
+      "id": "hurufiyya",
+      "name": "Hurufiyya",
+      "aka": ["Calligraphic school of art", "Al-hurufiyyah", "Lettrism (Arab)"],
+      "start": 1949, "end": 2026, "ongoing": true,
+      "peak": [1960, 1985],
+      "region": "middle-east",
+      "places": ["Baghdad", "Khartoum", "Amman", "Beirut", "Tehran", "Rabat"],
+      "lineage": "avant-garde",
+      "summary": "Pan-Arab and Islamic-world movement freeing Arabic calligraphy from classical rules and using letters as abstract signs of post-colonial identity.",
+      "influences": ["saqqakhaneh"],
+      "principles": [
+        { "name": "Free the letter from the rules", "idea": "Classical proportion and devotional use are broken; the letter is distorted and abstracted.", "example": "Madiha Omar, 22 calligraphy-based paintings, Georgetown Public Library, Washington, 1949" },
+        { "name": "The letter as sign, emptied and refilled", "idea": "A character keeps its cultural link while losing its linguistic function.", "example": "Shakir Hassan Al Said, One Dimension Group manifesto, Baghdad, 1971" },
+        { "name": "Geometry as a bridge", "idea": "Kufic and the square link Islamic pattern, icon and architecture.", "example": "Kamal Boullata, Three Quartets (Opus 1–12) silkscreens, 1994" },
+        { "name": "Generations", "idea": "Nationalist pioneers, then exiles, then a third generation using script purely abstractly.", "example": "Word into Art: Artists of the Modern Middle East, British Museum, 2006" }
+      ],
+      "keyWorks": [
+        { "title": "Washington exhibition of calligraphic paintings", "year": 1949, "figure": "madiha-omar", "kind": "exhibition" },
+        { "title": "One Dimension Group manifesto", "year": 1971, "kind": "manifesto" },
+        { "title": "Three Quartets (Opus 1–12)", "year": 1994, "figure": "kamal-boullata", "kind": "other" },
+        { "title": "Word into Art, British Museum", "year": 2006, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "arabic-modernism",
+      "name": "Arabic Modernism",
+      "aka": ["Modern Arabic typography", "Arab modern graphic design"],
+      "start": 1947, "end": 2026, "ongoing": true,
+      "peak": [1970, 1985],
+      "region": "middle-east",
+      "places": ["Beirut", "Cairo", "Amsterdam", "Dubai"],
+      "lineage": "modernism",
+      "summary": "Making Arabic script work with modern machines and media: type reform, Cairo and Beirut book and children's design, bilingual type and research.",
+      "influences": ["hurufiyya", "new-typography", "swiss-style", "polish-poster-school"],
+      "principles": [
+        { "name": "Simplify for the machine, keep the identity", "idea": "Reduce contextual forms for print while keeping letters recognisable.", "example": "Nasri Khattar, Unified Arabic, patented 1947, launched 1957" },
+        { "name": "The book cover as public art", "idea": "A single illustrator's hand across thousands of covers becomes a shared visual language.", "example": "Helmi El Touni, more than 3,000 book covers for Cairo and Beirut publishers" },
+        { "name": "Children's design as cultural sovereignty", "idea": "Arab children's books written and drawn in the region, not translated.", "example": "Mohieddine Ellabbad, Dar al-Fata al-Arabi, founded 1974" },
+        { "name": "Bilingual parity", "idea": "Arabic and Latin designed together as equals, not Arabic retrofitted.", "example": "Khatt Foundation, Typographic Matchmaking, 2007" },
+        { "name": "Research as design", "idea": "Writing the script's design history is part of the practice.", "example": "Huda Smitshuijzen AbiFarès, Arabic Typography: A Comprehensive Sourcebook, 2001" }
+      ],
+      "keyWorks": [
+        { "title": "Unified Arabic", "year": 1947, "figure": "nasri-khattar", "kind": "typeface" },
+        { "title": "Sindbad children's magazine (Hussein Bicar)", "year": 1952, "kind": "magazine" },
+        { "title": "Shuf Baba Shuf", "year": 1955, "figure": "nasri-khattar", "kind": "book" },
+        { "title": "International Year of the Child poster (UNICEF)", "year": 1979, "figure": "helmi-el-touni", "kind": "poster" },
+        { "title": "Kashkoul al-Rassam (The Illustrator's Sketchbook)", "year": 1989, "figure": "mohieddine-ellabbad", "kind": "book" },
+        { "title": "Arabic Typography: A Comprehensive Sourcebook", "year": 2001, "figure": "huda-smitshuijzen-abifares", "kind": "book" },
+        { "title": "Khatt Foundation", "year": 2004, "figure": "huda-smitshuijzen-abifares", "kind": "other" }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "karel-teige",
+      "name": "Karel Teige",
+      "born": 1900, "died": 1951,
+      "activeFrom": 1919, "activeTo": 1951,
+      "signatureYear": 1926,
+      "region": "eastern-europe",
+      "nationality": "Czech",
+      "role": "Typographer, critic, theorist, collagist",
+      "movements": ["czech-avant-garde"],
+      "summary": "Leader and theorist of Devětsil and Poetism whose book typography and photomontage made the Czech avant-garde a typographic movement.",
+      "principles": [
+        { "name": "Typography as poetry's second voice", "idea": "The layout carries the poem's meaning, not just its text.", "example": "Na vlnách TSF, 1925" },
+        { "name": "Montage over illustration", "idea": "Photographs are cut and recombined into a new statement.", "example": "Abeceda, 1926" },
+        { "name": "Function as a social programme", "idea": "Design as the scientific solution of exact tasks of rational construction.", "example": "Nejmenší byt (The Minimum Dwelling), 1932" }
+      ],
+      "keyWorks": [
+        { "title": "Na vlnách TSF", "year": 1925, "kind": "book" },
+        { "title": "Abeceda", "year": 1926, "kind": "book" },
+        { "title": "ReD (Revue Devětsilu)", "year": 1927, "kind": "magazine" },
+        { "title": "Nejmenší byt", "year": 1932, "kind": "book" }
+      ]
+    },
+    {
+      "id": "ladislav-sutnar",
+      "name": "Ladislav Sutnar",
+      "born": 1897, "died": 1976,
+      "activeFrom": 1923, "activeTo": 1970,
+      "signatureYear": 1950,
+      "region": "eastern-europe",
+      "nationality": "Czech (later American)",
+      "role": "Graphic, exhibition and information designer, educator",
+      "movements": ["czech-avant-garde", "american-modernism"],
+      "summary": "Prague avant-garde typographer who, after emigrating in 1939, founded American information design at Sweet's Catalog Service.",
+      "principles": [
+        { "name": "Controlled visual flow", "idea": "Colour, shape and size direct the eye through dense information.", "example": "Catalog Design (with Knud Lönberg-Holm), 1944" },
+        { "name": "Punctuation as navigation", "idea": "Brackets, tabs, numerals and arrows are wayfinding tools.", "example": "Parentheses around US telephone area codes, late 1950s" },
+        { "name": "Type alone can hold attention", "idea": "Hierarchy of sizes replaces the picture.", "example": "Visit the Modern Textile Exhibition, 1930" }
+      ],
+      "keyWorks": [
+        { "title": "Visit the Modern Textile Exhibition", "year": 1930, "kind": "poster" },
+        { "title": "Obrácení kapitána Brassbounda (jacket)", "year": 1932, "kind": "book" },
+        { "title": "Catalog Design", "year": 1944, "kind": "book" },
+        { "title": "Catalog Design Progress", "year": 1950, "kind": "book" },
+        { "title": "Visual Design in Action", "year": 1961, "kind": "book" }
+      ]
+    },
+    {
+      "id": "henryk-tomaszewski",
+      "name": "Henryk Tomaszewski",
+      "born": 1914, "died": 2005,
+      "activeFrom": 1936, "activeTo": 2000,
+      "signatureYear": 1959,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Poster artist, illustrator, educator",
+      "movements": ["polish-poster-school"],
+      "summary": "Father of the Polish Poster School; five Vienna first prizes in 1948 and head of the Warsaw Academy poster studio, 1952–1985.",
+      "principles": [
+        { "name": "Strip to the sign", "idea": "Analyse, discard the superfluous, drop the adjectives, arrive at a shortcut sign.", "example": "Cyrk poster, 1963" },
+        { "name": "The lettering is the image", "idea": "His own handwriting increasingly becomes the whole poster.", "example": "Henryk Tomaszewski – Love, 1991" },
+        { "name": "Train the eye, not the hand", "idea": "Teach through abstract concepts set as riddles to be solved.", "example": "Warsaw Academy poster studio, 1952–1985" }
+      ],
+      "keyWorks": [
+        { "title": "Obywatel Kane (Citizen Kane)", "year": 1948, "kind": "poster" },
+        { "title": "Moore", "year": 1959, "kind": "poster" },
+        { "title": "Książka zażaleń (Book of Complaints)", "year": 1961, "kind": "book" },
+        { "title": "Król Edyp (Oedipus Rex)", "year": 1961, "kind": "poster" },
+        { "title": "Love", "year": 1991, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "jozef-mroszczak",
+      "name": "Józef Mroszczak",
+      "born": 1910, "died": 1975,
+      "activeFrom": 1936, "activeTo": 1975,
+      "signatureYear": 1966,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Graphic designer, educator, organiser",
+      "movements": ["polish-poster-school"],
+      "summary": "Co-founder of Projekt magazine and founder of the Warsaw International Poster Biennale, who professionalised Polish design education.",
+      "principles": [
+        { "name": "Build the institution", "idea": "A magazine, a biennale and a museum gave the school its international stage.", "example": "1st International Poster Biennale, Warsaw, 1966" },
+        { "name": "Balance design and expression", "idea": "Rigorous composition kept painterly.", "example": "Don Carlos poster, 1964" },
+        { "name": "The poster as public conscience", "idea": "Posters as moral statements, not only announcements.", "example": "Auschwitz – Never Again project, prize at the 1966 Biennale" }
+      ],
+      "keyWorks": [
+        { "title": "Projekt", "year": 1956, "kind": "magazine" },
+        { "title": "Polnische Plakatkunst", "year": 1962, "kind": "book" },
+        { "title": "Don Carlos", "year": 1964, "kind": "poster" },
+        { "title": "1st International Poster Biennale, Warsaw", "year": 1966, "kind": "exhibition" },
+        { "title": "Słowo i obraz (Word and Image)", "year": 1971, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "jan-lenica",
+      "name": "Jan Lenica",
+      "born": 1928, "died": 2001,
+      "activeFrom": 1950, "activeTo": 2001,
+      "signatureYear": 1964,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Poster artist, animator, illustrator",
+      "movements": ["polish-poster-school"],
+      "summary": "Poster artist and cut-out animator whose sinuous, multiplied contour revived Art Nouveau line for the 1960s.",
+      "principles": [
+        { "name": "The contour as a living thing", "idea": "Flowing multiple outlines carry the image's energy.", "example": "Wozzeck poster, 1964" },
+        { "name": "Poster and animation as one art", "idea": "Cut-out figures move between street and screen.", "example": "Labirynt, 1962" },
+        { "name": "Absurdity as commentary", "idea": "Bureaucracy and the machine swallow the individual.", "example": "Monsieur Tête (with Eugène Ionesco), 1959" }
+      ],
+      "keyWorks": [
+        { "title": "Dom (with Walerian Borowczyk)", "year": 1958, "kind": "film" },
+        { "title": "Labirynt", "year": 1962, "kind": "film" },
+        { "title": "Wozzeck", "year": 1964, "kind": "poster" },
+        { "title": "Ubu et la Grande Gidouille", "year": 1976, "kind": "film" }
+      ]
+    },
+    {
+      "id": "roman-cieslewicz",
+      "name": "Roman Cieślewicz",
+      "born": 1930, "died": 1996,
+      "activeFrom": 1955, "activeTo": 1996,
+      "signatureYear": 1963,
+      "region": "eastern-europe",
+      "nationality": "Polish (naturalised French)",
+      "role": "Poster artist, art director, photomontagist",
+      "movements": ["polish-poster-school"],
+      "summary": "Polish School photomontagist who moved to Paris in 1963, art-directed Elle and made the halftone dot and mirror image expressive.",
+      "principles": [
+        { "name": "Maximum picture, maximum information", "idea": "The poster is the street picture and must hit as hard as possible.", "example": "Dziady poster, 1967" },
+        { "name": "Mechanise the image", "idea": "Enlarged halftone, mirroring and repetition make the image pulse.", "example": "Zawrót głowy (Vertigo), 1963" },
+        { "name": "Montage from the archive", "idea": "Old masters and press photographs collide into new meaning.", "example": "Kamikaze no. 1, 1976" }
+      ],
+      "keyWorks": [
+        { "title": "Zawrót głowy (Vertigo)", "year": 1963, "kind": "poster" },
+        { "title": "Dziady (Forefathers' Eve)", "year": 1967, "kind": "poster" },
+        { "title": "Kamikaze no. 1", "year": 1976, "kind": "magazine" },
+        { "title": "Paris–Moscou 1900–1930", "year": 1979, "kind": "poster" },
+        { "title": "Liberté = Wolność", "year": 1981, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "waldemar-swierzy",
+      "name": "Waldemar Świerzy",
+      "born": 1931, "died": 2013,
+      "activeFrom": 1952, "activeTo": 2013,
+      "signatureYear": 1955,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Poster artist, illustrator, educator",
+      "movements": ["polish-poster-school"],
+      "summary": "Prolific Polish School portraitist, with more than 1,500 posters, who brought gestural painting, pop-art and folk art into the poster.",
+      "principles": [
+        { "name": "Bring painting into the poster", "idea": "Gesture, lyrical abstraction and pop-art go straight onto the sheet.", "example": "Hej kolęda poster for No To Co, 1968" },
+        { "name": "The portrait as sign", "idea": "A few traits plus a metaphor for the profession.", "example": "Czerwona Oberża (The Red Inn), 1955" },
+        { "name": "Legible only at a distance", "idea": "Up close a mesh of squiggles and dots; from afar a face.", "example": "Expressionist portrait posters of the 1980s" }
+      ],
+      "keyWorks": [
+        { "title": "Czerwona Oberża (The Red Inn)", "year": 1955, "kind": "poster" },
+        { "title": "Bulwar zachodzącego słońca (Sunset Boulevard)", "year": 1957, "kind": "poster" },
+        { "title": "Hej kolęda", "year": 1968, "kind": "poster" },
+        { "title": "Ziemia obiecana (The Promised Land)", "year": 1975, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "franciszek-starowieyski",
+      "name": "Franciszek Starowieyski",
+      "born": 1930, "died": 2009,
+      "activeFrom": 1955, "activeTo": 2009,
+      "signatureYear": 1962,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Poster artist, painter, stage designer",
+      "movements": ["polish-poster-school"],
+      "summary": "Baroque-surrealist of the Polish School: skulls, anatomy and mock-17th-century calligraphy turned the poster into an autonomous artwork.",
+      "principles": [
+        { "name": "The baroque as resistance", "idea": "Morbid, ornamental imagery against both Socialist Realism and cheerful circus posters.", "example": "Franek V, 1962" },
+        { "name": "The poster as autonomous work", "idea": "Posters as 'Franciszek Starowieyski presents', not as advertisements.", "example": "Cyrk – Homage to Picasso, 1966" },
+        { "name": "Persona as method", "idea": "From 1970 he back-dated his works by 300 years.", "example": "Drawing Theatre performances, from 1980" }
+      ],
+      "keyWorks": [
+        { "title": "Płaczący gołąbek pokoju (The Crying Dove of Peace)", "year": 1956, "kind": "poster" },
+        { "title": "Franek V", "year": 1962, "kind": "poster" },
+        { "title": "Cyrk – Homage to Picasso", "year": 1966, "kind": "poster" },
+        { "title": "Drawing Theatre", "year": 1980, "kind": "other" }
+      ]
+    },
+    {
+      "id": "wiktor-gorka",
+      "name": "Wiktor Górka",
+      "born": 1922, "died": 2004,
+      "activeFrom": 1952, "activeTo": 1995,
+      "signatureYear": 1973,
+      "region": "eastern-europe",
+      "nationality": "Polish",
+      "role": "Poster artist, educator",
+      "movements": ["polish-poster-school"],
+      "summary": "Polish School film-poster master of the fused emblem, best known for Cabaret, who carried the method to Cuba and Mexico.",
+      "principles": [
+        { "name": "The composite emblem", "idea": "Two motifs fuse into a third, damning meaning.", "example": "Kabaret: dancers' legs and Joel Grey's face form a swastika, 1973" },
+        { "name": "Teaching as export", "idea": "The school's method carried abroad through workshops and teaching.", "example": "Design workshops in Havana, 1970; teaching in Mexico to the mid-1990s" }
+      ],
+      "keyWorks": [
+        { "title": "Kabaret (Cabaret)", "year": 1973, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "zdenek-ziegler",
+      "name": "Zdeněk Ziegler",
+      "born": 1932, "died": 2023,
+      "activeFrom": 1958, "activeTo": 2015,
+      "signatureYear": 1963,
+      "region": "eastern-europe",
+      "nationality": "Czech",
+      "role": "Typographer, graphic designer, educator",
+      "movements": ["czechoslovak-film-poster"],
+      "summary": "Architect-trained typographer of the Czechoslovak New Wave film poster, later book designer, stamp designer and rector of VŠUP Prague.",
+      "principles": [
+        { "name": "Type chosen for the text's nature", "idea": "Every typeface decision follows the character of the text.", "example": "Book series for Odeon and Československý spisovatel, from 1963" },
+        { "name": "One designer, one whole", "idea": "Poster, book series, identity and stamp form one designed world.", "example": "Aulos bibliophile editions, from 1992" }
+      ],
+      "keyWorks": [
+        { "title": "Křik (The Cry)", "year": 1963, "kind": "poster" },
+        { "title": "Aulos bibliophile series", "year": 1992, "kind": "book" },
+        { "title": "Czech postage stamps", "year": 1994, "kind": "other" }
+      ]
+    },
+    {
+      "id": "parviz-tanavoli",
+      "name": "Parviz Tanavoli",
+      "born": 1937, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1965,
+      "region": "middle-east",
+      "nationality": "Iranian (and Canadian)",
+      "role": "Sculptor, painter, educator, craft historian",
+      "movements": ["saqqakhaneh", "hurufiyya"],
+      "summary": "Key Saqqakhaneh artist whose Heech sculptures cast the Persian word 'nothing' as a solid character.",
+      "principles": [
+        { "name": "A word as an object", "idea": "Three nasta'liq letters cast as a figure that sits, is caged or embraced.", "example": "Heech series, from the 1960s" },
+        { "name": "The craftsman's archive", "idea": "Locks, rugs and salt bags studied as design sources.", "example": "Locks from Iran, Smithsonian, 1976" },
+        { "name": "Nothingness as content", "idea": "Sufi creation from nothing, made tangible.", "example": "Poet Turning into Heech, 2007" }
+      ],
+      "keyWorks": [
+        { "title": "Rasht 29 Club (co-founded)", "year": 1967, "kind": "other" },
+        { "title": "Locks from Iran", "year": 1976, "kind": "book" },
+        { "title": "Heech in a Cage", "year": 2005, "kind": "other" },
+        { "title": "Poet Turning into Heech", "year": 2007, "kind": "other" }
+      ]
+    },
+    {
+      "id": "morteza-momayez",
+      "name": "Morteza Momayez",
+      "born": 1936, "died": 2005,
+      "activeFrom": 1958, "activeTo": 2005,
+      "signatureYear": 1985,
+      "region": "middle-east",
+      "nationality": "Iranian",
+      "role": "Graphic designer, illustrator, educator, editor",
+      "movements": ["iranian-graphic-design"],
+      "summary": "Father of modern Iranian graphic design: Persian-letter marks, Tehran Film Festival art direction, and founder of the profession's schools and societies.",
+      "principles": [
+        { "name": "A mark from the letters' own rhythm", "idea": "Initials in Persian script generate the monogram.", "example": "Iranian Association of Certified Accountants mark, 1974" },
+        { "name": "Derive the symbol from local form", "idea": "City gates become a flower; Maragheh brickwork becomes a car marque.", "example": "Tehran Municipality mark, 1989" },
+        { "name": "The designer builds the profession", "idea": "Atelier, syndicate, biennials, society and magazine.", "example": "Iranian Graphic Designers Society, founding president, 1997" }
+      ],
+      "keyWorks": [
+        { "title": "Iran Tea Organization mark", "year": 1958, "kind": "identity" },
+        { "title": "Reza Abbasi Museum mark", "year": 1976, "kind": "identity" },
+        { "title": "ISIRI standards mark", "year": 1985, "kind": "identity" },
+        { "title": "SAIPA mark", "year": 1987, "kind": "identity" },
+        { "title": "Tehran Municipality mark", "year": 1989, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "ghobad-shiva",
+      "name": "Ghobad Shiva",
+      "born": 1941, "died": null,
+      "activeFrom": 1966, "activeTo": 2026,
+      "signatureYear": 1969,
+      "region": "middle-east",
+      "nationality": "Iranian",
+      "role": "Graphic designer, art director, educator",
+      "movements": ["iranian-graphic-design"],
+      "summary": "Founder of the graphics departments at Iranian national broadcasting and Soroush, co-founder of IGDS and planner of the first Tehran poster biennial.",
+      "principles": [
+        { "name": "Iranian themes in a graphic idiom", "idea": "Persian motifs restated as flat poster shapes.", "example": "3rd Shiraz Arts Festival poster, 1969" },
+        { "name": "Design departments as infrastructure", "idea": "In-house studios at broadcasters and publishers as public design.", "example": "Graphics department of Iranian radio and television, 1968" }
+      ],
+      "keyWorks": [
+        { "title": "3rd Shiraz Arts Festival poster", "year": 1969, "kind": "poster" },
+        { "title": "Iranian Graphic Designers Society mark", "year": 1997, "kind": "identity" },
+        { "title": "Palestine", "year": 2003, "kind": "poster" }
+      ]
+    },
+    {
+      "id": "farshid-mesghali",
+      "name": "Farshid Mesghali",
+      "born": 1943, "died": null,
+      "activeFrom": 1964, "activeTo": 2026,
+      "signatureYear": 1968,
+      "region": "middle-east",
+      "nationality": "Iranian",
+      "role": "Illustrator, graphic designer, animator",
+      "movements": ["iranian-graphic-design"],
+      "summary": "Kanoon illustrator, animator and poster designer; the only Iranian Hans Christian Andersen Award winner (1974).",
+      "principles": [
+        { "name": "Cross every medium", "idea": "The same designer makes the book, the film and the poster.", "example": "The Little Black Fish, 1968; Look Again, 1974" },
+        { "name": "Technique follows the story", "idea": "Lithography, collage, watercolour or lithographed-book style as each story needs.", "example": "Arash-e Kamangir, 1971" },
+        { "name": "One clear image for an auteur's film", "idea": "The poster distils the film into a single image.", "example": "Gav (The Cow) poster, 1969" }
+      ],
+      "keyWorks": [
+        { "title": "Mahi-ye siyah-e kuchulu (The Little Black Fish)", "year": 1968, "kind": "book" },
+        { "title": "Gav (The Cow)", "year": 1969, "kind": "poster" },
+        { "title": "Arash-e Kamangir", "year": 1971, "kind": "book" },
+        { "title": "Look Again", "year": 1974, "kind": "film" }
+      ]
+    },
+    {
+      "id": "mohammad-ehsai",
+      "name": "Mohammad Ehsai",
+      "born": 1939, "died": null,
+      "activeFrom": 1960, "activeTo": 2026,
+      "signatureYear": 1976,
+      "region": "middle-east",
+      "nationality": "Iranian",
+      "role": "Calligrapher, painter, graphic designer, educator",
+      "movements": ["hurufiyya", "iranian-graphic-design"],
+      "summary": "Pioneer of Iranian calligraphic painting (naqqashi-khatt) who enlarged and interlaced letters into monumental abstract structures.",
+      "principles": [
+        { "name": "Enlarge until meaning yields to rhythm", "idea": "Letters repeated and interlaced become architecture.", "example": "Eternal Alphabet series" },
+        { "name": "Mastery first, then rupture", "idea": "Full classical training underwrites the modern break.", "example": "Calligraphy for the Reza Abbasi Museum mark, 1976" }
+      ],
+      "keyWorks": [
+        { "title": "Reza Abbasi Museum logotype (calligraphy)", "year": 1976, "kind": "identity" }
+      ]
+    },
+    {
+      "id": "reza-abedini",
+      "name": "Reza Abedini",
+      "born": 1967, "died": null,
+      "activeFrom": 1989, "activeTo": 2026,
+      "signatureYear": 2006,
+      "region": "middle-east",
+      "nationality": "Iranian",
+      "role": "Graphic designer, visual artist, educator",
+      "movements": ["iranian-graphic-design"],
+      "summary": "Leading post-1990s Iranian poster designer whose Persian lettering is both image and concept; 2006 Prince Claus Award laureate.",
+      "principles": [
+        { "name": "The letter as aesthetic and concept", "idea": "Persian script carries the idea, not just the caption.", "example": "Fajr Film Festival best poster, 1993" },
+        { "name": "Reread the heritage, don't quote it", "idea": "Rodchenko, Ikko Tanaka and Cieślewicz alongside Qajar painters.", "example": "Gold medal, 8th International Poster Biennial, Mexico, 2004" },
+        { "name": "Dissolve design into art", "idea": "Posters that double as typographic artworks.", "example": "Prince Claus Award, 2006" }
+      ],
+      "keyWorks": [
+        { "title": "Fajr International Film Festival best film poster", "year": 1993, "kind": "poster" },
+        { "title": "8th International Poster Biennial, Mexico, gold medal", "year": 2004, "kind": "poster" },
+        { "title": "Prince Claus Award", "year": 2006, "kind": "other" }
+      ]
+    },
+    {
+      "id": "madiha-omar",
+      "name": "Madiha Omar",
+      "born": 1908, "died": 2005,
+      "activeFrom": 1933, "activeTo": 1980,
+      "signatureYear": 1949,
+      "region": "middle-east",
+      "nationality": "Iraqi",
+      "role": "Painter, educator",
+      "movements": ["hurufiyya"],
+      "summary": "Iraqi painter, generally seen as the first modern artist to build abstract paintings from Arabic letters (Washington, 1949).",
+      "principles": [
+        { "name": "The letter as abstract element", "idea": "Calligraphy as inspiration for abstract form, not as text.", "example": "Arabic Calligraphy: An Element of Inspiration in Abstract Art, 1949" },
+        { "name": "Secular use of a sacred script", "idea": "Arabic letters in secular modern painting.", "example": "48 paintings at the Ibn Sina exhibition, Baghdad, 1952" }
+      ],
+      "keyWorks": [
+        { "title": "Georgetown Public Library exhibition, Washington", "year": 1949, "kind": "exhibition" },
+        { "title": "Arabic Calligraphy: An Element of Inspiration in Abstract Art", "year": 1949, "kind": "book" },
+        { "title": "Ibn Sina exhibition, Baghdad", "year": 1952, "kind": "exhibition" }
+      ]
+    },
+    {
+      "id": "kamal-boullata",
+      "name": "Kamal Boullata",
+      "born": 1942, "died": 2019,
+      "activeFrom": 1965, "activeTo": 2019,
+      "signatureYear": 1994,
+      "region": "middle-east",
+      "nationality": "Palestinian",
+      "role": "Artist, art historian, art director",
+      "movements": ["hurufiyya", "arabic-modernism"],
+      "summary": "Palestinian artist-historian whose Kufic-on-the-square silkscreens bridged icon and Islamic geometry; author of the standard history of Palestinian art.",
+      "principles": [
+        { "name": "The square as root", "idea": "Two intersecting squares in a circle unite star, mandorla and Jerusalem's sacred plans.", "example": "Three Quartets (Opus 1–12), 1994" },
+        { "name": "Write the image", "idea": "From icon painting: the iconographer writes rather than paints.", "example": "Twelve Lanterns for Granada, 1995" },
+        { "name": "Stencil precision", "idea": "Pochoir and silkscreen give crisp, measured flat colour.", "example": "Silkscreen series of the 1990s" }
+      ],
+      "keyWorks": [
+        { "title": "Three Quartets (Opus 1–12)", "year": 1994, "kind": "other" },
+        { "title": "Twelve Lanterns for Granada", "year": 1995, "kind": "book" },
+        { "title": "Palestinian Art: From 1850 to the Present", "year": 2009, "kind": "book" }
+      ]
+    },
+    {
+      "id": "nasri-khattar",
+      "name": "Nasri Khattar",
+      "born": 1911, "died": 1998,
+      "activeFrom": 1947, "activeTo": 1998,
+      "signatureYear": 1947,
+      "region": "middle-east",
+      "nationality": "Lebanese",
+      "role": "Architect, type designer",
+      "movements": ["arabic-modernism"],
+      "summary": "Lebanese architect who devised Unified Arabic, a one-form-per-letter printing script of 33 glyphs (patented 1947, launched 1957).",
+      "principles": [
+        { "name": "Rationalise the system, not the letter", "idea": "Combine isolated and connected features so each letter needs one form.", "example": "Unified Arabic, patented 1947" },
+        { "name": "For print only", "idea": "Handwriting stays; the reform is for the machine.", "example": "Shuf Baba Shuf primer, 1955" }
+      ],
+      "keyWorks": [
+        { "title": "Unified Arabic (al-Abjadiyya al-Muwahhada)", "year": 1947, "kind": "typeface" },
+        { "title": "Shuf Baba Shuf", "year": 1955, "kind": "book" }
+      ]
+    },
+    {
+      "id": "mohieddine-ellabbad",
+      "name": "Mohieddine Ellabbad",
+      "born": 1940, "died": 2010,
+      "activeFrom": 1957, "activeTo": 2010,
+      "signatureYear": 1989,
+      "region": "middle-east",
+      "nationality": "Egyptian",
+      "role": "Illustrator, graphic designer, author, publisher",
+      "movements": ["arabic-modernism"],
+      "summary": "Egyptian illustrator-designer who built a modern Arab children's book culture through Dar al-Fata al-Arabi and books about images.",
+      "principles": [
+        { "name": "Visual literacy for the reader", "idea": "Books about images, written and designed by the designer.", "example": "Lugha bidun kalimat (Language without Words)" },
+        { "name": "Memory as material", "idea": "Visual memories addressed across generations.", "example": "Kashkoul al-Rassam, Golden Apple, Bratislava, 1989" },
+        { "name": "Arab publishing for Arab children", "idea": "Build the publisher, not only the pages.", "example": "Dar al-Fata al-Arabi, co-founded 1974" }
+      ],
+      "keyWorks": [
+        { "title": "Dar al-Fata al-Arabi (co-founded)", "year": 1974, "kind": "other" },
+        { "title": "Arab Graphic Center (founded)", "year": 1976, "kind": "other" },
+        { "title": "Kashkoul al-Rassam (The Illustrator's Sketchbook)", "year": 1989, "kind": "book" }
+      ]
+    },
+    {
+      "id": "helmi-el-touni",
+      "name": "Helmi El Touni",
+      "born": 1934, "died": 2024,
+      "activeFrom": 1958, "activeTo": 2024,
+      "signatureYear": 1979,
+      "region": "middle-east",
+      "nationality": "Egyptian",
+      "role": "Painter, book and magazine designer, illustrator",
+      "movements": ["arabic-modernism"],
+      "summary": "Egyptian painter-designer of more than 3,000 book covers across Cairo and Beirut, setting popular imagery in a flat modern frame.",
+      "principles": [
+        { "name": "Popular imagery, modern frame", "idea": "Folk and popular-print motifs restated in flat poster colour.", "example": "UNICEF International Year of the Child poster, 1979" },
+        { "name": "The cover as a repeated public gallery", "idea": "Volume makes one hand a shared visual language.", "example": "More than 3,000 book covers" }
+      ],
+      "keyWorks": [
+        { "title": "International Year of the Child poster (UNICEF)", "year": 1979, "kind": "poster" },
+        { "title": "Shumu' magazine (first three issues)", "year": 1986, "kind": "magazine" }
+      ]
+    },
+    {
+      "id": "huda-smitshuijzen-abifares",
+      "name": "Huda Smitshuijzen AbiFarès",
+      "born": 1965, "died": null,
+      "activeFrom": 1990, "activeTo": 2026,
+      "signatureYear": 2001,
+      "region": "middle-east",
+      "nationality": "Lebanese",
+      "role": "Typographer, researcher, writer, educator",
+      "movements": ["arabic-modernism"],
+      "summary": "Author of Arabic Typography (2001) and founder of the Khatt Foundation (2004), the research and matchmaking hub of bilingual Arabic type.",
+      "principles": [
+        { "name": "Structure before style", "idea": "Analyse Arabic typography structurally and theoretically.", "example": "Arabic Typography: A Comprehensive Sourcebook, 2001" },
+        { "name": "Matchmaking", "idea": "Pair Arabic and Latin designers to make genuinely bilingual families.", "example": "Typographic Matchmaking, 2007" },
+        { "name": "Build the library", "idea": "Publish the region's design history.", "example": "Khatt Books, from 2010" }
+      ],
+      "keyWorks": [
+        { "title": "Arabic Typography: A Comprehensive Sourcebook", "year": 2001, "kind": "book" },
+        { "title": "Khatt Foundation", "year": 2004, "kind": "other" },
+        { "title": "Typographic Matchmaking", "year": 2007, "kind": "book" },
+        { "title": "Against the Grain", "year": 2023, "kind": "book" }
+      ]
+    }
+  ],
+  "events": [
+    { "year": 1920, "label": "Devětsil founded in Prague", "kind": "context", "note": "The Czech avant-garde union that produced Poetism, the picture poem and Teige's typography." },
+    { "year": 1926, "label": "Abeceda published", "kind": "context", "note": "Nezval, Teige and Mayerová stage the alphabet as dance and photomontage, a landmark of avant-garde book typography." },
+    { "year": 1929, "label": "Teige lectures at the Bauhaus", "kind": "context", "note": "Prague's leading theorist teaches in Dessau, linking Czech Poetism to the Bauhaus." },
+    { "year": 1939, "label": "Sutnar stays in New York", "kind": "context", "note": "After the Nazi occupation the Czech avant-garde typographer remains in the US and goes on to found American information design." },
+    { "year": 1947, "label": "Unified Arabic patented", "kind": "technology", "note": "Nasri Khattar's one-form-per-letter Arabic print script cuts the glyph set to 33 for machine typesetting." },
+    { "year": 1948, "label": "Polish posters win in Vienna", "kind": "context", "note": "Tomaszewski's five first prizes start international attention to the Polish poster." },
+    { "year": 1949, "label": "Madiha Omar's calligraphic paintings shown in Washington", "kind": "context", "note": "Generally taken as the first exhibition of modern art built from Arabic letters, the start of hurufiyya." },
+    { "year": 1952, "label": "Sindbad magazine launched in Cairo", "kind": "context", "note": "Hussein Bicar's Sindbad, Egypt's first children's magazine, trained a generation of Arab illustrators." },
+    { "year": 1956, "label": "Projekt magazine founded in Warsaw", "kind": "context", "note": "The design magazine of the Polish thaw, co-designed by Cieślewicz, carried the school abroad." },
+    { "year": 1965, "label": "Kanoon founded in Tehran", "kind": "context", "note": "The children's institute became the laboratory of Iranian illustration, animation and graphic design." },
+    { "year": 1966, "label": "First International Poster Biennale, Warsaw", "kind": "context", "note": "The world's first recurring event devoted to the poster." },
+    { "year": 1967, "label": "First Shiraz Arts Festival", "kind": "context", "note": "An annual international festival (1967–1977) whose posters and programmes were key commissions for Iranian designers." },
+    { "year": 1968, "label": "Poster Museum at Wilanów opens", "kind": "context", "note": "The world's first museum dedicated to the poster." },
+    { "year": 1970, "label": "Polish poster designers teach in Havana", "kind": "context", "note": "Górka and Świerzy lead workshops in Cuba, linking the Polish and Cuban poster schools." },
+    { "year": 1971, "label": "One Dimension Group manifesto", "kind": "context", "note": "Shakir Hassan Al Said's Baghdad manifesto gives hurufiyya its most articulate theory." },
+    { "year": 1974, "label": "Dar al-Fata al-Arabi founded", "kind": "context", "note": "A Beirut-based Arab children's publisher, co-founded by Ellabbad, that built a regional visual culture for young readers." },
+    { "year": 1977, "label": "Tehran Museum of Contemporary Art opens", "kind": "context", "note": "Kamran Diba's museum showed Iranian modernists beside a major Western collection, two years before the revolution." },
+    { "year": 1979, "label": "Iranian Revolution", "kind": "context", "note": "Ends royal cultural patronage and makes the political and martyrdom poster Iran's dominant public genre." },
+    { "year": 1989, "label": "Communist rule ends in Poland and Czechoslovakia", "kind": "context", "note": "The market economy removes the state commissioning system that sustained the Polish and Czech poster schools." },
+    { "year": 1997, "label": "Iranian Graphic Designers Society founded", "kind": "context", "note": "Momayez's professional society rebuilds Iranian design's institutions after the revolution." },
+    { "year": 2001, "label": "AbiFarès publishes Arabic Typography", "kind": "context", "note": "The first comprehensive modern sourcebook on Arabic type, written because none existed to teach from." },
+    { "year": 2004, "label": "Khatt Foundation founded", "kind": "context", "note": "An Amsterdam foundation that became the hub for bilingual Arabic–Latin type design and research." },
+    { "year": 2013, "label": "Unified Arabic revived digitally", "kind": "technology", "note": "The 29LT foundry turns Khattar's 1947 reform into working digital fonts." }
+  ],
+  "sources": [
+    "Philip B. Meggs & Alston W. Purvis, Meggs' History of Graphic Design, 6th ed., 2016",
+    "Elizabeth E. Guffey, Posters: A Global History, Reaktion Books, 2014",
+    "Dorota Folga-Januszewska, Art of Polish Poster, Bosz, 2018",
+    "Maria Kurpik & Agata Szydłowska (eds.), Plakaty w zbiorach Muzeum Plakatu w Wilanowie, 2008",
+    "Eric Dluhosch & Rostislav Švácha (eds.), Karel Teige: L'Enfant Terrible of the Czech Modernist Avant-Garde, MIT Press, 1999",
+    "Iva Janáková (ed.), Ladislav Sutnar — Praha, New York: Design in Action, Argo, 2003",
+    "Huda Smitshuijzen AbiFarès, Arabic Typography: A Comprehensive Sourcebook, Saqi, 2001",
+    "Yara Khoury Nammour, Nasri Khattar: A Modernist Typotect, Khatt Books, 2014",
+    "Kamal Boullata, Palestinian Art: From 1850 to the Present, Saqi, 2009",
+    "Sharbal Dāghir, Arabic Hurufiya: Art and Identity, Skira, 2016",
+    "Venetia Porter, Word into Art: Artists of the Modern Middle East, British Museum, 2006",
+    "https://culture.pl/en/artist/henryk-tomaszewski",
+    "https://culture.pl/en/artist/roman-cieslewicz",
+    "https://culture.pl/en/artist/waldemar-swierzy",
+    "https://culture.pl/en/artist/franciszek-starowieyski",
+    "https://culture.pl/en/artist/wiktor-gorka",
+    "https://en.wikipedia.org/wiki/Polish_School_of_Posters",
+    "https://en.wikipedia.org/wiki/Poster_Museum,_Wilan%C3%B3w",
+    "https://pl.wikipedia.org/wiki/Henryk_Tomaszewski_(grafik)",
+    "https://en.wikipedia.org/wiki/J%C3%B3zef_Mroszczak",
+    "https://cs.wikipedia.org/wiki/Karel_Teige",
+    "https://en.wikipedia.org/wiki/Poetism",
+    "https://en.wikipedia.org/wiki/Ladislav_Sutnar",
+    "https://cs.wikipedia.org/wiki/Zden%C4%9Bk_Ziegler",
+    "https://en.wikipedia.org/wiki/Iranian_modern_and_contemporary_art",
+    "https://en.wikipedia.org/wiki/Parviz_Tanavoli",
+    "https://fa.wikipedia.org/wiki/مرتضی_ممیز",
+    "https://fa.wikipedia.org/wiki/قباد_شیوا",
+    "https://fa.wikipedia.org/wiki/فرشید_مثقالی",
+    "https://en.wikipedia.org/wiki/Reza_Abedini",
+    "https://en.wikipedia.org/wiki/Mohammad_Ehsai",
+    "https://en.wikipedia.org/wiki/Institute_for_the_Intellectual_Development_of_Children_and_Young_Adults",
+    "https://en.wikipedia.org/wiki/Tehran_Museum_of_Contemporary_Art",
+    "https://en.wikipedia.org/wiki/Hurufiyya_movement",
+    "https://en.wikipedia.org/wiki/Madiha_Omar",
+    "https://en.wikipedia.org/wiki/Kamal_Boullata",
+    "https://en.wikipedia.org/wiki/Nasri_Khattar",
+    "https://ar.wikipedia.org/wiki/محيي_الدين_اللباد",
+    "https://ar.wikipedia.org/wiki/حلمي_التوني",
+    "https://en.wikipedia.org/wiki/Huda_Smitshuijzen_AbiFar%C3%A8s",
+    "https://en.wikipedia.org/wiki/Khatt_Foundation"
+  ]
+}
